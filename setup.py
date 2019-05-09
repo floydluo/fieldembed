@@ -83,9 +83,6 @@ if WHEELHOUSE_UPLOADER_COMMANDS.intersection(sys.argv):
     cmdclass.update(vars(wheelhouse_uploader.cmd))
 
 
-
-
-
 distributed_env = ['Pyro4 >= 4.27']
 
 win_testenv = [
@@ -107,6 +104,9 @@ ext_modules = [
     Extension('fieldembed.models.word2vec_inner',
         sources=['./fieldembed/models/word2vec_inner.c'],
         include_dirs=[model_dir]),
+
+    Extension('fieldembed._matutils',
+        sources=['./fieldembed/_matutils.c']),
 ]
 
 setup(
