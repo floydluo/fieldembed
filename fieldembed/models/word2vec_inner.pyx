@@ -71,6 +71,8 @@ cdef void our_saxpy_noblas(const int *N, const float *alpha, const float *X, con
     for i from 0 <= i < N[0] by 1:
         Y[i * (incY[0])] = (alpha[0]) * X[i * (incX[0])] + Y[i * (incY[0])]
 
+
+'''
 cdef void w2v_fast_sentence_sg_hs(
     const np.uint32_t *word_point, const np.uint8_t *word_code, const int codelen,
     REAL_t *syn0, REAL_t *syn1, const int size,
@@ -136,7 +138,7 @@ cdef void w2v_fast_sentence_sg_hs(
         our_saxpy(&size, &g, &syn0[row1], &ONE, &syn1[row2], &ONE)
 
     our_saxpy(&size, &word_locks[word2_index], work, &ONE, &syn0[row1], &ONE)
-
+'''
 
 # to support random draws from negative-sampling cum_table
 cdef inline unsigned long long bisect_left(np.uint32_t *a, unsigned long long x, unsigned long long lo, unsigned long long hi) nogil:
@@ -155,6 +157,10 @@ cdef inline unsigned long long random_int32(unsigned long long *next_random) nog
     cdef unsigned long long this_random = next_random[0] >> 16
     next_random[0] = (next_random[0] * <unsigned long long>25214903917ULL + 11) & 281474976710655ULL
     return this_random
+
+
+
+
 
 cdef unsigned long long w2v_fast_sentence_sg_neg(
     const int negative, np.uint32_t *cum_table, unsigned long long cum_table_len,
@@ -245,106 +251,6 @@ cdef unsigned long long w2v_fast_sentence_sg_neg(
     our_saxpy(&size, &word_locks[word2_index], work, &ONE, &syn0[row1], &ONE)
 
     return next_random
-
-
-cdef void w2v_fast_sentence_cbow_hs(
-    const np.uint32_t *word_point, const np.uint8_t *word_code, int codelens[MAX_SENTENCE_LEN],
-    REAL_t *neu1, REAL_t *syn0, REAL_t *syn1, const int size,
-    const np.uint32_t indexes[MAX_SENTENCE_LEN], const REAL_t alpha, REAL_t *work,
-    int i, int j, int k, int cbow_mean, REAL_t *word_locks,
-    const int _compute_loss, REAL_t *_running_training_loss_param) nogil:
-    """Train on a single effective word from the current batch, using the CBOW method.
-
-    Using this method we train the trainable neural network by attempting to predict a
-    given word by its context (words surrounding the one we are trying to predict).
-    Hierarchical softmax method is used to speed-up training.
-
-    Parameters
-    ----------
-    word_point
-        Vector representation of the current word.
-    word_code
-        ASCII (char == uint8) representation of the current word.
-    codelens
-        Number of characters (length) for all words in the context.
-    neu1
-        Private working memory for every worker.
-    syn0
-        Embeddings for the words in the vocabulary (`model.wv.vectors`)
-    syn1
-        Weights of the hidden layer in the model's trainable neural network.
-    size
-        Length of the embeddings.
-    word2_index
-        Index of the context word in the vocabulary.
-    alpha
-        Learning rate.
-    work
-        Private working memory for each worker.
-    i
-        Index of the word to be predicted from the context.
-    j
-        Index of the word at the beginning of the context window.
-    k
-        Index of the word at the end of the context window.
-    cbow_mean
-        If 0, use the sum of the context word vectors as the prediction. If 1, use the mean.
-    word_locks
-        Lock factors for each word. A value of 0 will block training.
-    _compute_loss
-        Whether or not the loss should be computed at this step.
-    _running_training_loss_param
-        Running loss, used to debug or inspect how training progresses.
-
-    """
-    cdef long long a, b
-    cdef long long row2, sgn
-    cdef REAL_t f, g, count, inv_count = 1.0, f_dot, lprob
-    cdef int m
-
-    memset(neu1, 0, size * cython.sizeof(REAL_t))
-    count = <REAL_t>0.0
-    for m in range(j, k):
-        if m == i:
-            continue
-        else:
-            count += ONEF
-            our_saxpy(&size, &ONEF, &syn0[indexes[m] * size], &ONE, neu1, &ONE)
-    if count > (<REAL_t>0.5):
-        inv_count = ONEF/count
-    if cbow_mean:
-        sscal(&size, &inv_count, neu1, &ONE)  # (does this need BLAS-variants like saxpy?)
-
-    memset(work, 0, size * cython.sizeof(REAL_t))
-    for b in range(codelens[i]):
-        row2 = word_point[b] * size
-        f_dot = our_dot(&size, neu1, &ONE, &syn1[row2], &ONE)
-        if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:
-            continue
-        f = EXP_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
-        g = (1 - word_code[b] - f) * alpha
-
-        if _compute_loss == 1:
-            sgn = (-1)**word_code[b]  # ch function: 0-> 1, 1 -> -1
-            lprob = -1*sgn*f_dot
-            if lprob <= -MAX_EXP or lprob >= MAX_EXP:
-                continue
-            lprob = LOG_TABLE[<int>((lprob + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
-            _running_training_loss_param[0] = _running_training_loss_param[0] - lprob
-
-        our_saxpy(&size, &g, &syn1[row2], &ONE, work, &ONE)
-        our_saxpy(&size, &g, neu1, &ONE, &syn1[row2], &ONE)
-
-    if not cbow_mean:  # divide error over summed window vectors
-        sscal(&size, &inv_count, work, &ONE)  # (does this need BLAS-variants like saxpy?)
-
-    for m in range(j, k):
-        if m == i:
-            continue
-        else:
-            our_saxpy(&size, &word_locks[indexes[m]], work, &ONE, &syn0[indexes[m] * size], &ONE)
-
-
 cdef unsigned long long w2v_fast_sentence_cbow_neg(
     const int negative, np.uint32_t *cum_table, unsigned long long cum_table_len, int codelens[MAX_SENTENCE_LEN],
     REAL_t *neu1,  REAL_t *syn0, REAL_t *syn1neg, const int size,
@@ -579,8 +485,8 @@ def train_batch_sg(model, sentences, alpha, _work, compute_loss):
                 for j in range(j, k):
                     if j == i:
                         continue
-                    if c.hs:
-                        w2v_fast_sentence_sg_hs(c.points[i], c.codes[i], c.codelens[i], c.syn0, c.syn1, c.size, c.indexes[j], c.alpha, c.work, c.word_locks, c.compute_loss, &c.running_training_loss)
+                    # if c.hs:
+                    #     w2v_fast_sentence_sg_hs(c.points[i], c.codes[i], c.codelens[i], c.syn0, c.syn1, c.size, c.indexes[j], c.alpha, c.work, c.word_locks, c.compute_loss, &c.running_training_loss)
                     if c.negative:
                         c.next_random = w2v_fast_sentence_sg_neg(c.negative, c.cum_table, c.cum_table_len, c.syn0, c.syn1neg, c.size, c.indexes[i], c.indexes[j], c.alpha, c.work, c.next_random, c.word_locks, c.compute_loss, &c.running_training_loss)
 
@@ -667,215 +573,13 @@ def train_batch_cbow(model, sentences, alpha, _work, _neu1, compute_loss):
                 k = i + c.window + 1 - c.reduced_windows[i]
                 if k > idx_end:
                     k = idx_end
-                if c.hs:
-                    w2v_fast_sentence_cbow_hs(c.points[i], c.codes[i], c.codelens, c.neu1, c.syn0, c.syn1, c.size, c.indexes, c.alpha, c.work, i, j, k, c.cbow_mean, c.word_locks, c.compute_loss, &c.running_training_loss)
+                # if c.hs:
+                #     w2v_fast_sentence_cbow_hs(c.points[i], c.codes[i], c.codelens, c.neu1, c.syn0, c.syn1, c.size, c.indexes, c.alpha, c.work, i, j, k, c.cbow_mean, c.word_locks, c.compute_loss, &c.running_training_loss)
                 if c.negative:
                     c.next_random = w2v_fast_sentence_cbow_neg(c.negative, c.cum_table, c.cum_table_len, c.codelens, c.neu1, c.syn0, c.syn1neg, c.size, c.indexes, c.alpha, c.work, i, j, k, c.cbow_mean, c.next_random, c.word_locks, c.compute_loss, &c.running_training_loss)
 
     model.running_training_loss = c.running_training_loss
     return effective_words
-
-
-def score_sentence_sg(model, sentence, _work):
-    """Obtain likelihood score for a single sentence in a fitted skip-gram representation.
-
-    Notes
-    -----
-    This scoring function is only implemented for hierarchical softmax (`model.hs == 1`).
-    The model should have been trained using the skip-gram model (`model.sg` == 1`).
-
-    Parameters
-    ----------
-    model : :class:`~gensim.models.word2vec.Word2Vec`
-        The trained model. It **MUST** have been trained using hierarchical softmax and the skip-gram algorithm.
-    sentence : list of str
-        The words comprising the sentence to be scored.
-    _work : np.ndarray
-        Private working memory for each worker.
-
-    Returns
-    -------
-    float
-        The probability assigned to this sentence by the Skip-Gram model.
-
-    """
-    cdef Word2VecConfig c
-    c.syn0 = <REAL_t *>(np.PyArray_DATA(model.wv.vectors))
-    c.size = model.wv.vector_size
-
-    c.window = model.window
-
-    cdef int i, j, k
-    cdef long result = 0
-    cdef int sentence_len
-
-    c.syn1 = <REAL_t *>(np.PyArray_DATA(model.trainables.syn1))
-
-    # convert Python structures to primitive types, so we can release the GIL
-    c.work = <REAL_t *>np.PyArray_DATA(_work)
-
-    vlookup = model.wv.vocab
-    i = 0
-    for token in sentence:
-        word = vlookup[token] if token in vlookup else None
-        if word is None:
-            continue  # should drop the
-        c.indexes[i] = word.index
-        c.codelens[i] = <int>len(word.code)
-        c.codes[i] = <np.uint8_t *>np.PyArray_DATA(word.code)
-        c.points[i] = <np.uint32_t *>np.PyArray_DATA(word.point)
-        result += 1
-        i += 1
-        if i == MAX_SENTENCE_LEN:
-            break  # TODO: log warning, tally overflow?
-    sentence_len = i
-
-    # release GIL & train on the sentence
-    c.work[0] = 0.0
-
-    with nogil:
-        for i in range(sentence_len):
-            if c.codelens[i] == 0:
-                continue
-            j = i - c.window
-            if j < 0:
-                j = 0
-            k = i + c.window + 1
-            if k > sentence_len:
-                k = sentence_len
-            for j in range(j, k):
-                if j == i or c.codelens[j] == 0:
-                    continue
-                score_pair_sg_hs(c.points[i], c.codes[i], c.codelens[i], c.syn0, c.syn1, c.size, c.indexes[j], c.work)
-
-    return c.work[0]
-
-cdef void score_pair_sg_hs(
-    const np.uint32_t *word_point, const np.uint8_t *word_code, const int codelen,
-    REAL_t *syn0, REAL_t *syn1, const int size,
-    const np.uint32_t word2_index, REAL_t *work) nogil:
-
-    cdef long long b
-    cdef long long row1 = word2_index * size, row2, sgn
-    cdef REAL_t f
-
-    for b in range(codelen):
-        row2 = word_point[b] * size
-        f = our_dot(&size, &syn0[row1], &ONE, &syn1[row2], &ONE)
-        sgn = (-1)**word_code[b] # ch function: 0-> 1, 1 -> -1
-        f *= sgn
-        if f <= -MAX_EXP or f >= MAX_EXP:
-            continue
-        f = LOG_TABLE[<int>((f + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
-        work[0] += f
-
-def score_sentence_cbow(model, sentence, _work, _neu1):
-    """Obtain likelihood score for a single sentence in a fitted CBOW representation.
-
-    Notes
-    -----
-    This scoring function is only implemented for hierarchical softmax (`model.hs == 1`).
-    The model should have been trained using the skip-gram model (`model.cbow` == 1`).
-
-    Parameters
-    ----------
-    model : :class:`~gensim.models.word2vec.Word2Vec`
-        The trained model. It **MUST** have been trained using hierarchical softmax and the CBOW algorithm.
-    sentence : list of str
-        The words comprising the sentence to be scored.
-    _work : np.ndarray
-        Private working memory for each worker.
-    _neu1 : np.ndarray
-        Private working memory for each worker.
-
-    Returns
-    -------
-    float
-        The probability assigned to this sentence by the Skip-Gram model.
-
-    """
-    cdef Word2VecConfig c
-
-    c.cbow_mean = model.cbow_mean
-    c.syn0 = <REAL_t *>(np.PyArray_DATA(model.wv.vectors))
-    c.size = model.wv.vector_size
-    c.window = model.window
-
-    cdef int i, j, k
-    cdef long result = 0
-
-    c.syn1 = <REAL_t *>(np.PyArray_DATA(model.trainables.syn1))
-
-    # convert Python structures to primitive types, so we can release the GIL
-    c.work = <REAL_t *>np.PyArray_DATA(_work)
-    c.neu1 = <REAL_t *>np.PyArray_DATA(_neu1)
-
-    vlookup = model.wv.vocab
-    i = 0
-    for token in sentence:
-        word = vlookup[token] if token in vlookup else None
-        if word is None:
-            continue  # for score, should this be a default negative value?
-        c.indexes[i] = word.index
-        c.codelens[i] = <int>len(word.code)
-        c.codes[i] = <np.uint8_t *>np.PyArray_DATA(word.code)
-        c.points[i] = <np.uint32_t *>np.PyArray_DATA(word.point)
-        result += 1
-        i += 1
-        if i == MAX_SENTENCE_LEN:
-            break  # TODO: log warning, tally overflow?
-    sentence_len = i
-
-    # release GIL & train on the sentence
-    c.work[0] = 0.0
-    with nogil:
-        for i in range(sentence_len):
-            if c.codelens[i] == 0:
-                continue
-            j = i - c.window
-            if j < 0:
-                j = 0
-            k = i + c.window + 1
-            if k > sentence_len:
-                k = sentence_len
-            score_pair_cbow_hs(c.points[i], c.codes[i], c.codelens, c.neu1, c.syn0, c.syn1, c.size, c.indexes, c.work, i, j, k, c.cbow_mean)
-
-    return c.work[0]
-
-cdef void score_pair_cbow_hs(
-    const np.uint32_t *word_point, const np.uint8_t *word_code, int codelens[MAX_SENTENCE_LEN],
-    REAL_t *neu1, REAL_t *syn0, REAL_t *syn1, const int size,
-    const np.uint32_t indexes[MAX_SENTENCE_LEN], REAL_t *work,
-    int i, int j, int k, int cbow_mean) nogil:
-
-    cdef long long a, b
-    cdef long long row2
-    cdef REAL_t f, g, count, inv_count, sgn
-    cdef int m
-
-    memset(neu1, 0, size * cython.sizeof(REAL_t))
-    count = <REAL_t>0.0
-    for m in range(j, k):
-        if m == i or codelens[m] == 0:
-            continue
-        else:
-            count += ONEF
-            our_saxpy(&size, &ONEF, &syn0[indexes[m] * size], &ONE, neu1, &ONE)
-    if count > (<REAL_t>0.5):
-        inv_count = ONEF/count
-    if cbow_mean:
-        sscal(&size, &inv_count, neu1, &ONE)
-
-    for b in range(codelens[i]):
-        row2 = word_point[b] * size
-        f = our_dot(&size, neu1, &ONE, &syn1[row2], &ONE)
-        sgn = (-1)**word_code[b] # ch function: 0-> 1, 1 -> -1
-        f *= sgn
-        if f <= -MAX_EXP or f >= MAX_EXP:
-            continue
-        f = LOG_TABLE[<int>((f + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
-        work[0] += f
-
 
 def init():
     """Precompute function `sigmoid(x) = 1 / (1 + exp(-x))`, for x values discretized into table EXP_TABLE.

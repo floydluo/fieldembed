@@ -26,11 +26,11 @@ from .utils_any2vec import _save_word2vec_format, _load_word2vec_format #, ft_ng
 
 logger = logging.getLogger(__name__)
 
-
+# items
 class Vocab(object):
     """A single vocabulary item, used internally for collecting per-word frequency/sampling info,
     and for constructing binary trees (incl. both word leaves and inner nodes).
-
+    # vocab means word_info
     """
     def __init__(self, **kwargs):
         self.count = 0
@@ -42,7 +42,6 @@ class Vocab(object):
     def __str__(self):
         vals = ['%s:%r' % (key, self.__dict__[key]) for key in sorted(self.__dict__) if not key.startswith('_')]
         return "%s(%s)" % (self.__class__.__name__, ', '.join(vals))
-
 
 class BaseKeyedVectors(utils.SaveLoad):
     """Abstract base class / interface for various types of word vectors."""
@@ -101,6 +100,7 @@ class BaseKeyedVectors(utils.SaveLoad):
 
         """
         if entity in self.vocab:
+            # self.vocab[entity].index: get the ordered vocab_index
             result = self.vectors[self.vocab[entity].index]
             result.setflags(write=False)
             return result
@@ -205,19 +205,19 @@ class BaseKeyedVectors(utils.SaveLoad):
         """Rank of the distance of `entity2` from `entity1`, in relation to distances of all entities from `entity1`."""
         return len(self.closer_than(entity1, entity2)) + 1
 
-
 class WordEmbeddingsKeyedVectors(BaseKeyedVectors):
     """Class containing common methods for operations over word vectors."""
     def __init__(self, vector_size):
         super(WordEmbeddingsKeyedVectors, self).__init__(vector_size=vector_size)
         self.vectors_norm = None
-        self.index2word = []
+        self.index2word = [] # DT
 
     @property
     @deprecated("Attribute will be removed in 4.0.0, use self instead")
     def wv(self):
         return self
 
+    ########################
     @property
     def index2entity(self):
         return self.index2word
@@ -226,6 +226,7 @@ class WordEmbeddingsKeyedVectors(BaseKeyedVectors):
     def index2entity(self, value):
         self.index2word = value
 
+    ########################
     @property
     @deprecated("Attribute will be removed in 4.0.0, use self.vectors instead")
     def syn0(self):
@@ -236,6 +237,7 @@ class WordEmbeddingsKeyedVectors(BaseKeyedVectors):
     def syn0(self, value):
         self.vectors = value
 
+    ########################
     @property
     @deprecated("Attribute will be removed in 4.0.0, use self.vectors_norm instead")
     def syn0norm(self):
@@ -245,6 +247,7 @@ class WordEmbeddingsKeyedVectors(BaseKeyedVectors):
     @deprecated("Attribute will be removed in 4.0.0, use self.vectors_norm instead")
     def syn0norm(self, value):
         self.vectors_norm = value
+    ########################
 
     def __contains__(self, word):
         return word in self.vocab
@@ -452,59 +455,6 @@ class WordEmbeddingsKeyedVectors(BaseKeyedVectors):
 
         """
         return self.most_similar(positive=[vector], topn=topn, restrict_vocab=restrict_vocab)
-
-    @deprecated(
-        "Method will be removed in 4.0.0, use "
-        "gensim.models.keyedvectors.WordEmbeddingSimilarityIndex instead")
-    def similarity_matrix(self, dictionary, tfidf=None, threshold=0.0, exponent=2.0, nonzero_limit=100, dtype=REAL):
-        """Construct a term similarity matrix for computing Soft Cosine Measure.
-
-        This creates a sparse term similarity matrix in the :class:`scipy.sparse.csc_matrix` format for computing
-        Soft Cosine Measure between documents.
-
-        Parameters
-        ----------
-        dictionary : :class:`~gensim.corpora.dictionary.Dictionary`
-            A dictionary that specifies the considered terms.
-        tfidf : :class:`gensim.models.tfidfmodel.TfidfModel` or None, optional
-            A model that specifies the relative importance of the terms in the dictionary. The
-            columns of the term similarity matrix will be build in a decreasing order of importance
-            of terms, or in the order of term identifiers if None.
-        threshold : float, optional
-            Only embeddings more similar than `threshold` are considered when retrieving word
-            embeddings closest to a given word embedding.
-        exponent : float, optional
-            Take the word embedding similarities larger than `threshold` to the power of `exponent`.
-        nonzero_limit : int, optional
-            The maximum number of non-zero elements outside the diagonal in a single column of the
-            sparse term similarity matrix.
-        dtype : numpy.dtype, optional
-            Data-type of the sparse term similarity matrix.
-
-        Returns
-        -------
-        :class:`scipy.sparse.csc_matrix`
-            Term similarity matrix.
-
-        See Also
-        --------
-        :func:`gensim.matutils.softcossim`
-            The Soft Cosine Measure.
-        :class:`~gensim.similarities.docsim.SoftCosineSimilarity`
-            A class for performing corpus-based similarity queries with Soft Cosine Measure.
-
-        Notes
-        -----
-        The constructed matrix corresponds to the matrix Mrel defined in section 2.1 of
-        `Delphine Charlet and Geraldine Damnati, "SimBow at SemEval-2017 Task 3: Soft-Cosine Semantic Similarity
-        between Questions for Community Question Answering", 2017
-        <http://www.aclweb.org/anthology/S/S17/S17-2051.pdf>`_.
-
-        """
-        index = WordEmbeddingSimilarityIndex(self, threshold=threshold, exponent=exponent)
-        similarity_matrix = SparseTermSimilarityMatrix(
-            index, dictionary, tfidf=tfidf, nonzero_limit=nonzero_limit, dtype=dtype)
-        return similarity_matrix.matrix
 
     def wmdistance(self, document1, document2):
         """Compute the Word Mover's Distance between two documents.
@@ -973,102 +923,13 @@ class WordEmbeddingsKeyedVectors(BaseKeyedVectors):
                 section['section'], 100.0 * correct / (correct + incorrect), correct, correct + incorrect
             )
 
-    @deprecated("Method will be removed in 4.0.0, use self.evaluate_word_analogies() instead")
-    def accuracy(self, questions, restrict_vocab=30000, most_similar=most_similar, case_insensitive=True):
-        """Compute accuracy of the model.
-
-        The accuracy is reported (=printed to log and returned as a list) for each
-        section separately, plus there's one aggregate summary at the end.
-
-        Parameters
-        ----------
-        questions : str
-            Path to file, where lines are 4-tuples of words, split into sections by ": SECTION NAME" lines.
-            See `gensim/test/test_data/questions-words.txt` as example.
-        restrict_vocab : int, optional
-            Ignore all 4-tuples containing a word not in the first `restrict_vocab` words.
-            This may be meaningful if you've sorted the model vocabulary by descending frequency (which is standard
-            in modern word embedding models).
-        most_similar : function, optional
-            Function used for similarity calculation.
-        case_insensitive : bool, optional
-            If True - convert all words to their uppercase form before evaluating the performance.
-            Useful to handle case-mismatch between training tokens and words in the test set.
-            In case of multiple case variants of a single word, the vector for the first occurrence
-            (also the most frequent if vocabulary is sorted) is taken.
-
-        Returns
-        -------
-        list of dict of (str, (str, str, str)
-            Full lists of correct and incorrect predictions divided by sections.
-
-        """
-        ok_vocab = [(w, self.vocab[w]) for w in self.index2word[:restrict_vocab]]
-        ok_vocab = {w.upper(): v for w, v in reversed(ok_vocab)} if case_insensitive else dict(ok_vocab)
-
-        sections, section = [], None
-        for line_no, line in enumerate(utils.smart_open(questions)):
-            # TODO: use level3 BLAS (=evaluate multiple questions at once), for speed
-            line = utils.to_unicode(line)
-            if line.startswith(': '):
-                # a new section starts => store the old section
-                if section:
-                    sections.append(section)
-                    self.log_accuracy(section)
-                section = {'section': line.lstrip(': ').strip(), 'correct': [], 'incorrect': []}
-            else:
-                if not section:
-                    raise ValueError("Missing section header before line #%i in %s" % (line_no, questions))
-                try:
-                    if case_insensitive:
-                        a, b, c, expected = [word.upper() for word in line.split()]
-                    else:
-                        a, b, c, expected = [word for word in line.split()]
-                except ValueError:
-                    logger.info("Skipping invalid line #%i in %s", line_no, questions)
-                    continue
-                if a not in ok_vocab or b not in ok_vocab or c not in ok_vocab or expected not in ok_vocab:
-                    logger.debug("Skipping line #%i with OOV words: %s", line_no, line.strip())
-                    continue
-                original_vocab = self.vocab
-                self.vocab = ok_vocab
-                ignore = {a, b, c}  # input words to be ignored
-                predicted = None
-                # find the most likely prediction, ignoring OOV words and input words
-                sims = most_similar(self, positive=[b, c], negative=[a], topn=None, restrict_vocab=restrict_vocab)
-                self.vocab = original_vocab
-                for index in matutils.argsort(sims, reverse=True):
-                    predicted = self.index2word[index].upper() if case_insensitive else self.index2word[index]
-                    if predicted in ok_vocab and predicted not in ignore:
-                        if predicted != expected:
-                            logger.debug("%s: expected %s, predicted %s", line.strip(), expected, predicted)
-                        break
-                if predicted == expected:
-                    section['correct'].append((a, b, c, expected))
-                else:
-                    section['incorrect'].append((a, b, c, expected))
-        if section:
-            # store the last section, too
-            sections.append(section)
-            self.log_accuracy(section)
-
-        total = {
-            'section': 'total',
-            'correct': list(chain.from_iterable(s['correct'] for s in sections)),
-            'incorrect': list(chain.from_iterable(s['incorrect'] for s in sections)),
-        }
-        self.log_accuracy(total)
-        sections.append(total)
-        return sections
-
     @staticmethod
-    def log_evaluate_word_pairs(pearson, spearman, oov, pairs):
+    def _log_evaluate_word_pairs(pearson, spearman, oov, pairs):
         logger.info('Pearson correlation coefficient against %s: %.4f', pairs, pearson[0])
         logger.info('Spearman rank-order correlation coefficient against %s: %.4f', pairs, spearman[0])
         logger.info('Pairs with unknown words ratio: %.1f%%', oov)
 
-    def evaluate_word_pairs(self, pairs, delimiter='\t', restrict_vocab=300000,
-                            case_insensitive=True, dummy4unknown=False):
+    def evaluate_word_pairs(self, pairs, delimiter='\t', restrict_vocab=300000, case_insensitive=True, dummy4unknown=False):
         """Compute correlation of the model with human similarity judgments.
 
         Notes
@@ -1159,7 +1020,7 @@ class WordEmbeddingsKeyedVectors(BaseKeyedVectors):
             pairs, spearman[0], spearman[1]
         )
         logger.debug('Pairs with unknown words: %d', oov)
-        self.log_evaluate_word_pairs(pearson, spearman, oov_ratio, pairs)
+        self._log_evaluate_word_pairs(pearson, spearman, oov_ratio, pairs)
         return pearson, spearman, oov_ratio
 
     def init_sims(self, replace=False):
@@ -1212,49 +1073,6 @@ class WordEmbeddingsKeyedVectors(BaseKeyedVectors):
 
         return rcs
 
-
-class WordEmbeddingSimilarityIndex(TermSimilarityIndex):
-    """
-    Computes cosine similarities between word embeddings and retrieves the closest word embeddings
-    by cosine similarity for a given word embedding.
-
-    Parameters
-    ----------
-    keyedvectors : :class:`~gensim.models.keyedvectors.WordEmbeddingsKeyedVectors`
-        The word embeddings.
-    threshold : float, optional
-        Only embeddings more similar than `threshold` are considered when retrieving word embeddings
-        closest to a given word embedding.
-    exponent : float, optional
-        Take the word embedding similarities larger than `threshold` to the power of `exponent`.
-    kwargs : dict or None
-        A dict with keyword arguments that will be passed to the `keyedvectors.most_similar` method
-        when retrieving the word embeddings closest to a given word embedding.
-
-    See Also
-    --------
-    :class:`~gensim.similarities.termsim.SparseTermSimilarityMatrix`
-        Build a term similarity matrix and compute the Soft Cosine Measure.
-
-    """
-    def __init__(self, keyedvectors, threshold=0.0, exponent=2.0, kwargs=None):
-        assert isinstance(keyedvectors, WordEmbeddingsKeyedVectors)
-        self.keyedvectors = keyedvectors
-        self.threshold = threshold
-        self.exponent = exponent
-        self.kwargs = kwargs or {}
-        super(WordEmbeddingSimilarityIndex, self).__init__()
-
-    def most_similar(self, t1, topn=10):
-        if t1 not in self.keyedvectors.vocab:
-            logger.debug('an out-of-dictionary term "%s"', t1)
-        else:
-            most_similar = self.keyedvectors.most_similar(positive=[t1], topn=topn, **self.kwargs)
-            for t2, similarity in most_similar:
-                if similarity > self.threshold:
-                    yield (t2, similarity**self.exponent)
-
-
 class Word2VecKeyedVectors(WordEmbeddingsKeyedVectors):
     """Mapping between words and vectors for the :class:`~gensim.models.Word2Vec` model.
     Used to perform operations on the vectors such as vector lookup, distance, similarity etc.
@@ -1282,8 +1100,7 @@ class Word2VecKeyedVectors(WordEmbeddingsKeyedVectors):
             fname, self.vocab, self.vectors, fvocab=fvocab, binary=binary, total_vec=total_vec)
 
     @classmethod
-    def load_word2vec_format(cls, fname, fvocab=None, binary=False, encoding='utf8', unicode_errors='strict',
-                             limit=None, datatype=REAL):
+    def load_word2vec_format(cls, fname, fvocab=None, binary=False, encoding='utf8', unicode_errors='strict',limit=None, datatype=REAL):
         """Load the input-hidden weight matrix from the original C word2vec-tool format.
 
         Warnings
@@ -1375,7 +1192,6 @@ class Word2VecKeyedVectors(WordEmbeddingsKeyedVectors):
 
 
 KeyedVectors = Word2VecKeyedVectors  # alias for backward compatibility
-
 
 def _process_fasttext_vocab(iterable, min_n, max_n, num_buckets, compatible_hash):
     """
@@ -1586,3 +1402,46 @@ def _try_upgrade(wv):
             "from scratch."
         )
         wv.compatible_hash = False
+
+
+class WordEmbeddingSimilarityIndex(TermSimilarityIndex):
+    """
+    Computes cosine similarities between word embeddings and retrieves the closest word embeddings
+    by cosine similarity for a given word embedding.
+
+    Parameters
+    ----------
+    keyedvectors : :class:`~gensim.models.keyedvectors.WordEmbeddingsKeyedVectors`
+        The word embeddings.
+    threshold : float, optional
+        Only embeddings more similar than `threshold` are considered when retrieving word embeddings
+        closest to a given word embedding.
+    exponent : float, optional
+        Take the word embedding similarities larger than `threshold` to the power of `exponent`.
+    kwargs : dict or None
+        A dict with keyword arguments that will be passed to the `keyedvectors.most_similar` method
+        when retrieving the word embeddings closest to a given word embedding.
+
+    See Also
+    --------
+    :class:`~gensim.similarities.termsim.SparseTermSimilarityMatrix`
+        Build a term similarity matrix and compute the Soft Cosine Measure.
+
+    """
+    def __init__(self, keyedvectors, threshold=0.0, exponent=2.0, kwargs=None):
+        assert isinstance(keyedvectors, WordEmbeddingsKeyedVectors)
+        self.keyedvectors = keyedvectors
+        self.threshold = threshold
+        self.exponent = exponent
+        self.kwargs = kwargs or {}
+        super(WordEmbeddingSimilarityIndex, self).__init__()
+
+    def most_similar(self, t1, topn=10):
+        if t1 not in self.keyedvectors.vocab:
+            logger.debug('an out-of-dictionary term "%s"', t1)
+        else:
+            most_similar = self.keyedvectors.most_similar(positive=[t1], topn=topn, **self.kwargs)
+            for t2, similarity in most_similar:
+                if similarity > self.threshold:
+                    yield (t2, similarity**self.exponent)
+
