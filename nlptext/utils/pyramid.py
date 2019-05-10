@@ -7,7 +7,7 @@ from datetime import datetime
 
 from .channel import getChannelName
 from .grain import getChannelGrain4Token
-from .infrastructure import UNK_ID, specialTokens, specialTokensDict, strQ2B, fileReader
+from .infrastructure import UNK, UNK_ID, specialTokens, specialTokensDict, strQ2B, fileReader
 
 ##################################################################################################CORPUS-FOLDER
 # Important One 
@@ -407,9 +407,13 @@ def buildTokens(tokenList, MaxTokenUnique = None):
 
     print('Generating Dictionary of Token Unique...\t', datetime.now())
     DTU = specialTokensDict.copy()
-    for token, _ in count:
+    DTU_freq = {sp_tk: 0 for sp_tk in specialTokens}
+    for token, freq in count:
         if token is not specialTokens:
             DTU[token] = len(DTU)
+            DTU_freq[token] = freq
+        else:
+            DTU_freq[token] = DTU_freq[token] + 1
 
 
     print('\t\tThe length of DTU is:', len(DTU), '\t', datetime.now())
@@ -417,7 +421,11 @@ def buildTokens(tokenList, MaxTokenUnique = None):
     data = np.zeros(len(tokenList), dtype=int)
     # data = []
     for idx, token in enumerate(tokenList):
-        data[idx] = DTU.get(token, UNK_ID)
+        voc_id = DTU.get(token, UNK_ID)
+        data[idx] = voc_id
+        if voc_id == UNK_ID:
+            DTU_freq[UNK] = DTU_freq[UNK] + 1
+
         # data.append(DTU.get(token,UNK_ID))
         if idx % 5000000 == 0:
             print('\t\tThe idx of token is:', idx, '\t', datetime.now())
@@ -428,7 +436,7 @@ def buildTokens(tokenList, MaxTokenUnique = None):
         print('Only Keep First', MaxTokenUnique, 'Tokens.')
         print('The coverage rate is:', np.bincount(data)[UNK_ID]/total_len_token)
     # data = np.array(data)
-    return data, LTU, DTU
+    return data, LTU, DTU, DTU_freq
 ##################################################################################################TOKEN_LTU
 
 

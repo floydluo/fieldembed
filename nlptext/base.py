@@ -283,7 +283,7 @@ class BasicObject(object):
         print('Total Num of All    Tokens', len(TOKEN['ORIGToken']))
         # TOKEN['ORIGToken'] = list(TOKEN['ORIGToken'])
         # print(datetime.now())
-        TOKEN['ORIGTokenIndex'], LTU, DTU =  buildTokens(TOKEN['ORIGToken'], MaxTokenUnique)
+        TOKEN['ORIGTokenIndex'], LTU, DTU, DTU_freq =  buildTokens(TOKEN['ORIGToken'], MaxTokenUnique)
         # print(datetime.now())
         del TOKEN['ORIGToken']
         
@@ -367,6 +367,7 @@ class BasicObject(object):
         cls.SENT   = SENT
         cls.TOKEN  = TOKEN
         cls.TokenUnique = (LTU, DTU)
+        cls.DTU_freq = DTU_freq
         cls.GRAIN_UNI = GRAIN_UNI
         cls.TokenNum_Dir = TokenNum_Dir
         cls.OBJECT_TO_PICKLE()
