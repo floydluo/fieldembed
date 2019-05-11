@@ -32,6 +32,7 @@ from .base_any2vec import BaseWordEmbeddingsModel
 logger = logging.getLogger(__name__)
 
 from .word2vec_inner import train_batch_sg_nlptext, train_batch_cbow_nlptext
+from .word2vec_inner import train_batch_fieldembed_token
 from .word2vec_inner import FAST_VERSION, MAX_WORDS_IN_BATCH
 
 class FieldEmbedding(BaseWordEmbeddingsModel):
@@ -70,12 +71,14 @@ class FieldEmbedding(BaseWordEmbeddingsModel):
     def _do_train_job_nlptext(self, indexes, sentence_idx, alpha, inits):
         work, neu1 = inits
         tally = 0
-        if self.sg:
-            # print('||--> Use sg..')
-            tally += train_batch_sg_nlptext(self, indexes, sentence_idx, alpha, work, self.compute_loss)
-        else:
-            # print('||--> Use cbow..')
-            tally += train_batch_cbow_nlptext(self, indexes, sentence_idx, alpha, work, neu1, self.compute_loss)
+        
+        tally += train_batch_fieldembed_token(self, indexes, sentence_idx, alpha, work, neu1, self.compute_loss)
+        # if self.sg:
+        #     # print('||--> Use sg..')
+        #     tally += train_batch_sg_nlptext(self, indexes, sentence_idx, alpha, work, self.compute_loss)
+        # else:
+        #     # print('||--> Use cbow..')
+        #     tally += train_batch_cbow_nlptext(self, indexes, sentence_idx, alpha, work, neu1, self.compute_loss)
         return tally, sentence_idx[-1] # sentence_idx[-1] is the length of all tokens form this job sentences.
 
     def _clear_post_train(self):
