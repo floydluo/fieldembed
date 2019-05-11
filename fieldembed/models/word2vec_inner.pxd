@@ -50,6 +50,7 @@ cdef our_saxpy_ptr our_saxpy
 
 cdef struct Word2VecConfig:
     int hs, negative, sample, compute_loss, size, window, cbow_mean, workers
+    int sg # added by jjluo
 
     REAL_t running_training_loss, alpha
 
@@ -165,47 +166,26 @@ cdef init_w2v_config(
     _neu1=*)
 
 
-# cdef unsigned long long w2v_nlptext_sg_neg(
-#     const int negative, 
-#     np.uint32_t *cum_table, 
-#     unsigned long long cum_table_len,
-#     REAL_t *syn0, 
-#     REAL_t *syn1neg, 
-#     const int size, 
-#     const np.uint32_t word_index,
-#     const np.uint32_t word2_index, 
-#     const REAL_t alpha, 
-#     REAL_t *work,
-#     unsigned long long next_random, 
-#     REAL_t *word_locks,
-#     const int _compute_loss, 
-#     REAL_t *_running_training_loss_param) nogil
+cdef unsigned long long feildembed_token_neg( 
+    const REAL_t alpha, 
+    const int size,
+    const int negative, 
+    np.uint32_t *cum_table, 
+    unsigned long long cum_table_len, 
 
+    const np.uint32_t indexes[MAX_SENTENCE_LEN], 
+    int i, # right word loc_idx
+    int j, # left  word loc_idx start
+    int k, # left  word loc_idx end
 
-# cdef unsigned long long w2v_nlptext_cbow_neg( 
-#     const int negative, 
-#     np.uint32_t *cum_table, 
-#     unsigned long long cum_table_len, 
-#     int codelens[MAX_SENTENCE_LEN],
-#     REAL_t *neu1,  
-#     REAL_t *syn0, 
-#     REAL_t *syn1neg, 
-#     const int size,
-#     np.uint32_t *indexes, 
-#     const REAL_t alpha, 
-#     REAL_t *work,
-#     int i, int j, int k, 
-#     int cbow_mean, 
-#     unsigned long long next_random, 
-#     REAL_t *word_locks,
-#     const int _compute_loss, 
-#     REAL_t *_running_training_loss_param) nogil
-
-
-# cdef init_w2v_config_nlptext(
-#     Word2VecConfig_NLPText *c, 
-#     model, 
-#     alpha, 
-#     compute_loss,
-#     _work,
-#     _neu1=*)
+    REAL_t *syn0, 
+    REAL_t *syn1neg, 
+    REAL_t *word_locks,
+    REAL_t *neu1,  
+    REAL_t *work,
+    
+    int cbow_mean, 
+    unsigned long long next_random, 
+    const int _compute_loss, 
+    REAL_t *_running_training_loss_param) nogil
+#=================================================#
