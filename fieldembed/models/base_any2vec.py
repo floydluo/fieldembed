@@ -416,7 +416,6 @@ class BaseAny2VecModel(utils.SaveLoad):
 
     def _train_epoch_nlptext(self, nlptext, cur_epoch=0, total_examples=None, total_words=None,queue_factor=2, report_delay=1.0):
         
-
         ########### preprocess
         sentences_endidx = nlptext.SENT['EndIDXTokens']
         tokens_vocidx    = nlptext.TOKEN['ORIGTokenIndex']
@@ -504,6 +503,9 @@ class BaseAny2VecModel(utils.SaveLoad):
                     nlptext, cur_epoch=cur_epoch, total_examples=total_examples,
                     total_words=total_words, queue_factor=queue_factor, report_delay=report_delay
                 )
+
+            else:
+                print('No Training Data is Provided...')
 
             trained_word_count += trained_word_count_epoch
             raw_word_count += raw_word_count_epoch
@@ -652,7 +654,7 @@ class BaseWordEmbeddingsModel(BaseAny2VecModel):
             # then train
             print('\n\n======== Training Start ....'); s = datetime.now()
             self.train(
-                sentences=sentences, corpus_file=corpus_file, nlptext = nlptext, total_examples=self.corpus_count,
+                sentences=sentences, corpus_file = corpus_file, nlptext = nlptext, total_examples=self.corpus_count,
                 total_words=self.corpus_total_words, epochs=self.epochs, start_alpha=self.alpha,
                 end_alpha=self.min_alpha, compute_loss=compute_loss)
             print('======== Training End ......'); e = datetime.now()
@@ -665,135 +667,9 @@ class BaseWordEmbeddingsModel(BaseAny2VecModel):
                     "and is not stored as part of the model. Model initialized without sentences. "
                     "trim_rule provided, if any, will be ignored.")
 
-    # for backward compatibility (aliases pointing to corresponding variables in trainables, vocabulary)
-    @property
-    @deprecated("Attribute will be removed in 4.0.0, use self.epochs instead")
-    def iter(self):
-        return self.epochs
-
-    @iter.setter
-    @deprecated("Attribute will be removed in 4.0.0, use self.epochs instead")
-    def iter(self, value):
-        self.epochs = value
-
-    @property
-    @deprecated("Attribute will be removed in 4.0.0, use self.trainables.syn1 instead")
-    def syn1(self):
-        return self.trainables.syn1
-
-    @syn1.setter
-    @deprecated("Attribute will be removed in 4.0.0, use self.trainables.syn1 instead")
-    def syn1(self, value):
-        self.trainables.syn1 = value
-
-    @syn1.deleter
-    @deprecated("Attribute will be removed in 4.0.0, use self.trainables.syn1 instead")
-    def syn1(self):
-        del self.trainables.syn1
-
-    @property
-    @deprecated("Attribute will be removed in 4.0.0, use self.trainables.syn1neg instead")
-    def syn1neg(self):
-        return self.trainables.syn1neg
-
-    @syn1neg.setter
-    @deprecated("Attribute will be removed in 4.0.0, use self.trainables.syn1neg instead")
-    def syn1neg(self, value):
-        self.trainables.syn1neg = value
-
-    @syn1neg.deleter
-    @deprecated("Attribute will be removed in 4.0.0, use self.trainables.syn1neg instead")
-    def syn1neg(self):
-        del self.trainables.syn1neg
-
-    @property
-    @deprecated("Attribute will be removed in 4.0.0, use self.trainables.vectors_lockf instead")
-    def syn0_lockf(self):
-        return self.trainables.vectors_lockf
-
-    @syn0_lockf.setter
-    @deprecated("Attribute will be removed in 4.0.0, use self.trainables.vectors_lockf instead")
-    def syn0_lockf(self, value):
-        self.trainables.vectors_lockf = value
-
-    @syn0_lockf.deleter
-    @deprecated("Attribute will be removed in 4.0.0, use self.trainables.vectors_lockf instead")
-    def syn0_lockf(self):
-        del self.trainables.vectors_lockf
-
-    @property
-    @deprecated("Attribute will be removed in 4.0.0, use self.trainables.layer1_size instead")
-    def layer1_size(self):
-        return self.trainables.layer1_size
-
-    @layer1_size.setter
-    @deprecated("Attribute will be removed in 4.0.0, use self.trainables.layer1_size instead")
-    def layer1_size(self, value):
-        self.trainables.layer1_size = value
-
-    @property
-    @deprecated("Attribute will be removed in 4.0.0, use self.trainables.hashfxn instead")
-    def hashfxn(self):
-        return self.trainables.hashfxn
-
-    @hashfxn.setter
-    @deprecated("Attribute will be removed in 4.0.0, use self.trainables.hashfxn instead")
-    def hashfxn(self, value):
-        self.trainables.hashfxn = value
-
-    @property
-    @deprecated("Attribute will be removed in 4.0.0, use self.vocabulary.sample instead")
-    def sample(self):
-        return self.vocabulary.sample
-
-    @sample.setter
-    @deprecated("Attribute will be removed in 4.0.0, use self.vocabulary.sample instead")
-    def sample(self, value):
-        self.vocabulary.sample = value
-
-    @property
-    @deprecated("Attribute will be removed in 4.0.0, use self.vocabulary.min_count instead")
-    def min_count(self):
-        return self.vocabulary.min_count
-
-    @min_count.setter
-    @deprecated("Attribute will be removed in 4.0.0, use self.vocabulary.min_count instead")
-    def min_count(self, value):
-        self.vocabulary.min_count = value
-
-    @property
-    @deprecated("Attribute will be removed in 4.0.0, use self.vocabulary.cum_table instead")
-    def cum_table(self):
-        return self.vocabulary.cum_table
-
-    @cum_table.setter
-    @deprecated("Attribute will be removed in 4.0.0, use self.vocabulary.cum_table instead")
-    def cum_table(self, value):
-        self.vocabulary.cum_table = value
-
-    @cum_table.deleter
-    @deprecated("Attribute will be removed in 4.0.0, use self.vocabulary.cum_table instead")
-    def cum_table(self):
-        del self.vocabulary.cum_table
-
-    def __str__(self):
-        """Get a human readable representation of the object.
-
-        Returns
-        -------
-        str
-            A human readable string containing the class name, as well as the size of dictionary, number of
-            features and starting learning rate used by the object.
-
-        """
-        return "%s(vocab=%s, size=%s, alpha=%s)" % (
-            self.__class__.__name__, len(self.wv.index2word), self.vector_size, self.alpha
-        )
-
     # this seems to be important.
     def build_vocab(self, sentences=None, corpus_file=None, nlptext = None, update=False, progress_per=10000, keep_raw_vocab=False, trim_rule=None, **kwargs):
         
-
         ## my code:
         if nlptext is not None:
             # scan_vocab and prepare_vocab
@@ -803,9 +679,7 @@ class BaseWordEmbeddingsModel(BaseAny2VecModel):
 
             print('-------> Prepare Vocab....')
             total_words, corpus_count,  report_values = self.vocabulary.scan_and_prepare_vocab_from_nlptext(nlptext, 
-                                                                        self.hs, self.negative, self.wv, 
-                                                                        update=update, keep_raw_vocab=keep_raw_vocab,
-                                                                        trim_rule=trim_rule, **kwargs) 
+                                                                        self.negative, self.wv, update=update, **kwargs) 
 
             self.corpus_count = corpus_count
             self.corpus_total_words = total_words
@@ -813,8 +687,7 @@ class BaseWordEmbeddingsModel(BaseAny2VecModel):
             report_values['memory'] = self.estimate_memory(vocab_size=report_values['num_retained_words'])
 
             print('-------> Prepare Trainable Weight....')
-            self.trainables.prepare_weights_from_nlptext(self.hs, self.negative, self.wv, update=update, 
-                                                         vocabulary=self.vocabulary)
+            self.trainables.prepare_weights_from_nlptext(self.negative, self.wv, update=update, vocabulary=self.vocabulary)
 
             print('======== The Voc and Parameters are Ready!'); e = datetime.now()
             print('======== Total Time: ', e - s)
@@ -926,49 +799,6 @@ class BaseWordEmbeddingsModel(BaseAny2VecModel):
     def train(self, sentences=None, corpus_file=None, nlptext = None, total_examples=None, total_words=None,
               epochs=None, start_alpha=None, end_alpha=None, word_count=0,
               queue_factor=2, report_delay=1.0, compute_loss=False, callbacks=(), **kwargs):
-        """Train the model. If the hyper-parameters are passed, they override the ones set in the constructor.
-
-        Parameters
-        ----------
-        sentences : iterable of list of str
-            Can be simply a list of lists of tokens, but for larger corpora,
-            consider an iterable that streams the sentences directly from disk/network.
-            See :class:`~gensim.models.word2vec.BrownCorpus`, :class:`~gensim.models.word2vec.Text8Corpus`
-            or :class:`~gensim.models.word2vec.LineSentence` module for such examples.
-        corpus_file : str, optional
-            Path to a corpus file in :class:`~gensim.models.word2vec.LineSentence` format.
-            You may use this argument instead of `sentences` to get performance boost. Only one of `sentences` or
-            `corpus_file` arguments need to be passed (not both of them).
-        total_examples : int, optional
-            Count of sentences.
-        total_words : int, optional
-            Count of raw words in sentences.
-        epochs : int, optional
-            Number of iterations (epochs) over the corpus.
-        start_alpha : float, optional
-            Initial learning rate.
-        end_alpha : float, optional
-            Final learning rate. Drops linearly with the number of iterations from `start_alpha`.
-        word_count : int, optional
-            Count of words already trained. Leave this to 0 for the usual case of training on all words in sentences.
-        queue_factor : int, optional
-            Multiplier for size of queue -> size = number of workers * queue_factor.
-        report_delay : float, optional
-            Seconds to wait before reporting progress.
-        compute_loss : bool, optional
-            If True, loss will be computed while training the Word2Vec model and stored in
-            :attr:`~gensim.models.base_any2vec.BaseWordEmbeddingsModel.running_training_loss`.
-        callbacks : list of :class:`~gensim.models.callbacks.CallbackAny2Vec`, optional
-            List of callbacks that need to be executed/run at specific stages during training.
-        **kwargs : object
-            Additional key word parameters for the specific model inheriting from this class.
-
-        Returns
-        -------
-        (int, int)
-            Tuple of (effective word count after ignoring unknown words and sentence length trimming, total word count).
-
-        """
 
         self.alpha = start_alpha or self.alpha
         self.min_alpha = end_alpha or self.min_alpha
@@ -979,6 +809,12 @@ class BaseWordEmbeddingsModel(BaseAny2VecModel):
             total_words=total_words, epochs=epochs, start_alpha=start_alpha, end_alpha=end_alpha, word_count=word_count,
             queue_factor=queue_factor, report_delay=report_delay, compute_loss=compute_loss, callbacks=callbacks,
             **kwargs)
+
+
+    def _get_thread_working_mem(self):
+        work = matutils.zeros_aligned(self.trainables.layer1_size, dtype=REAL)  # per-thread private work memory
+        neu1 = matutils.zeros_aligned(self.trainables.layer1_size, dtype=REAL)
+        return work, neu1
 
     def _get_job_params(self, cur_epoch):
         """Get the learning rate used in the current epoch.
@@ -998,23 +834,6 @@ class BaseWordEmbeddingsModel(BaseAny2VecModel):
         return alpha
 
     def _update_job_params(self, job_params, epoch_progress, cur_epoch):
-        """Get the correct learning rate for the next iteration.
-
-        Parameters
-        ----------
-        job_params : dict of (str, obj)
-            UNUSED.
-        epoch_progress : float
-            Ratio of finished work in the current epoch.
-        cur_epoch : int
-            Number of current iteration.
-
-        Returns
-        -------
-        float
-            The learning rate to be used in the next training epoch.
-
-        """
         start_alpha = self.alpha
         end_alpha = self.min_alpha
         progress = (cur_epoch + epoch_progress) / self.epochs
@@ -1022,19 +841,6 @@ class BaseWordEmbeddingsModel(BaseAny2VecModel):
         next_alpha = max(end_alpha, next_alpha)
         self.min_alpha_yet_reached = next_alpha
         return next_alpha
-
-    def _get_thread_working_mem(self):
-        """Computes the memory used per worker thread.
-
-        Returns
-        -------
-        (np.ndarray, np.ndarray)
-            Each worker threads private work memory.
-
-        """
-        work = matutils.zeros_aligned(self.trainables.layer1_size, dtype=REAL)  # per-thread private work memory
-        neu1 = matutils.zeros_aligned(self.trainables.layer1_size, dtype=REAL)
-        return work, neu1
 
     def _raw_word_count(self, job):
         """Get the number of words in a given job.
@@ -1298,3 +1104,129 @@ class BaseWordEmbeddingsModel(BaseAny2VecModel):
 
         """
         return self.wv.evaluate_word_pairs(pairs, delimiter, restrict_vocab, case_insensitive, dummy4unknown)
+
+
+    # for backward compatibility (aliases pointing to corresponding variables in trainables, vocabulary)
+    @property
+    @deprecated("Attribute will be removed in 4.0.0, use self.epochs instead")
+    def iter(self):
+        return self.epochs
+
+    @iter.setter
+    @deprecated("Attribute will be removed in 4.0.0, use self.epochs instead")
+    def iter(self, value):
+        self.epochs = value
+
+    @property
+    @deprecated("Attribute will be removed in 4.0.0, use self.trainables.syn1 instead")
+    def syn1(self):
+        return self.trainables.syn1
+
+    @syn1.setter
+    @deprecated("Attribute will be removed in 4.0.0, use self.trainables.syn1 instead")
+    def syn1(self, value):
+        self.trainables.syn1 = value
+
+    @syn1.deleter
+    @deprecated("Attribute will be removed in 4.0.0, use self.trainables.syn1 instead")
+    def syn1(self):
+        del self.trainables.syn1
+
+    @property
+    @deprecated("Attribute will be removed in 4.0.0, use self.trainables.syn1neg instead")
+    def syn1neg(self):
+        return self.trainables.syn1neg
+
+    @syn1neg.setter
+    @deprecated("Attribute will be removed in 4.0.0, use self.trainables.syn1neg instead")
+    def syn1neg(self, value):
+        self.trainables.syn1neg = value
+
+    @syn1neg.deleter
+    @deprecated("Attribute will be removed in 4.0.0, use self.trainables.syn1neg instead")
+    def syn1neg(self):
+        del self.trainables.syn1neg
+
+    @property
+    @deprecated("Attribute will be removed in 4.0.0, use self.trainables.vectors_lockf instead")
+    def syn0_lockf(self):
+        return self.trainables.vectors_lockf
+
+    @syn0_lockf.setter
+    @deprecated("Attribute will be removed in 4.0.0, use self.trainables.vectors_lockf instead")
+    def syn0_lockf(self, value):
+        self.trainables.vectors_lockf = value
+
+    @syn0_lockf.deleter
+    @deprecated("Attribute will be removed in 4.0.0, use self.trainables.vectors_lockf instead")
+    def syn0_lockf(self):
+        del self.trainables.vectors_lockf
+
+    @property
+    @deprecated("Attribute will be removed in 4.0.0, use self.trainables.layer1_size instead")
+    def layer1_size(self):
+        return self.trainables.layer1_size
+
+    @layer1_size.setter
+    @deprecated("Attribute will be removed in 4.0.0, use self.trainables.layer1_size instead")
+    def layer1_size(self, value):
+        self.trainables.layer1_size = value
+
+    @property
+    @deprecated("Attribute will be removed in 4.0.0, use self.trainables.hashfxn instead")
+    def hashfxn(self):
+        return self.trainables.hashfxn
+
+    @hashfxn.setter
+    @deprecated("Attribute will be removed in 4.0.0, use self.trainables.hashfxn instead")
+    def hashfxn(self, value):
+        self.trainables.hashfxn = value
+
+    @property
+    @deprecated("Attribute will be removed in 4.0.0, use self.vocabulary.sample instead")
+    def sample(self):
+        return self.vocabulary.sample
+
+    @sample.setter
+    @deprecated("Attribute will be removed in 4.0.0, use self.vocabulary.sample instead")
+    def sample(self, value):
+        self.vocabulary.sample = value
+
+    @property
+    @deprecated("Attribute will be removed in 4.0.0, use self.vocabulary.min_count instead")
+    def min_count(self):
+        return self.vocabulary.min_count
+
+    @min_count.setter
+    @deprecated("Attribute will be removed in 4.0.0, use self.vocabulary.min_count instead")
+    def min_count(self, value):
+        self.vocabulary.min_count = value
+
+    @property
+    @deprecated("Attribute will be removed in 4.0.0, use self.vocabulary.cum_table instead")
+    def cum_table(self):
+        return self.vocabulary.cum_table
+
+    @cum_table.setter
+    @deprecated("Attribute will be removed in 4.0.0, use self.vocabulary.cum_table instead")
+    def cum_table(self, value):
+        self.vocabulary.cum_table = value
+
+    @cum_table.deleter
+    @deprecated("Attribute will be removed in 4.0.0, use self.vocabulary.cum_table instead")
+    def cum_table(self):
+        del self.vocabulary.cum_table
+
+    def __str__(self):
+        """Get a human readable representation of the object.
+
+        Returns
+        -------
+        str
+            A human readable string containing the class name, as well as the size of dictionary, number of
+            features and starting learning rate used by the object.
+
+        """
+        return "%s(vocab=%s, size=%s, alpha=%s)" % (
+            self.__class__.__name__, len(self.wv.index2word), self.vector_size, self.alpha
+        )
