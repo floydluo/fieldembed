@@ -47,6 +47,7 @@ cdef int ONE = 1
 cdef REAL_t ONEF = <REAL_t>1.0
 
 
+############################################## UTILS TOOL
 # for when fblas.sdot returns a double
 cdef REAL_t our_dot_double(const int *N, const float *X, const int *incX, const float *Y, const int *incY) nogil:
     return <REAL_t>dsdot(N, X, incX, Y, incY)
@@ -71,75 +72,6 @@ cdef void our_saxpy_noblas(const int *N, const float *alpha, const float *X, con
     for i from 0 <= i < N[0] by 1:
         Y[i * (incY[0])] = (alpha[0]) * X[i * (incX[0])] + Y[i * (incY[0])]
 
-
-'''
-cdef void w2v_fast_sentence_sg_hs(
-    const np.uint32_t *word_point, const np.uint8_t *word_code, const int codelen,
-    REAL_t *syn0, REAL_t *syn1, const int size,
-    const np.uint32_t word2_index, const REAL_t alpha, REAL_t *work, REAL_t *word_locks,
-    const int _compute_loss, REAL_t *_running_training_loss_param) nogil:
-    """Train on a single effective word from the current batch, using the Skip-Gram model.
-
-    In this model we are using a given word to predict a context word (a word that is
-    close to the one we are using as training). Hierarchical softmax is used to speed-up
-    training.
-
-    Parameters
-    ----------
-    word_point
-        Vector representation of the current word.
-    word_code
-        ASCII (char == uint8) representation of the current word.
-    codelen
-        Number of characters (length) in the current word.
-    syn0
-        Embeddings for the words in the vocabulary (`model.wv.vectors`)
-    syn1
-        Weights of the hidden layer in the model's trainable neural network.
-    size
-        Length of the embeddings.
-    word2_index
-        Index of the context word in the vocabulary.
-    alpha
-        Learning rate.
-    work
-        Private working memory for each worker.
-    word_locks
-        Lock factors for each word. A value of 0 will block training.
-    _compute_loss
-        Whether or not the loss should be computed at this step.
-    _running_training_loss_param
-        Running loss, used to debug or inspect how training progresses.
-
-    """
-
-    cdef long long a, b
-    cdef long long row1 = word2_index * size, row2, sgn
-    cdef REAL_t f, g, f_dot, lprob
-
-    memset(work, 0, size * cython.sizeof(REAL_t))
-    for b in range(codelen):
-        row2 = word_point[b] * size
-        f_dot = our_dot(&size, &syn0[row1], &ONE, &syn1[row2], &ONE)
-        if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:
-            continue
-        f = EXP_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
-        g = (1 - word_code[b] - f) * alpha
-
-        if _compute_loss == 1:
-            sgn = (-1)**word_code[b]  # ch function: 0-> 1, 1 -> -1
-            lprob = -1*sgn*f_dot
-            if lprob <= -MAX_EXP or lprob >= MAX_EXP:
-                continue
-            lprob = LOG_TABLE[<int>((lprob + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
-            _running_training_loss_param[0] = _running_training_loss_param[0] - lprob
-
-        our_saxpy(&size, &g, &syn1[row2], &ONE, work, &ONE)
-        our_saxpy(&size, &g, &syn0[row1], &ONE, &syn1[row2], &ONE)
-
-    our_saxpy(&size, &word_locks[word2_index], work, &ONE, &syn0[row1], &ONE)
-'''
-
 # to support random draws from negative-sampling cum_table
 cdef inline unsigned long long bisect_left(np.uint32_t *a, unsigned long long x, unsigned long long lo, unsigned long long hi) nogil:
     cdef unsigned long long mid
@@ -157,60 +89,28 @@ cdef inline unsigned long long random_int32(unsigned long long *next_random) nog
     cdef unsigned long long this_random = next_random[0] >> 16
     next_random[0] = (next_random[0] * <unsigned long long>25214903917ULL + 11) & 281474976710655ULL
     return this_random
+############################################## UTILS TOOL
 
 
-
-
-
+################################################################# OLD WAY
 cdef unsigned long long w2v_fast_sentence_sg_neg(
-    const int negative, np.uint32_t *cum_table, unsigned long long cum_table_len,
-    REAL_t *syn0, REAL_t *syn1neg, const int size, const np.uint32_t word_index,
-    const np.uint32_t word2_index, const REAL_t alpha, REAL_t *work,
-    unsigned long long next_random, REAL_t *word_locks,
-    const int _compute_loss, REAL_t *_running_training_loss_param) nogil:
-    """Train on a single effective word from the current batch, using the Skip-Gram model.
+    const int negative, 
+    np.uint32_t *cum_table, 
+    unsigned long long cum_table_len,
+    REAL_t *syn0, 
+    REAL_t *syn1neg, 
+    const int size, 
+    const np.uint32_t word_index,
+    const np.uint32_t word2_index, 
+    const REAL_t alpha, 
+    REAL_t *work,
+    unsigned long long next_random, 
+    REAL_t *word_locks,
+    const int _compute_loss, 
+    REAL_t *_running_training_loss_param) nogil:
+    #=================================================#
+        
 
-    In this model we are using a given word to predict a context word (a word that is
-    close to the one we are using as training). Negative sampling is used to speed-up
-    training.
-
-    Parameters
-    ----------
-    negative
-        Number of negative words to be sampled.
-    cum_table
-        Cumulative-distribution table using stored vocabulary word counts for
-        drawing random words (with a negative label).
-    cum_table_len
-        Length of the `cum_table`
-    syn0
-        Embeddings for the words in the vocabulary (`model.wv.vectors`)
-    syn1neg
-        Weights of the hidden layer in the model's trainable neural network.
-    size
-        Length of the embeddings.
-    word_index
-        Index of the current training word in the vocabulary.
-    word2_index
-        Index of the context word in the vocabulary.
-    alpha
-        Learning rate.
-    work
-        Private working memory for each worker.
-    next_random
-        Seed to produce the index for the next word to be randomly sampled.
-    word_locks
-        Lock factors for each word. A value of 0 will block training.
-    _compute_loss
-        Whether or not the loss should be computed at this step.
-    _running_training_loss_param
-        Running loss, used to debug or inspect how training progresses.
-
-    Returns
-    -------
-    Seed to draw the training word for the next iteration of the same routine.
-
-    """
     cdef long long a
     cdef long long row1 = word2_index * size, row2
     cdef unsigned long long modulo = 281474976710655ULL
@@ -251,61 +151,30 @@ cdef unsigned long long w2v_fast_sentence_sg_neg(
     our_saxpy(&size, &word_locks[word2_index], work, &ONE, &syn0[row1], &ONE)
 
     return next_random
-cdef unsigned long long w2v_fast_sentence_cbow_neg(
-    const int negative, np.uint32_t *cum_table, unsigned long long cum_table_len, int codelens[MAX_SENTENCE_LEN],
-    REAL_t *neu1,  REAL_t *syn0, REAL_t *syn1neg, const int size,
-    const np.uint32_t indexes[MAX_SENTENCE_LEN], const REAL_t alpha, REAL_t *work,
-    int i, int j, int k, int cbow_mean, unsigned long long next_random, REAL_t *word_locks,
-    const int _compute_loss, REAL_t *_running_training_loss_param) nogil:
-    """Train on a single effective word from the current batch, using the CBOW method.
 
-    Using this method we train the trainable neural network by attempting to predict a
-    given word by its context (words surrounding the one we are trying to predict).
-    Negative sampling is used to speed-up training.
+cdef unsigned long long w2v_fast_sentence_cbow_neg( 
+    const int negative, 
+    np.uint32_t *cum_table, 
+    unsigned long long cum_table_len, 
+    int codelens[MAX_SENTENCE_LEN],
+    REAL_t *neu1,  
+    REAL_t *syn0, 
+    REAL_t *syn1neg, 
+    const int size,
+    const np.uint32_t indexes[MAX_SENTENCE_LEN], 
+    const REAL_t alpha, 
+    REAL_t *work,
+    int i, int j, int k, 
+    int cbow_mean, 
+    unsigned long long next_random, 
+    REAL_t *word_locks,
+    const int _compute_loss, 
+    REAL_t *_running_training_loss_param) nogil:
+    #=================================================#
 
-    Parameters
-    ----------
-    negative
-        Number of negative words to be sampled.
-    cum_table
-        Cumulative-distribution table using stored vocabulary word counts for
-        drawing random words (with a negative label).
-    cum_table_len
-        Length of the `cum_table`
-    codelens
-        Number of characters (length) for all words in the context.
-    neu1
-        Private working memory for every worker.
-    syn0
-        Embeddings for the words in the vocabulary (`model.wv.vectors`)
-    syn1neg
-        Weights of the hidden layer in the model's trainable neural network.
-    size
-        Length of the embeddings.
-    indexes
-        Indexes of the context words in the vocabulary.
-    alpha
-        Learning rate.
-    work
-        Private working memory for each worker.
-    i
-        Index of the word to be predicted from the context.
-    j
-        Index of the word at the beginning of the context window.
-    k
-        Index of the word at the end of the context window.
-    cbow_mean
-        If 0, use the sum of the context word vectors as the prediction. If 1, use the mean.
-    next_random
-        Seed for the drawing the predicted word for the next iteration of the same routine.
-    word_locks
-        Lock factors for each word. A value of 0 will block training.
-    _compute_loss
-        Whether or not the loss should be computed at this step.
-    _running_training_loss_param
-        Running loss, used to debug or inspect how training progresses.
 
-    """
+    
+
     cdef long long a
     cdef long long row2
     cdef unsigned long long modulo = 281474976710655ULL
@@ -369,7 +238,6 @@ cdef unsigned long long w2v_fast_sentence_cbow_neg(
 
     return next_random
 
-
 cdef init_w2v_config(Word2VecConfig *c, model, alpha, compute_loss, _work, _neu1=None):
     c[0].hs = model.hs
     c[0].negative = model.negative
@@ -381,13 +249,11 @@ cdef init_w2v_config(Word2VecConfig *c, model, alpha, compute_loss, _work, _neu1
     c[0].compute_loss = (1 if compute_loss else 0)
     c[0].running_training_loss = model.running_training_loss
 
+    # print(model.wv.vectors.shape)
     c[0].syn0 = <REAL_t *>(np.PyArray_DATA(model.wv.vectors))
     c[0].word_locks = <REAL_t *>(np.PyArray_DATA(model.trainables.vectors_lockf))
     c[0].alpha = alpha
     c[0].size = model.wv.vector_size
-
-    if c[0].hs:
-        c[0].syn1 = <REAL_t *>(np.PyArray_DATA(model.trainables.syn1))
 
     if c[0].negative:
         c[0].syn1neg = <REAL_t *>(np.PyArray_DATA(model.trainables.syn1neg))
@@ -402,34 +268,218 @@ cdef init_w2v_config(Word2VecConfig *c, model, alpha, compute_loss, _work, _neu1
     if _neu1 is not None:
         c[0].neu1 = <REAL_t *>np.PyArray_DATA(_neu1)
 
+################################################################# OLD WAY
 
+
+
+
+################################################################# WITH NLPText
+
+# cdef unsigned long long w2v_nlptext_sg_neg(
+#     const int negative, 
+#     np.uint32_t *cum_table, 
+#     unsigned long long cum_table_len,
+#     REAL_t *syn0, 
+#     REAL_t *syn1neg, 
+#     const int size, 
+#     const np.uint32_t word_index,
+#     const np.uint32_t word2_index, 
+#     const REAL_t alpha, 
+#     REAL_t *work,
+#     unsigned long long next_random, 
+#     REAL_t *word_locks,
+#     const int _compute_loss, 
+#     REAL_t *_running_training_loss_param) nogil:
+#     #=================================================#
+        
+
+#     cdef long long a
+#     cdef long long row1 = word2_index * size, row2
+#     cdef unsigned long long modulo = 281474976710655ULL
+#     cdef REAL_t f, g, label, f_dot, log_e_f_dot
+#     cdef np.uint32_t target_index
+#     cdef int d
+
+#     memset(work, 0, size * cython.sizeof(REAL_t))
+
+#     for d in range(negative+1):
+#         if d == 0:
+#             target_index = word_index
+#             label = ONEF
+#         else:
+#             target_index = bisect_left(cum_table, (next_random >> 16) % cum_table[cum_table_len-1], 0, cum_table_len)
+#             next_random = (next_random * <unsigned long long>25214903917ULL + 11) & modulo
+#             if target_index == word_index:
+#                 continue
+#             label = <REAL_t>0.0
+
+#         row2 = target_index * size
+#         f_dot = our_dot(&size, &syn0[row1], &ONE, &syn1neg[row2], &ONE)
+#         if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:
+#             continue
+#         f = EXP_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
+#         g = (label - f) * alpha
+
+#         if _compute_loss == 1:
+#             f_dot = (f_dot if d == 0  else -f_dot)
+#             if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:
+#                 continue
+#             log_e_f_dot = LOG_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
+#             _running_training_loss_param[0] = _running_training_loss_param[0] - log_e_f_dot
+
+#         our_saxpy(&size, &g, &syn1neg[row2], &ONE, work, &ONE)
+#         our_saxpy(&size, &g, &syn0[row1], &ONE, &syn1neg[row2], &ONE)
+
+#     our_saxpy(&size, &word_locks[word2_index], work, &ONE, &syn0[row1], &ONE)
+
+#     return next_random
+
+# cdef unsigned long long w2v_nlptext_cbow_neg( 
+#     const int negative, 
+#     np.uint32_t *cum_table, 
+#     unsigned long long cum_table_len, 
+#     int codelens[MAX_SENTENCE_LEN],
+#     REAL_t *neu1,  
+#     REAL_t *syn0, 
+#     REAL_t *syn1neg, 
+#     const int size,
+#     np.uint32_t *indexes, 
+#     const REAL_t alpha, 
+#     REAL_t *work,
+#     int i, int j, int k, 
+#     int cbow_mean, 
+#     unsigned long long next_random, 
+#     REAL_t *word_locks,
+#     const int _compute_loss, 
+#     REAL_t *_running_training_loss_param) nogil:
+
+#     #=================================================#
+
+
+    
+
+#     cdef long long a
+#     cdef long long row2
+#     cdef unsigned long long modulo = 281474976710655ULL
+#     cdef REAL_t f, g, count, inv_count = 1.0, label, log_e_f_dot, f_dot
+#     cdef np.uint32_t target_index, word_index
+#     cdef int d, m
+
+#     word_index = indexes[i]
+
+#     memset(neu1, 0, size * cython.sizeof(REAL_t))
+#     count = <REAL_t>0.0
+#     for m in range(j, k):
+#         if m == i:
+#             continue
+#         else:
+#             count += ONEF
+#             our_saxpy(&size, &ONEF, &syn0[indexes[m] * size], &ONE, neu1, &ONE)
+#     if count > (<REAL_t>0.5):
+#         inv_count = ONEF/count
+#     if cbow_mean:
+#         sscal(&size, &inv_count, neu1, &ONE)  # (does this need BLAS-variants like saxpy?)
+
+#     memset(work, 0, size * cython.sizeof(REAL_t))
+
+#     for d in range(negative+1):
+#         if d == 0:
+#             target_index = word_index
+#             label = ONEF
+#         else:
+#             target_index = bisect_left(cum_table, (next_random >> 16) % cum_table[cum_table_len-1], 0, cum_table_len)
+#             next_random = (next_random * <unsigned long long>25214903917ULL + 11) & modulo
+#             if target_index == word_index:
+#                 continue
+#             label = <REAL_t>0.0
+
+#         row2 = target_index * size
+#         f_dot = our_dot(&size, neu1, &ONE, &syn1neg[row2], &ONE)
+#         if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:
+#             continue
+#         f = EXP_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
+#         g = (label - f) * alpha
+
+#         if _compute_loss == 1:
+#             f_dot = (f_dot if d == 0  else -f_dot)
+#             if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:
+#                 continue
+#             log_e_f_dot = LOG_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
+#             _running_training_loss_param[0] = _running_training_loss_param[0] - log_e_f_dot
+
+#         our_saxpy(&size, &g, &syn1neg[row2], &ONE, work, &ONE)
+#         our_saxpy(&size, &g, neu1, &ONE, &syn1neg[row2], &ONE)
+
+#     if not cbow_mean:  # divide error over summed window vectors
+#         sscal(&size, &inv_count, work, &ONE)  # (does this need BLAS-variants like saxpy?)
+
+#     for m in range(j,k):
+#         if m == i:
+#             continue
+#         else:
+#             our_saxpy(&size, &word_locks[indexes[m]], work, &ONE, &syn0[indexes[m]*size], &ONE)
+
+#     return next_random
+
+# cdef init_w2v_config_nlptext(
+#     Word2VecConfig_NLPText *c, 
+#     model, 
+#     indexes, 
+#     sentence_idx, 
+#     alpha, 
+#     compute_loss,
+#     _work,
+#     _neu1=None):
+
+
+#     c[0].hs = model.hs
+#     c[0].negative = model.negative
+#     c[0].sample = (model.vocabulary.sample != 0)
+#     c[0].cbow_mean = model.cbow_mean
+#     c[0].window = model.window
+#     c[0].workers = model.workers
+
+    
+#     c[0].compute_loss = (1 if compute_loss else 0)
+#     c[0].running_training_loss = model.running_training_loss
+
+#     c[0].syn0       = <REAL_t *>(np.PyArray_DATA(model.wv.vectors))
+#     c[0].word_locks = <REAL_t *>(np.PyArray_DATA(model.trainables.vectors_lockf))
+    
+
+#     c[0].alpha = alpha
+#     c[0].size = model.wv.vector_size
+
+#     c[0].syn1neg    = <REAL_t *>(np.PyArray_DATA(model.trainables.syn1neg))
+
+
+
+#     c[0].indexes      =  <np.uint32_t *>(np.PyArray_DATA(indexes))
+#     c[0].sentence_idx =  <np.uint32_t *>(np.PyArray_DATA(sentence_idx))
+
+#     c[0].cum_table    = <np.uint32_t *>(np.PyArray_DATA(model.vocabulary.cum_table)) # Pay attention to this
+#     c[0].cum_table_len = len(model.vocabulary.cum_table)
+    
+
+#     if c[0].negative or c[0].sample:
+#         c[0].next_random = (2**24) * model.random.randint(0, 2**24) + model.random.randint(0, 2**24)
+
+#     # convert Python structures to primitive types, so we can release the GIL
+#     c[0].work = <REAL_t *>np.PyArray_DATA(_work)     # evey change, still use <REAL_t *>
+
+#     if _neu1 is not None:
+#         c[0].neu1 = <REAL_t *>np.PyArray_DATA(_neu1) # evey change, still use <REAL_t *>
+
+################################################################# WITH NLPText
+
+
+
+
+##############################################
 def train_batch_sg(model, sentences, alpha, _work, compute_loss):
-    """Update skip-gram model by training on a batch of sentences.
 
-    Called internally from :meth:`~gensim.models.word2vec.Word2Vec.train`.
-
-    Parameters
-    ----------
-    model : :class:`~gensim.models.word2Vec.Word2Vec`
-        The Word2Vec model instance to train.
-    sentences : iterable of list of str
-        The corpus used to train the model.
-    alpha : float
-        The learning rate
-    _work : np.ndarray
-        Private working memory for each worker.
-    compute_loss : bool
-        Whether or not the training loss should be computed in this batch.
-
-    Returns
-    -------
-    int
-        Number of words in the vocabulary actually used for training (They already existed in the vocabulary
-        and were not discarded by negative sampling).
-
-    """
     cdef Word2VecConfig c
-    cdef int i, j, k
+    cdef int i, j, k, g
     cdef int effective_words = 0, effective_sentences = 0
     cdef int sent_idx, idx_start, idx_end
 
@@ -449,10 +499,7 @@ def train_batch_sg(model, sentences, alpha, _work, compute_loss):
             if c.sample and word.sample_int < random_int32(&c.next_random):
                 continue
             c.indexes[effective_words] = word.index
-            if c.hs:
-                c.codelens[effective_words] = <int>len(word.code)
-                c.codes[effective_words] = <np.uint8_t *>np.PyArray_DATA(word.code)
-                c.points[effective_words] = <np.uint32_t *>np.PyArray_DATA(word.point)
+
             effective_words += 1
             if effective_words == MAX_SENTENCE_LEN:
                 break  # TODO: log warning, tally overflow?
@@ -493,33 +540,7 @@ def train_batch_sg(model, sentences, alpha, _work, compute_loss):
     model.running_training_loss = c.running_training_loss
     return effective_words
 
-
 def train_batch_cbow(model, sentences, alpha, _work, _neu1, compute_loss):
-    """Update CBOW model by training on a batch of sentences.
-
-    Called internally from :meth:`~gensim.models.word2vec.Word2Vec.train`.
-
-    Parameters
-    ----------
-    model : :class:`~gensim.models.word2vec.Word2Vec`
-        The Word2Vec model instance to train.
-    sentences : iterable of list of str
-        The corpus used to train the model.
-    alpha : float
-        The learning rate.
-    _work : np.ndarray
-        Private working memory for each worker.
-    _neu1 : np.ndarray
-        Private working memory for each worker.
-    compute_loss : bool
-        Whether or not the training loss should be computed in this batch.
-
-    Returns
-    -------
-    int
-        Number of words in the vocabulary actually used for training (They already existed in the vocabulary
-        and were not discarded by negative sampling).
-    """
     cdef Word2VecConfig c
     cdef int i, j, k
     cdef int effective_words = 0, effective_sentences = 0
@@ -540,10 +561,6 @@ def train_batch_cbow(model, sentences, alpha, _work, _neu1, compute_loss):
             if c.sample and word.sample_int < random_int32(&c.next_random):
                 continue
             c.indexes[effective_words] = word.index
-            if c.hs:
-                c.codelens[effective_words] = <int>len(word.code)
-                c.codes[effective_words] = <np.uint8_t *>np.PyArray_DATA(word.code)
-                c.points[effective_words] = <np.uint32_t *>np.PyArray_DATA(word.point)
             effective_words += 1
             if effective_words == MAX_SENTENCE_LEN:
                 break  # TODO: log warning, tally overflow?
@@ -573,13 +590,152 @@ def train_batch_cbow(model, sentences, alpha, _work, _neu1, compute_loss):
                 k = i + c.window + 1 - c.reduced_windows[i]
                 if k > idx_end:
                     k = idx_end
-                # if c.hs:
-                #     w2v_fast_sentence_cbow_hs(c.points[i], c.codes[i], c.codelens, c.neu1, c.syn0, c.syn1, c.size, c.indexes, c.alpha, c.work, i, j, k, c.cbow_mean, c.word_locks, c.compute_loss, &c.running_training_loss)
+                
                 if c.negative:
-                    c.next_random = w2v_fast_sentence_cbow_neg(c.negative, c.cum_table, c.cum_table_len, c.codelens, c.neu1, c.syn0, c.syn1neg, c.size, c.indexes, c.alpha, c.work, i, j, k, c.cbow_mean, c.next_random, c.word_locks, c.compute_loss, &c.running_training_loss)
+                    c.next_random = w2v_fast_sentence_cbow_neg(c.negative, c.cum_table, c.cum_table_len, 
+                                                               c.codelens, c.neu1, c.syn0, c.syn1neg, c.size, 
+                                                               c.indexes, c.alpha, c.work, i, j, k, c.cbow_mean, 
+                                                               c.next_random, c.word_locks, 
+                                                               c.compute_loss, &c.running_training_loss)
 
     model.running_training_loss = c.running_training_loss
     return effective_words
+############################################
+
+
+
+##############################################
+def train_batch_sg_nlptext(model, indexes, sentence_idx, alpha, _work, compute_loss):
+
+    cdef Word2VecConfig c
+    cdef int i, j, k
+    cdef int effective_words = 0, effective_sentences = 0
+    cdef int sent_idx, idx_start, idx_end
+    # print('before init')
+    init_w2v_config(&c, model, alpha, compute_loss, _work)
+    # init_w2v_config(&c, model, alpha, compute_loss, _work)
+    # print('after init')
+    # in this case, there is no:
+    #       if c.sample and word.sample_int < random_int32(&c.next_random):
+    #           continue
+    effective_words = len(indexes)
+    effective_sentences = len(sentence_idx) # a little different from the original sentence_idx and effective_sentences
+    
+    # print(indexes[:10])
+    for i, item in enumerate(indexes):
+        c.indexes[i] = item
+
+    for i, item in enumerate(sentence_idx):
+        c.sentence_idx[i] = item
+
+    # precompute "reduced window" offsets in a single randint() call
+    for i, item in enumerate(model.random.randint(0, c.window, effective_words)):
+        c.reduced_windows[i] = item
+
+    # print(c.indexes[:10])
+    # print(c.sentence_idx[:5])
+    # print(c.reduced_windows[:10])
+    # print('three c arrays. This is right')
+    # # release GIL & train on all sentences
+    # print('====================')
+    # print(c.negative)
+    # print(c.indexes[0])
+    # print(c.indexes[1])
+    # print('====================')
+    # print(c.cum_table)
+    # print(c.cum_table[:10])
+    # print(*c.syn0[0:200])
+    with nogil: # LESSION: you should notice this nogil, otherwise the threads are rubbish
+        for sent_idx in range(effective_sentences):
+
+            # idx_start and idx_end
+            if sent_idx == 0:
+                idx_start = 0
+            else:
+                idx_start = c.sentence_idx[sent_idx-1]
+            idx_end = c.sentence_idx[sent_idx]
+            # then indexes[idx_start: idx_end] is the current sentence.
+            # print(idx_start, idx_end)
+
+
+            for i in range(idx_start, idx_end):
+                j = i - c.window + c.reduced_windows[i]
+                if j < idx_start:
+                    j = idx_start
+                k = i + c.window + 1 - c.reduced_windows[i]
+                if k > idx_end:
+                    k = idx_end
+                # print(j, i, k)
+                for j in range(j, k): # change the first j to another name: such as t.
+                    if j == i:
+                        continue
+                    if c.negative:
+                        c.next_random = w2v_fast_sentence_sg_neg(c.negative, c.cum_table, c.cum_table_len, c.syn0, c.syn1neg, 
+                                                                 c.size, 
+                                                                 c.indexes[i], c.indexes[j], c.alpha, c.work, c.next_random, c.word_locks, c.compute_loss, &c.running_training_loss)
+
+
+    model.running_training_loss = c.running_training_loss
+    return effective_words
+
+
+##############################################
+def train_batch_cbow_nlptext(model, indexes, sentence_idx, alpha, _work, _neu1, compute_loss):
+
+    cdef Word2VecConfig c
+    cdef int i, j, k
+    cdef int effective_words = 0, effective_sentences = 0
+    cdef int sent_idx, idx_start, idx_end
+    # print('before init')
+    init_w2v_config(&c, model, alpha, compute_loss, _work, _neu1) # this is the difference between sg and cbow
+    # init_w2v_config(&c, model, alpha, compute_loss, _work)
+    # print('after init')
+    # in this case, there is no:
+    #       if c.sample and word.sample_int < random_int32(&c.next_random):
+    #           continue
+    effective_words = len(indexes)
+    effective_sentences = len(sentence_idx) # a little different from the original sentence_idx and effective_sentences
+    
+    # print(indexes[:10])
+    for i, item in enumerate(indexes):
+        c.indexes[i] = item
+
+    for i, item in enumerate(sentence_idx):
+        c.sentence_idx[i] = item
+
+    # precompute "reduced window" offsets in a single randint() call
+    for i, item in enumerate(model.random.randint(0, c.window, effective_words)):
+        c.reduced_windows[i] = item
+
+    with nogil: # LESSION: you should notice this nogil, otherwise the threads are rubbish
+        for sent_idx in range(effective_sentences):
+
+            # idx_start and idx_end
+            if sent_idx == 0:
+                idx_start = 0
+            else:
+                idx_start = c.sentence_idx[sent_idx-1]      # this is the difference between nlptext or original version
+            idx_end = c.sentence_idx[sent_idx]              # this is the difference between nlptext or original version
+            # then indexes[idx_start: idx_end] is the current sentence.
+
+            for i in range(idx_start, idx_end):
+                j = i - c.window + c.reduced_windows[i]
+                if j < idx_start:
+                    j = idx_start
+                k = i + c.window + 1 - c.reduced_windows[i]
+                if k > idx_end:
+                    k = idx_end
+                # print(j, i, k)
+                if c.negative:
+                    c.next_random = w2v_fast_sentence_cbow_neg(c.negative, c.cum_table, c.cum_table_len, 
+                                                               c.codelens, c.neu1, c.syn0, c.syn1neg, c.size, 
+                                                               c.indexes, c.alpha, c.work, i, j, k, c.cbow_mean, 
+                                                               c.next_random, c.word_locks, 
+                                                               c.compute_loss, &c.running_training_loss)
+
+    model.running_training_loss = c.running_training_loss
+    return effective_words
+
 
 def init():
     """Precompute function `sigmoid(x) = 1 / (1 + exp(-x))`, for x values discretized into table EXP_TABLE.

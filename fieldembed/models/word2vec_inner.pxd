@@ -50,6 +50,7 @@ cdef our_saxpy_ptr our_saxpy
 
 cdef struct Word2VecConfig:
     int hs, negative, sample, compute_loss, size, window, cbow_mean, workers
+
     REAL_t running_training_loss, alpha
 
     REAL_t *syn0
@@ -58,21 +59,50 @@ cdef struct Word2VecConfig:
     REAL_t *neu1
 
     int codelens[MAX_SENTENCE_LEN]
-    np.uint32_t indexes[MAX_SENTENCE_LEN]
+    
     np.uint32_t reduced_windows[MAX_SENTENCE_LEN]
+    np.uint32_t indexes[MAX_SENTENCE_LEN]
     int sentence_idx[MAX_SENTENCE_LEN + 1]
-
-    # For hierarchical softmax
-    REAL_t *syn1
-    np.uint32_t *points[MAX_SENTENCE_LEN]
-    np.uint8_t *codes[MAX_SENTENCE_LEN]
+    np.uint32_t *cum_table
 
     # For negative sampling
     REAL_t *syn1neg
-    np.uint32_t *cum_table
     unsigned long long cum_table_len
+    
     # for sampling (negative and frequent-word downsampling)
     unsigned long long next_random
+
+
+# cdef struct Word2VecConfig_NLPText:
+#     int hs, negative, sample, compute_loss, size, window, cbow_mean, workers
+    
+#     REAL_t running_training_loss, alpha
+
+#     REAL_t *syn0
+#     REAL_t *word_locks
+    
+
+#     # interesting
+#     REAL_t *work  # change in each pair
+#     REAL_t *neu1  # change in each pair
+
+#     int codelens[MAX_SENTENCE_LEN]
+    
+#     # change in each batch
+#     # interesting
+#     np.uint32_t reduced_windows[MAX_SENTENCE_LEN]   # This is produced inside each batch, make sure that batch size < MAX_SENTENCE_LEN
+#     np.uint32_t indexes[MAX_SENTENCE_LEN]         # <Token    Info>
+#     int sentence_idx[MAX_SENTENCE_LEN + 1]    # <Sentence Info>
+#     np.uint32_t *cum_table # this is constant. 
+
+#     # For negative sampling
+#     REAL_t *syn1neg
+    
+#     unsigned long long cum_table_len
+#     # for sampling (negative and frequent-word downsampling)
+#     unsigned long long next_random
+
+
 
 
 # for when fblas.sdot returns a double
@@ -91,18 +121,91 @@ cdef unsigned long long bisect_left(np.uint32_t *a, unsigned long long x, unsign
 cdef unsigned long long random_int32(unsigned long long *next_random) nogil
 
 cdef unsigned long long w2v_fast_sentence_sg_neg(
-    const int negative, np.uint32_t *cum_table, unsigned long long cum_table_len,
-    REAL_t *syn0, REAL_t *syn1neg, const int size, const np.uint32_t word_index,
-    const np.uint32_t word2_index, const REAL_t alpha, REAL_t *work,
-    unsigned long long next_random, REAL_t *word_locks,
-    const int _compute_loss, REAL_t *_running_training_loss_param) nogil
+    const int negative, 
+    np.uint32_t *cum_table, 
+    unsigned long long cum_table_len,
+    REAL_t *syn0, 
+    REAL_t *syn1neg, 
+    const int size, 
+    const np.uint32_t word_index,
+    const np.uint32_t word2_index, 
+    const REAL_t alpha, 
+    REAL_t *work,
+    unsigned long long next_random, 
+    REAL_t *word_locks,
+    const int _compute_loss, 
+    REAL_t *_running_training_loss_param) nogil
 
 cdef unsigned long long w2v_fast_sentence_cbow_neg(
-    const int negative, np.uint32_t *cum_table, unsigned long long cum_table_len, int codelens[MAX_SENTENCE_LEN],
-    REAL_t *neu1,  REAL_t *syn0, REAL_t *syn1neg, const int size,
-    const np.uint32_t indexes[MAX_SENTENCE_LEN], const REAL_t alpha, REAL_t *work,
-    int i, int j, int k, int cbow_mean, unsigned long long next_random, REAL_t *word_locks,
-    const int _compute_loss, REAL_t *_running_training_loss_param) nogil
+    const int negative, 
+    np.uint32_t *cum_table, 
+    unsigned long long cum_table_len, 
+    int codelens[MAX_SENTENCE_LEN],
+    REAL_t *neu1,  
+    REAL_t *syn0, 
+    REAL_t *syn1neg, 
+    const int size,
+    const np.uint32_t indexes[MAX_SENTENCE_LEN], 
+    const REAL_t alpha, 
+    REAL_t *work,
+    int i, int j, int k, 
+    int cbow_mean, 
+    unsigned long long next_random, 
+    REAL_t *word_locks,
+    const int _compute_loss, 
+    REAL_t *_running_training_loss_param) nogil
 
 
-cdef init_w2v_config(Word2VecConfig *c, model, alpha, compute_loss, _work, _neu1=*)
+cdef init_w2v_config(
+    Word2VecConfig *c, 
+    model, 
+    alpha, 
+    compute_loss, 
+    _work, 
+    _neu1=*)
+
+
+# cdef unsigned long long w2v_nlptext_sg_neg(
+#     const int negative, 
+#     np.uint32_t *cum_table, 
+#     unsigned long long cum_table_len,
+#     REAL_t *syn0, 
+#     REAL_t *syn1neg, 
+#     const int size, 
+#     const np.uint32_t word_index,
+#     const np.uint32_t word2_index, 
+#     const REAL_t alpha, 
+#     REAL_t *work,
+#     unsigned long long next_random, 
+#     REAL_t *word_locks,
+#     const int _compute_loss, 
+#     REAL_t *_running_training_loss_param) nogil
+
+
+# cdef unsigned long long w2v_nlptext_cbow_neg( 
+#     const int negative, 
+#     np.uint32_t *cum_table, 
+#     unsigned long long cum_table_len, 
+#     int codelens[MAX_SENTENCE_LEN],
+#     REAL_t *neu1,  
+#     REAL_t *syn0, 
+#     REAL_t *syn1neg, 
+#     const int size,
+#     np.uint32_t *indexes, 
+#     const REAL_t alpha, 
+#     REAL_t *work,
+#     int i, int j, int k, 
+#     int cbow_mean, 
+#     unsigned long long next_random, 
+#     REAL_t *word_locks,
+#     const int _compute_loss, 
+#     REAL_t *_running_training_loss_param) nogil
+
+
+# cdef init_w2v_config_nlptext(
+#     Word2VecConfig_NLPText *c, 
+#     model, 
+#     alpha, 
+#     compute_loss,
+#     _work,
+#     _neu1=*)
