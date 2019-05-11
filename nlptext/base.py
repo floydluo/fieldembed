@@ -67,7 +67,7 @@ class BasicObject(object):
     GRAIN_UNI = {}
     TokenNum_Dir = None
     TokenUnique  = None
-
+    specialTokens = specialTokens
     CONTEXT_IND_CHANNELS = CONTEXT_IND_CHANNELS
     CONTEXT_DEP_CHANNELS = CONTEXT_DEP_CHANNELS
     ANNO_CHANNELS        = ANNO_CHANNELS
@@ -75,6 +75,9 @@ class BasicObject(object):
 
     BIOES_Trans = {}
     CTX_DEP_TMP = {}
+
+
+    BATCH_INFO = {}
 
 
     def __init__(self):
@@ -326,7 +329,7 @@ class BasicObject(object):
                     L.append(DGU["O"])
                 else:
                     L.append(DGU['-'.join([split[0], split[-1]])])
-            TOKEN['ANNOTokenIndex'] = np.array(L)
+            TOKEN['ANNOTokenIndex'] = np.array(L, dtype = np.uint32)
             del TOKEN['ANNOToken']
         ########################################################
 
@@ -347,16 +350,17 @@ class BasicObject(object):
 
 
 
-        CORPUS['EndIDXFolders'] = np.array(CORPUS['EndIDXFolders'])
+
+        CORPUS['EndIDXFolders'] = np.array(CORPUS['EndIDXFolders'], dtype = np.uint32)
         CORPUS['length']        = len(CORPUS['EndIDXFolders'])
 
-        FOLDER['EndIDXTexts']   = np.array(FOLDER['EndIDXTexts'])
+        FOLDER['EndIDXTexts']   = np.array(FOLDER['EndIDXTexts'], dtype = np.uint32)
         FOLDER['length']        = len(FOLDER['EndIDXTexts'])
 
-        TEXT['EndIDXSents']     = np.array(TEXT['EndIDXSents'])
+        TEXT['EndIDXSents']     = np.array(TEXT['EndIDXSents'], dtype = np.uint32)
         TEXT['length']          = len(TEXT['EndIDXSents'])
 
-        SENT['EndIDXTokens']    = np.array(SENT['EndIDXTokens'])
+        SENT['EndIDXTokens']    = np.array(SENT['EndIDXTokens'], dtype = np.uint32)
         SENT['length']          = len(SENT['EndIDXTokens'])
 
         TOKEN['length']         = len(TOKEN['ORIGTokenIndex'])
@@ -371,6 +375,87 @@ class BasicObject(object):
         cls.GRAIN_UNI = GRAIN_UNI
         cls.TokenNum_Dir = TokenNum_Dir
         cls.OBJECT_TO_PICKLE()
+
+
+    @classmethod
+    def Calculate_Infos(cls, batch_words):
+
+        Pyramid_Dir = os.path.join(cls.TokenNum_Dir, 'Pyramid')
+        # Pyramid_Dir = 
+        pickle_path = os.path.join(Pyramid_Dir,  str(batch_words) + '_Info.p')
+
+        if os.path.isfile(pickle_path):
+
+            with open(pickle_path, 'rb') as handle:
+                batch_end_st_idx_list, job_no = pickle.load(handle)
+
+            print('Read info from:', pickle_path)
+            return batch_end_st_idx_list, job_no
+
+
+        else:
+            sentences_endidx = cls.SENT['EndIDXTokens']
+            tokens_vocidx = cls.TOKEN['ORIGTokenIndex']
+            
+            total_words = len(tokens_vocidx)           
+            total_examples  = len(sentences_endidx)
+
+
+            batch_end_st_idx_list = []
+            job_no = 0 # job_num
+            while True:
+                job_no = job_no + 1
+                batch_token_progress = job_no * batch_words  # 
+
+                if batch_token_progress >= total_words:
+                    
+                    # if touch the bottom, go to the end and terminate the loop
+                    batch_end_st_idx_list.append(total_examples)
+                    # # This won't work: print('Current batch token number:', sentences_endidx[total_examples]) 
+                    # print("Last sentence's end tk loc:", sentences_endidx[total_examples-1])
+                    break
+
+                # if not, find the correct end sentence loc_id for this batch
+                batch_end_st_idx = np.argmax(sentences_endidx > batch_token_progress)
+                batch_end_st_idx_list.append(batch_end_st_idx)
+                
+                # print('Current batch token number:', sentences_endidx[batch_end_st_idx])
+                # print("Last sentence's end tk loc:", sentences_endidx[batch_end_st_idx-1])
+
+                
+            # print(batch_end_st_idx_list, '\n')
+
+            for idx in range(job_no):
+
+                # start and end are batch's start sentence loc_id and end sentence loc_id
+                # as python routines, batch is [start, end), left close right open
+                start = batch_end_st_idx_list[idx-1] if idx > 0 else 0
+                end   = batch_end_st_idx_list[idx]
+
+                # print(start, end)
+                # find the start sentence's start token loc_id, and
+                # find the end sentence's start token loc_id. (as the end sentence is exluded)
+                token_start = sentences_endidx[start-1] if start > 0 else 0
+                token_end   = sentences_endidx[end  -1]
+
+                indexes     = tokens_vocidx[token_start:token_end] # dtype = np.uint32
+                sentence_idx = np.array([i-token_start for i in sentences_endidx[start: end]], dtype = np.uint32)
+                # print('The start and end sent loc_id:', start, end)
+                # print('The token start and end loc idx in each batch:', token_start, token_end)
+                # print(sentence_idx[-1], len(indexes), '\n')
+                
+            # print(end == len(sentences_endidx))
+            # print(token_end == len(tokens_vocidx))
+            
+
+            with open(pickle_path, 'wb') as handle:
+                pickle.dump([batch_end_st_idx_list, job_no], handle, protocol=4)
+
+                print('Write info to:', pickle_path)
+
+            return batch_end_st_idx_list, job_no
+
+    
 
     @classmethod
     def INIT_FROM_PICKLE(cls, Pyramid_Dir, GrainUnique_Dir):
@@ -411,6 +496,12 @@ class BasicObject(object):
         ##########################################################
         # cls.TEXT['Text2SentMethod'] = 're'
         cls.TokenUnique = cls.GRAIN_UNI[cls.TokenNum_Dir]['token'] # (LTU & DTU) 
+
+
+        pickle_path = os.path.join(GrainUnique_Dir, 'DTU_freq.p')
+        with open(pickle_path, 'rb') as handle:
+            v = pickle.load(handle)
+            cls.DTU_freq = v
 
         ##########################################################
         GUDict = cls.GRAIN_UNI[cls.TokenNum_Dir]
@@ -456,6 +547,13 @@ class BasicObject(object):
                 pickle.dump(v, handle, protocol=4)
                 print(k + '\tis Dumped into file:', pickle_path)
                 print(k + '\tthe length of it is   :', len(v[0]))
+
+        pickle_path = os.path.join(GU_Dir, 'DTU_freq.p')
+        with open(pickle_path, 'wb') as handle:
+            # v is (LGU, DGU)
+            pickle.dump(cls.DTU_freq, handle, protocol=4)
+            # print(k + '\tis Dumped into file:', pickle_path)
+            # print(k + '\tthe length of it is   :', len(v[0]))
         print('*'*40)
         ##########################################################
 

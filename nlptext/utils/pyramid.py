@@ -418,7 +418,7 @@ def buildTokens(tokenList, MaxTokenUnique = None):
 
     print('\t\tThe length of DTU is:', len(DTU), '\t', datetime.now())
     print('Generating the ORIGTokenIndex...       \t', datetime.now())
-    data = np.zeros(len(tokenList), dtype=int)
+    data = np.zeros(len(tokenList), dtype = np.uint32)
     # data = []
     for idx, token in enumerate(tokenList):
         voc_id = DTU.get(token, UNK_ID)
