@@ -32,7 +32,7 @@ DEF MAX_SENTENCE_LEN = 10000
 
 cdef scopy_ptr scopy=<scopy_ptr>PyCObject_AsVoidPtr(fblas.scopy._cpointer)  # y = x
 cdef saxpy_ptr saxpy=<saxpy_ptr>PyCObject_AsVoidPtr(fblas.saxpy._cpointer)  # y += alpha * x
-cdef sdot_ptr sdot=<sdot_ptr>PyCObject_AsVoidPtr(fblas.sdot._cpointer)  # float = dot(x, y)
+cdef sdot_ptr  sdot =<sdot_ptr> PyCObject_AsVoidPtr(fblas.sdot._cpointer)  # float = dot(x, y)
 cdef dsdot_ptr dsdot=<dsdot_ptr>PyCObject_AsVoidPtr(fblas.sdot._cpointer)  # double = dot(x, y)
 cdef snrm2_ptr snrm2=<snrm2_ptr>PyCObject_AsVoidPtr(fblas.snrm2._cpointer)  # sqrt(x^2)
 cdef sscal_ptr sscal=<sscal_ptr>PyCObject_AsVoidPtr(fblas.sscal._cpointer) # x = alpha * x
@@ -110,8 +110,7 @@ cdef unsigned long long w2v_fast_sentence_sg_neg(
     REAL_t *_running_training_loss_param) nogil:
     #=================================================#
         
-
-    cdef long long a
+    # cdef long long a
     cdef long long row1 = word2_index * size, row2
     cdef unsigned long long modulo = 281474976710655ULL
     cdef REAL_t f, g, label, f_dot, log_e_f_dot
@@ -175,7 +174,7 @@ cdef unsigned long long w2v_fast_sentence_cbow_neg(
 
     
 
-    cdef long long a
+    # cdef long long a
     cdef long long row2
     cdef unsigned long long modulo = 281474976710655ULL
     cdef REAL_t f, g, count, inv_count = 1.0, label, log_e_f_dot, f_dot
@@ -250,14 +249,17 @@ cdef init_w2v_config(Word2VecConfig *c, model, alpha, compute_loss, _work, _neu1
     c[0].compute_loss = (1 if compute_loss else 0)
     c[0].running_training_loss = model.running_training_loss
 
+    #######################################################################
     # print(model.wv.vectors.shape)
     c[0].syn0 = <REAL_t *>(np.PyArray_DATA(model.wv.vectors))
+    #######################################################################
+
     c[0].word_locks = <REAL_t *>(np.PyArray_DATA(model.trainables.vectors_lockf))
     c[0].alpha = alpha
     c[0].size = model.wv.vector_size
 
     if c[0].negative:
-        c[0].syn1neg = <REAL_t *>(np.PyArray_DATA(model.trainables.syn1neg))
+        c[0].syn1neg = <REAL_t *>(np.PyArray_DATA(model.wv_neg.vectors))
         c[0].cum_table = <np.uint32_t *>(np.PyArray_DATA(model.vocabulary.cum_table))
         c[0].cum_table_len = len(model.vocabulary.cum_table)
     if c[0].negative or c[0].sample:
@@ -273,7 +275,7 @@ cdef init_w2v_config(Word2VecConfig *c, model, alpha, compute_loss, _work, _neu1
 
 
 ################################################################# Field Embedding WITH NLPText
-cdef unsigned long long feildembed_token_neg( 
+cdef unsigned long long fieldembed_token_neg( 
     const REAL_t alpha, 
     const int size,
     const int negative, 
@@ -295,12 +297,18 @@ cdef unsigned long long feildembed_token_neg(
     unsigned long long next_random, 
     const int _compute_loss, 
     REAL_t *_running_training_loss_param) nogil:
-    #=================================================#
+    #=======================================================================#
 
-    cdef long long a
+
+
+
+    # cdef long long a
     cdef long long row2
     cdef unsigned long long modulo = 281474976710655ULL
-    cdef REAL_t f, g, count, inv_count = 1.0, label, log_e_f_dot, f_dot
+
+    cdef REAL_t count, inv_count = 1.0
+    cdef REAL_t label, f, g, f_dot, log_e_f_dot
+    
     cdef np.uint32_t target_index, word_index
     cdef int d, m
 
@@ -375,6 +383,298 @@ cdef unsigned long long feildembed_token_neg(
 
     return next_random
 ################################################################# Field Embedding WITH NLPText
+
+################################################################# Field Embedding 0X1
+#--> NEW for 0X1
+cdef init_w2v_config_0X1(
+    Word2VecConfig *c, 
+    model, 
+    alpha, 
+    compute_loss, 
+    _work, 
+    _neu1, 
+    _work2, 
+    _neu2):
+
+    c[0].sg = model.sg
+    c[0].negative = model.negative
+    c[0].sample = (model.vocabulary.sample != 0)
+    c[0].cbow_mean = model.cbow_mean
+    c[0].window = model.window
+    c[0].workers = model.workers
+    c[0].compute_loss = (1 if compute_loss else 0)
+    c[0].running_training_loss = model.running_training_loss
+
+    #######################################################################
+    # c[0].total_fields = len(sg_model.field_headfields_meta) # new; total_fields = 1
+    # assume that total_fields is 1    
+    # 0 X 1 
+    c[0].use_head = model.use_head # loop head
+    # print('\n')
+    if c[0].use_head:
+        # print(model.field_head[0][1].vectors.shape)
+        c[0].syn0  = <REAL_t *>(np.PyArray_DATA(model.field_head[0][1].vectors)) # currently, use this
+    
+    c[0].use_sub  = model.use_sub
+    if c[0].use_sub:
+        c[0].syn0_1 = <REAL_t *>(np.PyArray_DATA(model.field_sub[0][0][0].vectors)) # currently, use this
+        c[0].syn0_1_LookUp   = <np.uint32_t *>(np.PyArray_DATA(model.field_sub[0][0][1]))  # lookup
+        c[0].syn0_1_EndIdx   = <np.uint32_t *>(np.PyArray_DATA(model.field_sub[0][0][2]))  # endIdx
+        c[0].syn0_1_LengInv  = <REAL_t *>(np.PyArray_DATA(model.field_sub[0][0][3]))  # leng_inv
+        c[0].syn0_1_leng_max = model.field_sub[0][0][4]                                    # leng_max
+    #######################################################################
+
+    c[0].word_locks = <REAL_t *>(np.PyArray_DATA(model.trainables.vectors_lockf))
+    c[0].alpha = alpha
+    c[0].size = model.wv.vector_size
+
+    if c[0].negative:
+        c[0].syn1neg = <REAL_t *>(np.PyArray_DATA(model.wv_neg.vectors))
+        c[0].cum_table = <np.uint32_t *>(np.PyArray_DATA(model.vocabulary.cum_table))
+        c[0].cum_table_len = len(model.vocabulary.cum_table)
+    if c[0].negative or c[0].sample:
+        c[0].next_random = (2**24) * model.random.randint(0, 2**24) + model.random.randint(0, 2**24)
+
+    # convert Python structures to primitive types, so we can release the GIL
+    c[0].work = <REAL_t *>np.PyArray_DATA(_work)
+    c[0].neu1 = <REAL_t *>np.PyArray_DATA(_neu1)
+
+    #######################################################################
+    c[0].work2 = <REAL_t *>np.PyArray_DATA(_work2)
+    c[0].neu2  = <REAL_t *>np.PyArray_DATA(_neu2)
+    #######################################################################
+
+#--> NEW for 0X1
+cdef unsigned long long fieldembed_token_neg_0X1( 
+    const REAL_t alpha, 
+    const int size,
+    const int negative, 
+    np.uint32_t *cum_table, 
+    unsigned long long cum_table_len, 
+
+    const np.uint32_t indexes[MAX_SENTENCE_LEN], 
+    int i, # right word loc_idx
+    int j, # left  word loc_idx start
+    int k, # left  word loc_idx end
+
+    int use_head,                # 
+    int use_sub,                 # 
+    REAL_t *syn0, 
+    
+    REAL_t *syn0_1,
+    np.uint32_t *syn0_1_LookUp,  # 
+    np.uint32_t *syn0_1_EndIdx,  # 
+    REAL_t *syn0_1_LengInv,      # 
+    int syn0_1_leng_max,         # currently, it is not in use.
+
+    REAL_t *syn1neg, 
+    REAL_t *word_locks,
+
+    REAL_t *neu1,  
+    REAL_t *work,
+
+    REAL_t *neu2,                # 
+    REAL_t *work2,               # 
+
+    int cbow_mean, 
+    unsigned long long next_random, 
+    const int _compute_loss, 
+    REAL_t *_running_training_loss_param) nogil:
+    #===========================================================================================#
+
+    # cdef long long a
+    cdef long long row2
+    cdef unsigned long long modulo = 281474976710655ULL
+    
+    cdef REAL_t label
+    cdef REAL_t f_dot,  f,  g,  log_e_f_dot
+    cdef REAL_t g2
+    
+    cdef int d, m  # d is for looping negative, m is for looping left words, 
+    cdef int n # n is for looping left word's grain, shoud n be an int?
+    cdef int left_word
+    cdef int gs, ge
+    cdef np.uint32_t target_index, word_index,  grain_index # should left_word be an int?
+
+    cdef REAL_t count,  inv_count = 1.0
+    # cdef REAL_t count2, inv_count2 = 1.0
+    cdef REAL_t word_lenginv = 1.0
+
+    # Here word_index is np.uint32_t. very interesting
+    word_index = indexes[i]  ########### S: get index for right token voc_idx
+    # because indexes is np.int32_t
+
+    #################################### S: Count the left tokens number
+    count = <REAL_t>0.0
+    for m in range(j, k):
+        if m == i: # j, m, i, k are int
+            continue
+        else:
+            count += ONEF
+    if count > (<REAL_t>0.5):  # when using sg, count is 1. count is cw in word2vec.c
+        inv_count = ONEF/count
+    else:
+        inv_cout  = <REAL_t>1.0
+    #################################### E: Count the left tokens number
+
+
+    #################################### E: calculate hProj from syn0
+    if use_head: # this is correct
+        memset(neu1, 0, size * cython.sizeof(REAL_t))
+        for m in range(j, k): # sg case: k = j+1; loop left tokens here
+            if m == i: # j, m, i, k are int
+                continue
+            else:
+                our_saxpy(&size, &ONEF, &syn0[indexes[m] * size], &ONE, neu1, &ONE)
+        if cbow_mean: #  and count > (<REAL_t>1.5):
+            sscal(&size, &inv_count, neu1, &ONE)  # (does this need BLAS-variants like saxpy? # no, you don't)
+    #################################### E: calculate hProj from syn0
+
+
+    #################################### S: calculate hProj from syn0
+    if use_sub: # this is correct
+        memset(neu2, 0, size * cython.sizeof(REAL_t))
+        # count2 = <REAL_t>0.0 // different weight: using their code directly, don't need to reproduce it.
+        for m in range(j, k): # sg case: j = k; loop left tokens here
+            if m == i:
+                continue
+            else:
+                left_word  = indexes[m]                  # left_word: uint32 to int
+                ###################################################################
+                word_lenginv = syn0_1_LengInv[left_word] # word_lenginv: REAL_t
+                gs = syn0_1_EndIdx[left_word-1]
+                ge = syn0_1_EndIdx[left_word]
+                for n in range(gs, ge):
+                    # n is also np.uint_32
+                    # should n be an int? just like m?
+                    grain_index = syn0_1_LookUp[n] # syn0_1_LookUp is a np.uint_32
+                    # grain_index is also np.uint_32
+                    our_saxpy(&size, &word_lenginv, &syn0_1[grain_index * size],  &ONE, neu2, &ONE)
+                ###################################################################
+
+        if cbow_mean: #  and count > (<REAL_t>1.5):
+            sscal(&size, &inv_count, neu2, &ONE)  # (does this need BLAS-variants like saxpy? # no, you don't)
+    #################################### E: calculate hProj from syn0
+
+
+    #################################### S: calculate hProj_grad and update syn1neg
+    if use_head:
+        memset(work,  0, size * cython.sizeof(REAL_t))
+    if use_sub:
+        memset(work2, 0, size * cython.sizeof(REAL_t))
+
+    for d in range(negative+1):
+        # d is int
+        if d == 0:
+            target_index = word_index # word_index is vocab_index
+            label = ONEF
+        else:
+            target_index = bisect_left(cum_table, (next_random >> 16) % cum_table[cum_table_len-1], 0, cum_table_len)
+            next_random = (next_random * <unsigned long long>25214903917ULL + 11) & modulo
+            if target_index == word_index:
+                continue 
+            label = <REAL_t>0.0
+
+        row2 = target_index * size # target_index: np.uint32, size: int; row2: long long 
+        ##########################################################################
+        if use_head:
+            f_dot = our_dot(&size, neu1, &ONE, &syn1neg[row2], &ONE)
+            if _compute_loss == 1: # TODO
+                f_dot = (f_dot if d == 0  else -f_dot)
+                if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:
+                    continue # this is still an issue
+                log_e_f_dot = LOG_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
+                _running_training_loss_param[0] = _running_training_loss_param[0] - log_e_f_dot # it seems when using *i, to query it, use *[0]
+            # method 1
+            # if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:
+            #     continue # quit: this is unreasonable.
+            # f = EXP_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
+            # method 2
+            if f_dot <= -MAX_EXP:
+                f = <REAL_t>0.0
+            elif f_dot >= MAX_EXP:
+                f = <REAL_t>1.0
+            else:
+                f = EXP_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
+            # which one is better?
+            g = (label - f) * alpha
+            our_saxpy(&size, &g,  &syn1neg[row2], &ONE, work, &ONE) # accumulate work
+
+        if use_sub:
+            ################################################################
+            f_dot = our_dot(&size, neu2, &ONE, &syn1neg[row2], &ONE)
+            if _compute_loss == 1: # TODO
+                f_dot = (f_dot if d == 0  else -f_dot)
+                if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:
+                    continue # this is still an issue
+                log_e_f_dot = LOG_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
+                _running_training_loss_param[0] = _running_training_loss_param[0] - log_e_f_dot # it seems when using *i, to query it, use *[0]
+            
+            # if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:
+            #     continue # quit: this is unreasonable.
+            # f = EXP_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
+            if f_dot <= -MAX_EXP:
+                f = <REAL_t>0.0
+            elif f_dot >= MAX_EXP:
+                f = <REAL_t>1.0
+            else:
+                f = EXP_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
+            g2 = (label - f) * alpha
+            our_saxpy(&size, &g2, &syn1neg[row2], &ONE, work2, &ONE) # accumulate work
+            ################################################################
+        #########################################################################
+
+        ##########################################################################
+        if use_head:
+            our_saxpy(&size, &g,  neu1, &ONE, &syn1neg[row2], &ONE)
+        if use_sub:
+            our_saxpy(&size, &g2, neu2, &ONE, &syn1neg[row2], &ONE)
+        ##########################################################################
+    #################################### E: calculate hProj_grad and update syn1neg
+
+
+    #################################### S: update syn0 gradient
+    # if sg, this is 1, cbow_mean should be changed as 0
+    if cbow_mean:  # divide error over summed window vectors
+    # if cbow mean
+        # big questions here!!!
+        if use_head:
+            # for each channel, plan gradient to each token.
+            # if sg, inv_count = 1
+            sscal(&size, &inv_count, work,  &ONE)  # (does this need BLAS-variants like saxpy?)
+        if use_sub:
+            sscal(&size, &inv_count, work2, &ONE)  
+  
+    if use_head:
+        for m in range(j,k): 
+            if m == i:
+                continue
+            else:
+                # Here,actually, it looks up the indexes again.
+                # Why not store these items some where?
+                # Is it a case to trade off between time and space?
+                our_saxpy(&size, &word_locks[indexes[m]], work, &ONE, &syn0[indexes[m]*size], &ONE)
+
+    if use_sub:
+        for m in range(j, k): # sg case: j = k; loop left tokens here
+            # m is tk_loc_id
+            if m == i:
+                continue
+            else:
+                ############### This four lines are important ###############
+                left_word = indexes[m] # left_word  #  from uint32 to int 
+                word_lenginv = syn0_1_LengInv[left_word] # word_lenginv: REAL_t
+
+                gs = syn0_1_EndIdx[left_word-1]     #  from uint32 to int 
+                ge = syn0_1_EndIdx[left_word]       #  from uint32 to int 
+
+                for n in range(gs, ge):             #  n is int
+                    grain_index = syn0_1_LookUp[n]  # grain_index is uint
+                    # print('From  ', gr_loc_id, 'To', gr_voc_id)
+                    our_saxpy(&size, &word_lenginv, work2, &ONE, &syn0_1[grain_index * size], &ONE)       
+    ################################### E: update syn0 gradient
+    return next_random
+################################################################# Field Embedding 0X1
 
 
 ##############################################
@@ -505,8 +805,6 @@ def train_batch_cbow(model, sentences, alpha, _work, _neu1, compute_loss):
     return effective_words
 
 
-
-
 ##############################################
 def train_batch_sg_nlptext(model, indexes, sentence_idx, alpha, _work, compute_loss):
 
@@ -634,8 +932,6 @@ def train_batch_fieldembed_token(model, indexes, sentence_idx, alpha, _work, _ne
     # print('before init')
     init_w2v_config(&c, model, alpha, compute_loss, _work, _neu1) # this is the difference between sg and cbow
     
-
-
     # in this case, there is no:
     #       if c.sample and word.sample_int < random_int32(&c.next_random):
     #           continue
@@ -681,15 +977,103 @@ def train_batch_fieldembed_token(model, indexes, sentence_idx, alpha, _work, _ne
                         if j == i:
                             continue
                         # build the batch here
-                        c.next_random = feildembed_token_neg(c.alpha, c.size, c.negative, c.cum_table, c.cum_table_len, 
+                        c.next_random = fieldembed_token_neg(c.alpha, c.size, c.negative, c.cum_table, c.cum_table_len, 
                             c.indexes, i, j, j + 1, c.syn0, c.syn1neg, c.word_locks, c.neu1, c.work, c.cbow_mean, 
                             c.next_random, c.compute_loss, &c.running_training_loss)
-
                 else:
                     # build the batch here
-                    c.next_random = feildembed_token_neg(c.alpha, c.size, c.negative, c.cum_table, c.cum_table_len, 
+                    c.next_random = fieldembed_token_neg(c.alpha, c.size, c.negative, c.cum_table, c.cum_table_len, 
                             c.indexes, i, j, k, c.syn0, c.syn1neg, c.word_locks, c.neu1, c.work, c.cbow_mean, 
                             c.next_random, c.compute_loss, &c.running_training_loss)
+
+    model.running_training_loss = c.running_training_loss
+    return effective_words
+
+
+##############################################
+#--> NEW for 0X1
+def train_batch_fieldembed_0X1(model, indexes, sentence_idx, alpha, _work, _neu1, _work2, _neu2, compute_loss):
+
+    cdef Word2VecConfig c
+    cdef int i, j, k
+    cdef int effective_words = 0, effective_sentences = 0
+    cdef int sent_idx, idx_start, idx_end
+    # cdef int sg
+    # print('before init')
+    init_w2v_config_0X1(&c, model, alpha, compute_loss,  _work, _neu1, _work2, _neu2) # this is the difference between sg and cbow
+    
+    # in this case, there is no:
+    #       if c.sample and word.sample_int < random_int32(&c.next_random):
+    #           continue
+
+    effective_words = len(indexes)
+    effective_sentences = len(sentence_idx) # a little different from the original sentence_idx and effective_sentences
+    
+    # print(indexes[:10])
+    for i, item in enumerate(indexes):
+        c.indexes[i] = item
+
+    for i, item in enumerate(sentence_idx):
+        c.sentence_idx[i] = item
+
+    # precompute "reduced window" offsets in a single randint() call
+    for i, item in enumerate(model.random.randint(0, c.window, effective_words)):
+        c.reduced_windows[i] = item
+
+    # skip_ngram model
+    # sg = c.sg
+    # print(sg)
+    with nogil: # LESSION: you should notice this nogil, otherwise the threads are rubbish
+    # if True:
+        # print(indexes[:10])
+
+        for sent_idx in range(effective_sentences):
+            # idx_start and idx_end
+            idx_end = c.sentence_idx[sent_idx]
+            if sent_idx == 0:
+                idx_start = 0
+            else:
+                idx_start = c.sentence_idx[sent_idx-1]
+            
+            # then indexes[idx_start: idx_end] is the current sentence.
+            # print(idx_start, idx_end)
+
+            
+            for i in range(idx_start, idx_end):
+                j = i - c.window + c.reduced_windows[i]
+                if j < idx_start:
+                    j = idx_start
+                k = i + c.window + 1 - c.reduced_windows[i]
+                if k > idx_end:
+                    k = idx_end
+                # print(j, i, k)
+                
+                # print(indexes[j:k])
+                if c.sg == 1:
+                    for j in range(j, k): # change the first j to another name: such as t.
+                        if j == i:
+                            continue
+                        # build the batch here
+                        c.next_random = fieldembed_token_neg_0X1(c.alpha, c.size, c.negative, c.cum_table, c.cum_table_len, 
+                            c.indexes, i, j, j + 1, 
+                            c.use_head, c.use_sub,  # new
+                            c.syn0, 
+                            c.syn0_1, c.syn0_1_LookUp, c.syn0_1_EndIdx, c.syn0_1_LengInv, c.syn0_1_leng_max, # new
+                            c.syn1neg, c.word_locks, 
+                            c.neu1, c.work, 
+                            c.neu2, c.work2,        # new
+                            c.cbow_mean, c.next_random, c.compute_loss, &c.running_training_loss)
+                else:
+                    # build the batch here
+                    c.next_random = fieldembed_token_neg_0X1(c.alpha, c.size, c.negative, c.cum_table, c.cum_table_len, 
+                            c.indexes, i, j, k, 
+                            c.use_head, c.use_sub,  # new
+                            c.syn0, 
+                            c.syn0_1, c.syn0_1_LookUp, c.syn0_1_EndIdx, c.syn0_1_LengInv, c.syn0_1_leng_max, # new
+                            c.syn1neg, c.word_locks, 
+                            c.neu1, c.work, 
+                            c.neu2, c.work2,        # new
+                            c.cbow_mean, c.next_random, c.compute_loss, &c.running_training_loss)
 
     model.running_training_loss = c.running_training_loss
     return effective_words
@@ -730,10 +1114,12 @@ def init():
     if abs(d_res - expected) < 0.0001:
         our_dot = our_dot_double
         our_saxpy = saxpy
+        # our_saxpy = our_saxpy_noblas
         return 0  # double
     elif abs(p_res[0] - expected) < 0.0001:
         our_dot = our_dot_float
         our_saxpy = saxpy
+        # our_saxpy = our_saxpy_noblas
         return 1  # float
     else:
         # neither => use cython loops, no BLAS

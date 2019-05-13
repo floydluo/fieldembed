@@ -12,7 +12,6 @@
 
 cimport numpy as np
 
-
 cdef extern from "voidptr.h":
     void* PyCObject_AsVoidPtr(object obj)
 
@@ -51,13 +50,27 @@ cdef our_saxpy_ptr our_saxpy
 cdef struct Word2VecConfig:
     int hs, negative, sample, compute_loss, size, window, cbow_mean, workers
     int sg # added by jjluo
+    int use_head #--> NEW for 0X1
+    int use_sub  #--> NEW for 0X1
 
     REAL_t running_training_loss, alpha
 
     REAL_t *syn0
+    
+    #########################
+    REAL_t *syn0_1
+    np.uint32_t *syn0_1_LookUp
+    np.uint32_t *syn0_1_EndIdx
+    REAL_t *syn0_1_LengInv
+    int syn0_1_leng_max
+    #########################
+
     REAL_t *word_locks
     REAL_t *work
     REAL_t *neu1
+
+    REAL_t *work2
+    REAL_t *neu2
 
     int codelens[MAX_SENTENCE_LEN]
     
@@ -72,38 +85,6 @@ cdef struct Word2VecConfig:
     
     # for sampling (negative and frequent-word downsampling)
     unsigned long long next_random
-
-
-# cdef struct Word2VecConfig_NLPText:
-#     int hs, negative, sample, compute_loss, size, window, cbow_mean, workers
-    
-#     REAL_t running_training_loss, alpha
-
-#     REAL_t *syn0
-#     REAL_t *word_locks
-    
-
-#     # interesting
-#     REAL_t *work  # change in each pair
-#     REAL_t *neu1  # change in each pair
-
-#     int codelens[MAX_SENTENCE_LEN]
-    
-#     # change in each batch
-#     # interesting
-#     np.uint32_t reduced_windows[MAX_SENTENCE_LEN]   # This is produced inside each batch, make sure that batch size < MAX_SENTENCE_LEN
-#     np.uint32_t indexes[MAX_SENTENCE_LEN]         # <Token    Info>
-#     int sentence_idx[MAX_SENTENCE_LEN + 1]    # <Sentence Info>
-#     np.uint32_t *cum_table # this is constant. 
-
-#     # For negative sampling
-#     REAL_t *syn1neg
-    
-#     unsigned long long cum_table_len
-#     # for sampling (negative and frequent-word downsampling)
-#     unsigned long long next_random
-
-
 
 
 # for when fblas.sdot returns a double
@@ -163,10 +144,20 @@ cdef init_w2v_config(
     alpha, 
     compute_loss, 
     _work, 
-    _neu1=*)
+    _neu1=*) # could learn this method.
 
+#--> NEW for 0X1
+cdef init_w2v_config_0X1(
+    Word2VecConfig *c, 
+    model, 
+    alpha, 
+    compute_loss, 
+    _work, 
+    _neu1, 
+    _work2, 
+    _neu2)
 
-cdef unsigned long long feildembed_token_neg( 
+cdef unsigned long long fieldembed_token_neg( 
     const REAL_t alpha, 
     const int size,
     const int negative, 
@@ -184,6 +175,44 @@ cdef unsigned long long feildembed_token_neg(
     REAL_t *neu1,  
     REAL_t *work,
     
+    int cbow_mean, 
+    unsigned long long next_random, 
+    const int _compute_loss, 
+    REAL_t *_running_training_loss_param) nogil
+#=================================================#
+
+#--> NEW for 0X1
+cdef unsigned long long fieldembed_token_neg_0X1( 
+    const REAL_t alpha, 
+    const int size,
+    const int negative, 
+    np.uint32_t *cum_table, 
+    unsigned long long cum_table_len, 
+
+    const np.uint32_t indexes[MAX_SENTENCE_LEN], 
+    int i, # right word loc_idx
+    int j, # left  word loc_idx start
+    int k, # left  word loc_idx end
+
+    int use_head,                # 
+    int use_sub,                 # 
+    REAL_t *syn0, 
+    
+    REAL_t *syn0_1,
+    np.uint32_t *syn0_1_LookUp,  # 
+    np.uint32_t *syn0_1_EndIdx,  # 
+    REAL_t *syn0_1_LengInv,     # currently, it is not in use.
+    int syn0_1_leng_max,         # currently, it is not in use.
+
+    REAL_t *syn1neg, 
+    REAL_t *word_locks,
+
+    REAL_t *neu1,  
+    REAL_t *work,
+
+    REAL_t *neu2,                # 
+    REAL_t *work2,               # 
+
     int cbow_mean, 
     unsigned long long next_random, 
     const int _compute_loss, 
