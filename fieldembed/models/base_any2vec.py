@@ -1,40 +1,5 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-#
-# Author: Shiva Manne <manneshiva@gmail.com>
-# Copyright (C) 2018 RaRe Technologies s.r.o.
-# Licensed under the GNU LGPL v2.1 - http://www.gnu.org/licenses/lgpl.html
-
-r"""This module contains base classes required for implementing \*2vec algorithms.
-
-The class hierarchy is designed to facilitate adding more concrete implementations for creating embeddings.
-In the most general case, the purpose of this class is to transform an arbitrary representation to a numerical vector
-(embedding). This is represented by the base :class:`~gensim.models.base_any2vec.BaseAny2VecModel`. The input space in
-most cases (in the NLP field at least) is plain text. For this reason, we enrich the class hierarchy with the abstract
-:class:`~gensim.models.base_any2vec.BaseWordEmbeddingsModel` to be used as a base for models where the input
-space is text.
-
-Notes
------
-Even though this is the usual case, not all embeddings transform text, such as the
-:class:`~gensim.models.poincare.PoincareModel` that embeds graphs.
-
-See Also
---------
-:class:`~gensim.models.word2vec.Word2Vec`.
-    Word2Vec model - embeddings for words.
-:class:`~gensim.models.fasttext.FastText`.
-    FastText model - embeddings for words (ngram-based).
-:class:`~gensim.models.doc2vec.Doc2Vec`.
-    Doc2Vec model - embeddings for documents.
-:class:`~gensim.models.poincare.PoincareModel`
-    Poincare model - embeddings for graphs.
-
-"""
-
 from fieldembed import utils
 from fieldembed.utils import deprecated
-
 
 import logging
 from timeit import default_timer
@@ -58,42 +23,9 @@ logger = logging.getLogger(__name__)
 
 
 class BaseAny2VecModel(utils.SaveLoad):
-    r"""Base class for training, using and evaluating \*2vec model.
-
-    Contains implementation for multi-threaded training. The purpose of this class is to provide a
-    reference interface for concrete embedding implementations, whether the input space is a corpus
-    of words, documents or anything else. At the same time, functionality that we expect to be common
-    for those implementations is provided here to avoid code duplication.
-
-    In the special but usual case where the input space consists of words, a more specialized layer
-    is provided, consider inheriting from :class:`~gensim.models.base_any2vec.BaseWordEmbeddingsModel`
-
-    Notes
-    -----
-    A subclass should initialize the following attributes:
-
-    * self.kv - keyed vectors in model (see :class:`~gensim.models.keyedvectors.Word2VecKeyedVectors` as example)
-    * self.vocabulary - vocabulary (see :class:`~gensim.models.word2vec.Word2VecVocab` as example)
-    * self.trainables - internal matrices (see :class:`~gensim.models.word2vec.Word2VecTrainables` as example)
-
-    """
+  
     def __init__(self, workers=3, vector_size=100, epochs=5, callbacks=(), batch_words=10000):
-        """
-
-        Parameters
-        ----------
-        workers : int, optional
-            Number of working threads, used for multithreading.
-        vector_size : int, optional
-            Dimensionality of the feature vectors.
-        epochs : int, optional
-            Number of iterations (epochs) of training through the corpus.
-        callbacks : list of :class:`~gensim.models.callbacks.CallbackAny2Vec`, optional
-            List of callbacks that need to be executed/run at specific stages during training.
-        batch_words : int, optional
-            Number of words to be processed by a single job.
-
-        """
+        
         self.vector_size = int(vector_size)
         self.workers = int(workers)
         self.epochs = epochs
@@ -127,7 +59,6 @@ class BaseAny2VecModel(utils.SaveLoad):
         """Resets certain properties of the model post training. eg. `keyedvectors.vectors_norm`."""
         raise NotImplementedError()
 
-
     def _check_training_sanity(self, epochs=None, total_examples=None, total_words=None, **kwargs):
         """Check that the training parameters provided make sense. e.g. raise error if `epochs` not provided."""
         raise NotImplementedError()
@@ -144,8 +75,8 @@ class BaseAny2VecModel(utils.SaveLoad):
         """Train a single batch. Return 2-tuple `(effective word count, total word count)`."""
         raise NotImplementedError()
 
-    def _worker_loop(self, job_queue, progress_queue):
-        thread_private_mem = self._get_thread_working_mem() # TODO: this is space to store gradients, change this.
+    def _worker_loop(self, job_queue, progress_queue, proj_num = 1):
+        thread_private_mem = self._get_thread_working_mem(proj_num = proj_num) # TODO: this is space to store gradients, change this.
         # eturn work, neu1
         jobs_processed = 0
         while True:
@@ -218,97 +149,6 @@ class BaseAny2VecModel(utils.SaveLoad):
         logger.debug("----> Worker: Job Producer loop exiting, total %i jobs", job_no)
     ################################################################### 
 
-
-    ###################################################################
-    ###################################################################
-    def _do_train_job_nlptext(self, indexes, sentence_idx, job_parameters, thread_private_mem):
-        """Train a single batch. Return 2-tuple `(effective word count, total word count)`."""
-        raise NotImplementedError()
-
-    def _worker_loop_nlptext(self, job_queue, progress_queue):
-        thread_private_mem = self._get_thread_working_mem() # TODO: this is space to store gradients, change this.
-        # eturn work, neu1
-        jobs_processed = 0
-        while True:
-            job = job_queue.get()
-            if job is None:
-                progress_queue.put(None)
-                break  # no more jobs => quit this worker
-            indexes, sentence_idx, job_parameters = job 
-
-            for callback in self.callbacks:
-                callback.on_batch_begin(self)
-
-            tally, raw_tally = self._do_train_job_nlptext(indexes, sentence_idx, job_parameters, thread_private_mem)
-
-            for callback in self.callbacks:
-                callback.on_batch_end(self)
-
-            progress_queue.put((len(sentence_idx), tally, raw_tally))  # report back progress
-            jobs_processed += 1
-        logger.debug("o----> Worker exiting, processed %i jobs", jobs_processed)
-    
-    def _job_producer_nlptext(self, 
-        sentences_endidx, total_examples, 
-        tokens_vocidx, total_words, 
-        batch_end_st_idx_list, job_no, job_queue,
-        cur_epoch=0):
-        
-
-        #---------------------------------------------------# 
-        job_batch, batch_size = [], 0
-        pushed_words, pushed_examples = 0, 0 # examples refers to sentences
-        next_job_params = self._get_job_params(cur_epoch) # current learning rate: cur_alpha
-    
-        for idx in range(job_no):
-
-            # start and end are batch's start sentence loc_id and end sentence loc_id
-            # as python routines, batch is [start, end), left close right open
-            start = batch_end_st_idx_list[idx-1] if idx > 0 else 0
-            end   = batch_end_st_idx_list[idx]
-
-            # print(start, end)
-            # find the start sentence's start token loc_id, and
-            # find the end sentence's start token loc_id. (as the end sentence is exluded)
-            token_start = sentences_endidx[start-1] if start > 0 else 0
-            token_end   = sentences_endidx[end  -1]
-
-            indexes     = tokens_vocidx[token_start:token_end] # dtype = np.uint32
-            # sentence_idx= np.array([i-token_start for i in sentences_endidx[start: end]], dtype = np.uint32)
-            sentence_idx= [i-token_start for i in sentences_endidx[start: end]]
-            # print('The start and end sent loc_id:', start, end)
-            # print('The token start and end loc idx in each batch:', token_start, token_end)
-            # print(sentence_idx[-1], len(indexes), '\n')
-            
-            # assaure that the input is correct
-            # TODO
-            # print_sentence()
-            job_queue.put((indexes, sentence_idx, next_job_params))
-
-            pushed_examples += len(sentence_idx)
-            epoch_progress = 1.0 * pushed_examples / total_examples
-
-            # prepare learning rate for next job
-            next_job_params = self._update_job_params(next_job_params, epoch_progress, cur_epoch)
-
-        # print(end == len(sentences_endidx))
-        # print(token_end == len(tokens_vocidx))
-    
-        if job_no == 0 and self.train_count == 0:
-            logger.warning(
-                "train() called with an empty iterator (if not intended, "
-                "be sure to provide a corpus that offers restartable iteration = an iterable)."
-            )
-
-        # give the workers heads up that they can finish -- no more work!
-        for _ in range(self.workers):
-            job_queue.put(None) # at the end, give 4 None s if there are 4 calculation workers.
-        logger.debug("----> Worker: Job Producer loop exiting, total %i jobs", job_no)
-    ################################################################### 
-
-
-
-
     def _log_progress(self, job_queue, progress_queue, cur_epoch, example_count, total_examples,
                       raw_word_count, total_words, trained_word_count, elapsed):
         raise NotImplementedError()
@@ -321,7 +161,7 @@ class BaseAny2VecModel(utils.SaveLoad):
         raise NotImplementedError()
 
     ###################################################################
-    def _log_epoch_progress(self, progress_queue=None, job_queue=None, cur_epoch=0, total_examples=None,total_words=None, report_delay=1.0, is_corpus_file_mode=None):
+    def _log_epoch_progress(self, progress_queue=None, job_queue=None, cur_epoch=0, total_examples=None,total_words=None, report_delay=10.0, is_corpus_file_mode=None):
 
         example_count, trained_word_count, raw_word_count = 0, 0, 0
         start, next_report = default_timer() - 0.00001, 1.0
@@ -360,35 +200,6 @@ class BaseAny2VecModel(utils.SaveLoad):
     ###################################################################
 
     def _train_epoch(self, data_iterable, cur_epoch=0, total_examples=None, total_words=None,queue_factor=2, report_delay=1.0):
-        """Train the model for a single epoch.
-
-        Parameters
-        ----------
-        data_iterable : iterable of list of object
-            The input corpus. This will be split in chunks and these chunks will be pushed to the queue.
-        cur_epoch : int, optional
-            The current training epoch, needed to compute the training parameters for each job.
-            For example in many implementations the learning rate would be dropping with the number of epochs.
-        total_examples : int, optional
-            Count of objects in the `data_iterator`. In the usual case this would correspond to the number of sentences
-            in a corpus, used to log progress.
-        total_words : int, optional
-            Count of total objects in `data_iterator`. In the usual case this would correspond to the number of raw
-            words in a corpus, used to log progress.
-        queue_factor : int, optional
-            Multiplier for size of queue -> size = number of workers * queue_factor.
-        report_delay : float, optional
-            Number of seconds between two consecutive progress report messages in the logger.
-
-        Returns
-        -------
-        (int, int, int)
-            The training report for this epoch consisting of three elements:
-                * Size of data chunk processed, for example number of sentences in the corpus chunk.
-                * Effective word count used in training (after ignoring unknown words and trimming the sentence length).
-                * Total word count used in training.
-
-        """
         job_queue = Queue(maxsize=queue_factor * self.workers)
         progress_queue = Queue(maxsize=(queue_factor + 1) * self.workers)
 
@@ -414,6 +225,88 @@ class BaseAny2VecModel(utils.SaveLoad):
 
         return trained_word_count, raw_word_count, job_tally
 
+
+    ###################################################################
+    ###################################################################
+    def _do_train_job_nlptext(self, indexes, sentence_idx, job_parameters, thread_private_mem):
+        raise NotImplementedError()
+
+    def _worker_loop_nlptext(self, job_queue, progress_queue, proj_num = 1):
+        thread_private_mem = self._get_thread_working_mem(proj_num = proj_num) # TODO: this is space to store gradients, change this.
+        # eturn work, neu1
+        jobs_processed = 0
+        while True:
+            job = job_queue.get()
+            if job is None:
+                progress_queue.put(None)
+                break  # no more jobs => quit this worker
+            indexes, sentence_idx, job_parameters = job 
+
+            for callback in self.callbacks:
+                callback.on_batch_begin(self)
+
+            tally, raw_tally = self._do_train_job_nlptext(indexes, sentence_idx, job_parameters, thread_private_mem)
+
+            for callback in self.callbacks:
+                callback.on_batch_end(self)
+
+            progress_queue.put((len(sentence_idx), tally, raw_tally))  # report back progress
+            jobs_processed += 1
+        logger.debug("o----> Worker exiting, processed %i jobs", jobs_processed)
+    
+    def _job_producer_nlptext(self, 
+        sentences_endidx, total_examples, 
+        tokens_vocidx, total_words, 
+        batch_end_st_idx_list, job_no, job_queue,
+        cur_epoch=0):
+        
+        #---------------------------------------------------# 
+        job_batch, batch_size = [], 0
+        pushed_words, pushed_examples = 0, 0 # examples refers to sentences
+        next_job_params = self._get_job_params(cur_epoch) # current learning rate: cur_alpha
+    
+        for idx in range(job_no):
+
+            # start and end are batch's start sentence loc_id and end sentence loc_id
+            # as python routines, batch is [start, end), left close right open
+            start = batch_end_st_idx_list[idx-1] if idx > 0 else 0
+            end   = batch_end_st_idx_list[idx]
+
+            # print(start, end)
+            # find the start sentence's start token loc_id, and
+            # find the end sentence's start token loc_id. (as the end sentence is exluded)
+            token_start = sentences_endidx[start-1] if start > 0 else 0
+            token_end   = sentences_endidx[end  -1]
+
+            indexes     = tokens_vocidx[token_start:token_end] # dtype = np.uint32
+            # sentence_idx= np.array([i-token_start for i in sentences_endidx[start: end]], dtype = np.uint32)
+            sentence_idx= [i-token_start for i in sentences_endidx[start: end]]
+            # print('The start and end sent loc_id:', start, end)
+            # print('The token start and end loc idx in each batch:', token_start, token_end)
+            # print(sentence_idx[-1], len(indexes), '\n')
+            # assaure that the input is correct
+            # TODO
+            # print_sentence()
+            job_queue.put((indexes, sentence_idx, next_job_params))
+
+            pushed_examples += len(sentence_idx)
+            epoch_progress = 1.0 * pushed_examples / total_examples
+
+            # prepare learning rate for next job
+            next_job_params = self._update_job_params(next_job_params, epoch_progress, cur_epoch)
+
+        if job_no == 0 and self.train_count == 0:
+            logger.warning(
+                "train() called with an empty iterator (if not intended, "
+                "be sure to provide a corpus that offers restartable iteration = an iterable)."
+            )
+
+        # give the workers heads up that they can finish -- no more work!
+        for _ in range(self.workers):
+            job_queue.put(None) # at the end, give 4 None s if there are 4 calculation workers.
+        logger.debug("----> Worker: Job Producer loop exiting, total %i jobs", job_no)
+    ################################################################### 
+
     def _train_epoch_nlptext(self, nlptext, cur_epoch=0, total_examples=None, total_words=None,queue_factor=2, report_delay=1.0):
         
         ########### preprocess
@@ -435,11 +328,10 @@ class BaseAny2VecModel(utils.SaveLoad):
         job_queue = Queue(maxsize=queue_factor * self.workers)
         progress_queue = Queue(maxsize=(queue_factor + 1) * self.workers)
 
-
         workers = [
             threading.Thread(
                 target=self._worker_loop_nlptext,
-                args=(job_queue, progress_queue,))
+                args=(job_queue, progress_queue, self.proj_num))
             for _ in range(self.workers)
         ]
         logger.info('\n the total_examples is:' + str(total_examples) + '   , the total words is:' + str(total_words) + '\n')
@@ -573,20 +465,11 @@ class BaseAny2VecModel(utils.SaveLoad):
         super(BaseAny2VecModel, self).save(fname_or_handle, **kwargs)
 
 class BaseWordEmbeddingsModel(BaseAny2VecModel):
-    """Base class containing common methods for training, using & evaluating word embeddings learning models.
+   
+    def _get_thread_working_mem(self, proj_num = 1):
+        work = matutils.zeros_aligned(self.trainables.layer1_size, dtype=REAL)  # per-thread private work memory
+        neu1 = matutils.zeros_aligned(self.trainables.layer1_size, dtype=REAL)
 
-    See Also
-    --------
-    :class:`~gensim.models.word2vec.Word2Vec`.
-        Word2Vec model - embeddings for words.
-    :class:`~gensim.models.fasttext.FastText`.
-        FastText model - embeddings for words (ngram-based).
-    :class:`~gensim.models.doc2vec.Doc2Vec`.
-        Doc2Vec model - embeddings for documents.
-    :class:`~gensim.models.poincare.PoincareModel`
-        Poincare model - embeddings for graphs.
-
-    """
     def _clear_post_train(self):
         raise NotImplementedError()
 
@@ -672,25 +555,7 @@ class BaseWordEmbeddingsModel(BaseAny2VecModel):
         
         ## my code:
         if nlptext is not None:
-            # scan_vocab and prepare_vocab
-            # build .wv.vocab + .wv.index2word + .wv.cum_table
-
-            print('======== Build_vocab based on NLPText....'); s = datetime.now()
-
-            print('-------> Prepare Vocab....')
-            total_words, corpus_count,  report_values = self.vocabulary.scan_and_prepare_vocab_from_nlptext(nlptext, 
-                                                                        self.negative, self.wv, update=update, **kwargs) 
-
-            self.corpus_count = corpus_count
-            self.corpus_total_words = total_words
-            
-            report_values['memory'] = self.estimate_memory(vocab_size=report_values['num_retained_words'])
-
-            print('-------> Prepare Trainable Weight....')
-            self.trainables.prepare_weights_from_nlptext(self.negative, self.wv, update=update, vocabulary=self.vocabulary)
-
-            print('======== The Voc and Parameters are Ready!'); e = datetime.now()
-            print('======== Total Time: ', e - s)
+            print('Wrong in build_vocab if you see this')
 
         else:
             #########################################################################
@@ -716,34 +581,7 @@ class BaseWordEmbeddingsModel(BaseAny2VecModel):
             print('======== Total Time: ', e - s)
 
     def build_vocab_from_freq(self, word_freq, keep_raw_vocab=False, corpus_count=None, trim_rule=None, update=False):
-        """Build vocabulary from a dictionary of word frequencies.
 
-        Parameters
-        ----------
-        word_freq : dict of (str, int)
-            A mapping from a word in the vocabulary to its frequency count.
-        keep_raw_vocab : bool, optional
-            If False, delete the raw vocabulary after the scaling is done to free up RAM.
-        corpus_count : int, optional
-            Even if no corpus is provided, this argument can set corpus_count explicitly.
-        trim_rule : function, optional
-            Vocabulary trimming rule, specifies whether certain words should remain in the vocabulary,
-            be trimmed away, or handled using the default (discard if word count < min_count).
-            Can be None (min_count will be used, look to :func:`~gensim.utils.keep_vocab_item`),
-            or a callable that accepts parameters (word, count, min_count) and returns either
-            :attr:`gensim.utils.RULE_DISCARD`, :attr:`gensim.utils.RULE_KEEP` or :attr:`gensim.utils.RULE_DEFAULT`.
-            The rule, if given, is only used to prune vocabulary during current method call and is not stored as part
-            of the model.
-
-            The input parameters are of the following types:
-                * `word` (str) - the word we are examining
-                * `count` (int) - the word's frequency count in the corpus
-                * `min_count` (int) - the minimum count threshold.
-
-        update : bool, optional
-            If true, the new provided words in `word_freq` dict will be added to model's vocab.
-
-        """
         logger.info("Processing provided word frequencies")
         # Instead of scanning text, this will assign provided word frequencies dictionary(word_freq)
         # to be directly the raw vocab
@@ -766,21 +604,6 @@ class BaseWordEmbeddingsModel(BaseAny2VecModel):
             self.hs, self.negative, self.wv, update=update, vocabulary=self.vocabulary)  # build tables & arrays
 
     def estimate_memory(self, vocab_size=None, report=None):
-        """Estimate required memory for a model using current settings and provided vocabulary size.
-
-        Parameters
-        ----------
-        vocab_size : int, optional
-            Number of unique tokens in the vocabulary
-        report : dict of (str, int), optional
-            A dictionary from string representations of the model's memory consuming members to their size in bytes.
-
-        Returns
-        -------
-        dict of (str, int)
-            A dictionary from string representations of the model's memory consuming members to their size in bytes.
-
-        """
         vocab_size = vocab_size or len(self.wv.vocab)
         report = report or {}
         report['vocab'] = vocab_size * (700 if self.hs else 500)
@@ -811,25 +634,7 @@ class BaseWordEmbeddingsModel(BaseAny2VecModel):
             **kwargs)
 
 
-    def _get_thread_working_mem(self):
-        work = matutils.zeros_aligned(self.trainables.layer1_size, dtype=REAL)  # per-thread private work memory
-        neu1 = matutils.zeros_aligned(self.trainables.layer1_size, dtype=REAL)
-        return work, neu1
-
     def _get_job_params(self, cur_epoch):
-        """Get the learning rate used in the current epoch.
-
-        Parameters
-        ----------
-        cur_epoch : int
-            Current iteration through the corpus
-
-        Returns
-        -------
-        float
-            The learning rate for this epoch (it is linearly reduced with epochs from `self.alpha` to `self.min_alpha`).
-
-        """
         alpha = self.alpha - ((self.alpha - self.min_alpha) * float(cur_epoch) / self.epochs)
         return alpha
 
@@ -843,47 +648,9 @@ class BaseWordEmbeddingsModel(BaseAny2VecModel):
         return next_alpha
 
     def _raw_word_count(self, job):
-        """Get the number of words in a given job.
-
-        Parameters
-        ----------
-        job: iterable of list of str
-            The corpus chunk processed in a single batch.
-
-        Returns
-        -------
-        int
-            Number of raw words in the corpus chunk.
-
-        """
         return sum(len(sentence) for sentence in job)
 
     def _check_training_sanity(self, epochs=None, total_examples=None, total_words=None, **kwargs):
-        """Checks whether the training parameters make sense.
-
-        Called right before training starts in :meth:`~gensim.models.base_any2vec.BaseWordEmbeddingsModel.train`
-        and raises warning or errors depending on the severity of the issue in case an inconsistent parameter
-        combination is detected.
-
-        Parameters
-        ----------
-        epochs : int, optional
-            Number of training epochs. Must have a (non None) value.
-        total_examples : int, optional
-            Number of documents in the corpus. Either `total_examples` or `total_words` **must** be supplied.
-        total_words : int, optional
-            Number of words in the corpus. Either `total_examples` or `total_words` **must** be supplied.
-        **kwargs : object
-            Unused. Present to preserve signature among base and inherited implementations.
-
-        Raises
-        ------
-        RuntimeError
-            If one of the required training pre/post processing steps have not been performed.
-        ValueError
-            If the combination of input parameters is inconsistent.
-
-        """
         if self.alpha > self.min_alpha_yet_reached:
             logger.warning("Effective 'alpha' higher than previous training cycles")
         if self.model_trimmed_post_training:
@@ -891,8 +658,8 @@ class BaseWordEmbeddingsModel(BaseAny2VecModel):
 
         if not self.wv.vocab:  # should be set by `build_vocab`
             raise RuntimeError("you must first build vocabulary before training the model")
-        if not len(self.wv.vectors):
-            raise RuntimeError("you must initialize vectors before training the model")
+        # if not len(self.wv.vectors):
+        #     raise RuntimeError("you must initialize vectors before training the model")
 
         if not hasattr(self, 'corpus_count'):
             raise ValueError(
@@ -918,35 +685,6 @@ class BaseWordEmbeddingsModel(BaseAny2VecModel):
 
     @classmethod
     def load(cls, *args, **kwargs):
-        """Load a previously saved object (using :meth:`~gensim.models.base_any2vec.BaseWordEmbeddingsModel.save`) from file.
-
-        Also initializes extra instance attributes in case the loaded model does not include them.
-        `*args` or `**kwargs` **MUST** include the fname argument (path to saved file).
-        See :meth:`~gensim.utils.SaveLoad.load`.
-
-        Parameters
-        ----------
-        *args : object
-            Positional arguments passed to :meth:`~gensim.utils.SaveLoad.load`.
-        **kwargs : object
-            Key word arguments passed to :meth:`~gensim.utils.SaveLoad.load`.
-
-        See Also
-        --------
-        :meth:`~gensim.models.base_any2vec.BaseWordEmbeddingsModel.save`
-            Method for save a model.
-
-        Returns
-        -------
-        :class:`~gensim.models.base_any2vec.BaseWordEmbeddingsModel`
-            Model loaded from disk.
-
-        Raises
-        ------
-        IOError
-            When methods are called on instance (should be called from class).
-
-        """
         model = super(BaseWordEmbeddingsModel, cls).load(*args, **kwargs)
         if not hasattr(model, 'ns_exponent'):
             model.ns_exponent = 0.75
