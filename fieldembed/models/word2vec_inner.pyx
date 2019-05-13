@@ -513,8 +513,7 @@ cdef unsigned long long fieldembed_token_neg_0X1(
             count += ONEF
     if count > (<REAL_t>0.5):  # when using sg, count is 1. count is cw in word2vec.c
         inv_count = ONEF/count
-    else:
-        inv_cout  = <REAL_t>1.0
+    # else: inv_count = 1.0
     #################################### E: Count the left tokens number
 
 
