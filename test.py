@@ -1,125 +1,212 @@
+
+
+
+# import os
+# from pprint import pprint
+# from nlptext.base import BasicObject
+# from datetime import datetime
+
+
+
+
+# BOB = 'data/WikiTotal/word/Token447174/Pyramid/'
+# LGU = 'data/WikiTotal/word/Token447174/GrainUnique/'
+
+
+# BOB = 'data/LuohuCorpus/char/Token3546/Pyramid/'
+# LGU = 'data/LuohuCorpus/char/Token3546/GrainUnique/'
+
+
+# BasicObject.INIT_FROM_PICKLE(BOB, LGU)
+
+
+
+# available_fields = ['token', 'char', 'subcomp', 'stroke', 'pinyin', 'pos']
+
+
+
+
+
+# CHANNEL_SETTINGS_TEMPLATE = {
+#     # CTX_IND
+#     'token':   {'use': True, 'Max_Ngram': 1,},
+#     'char':    {'use': True,'Max_Ngram': 1, 'end_grain': False},
+#     'pinyin':   {'use': True,'Max_Ngram': 2, 'end_grain': False},
+#     'subcomp': {'use': True,'Max_Ngram': 3, 'end_grain': True},
+#     'stroke':  {'use': True,'Max_Ngram': 3, 'end_grain': True},
+#     'pos':  {'use': True},
+# }
+
+# BasicObject.BUILD_GRAIN_UNI_AND_LOOKUP(CHANNEL_SETTINGS_TEMPLATE)
+# # TODO: pretty print the result.
+# # BasicObject.CHANNEL_SETTINGS
+
+# from fieldembed.models.fieldembed import FieldEmbedding
+# from datetime import datetime
+
+# # import logging
+# # logger = logging.getLogger()
+# # logger.setLevel(logging.DEBUG)
+# # logging.debug('test')
+
+
+# batch_words = 10000
+
+# s = datetime.now(); print('\n+++++Start++++++', s, '\n')
+# # end = datetime.now(); print('+++++End++++++', end, 'Using:',e - s ); 
+# model = FieldEmbedding(nlptext = BasicObject,  Field_Settings = BasicObject.CHANNEL_SETTINGS, 
+#                         use_merger = 0, neg_init = 0, mode = 'M0XY',
+#                         size = 200, alpha = 0.025, 
+#                         sg = 0, iter=1, workers = 8, batch_words = batch_words)
+# e = datetime.now(); print('\n+++++End++++++', e, 'Using:', e - s )
+
+
+# # workers = 2, alpha = 0.01
+# print('use channel about.')
+# print(BasicObject.CHANNEL_SETTINGS)
+
+# self = model
+# print()
+# print("training model with %i workers on %i vocabulary and %i features, "
+#             "using sg=%s hs=%s sample=%s negative=%s window=%s" %(self.workers, len(self.wv.vocab), self.trainables.layer1_size, self.sg,
+#             self.hs, self.vocabulary.sample, self.negative, self.window))
+
+# print()
+
+# print("learning rate starts at %i and training has %i epoch."%(self.alpha, self.iter))
+# print()
+
+# print("use merger", self.use_merger)
+
+
+# ######################### do word similariy 
+# from evals import get_similarity_score
+# # sg_model.wv.vectors
+
+# if 'token' in BasicObject.CHANNEL_SETTINGS:
+#     # sg_model.wv.vectors
+#     print('\nleft')
+#     sim_file = 'sources/240.txt'
+#     get_similarity_score(sim_file, token_embedding = model.wv)# wv maybe zero
+
+#     sim_file = 'sources/297.txt'
+#     get_similarity_score(sim_file, token_embedding = model.wv)# wv maybe zero
+
+
+
+# print('\nright')
+# sim_file = 'sources/240.txt'
+# get_similarity_score(sim_file, token_embedding = model.wv_neg) # comes at first
+
+# sim_file = 'sources/297.txt'
+# get_similarity_score(sim_file, token_embedding = model.wv_neg) # comes at first
+
+# ######################### do word similariy 
+# # do word analogy
+# #
+
+
+# # to study:
+# model.wv_neg
+
+# model.weights
+# # {'token': <fieldembed.models.keyedvectors.Word2VecKeyedVectors at 0x7feb0bd807f0>,
+# #  'char': <fieldembed.models.keyedvectors.Word2VecKeyedVectors at 0x7feafa9b6b70>,
+# #  'subcomp': <fieldembed.models.keyedvectors.Word2VecKeyedVectors at 0x7feafa8699e8>,
+# #  'stroke': <fieldembed.models.keyedvectors.Word2VecKeyedVectors at 0x7feb00b44668>,
+# #  'pinyin': <fieldembed.models.keyedvectors.Word2VecKeyedVectors at 0x7fea8db015c0>}
+
+
+# def iter_char(string):
+#     return [i for i in string]
+
+# def string2vec(string, wv, seg_method = jieba.cut): # you can change seg_method
+#     # 'unk' s index is 3
+#     words = seg_method(string)
+#     if hasattr(wv, 'DTU'):
+#         # print(wv)
+#         vec = []
+#         for w in words:
+#             word_vocidx = wv.DTU.get(w, 3)
+#             grain_start = wv.EndIdx[word_vocidx-1]
+#             grain_end   = wv.EndIdx[word_vocidx]
+#             grain_vocidx = [i for i in wv.LookUp[grain_start:grain_end]]
+#             # print(grain_vocidx)
+#             field_word = wv.vectors[grain_vocidx].mean(axis = 0)
+#             vec.append(field_word)
+#         return np.array(vec).mean(axis = 0)
+        
+#     else:
+#         # words_vocidx = [wv.vocab.get[.index for i in words]
+#         words_vocidx = []
+#         for w in words:
+#             if w in wv.vocab:
+#                 words_vocidx.append(wv.vocab[w].index)
+#             else:
+#                 words_vocidx.append(wv.vocab['</unk>'].index)
+                        
+#         vec = wv.vectors[words_vocidx]
+#     return vec.mean(axis = 0)
+    
+# string = '扫描二维码登录微信. 登录手机微信. 手机上安装并登录微信'
+# v = string2vec(string, model.wv_pinyin)
+
+
 from pprint import pprint
 from nlptext.base import BasicObject
-
-########### Wiki ###########
-CORPUSPath = 'corpus/wiki/'
-corpusFileIden = '.txt'
-textType   = 'line'
-Text2SentMethod  = 're'
-Sent2TokenMethod = 'sep- '
-TOKENLevel = 'word'
-anno = False
-annoKW = {}
-
-MaxTextIdx = False
-BasicObject.INIT(CORPUSPath, corpusFileIden, textType, 
-                 Text2SentMethod, Sent2TokenMethod, TOKENLevel, 
-                 anno, annoKW, MaxTextIdx)
-
-
-from nlptext.corpus import Corpus
-corpus = Corpus()
-sentences_endidx = BasicObject.SENT['EndIDXTokens']
-sentences_endidx[:10]
-tokens_vocidx = BasicObject.TOKEN['ORIGTokenIndex']
-# the first sentence
-tokens_vocidx[0:99]
-
-LTU, DTU = BasicObject.TokenUnique
-total_words = len(tokens_vocidx)           
-total_examples  = len(sentences_endidx)
-
-import numpy as np
-
-
-batch_words = 10000
-
-total_words = total_words or len(tokens_vocidx)           
-total_examples  = total_examples or len(sentences_endidx)
-
-batch_end_st_idx_list = []
-job_no = 0 # job_num
-while True:
-    job_no = job_no + 1
-    batch_token_progress = job_no * batch_words  # 
-
-    if batch_token_progress >= total_words:
-        
-        # if touch the bottom, go to the end and terminate the loop
-        batch_end_st_idx_list.append(total_examples)
-        # # This won't work: print('Current batch token number:', sentences_endidx[total_examples]) 
-        print("Last sentence's end tk loc:", sentences_endidx[total_examples-1])
-        break
-
-    # if not, find the correct end sentence loc_id for this batch
-    batch_end_st_idx = np.argmax(sentences_endidx > batch_token_progress)
-    batch_end_st_idx_list.append(batch_end_st_idx)
-    
-    print('Current batch token number:', sentences_endidx[batch_end_st_idx])
-    print("Last sentence's end tk loc:", sentences_endidx[batch_end_st_idx-1])
-
-    
-print(batch_end_st_idx_list, '\n')
-
-for idx in range(job_no):
-
-    # start and end are batch's start sentence loc_id and end sentence loc_id
-    # as python routines, batch is [start, end), left close right open
-    start = batch_end_st_idx_list[idx-1] if idx > 0 else 0
-    end   = batch_end_st_idx_list[idx]
-
-    # print(start, end)
-    # find the start sentence's start token loc_id, and
-    # find the end sentence's start token loc_id. (as the end sentence is exluded)
-    token_start = sentences_endidx[start-1] if start > 0 else 0
-    token_end   = sentences_endidx[end  -1]
-
-    indexes     = tokens_vocidx[token_start:token_end] # dtype = np.uint32
-    sentence_idx = np.array([i-token_start for i in sentences_endidx[start: end]], dtype = np.uint32)
-    print('The start and end sent loc_id:', start, end)
-    print('The token start and end loc idx in each batch:', token_start, token_end)
-    print(sentence_idx[-1], len(indexes), '\n')
-    
-print(end == len(sentences_endidx))
-print(token_end == len(tokens_vocidx))
-
-# train_batch_sg_nlptext()
-from fieldembed.models.word2vec import Word2Vec, LineSentence
 from datetime import datetime
-Little_Wiki_Path = 'corpus/wiki/wiki.txt'
-Total_Wiki_Path = 'corpus/WikiTotal/WikiTotal7k_v2.txt'
-
-data_input = LineSentence(Little_Wiki_Path)
-# data_input = LineSentence(Total_Wiki_Path)
-start = datetime.now()
-
-print(start)
-sg_model = Word2Vec(data_input, size = 200, alpha = 0.025,  min_count = 0, sg = 1, iter=1, workers = 8)
-end = datetime.now()
-time = end - start
-
-print(end)
-print(time)
 
 
-from fieldembed.models.word2vec_inner import train_batch_sg_nlptext
-from fieldembed.models.word2vec_inner import train_batch_sg
+BOB = 'data/LuohuCorpus/char/Token3546/Pyramid/'
+LGU = 'data/LuohuCorpus/char/Token3546/GrainUnique/'
 
-work1, work2 = sg_model._get_thread_working_mem()
-work1
+BasicObject.INIT_FROM_PICKLE(BOB, LGU)
+
+
+LGU, DGU = BasicObject.getGrainUnique('pos', tagScheme='BIOES')
 
 
 
-L = []
-for i in data_input:
-    L.append(i)
+# from train import test_model_sent_classification
+from train import train_model
+
+sg = 1 
+num_field = 1
+basic_eva_file = '%dfield_eva.csv' % num_field
+standard_grad = 0 
+use_merger = 0 
+iter = 1 
+batch_words = 10000
+neg_init = 0
+mode = 'M0XY_P'
+size = 200
+alpha = 0.025
+workers = 1
+
+
+import pickle 
+
+with open('sources/medical_sentence_classification.p', 'rb') as handle:
+    D = pickle.load( handle)
     
-sentences = L[10]
+    
+    
+from train import prepare_sentence_classificaiton_data
 
-from fieldembed.models.word2vec_inner import train_batch_sg
+test_data = prepare_sentence_classificaiton_data(D, BasicObject.TokenUnique[1])
 
-a = train_batch_sg(sg_model, sentences,  alpha = 0.05, _work = work1, compute_loss = False)
-print(a)
 
-a = train_batch_sg_nlptext(sg_model, indexes, sentence_idx, alpha = 0.05, _work = work1, compute_loss = False)
-print(a)
+# import logging
+
+# logger = logging.getLogger()
+# logger.setLevel(logging.DEBUG)
+# logging.debug('train')
+
+#  ['token', 'char', 'subcomp', 'stroke', 'pinyin']
+fields = ['token', 'char', 'subcomp', 'pos']
+
+model, eval_dict, eval_items = train_model(BasicObject, fields, sg=sg, mode = mode, iter = iter, 
+            standard_grad = standard_grad, use_merger = use_merger,  neg_init = neg_init, 
+            size = size, alpha =alpha,
+            workers = workers, batch_words = batch_words, 
+            test_data = test_data, test_lexical = False)

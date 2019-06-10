@@ -105,6 +105,10 @@ ext_modules = [
         sources=['./fieldembed/models/word2vec_inner.c'],
         include_dirs=[model_dir]),
 
+    Extension('fieldembed.models.fieldembed_inner',
+        sources=['./fieldembed/models/fieldembed_inner.c'],
+        include_dirs=[model_dir]),
+
     Extension('fieldembed._matutils',
         sources=['./fieldembed/_matutils.c']),
 ]

@@ -1,7 +1,6 @@
 import numpy as np
 import os
-from sklearn.linear_model import LogisticRegressionCV
-from sklearn.model_selection import train_test_split
+
 from scipy.stats import spearmanr
 import jieba
 
@@ -18,7 +17,6 @@ def read_wordpair(file):
             pair[-1] = float(pair[-1])
             pairs.append(pair)
     return pairs
-
 
 def read_word_analogy(ana_file):
     """
@@ -41,7 +39,6 @@ def read_word_analogy(ana_file):
             else:
                 family.append(pair)
     return capital, state, family
-
 
 class BasicEva:
     def __init__(self, wv):
@@ -132,27 +129,26 @@ class BasicEva:
                 predict_cnt = predict_cnt + self.analogy_predict_word(pair)
         return total, in_dict_cnt, predict_cnt
 
+def split(string):
+    return string.split()
 
-
-def string2vec(string, wv, need_seg=False, seg_method=jieba.cut):  # you can change seg_method
+def string2vec(words, wv):  # you can change seg_method
     # 'unk' s index is 3
-    if need_seg:
-        words = seg_method(string)
-    else:
-        words = string.split()
-
     words_vocidx = []
-    for w in words:
-        if w in wv.vocab:
-            words_vocidx.append(wv.vocab[w].index)
-        else:
-            words_vocidx.append(wv.vocab['</unk>'].index)
+    if hasattr(wv, 'DTU'):
+        for w in words:
+            wordidx = wv.DTU.get(w, 3)
+            words_vocidx.append(wordidx)
+        # print(words_vocidx)
+    else:
+        for w in words:
+            wordidx = wv.vocab[w].index if w in wv.vocab else 3
+            words_vocidx.append(wordidx)
 
     vec = wv.merge_vectors[words_vocidx]
     if len(vec) == 0:
         return None
     return vec.mean(axis=0)
-
 
 def read_fudan(root_dir):
     """
@@ -176,7 +172,7 @@ def read_fudan(root_dir):
             with open(os.path.join(sub_dir, file)) as f:
                 content = f.read()
             if content is not None:
-                contents.append(content)
+                contents.append(content.split())
                 label.append(cnt)
         cnt += 1
     return contents, label, label_dict
@@ -186,24 +182,11 @@ def fudan2embed(contents, labels, wv):
     embeds = []
     label = []
     for idx, content in enumerate(contents):
-        embed = string2vec(content, wv, need_seg=False)
+        embed = string2vec(content, wv)
         if embed is not None:
             embeds.append(embed)
             label.append(labels[idx])
     return np.array(embeds), label
-
-
-def fudan_classification(feat, label, cv=10):
-    """
-    multi-class logistic classification
-
-    """
-    x_train, x_test, y_train, y_test = train_test_split(feat, label, test_size=0.3, random_state=0)
-    lr = LogisticRegressionCV(cv=cv)
-    lr.fit(x_train, y_train)
-    y_pred = lr.predict(x_test)
-    acc = np.mean(np.equal(y_pred, y_test))
-    return acc
 
 
 
@@ -216,7 +199,7 @@ class Evaluation:
     def __init__(self, wv):
 
         self.wv = wv
-        self.wv.init_sims()
+        # self.wv.init_sims()
 
         self.dict_word = {i: v.index for i, v in wv.vocab.items()}
         self.embeddings = wv.vectors_norm
