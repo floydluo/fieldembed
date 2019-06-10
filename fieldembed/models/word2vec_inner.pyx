@@ -92,6 +92,44 @@ cdef inline unsigned long long random_int32(unsigned long long *next_random) nog
 ############################################## UTILS TOOL
 
 
+cdef init_w2v_config(Word2VecConfig *c, model, alpha, compute_loss, _work, _neu1=None):
+    # c[0].hs = model.hs
+    c[0].sg = model.sg
+    c[0].negative = model.negative
+    c[0].sample = (model.vocabulary.sample != 0)
+    c[0].cbow_mean = model.standard_grad
+    c[0].window = model.window
+    c[0].workers = model.workers
+
+    c[0].compute_loss = (1 if compute_loss else 0)
+    c[0].running_training_loss = model.running_training_loss
+
+    #######################################################################
+    # print(model.wv.vectors.shape)
+    c[0].syn0 = <REAL_t *>(np.PyArray_DATA(model.wv.vectors))
+    #######################################################################
+
+    c[0].word_locks = <REAL_t *>(np.PyArray_DATA(model.trainables.vectors_lockf))
+    c[0].alpha = alpha
+    c[0].size = model.wv.vector_size
+
+    if c[0].negative:
+        try:
+            c[0].syn1neg = <REAL_t *>(np.PyArray_DATA(model.wv_neg.vectors))
+        except:
+            c[0].syn1neg = <REAL_t *>(np.PyArray_DATA(model.syn1neg))
+        c[0].cum_table = <np.uint32_t *>(np.PyArray_DATA(model.vocabulary.cum_table))
+        c[0].cum_table_len = len(model.vocabulary.cum_table)
+    if c[0].negative or c[0].sample:
+        c[0].next_random = (2**24) * model.random.randint(0, 2**24) + model.random.randint(0, 2**24)
+
+    # convert Python structures to primitive types, so we can release the GIL
+    c[0].work = <REAL_t *>np.PyArray_DATA(_work)
+
+    if _neu1 is not None:
+        c[0].neu1 = <REAL_t *>np.PyArray_DATA(_neu1)
+################################################################# OLD WAY
+
 ################################################################# OLD WAY
 cdef unsigned long long w2v_fast_sentence_sg_neg(
     const int negative, 
@@ -193,8 +231,8 @@ cdef unsigned long long w2v_fast_sentence_cbow_neg(
             our_saxpy(&size, &ONEF, &syn0[indexes[m] * size], &ONE, neu1, &ONE)
     if count > (<REAL_t>0.5):
         inv_count = ONEF/count
-    if cbow_mean:
-        sscal(&size, &inv_count, neu1, &ONE)  # (does this need BLAS-variants like saxpy?)
+    # if cbow_mean:
+    sscal(&size, &inv_count, neu1, &ONE)  # (does this need BLAS-variants like saxpy?)
 
     memset(work, 0, size * cython.sizeof(REAL_t))
 
@@ -226,7 +264,7 @@ cdef unsigned long long w2v_fast_sentence_cbow_neg(
         our_saxpy(&size, &g, &syn1neg[row2], &ONE, work, &ONE)
         our_saxpy(&size, &g, neu1, &ONE, &syn1neg[row2], &ONE)
 
-    if not cbow_mean:  # divide error over summed window vectors
+    if cbow_mean:  # divide error over summed window vectors // if standard_grad
         sscal(&size, &inv_count, work, &ONE)  # (does this need BLAS-variants like saxpy?)
 
     for m in range(j,k):
@@ -236,43 +274,6 @@ cdef unsigned long long w2v_fast_sentence_cbow_neg(
             our_saxpy(&size, &word_locks[indexes[m]], work, &ONE, &syn0[indexes[m]*size], &ONE)
 
     return next_random
-
-cdef init_w2v_config(Word2VecConfig *c, model, alpha, compute_loss, _work, _neu1=None):
-    # c[0].hs = model.hs
-    c[0].sg = model.sg
-    c[0].negative = model.negative
-    c[0].sample = (model.vocabulary.sample != 0)
-    c[0].cbow_mean = model.cbow_mean
-    c[0].window = model.window
-    c[0].workers = model.workers
-
-    c[0].compute_loss = (1 if compute_loss else 0)
-    c[0].running_training_loss = model.running_training_loss
-
-    #######################################################################
-    # print(model.wv.vectors.shape)
-    c[0].syn0 = <REAL_t *>(np.PyArray_DATA(model.wv.vectors))
-    #######################################################################
-
-    c[0].word_locks = <REAL_t *>(np.PyArray_DATA(model.trainables.vectors_lockf))
-    c[0].alpha = alpha
-    c[0].size = model.wv.vector_size
-
-    if c[0].negative:
-        c[0].syn1neg = <REAL_t *>(np.PyArray_DATA(model.wv_neg.vectors))
-        c[0].cum_table = <np.uint32_t *>(np.PyArray_DATA(model.vocabulary.cum_table))
-        c[0].cum_table_len = len(model.vocabulary.cum_table)
-    if c[0].negative or c[0].sample:
-        c[0].next_random = (2**24) * model.random.randint(0, 2**24) + model.random.randint(0, 2**24)
-
-    # convert Python structures to primitive types, so we can release the GIL
-    c[0].work = <REAL_t *>np.PyArray_DATA(_work)
-
-    if _neu1 is not None:
-        c[0].neu1 = <REAL_t *>np.PyArray_DATA(_neu1)
-
-################################################################# OLD WAY
-
 
 ################################################################# Field Embedding WITH NLPText
 cdef unsigned long long fieldembed_token_neg( 
@@ -328,8 +329,8 @@ cdef unsigned long long fieldembed_token_neg(
             our_saxpy(&size, &ONEF, &syn0[indexes[m] * size], &ONE, neu1, &ONE)
     if count > (<REAL_t>0.5):
         inv_count = ONEF/count
-    if cbow_mean:
-        sscal(&size, &inv_count, neu1, &ONE)  # (does this need BLAS-variants like saxpy? # no, you don't)
+    #if cbow_mean:
+    sscal(&size, &inv_count, neu1, &ONE)  # (does this need BLAS-variants like saxpy? # no, you don't)
     #################################### E: calculate hProj from syn0
 
     #################################### S: calculate hProj_grad and update syn1neg
@@ -367,7 +368,7 @@ cdef unsigned long long fieldembed_token_neg(
 
 
     #################################### S: update syn0 gradient
-    if not cbow_mean:  # divide error over summed window vectors
+    if cbow_mean:  # divide error over summed window vectors # if standard grad
         # big questions here!!!
         sscal(&size, &inv_count, work, &ONE)  # (does this need BLAS-variants like saxpy?)
 
@@ -399,7 +400,7 @@ cdef init_w2v_config_0X1(
     c[0].sg = model.sg
     c[0].negative = model.negative
     c[0].sample = (model.vocabulary.sample != 0)
-    c[0].cbow_mean = model.cbow_mean
+    c[0].cbow_mean = model.standard_grad
     c[0].window = model.window
     c[0].workers = model.workers
     c[0].compute_loss = (1 if compute_loss else 0)
@@ -475,7 +476,7 @@ cdef unsigned long long fieldembed_token_neg_0X1(
 
     REAL_t *neu2,                # 
     REAL_t *work2,               # 
-
+    # int sg,
     int cbow_mean, 
     unsigned long long next_random, 
     const int _compute_loss, 
@@ -525,8 +526,8 @@ cdef unsigned long long fieldembed_token_neg_0X1(
                 continue
             else:
                 our_saxpy(&size, &ONEF, &syn0[indexes[m] * size], &ONE, neu1, &ONE)
-        if cbow_mean: #  and count > (<REAL_t>1.5):
-            sscal(&size, &inv_count, neu1, &ONE)  # (does this need BLAS-variants like saxpy? # no, you don't)
+        # if not sg:
+        sscal(&size, &inv_count, neu1, &ONE)  # (does this need BLAS-variants like saxpy? # no, you don't)
     #################################### E: calculate hProj from syn0
 
 
@@ -550,9 +551,8 @@ cdef unsigned long long fieldembed_token_neg_0X1(
                     # grain_index is also np.uint_32
                     our_saxpy(&size, &word_lenginv, &syn0_1[grain_index * size],  &ONE, neu2, &ONE)
                 ###################################################################
-
-        if cbow_mean: #  and count > (<REAL_t>1.5):
-            sscal(&size, &inv_count, neu2, &ONE)  # (does this need BLAS-variants like saxpy? # no, you don't)
+        # if not sg:
+        sscal(&size, &inv_count, neu2, &ONE)  # (does this need BLAS-variants like saxpy? # no, you don't)
     #################################### E: calculate hProj from syn0
 
 
@@ -584,18 +584,11 @@ cdef unsigned long long fieldembed_token_neg_0X1(
                     continue # this is still an issue
                 log_e_f_dot = LOG_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
                 _running_training_loss_param[0] = _running_training_loss_param[0] - log_e_f_dot # it seems when using *i, to query it, use *[0]
-            # method 1
-            # if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:
-            #     continue # quit: this is unreasonable.
-            # f = EXP_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
-            # method 2
-            if f_dot <= -MAX_EXP:
-                f = <REAL_t>0.0
-            elif f_dot >= MAX_EXP:
-                f = <REAL_t>1.0
-            else:
-                f = EXP_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
-            # which one is better?
+
+            if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:
+                continue # quit: this is unreasonable.
+            f = EXP_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
+
             g = (label - f) * alpha
             our_saxpy(&size, &g,  &syn1neg[row2], &ONE, work, &ONE) # accumulate work
 
@@ -609,15 +602,10 @@ cdef unsigned long long fieldembed_token_neg_0X1(
                 log_e_f_dot = LOG_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
                 _running_training_loss_param[0] = _running_training_loss_param[0] - log_e_f_dot # it seems when using *i, to query it, use *[0]
             
-            # if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:
-            #     continue # quit: this is unreasonable.
-            # f = EXP_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
-            if f_dot <= -MAX_EXP:
-                f = <REAL_t>0.0
-            elif f_dot >= MAX_EXP:
-                f = <REAL_t>1.0
-            else:
-                f = EXP_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
+            if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:
+                continue # quit: this is unreasonable.
+            f = EXP_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
+            
             g2 = (label - f) * alpha
             our_saxpy(&size, &g2, &syn1neg[row2], &ONE, work2, &ONE) # accumulate work
             ################################################################
@@ -633,13 +621,10 @@ cdef unsigned long long fieldembed_token_neg_0X1(
 
 
     #################################### S: update syn0 gradient
-    # if sg, this is 1, cbow_mean should be changed as 0
-    if cbow_mean:  # divide error over summed window vectors
-    # if cbow mean
-        # big questions here!!!
+    if cbow_mean:  # use standard grad
+        # set cbow_mean = 1 is the standard gradient
+        # other wise, it is using a larger graident step size
         if use_head:
-            # for each channel, plan gradient to each token.
-            # if sg, inv_count = 1
             sscal(&size, &inv_count, work,  &ONE)  # (does this need BLAS-variants like saxpy?)
         if use_sub:
             sscal(&size, &inv_count, work2, &ONE)  
@@ -649,27 +634,21 @@ cdef unsigned long long fieldembed_token_neg_0X1(
             if m == i:
                 continue
             else:
-                # Here,actually, it looks up the indexes again.
-                # Why not store these items some where?
-                # Is it a case to trade off between time and space?
                 our_saxpy(&size, &word_locks[indexes[m]], work, &ONE, &syn0[indexes[m]*size], &ONE)
 
     if use_sub:
         for m in range(j, k): # sg case: j = k; loop left tokens here
-            # m is tk_loc_id
             if m == i:
                 continue
             else:
                 ############### This four lines are important ###############
                 left_word = indexes[m] # left_word  #  from uint32 to int 
+                
                 word_lenginv = syn0_1_LengInv[left_word] # word_lenginv: REAL_t
-
                 gs = syn0_1_EndIdx[left_word-1]     #  from uint32 to int 
                 ge = syn0_1_EndIdx[left_word]       #  from uint32 to int 
-
                 for n in range(gs, ge):             #  n is int
                     grain_index = syn0_1_LookUp[n]  # grain_index is uint
-                    # print('From  ', gr_loc_id, 'To', gr_voc_id)
                     our_saxpy(&size, &word_lenginv, work2, &ONE, &syn0_1[grain_index * size], &ONE)       
     ################################### E: update syn0 gradient
     return next_random
@@ -804,31 +783,59 @@ def train_batch_cbow(model, sentences, alpha, _work, _neu1, compute_loss):
     return effective_words
 
 
+
+cdef int SUBSAMPLING = 1
 ##############################################
-def train_batch_sg_nlptext(model, indexes, sentence_idx, alpha, _work, compute_loss):
+def train_batch_sg_nlptext(model, indexes, sentence_idx, alpha, _work, compute_loss, subsampling = SUBSAMPLING):
 
     cdef Word2VecConfig c
     cdef int i, j, k
     cdef int effective_words = 0, effective_sentences = 0
     cdef int sent_idx, idx_start, idx_end
+    cdef int word_vocidx
 
     # prepare c with store the information for this whole job 
     init_w2v_config(&c, model, alpha, compute_loss, _work)
 
-    # in this case, there is no:
-    #       if c.sample and word.sample_int < random_int32(&c.next_random):
-    #           continue
+    if subsampling:
+        vlookup = model.wv.vocab_values
+        for sent_idx in range(len(sentence_idx)):
+            # step1: get every sentence's idx_start and idx_end
+            if sent_idx == 0:
+                idx_start = 0
+            else:
+                idx_start = sentence_idx[sent_idx-1]
+            idx_end = sentence_idx[sent_idx]
 
-    effective_words = len(indexes)
-    effective_sentences = len(sentence_idx) # a little different from the original sentence_idx and effective_sentences
-    
+            # step2: loop every tokens in this sentence, drop special tokens and use subsampling
+            for word_vocidx in indexes[idx_start: idx_end]:
+                if word_vocidx <= 3:
+                    continue
+                if c.sample and vlookup[word_vocidx].sample_int < random_int32(&c.next_random): # 
+                    continue
+                # NOTICE: c.sentence_idx[0] = 0  # indices of the first sentence always start at 0
+                # my sentence_idx is not started from 0
+                c.indexes[effective_words] = word_vocidx
+                effective_words +=1
+                if effective_words == MAX_SENTENCE_LEN:
+                    break  # TODO: log warning, tally overflow?
 
-    for i, item in enumerate(indexes):
-        c.indexes[i] = item
+            # step3: add the new idx_end for this sentence, that is, the value of effective_words
+            c.sentence_idx[effective_sentences] = effective_words
+            effective_sentences += 1
+            if effective_words == MAX_SENTENCE_LEN:
+                break  # TODO: log warning, tally overflow?
 
-    for i, item in enumerate(sentence_idx):
-        c.sentence_idx[i] = item
+    else:
+        # In this case, we don't drop special tokens or use subsampling 
+        effective_words = len(indexes)
+        effective_sentences = len(sentence_idx) # different from the original sentence_idx and effective_sentences
+        for i, item in enumerate(indexes):
+            c.indexes[i] = item
+        for i, item in enumerate(sentence_idx):
+            c.sentence_idx[i] = item
 
+    # use dynamic windows
     for i, item in enumerate(model.random.randint(0, c.window, effective_words)):
         c.reduced_windows[i] = item
 
@@ -865,26 +872,54 @@ def train_batch_sg_nlptext(model, indexes, sentence_idx, alpha, _work, compute_l
 
 
 ##############################################
-def train_batch_cbow_nlptext(model, indexes, sentence_idx, alpha, _work, _neu1, compute_loss):
+def train_batch_cbow_nlptext(model, indexes, sentence_idx, alpha, _work, _neu1, compute_loss, subsampling = SUBSAMPLING):
 
     cdef Word2VecConfig c
     cdef int i, j, k
     cdef int effective_words = 0, effective_sentences = 0
     cdef int sent_idx, idx_start, idx_end
+    cdef int word_vocidx
+
+
     init_w2v_config(&c, model, alpha, compute_loss, _work, _neu1) # this is the difference between sg and cbow
     
-    # in this case, there is no:
-    #       if c.sample and word.sample_int < random_int32(&c.next_random):
-    #           continue
-    effective_words = len(indexes)
-    effective_sentences = len(sentence_idx) # a little different from the original sentence_idx and effective_sentences
-    
-    # print(indexes[:10])
-    for i, item in enumerate(indexes):
-        c.indexes[i] = item
+    if subsampling:
+        vlookup = model.wv.vocab_values
+        for sent_idx in range(len(sentence_idx)):
+            # step1: get every sentence's idx_start and idx_end
+            if sent_idx == 0:
+                idx_start = 0
+            else:
+                idx_start = sentence_idx[sent_idx-1]
+            idx_end = sentence_idx[sent_idx]
 
-    for i, item in enumerate(sentence_idx):
-        c.sentence_idx[i] = item
+            # step2: loop every tokens in this sentence, drop special tokens and use subsampling
+            for word_vocidx in indexes[idx_start: idx_end]:
+                if word_vocidx <= 3:
+                    continue
+                if c.sample and vlookup[word_vocidx].sample_int < random_int32(&c.next_random):
+                    continue
+                # NOTICE: c.sentence_idx[0] = 0  # indices of the first sentence always start at 0
+                # my sentence_idx is not started from 0
+                c.indexes[effective_words] = word_vocidx
+                effective_words +=1
+                if effective_words == MAX_SENTENCE_LEN:
+                    break  # TODO: log warning, tally overflow?
+
+            # step3: add the new idx_end for this sentence, that is, the value of effective_words
+            c.sentence_idx[effective_sentences] = effective_words
+            effective_sentences += 1
+            if effective_words == MAX_SENTENCE_LEN:
+                break  # TODO: log warning, tally overflow?
+
+    else:
+        # In this case, we don't drop special tokens or use subsampling 
+        effective_words = len(indexes)
+        effective_sentences = len(sentence_idx) # different from the original sentence_idx and effective_sentences
+        for i, item in enumerate(indexes):
+            c.indexes[i] = item
+        for i, item in enumerate(sentence_idx):
+            c.sentence_idx[i] = item
 
     # precompute "reduced window" offsets in a single randint() call
     for i, item in enumerate(model.random.randint(0, c.window, effective_words)):
@@ -921,37 +956,61 @@ def train_batch_cbow_nlptext(model, indexes, sentence_idx, alpha, _work, _neu1, 
 
 
 ##############################################
-def train_batch_fieldembed_token(model, indexes, sentence_idx, alpha, _work, _neu1, compute_loss):
+def train_batch_fieldembed_token(model, indexes, sentence_idx, alpha, _work, _neu1, compute_loss, subsampling = SUBSAMPLING):
 
     cdef Word2VecConfig c
     cdef int i, j, k
     cdef int effective_words = 0, effective_sentences = 0
     cdef int sent_idx, idx_start, idx_end
+
+    cdef int word_vocidx
     # cdef int sg
     # print('before init')
     init_w2v_config(&c, model, alpha, compute_loss, _work, _neu1) # this is the difference between sg and cbow
     
-    # in this case, there is no:
-    #       if c.sample and word.sample_int < random_int32(&c.next_random):
-    #           continue
+    if subsampling:
+        vlookup = model.wv.vocab_values
+        for sent_idx in range(len(sentence_idx)):
+            # step1: get every sentence's idx_start and idx_end
+            if sent_idx == 0:
+                idx_start = 0
+            else:
+                idx_start = sentence_idx[sent_idx-1]
+            idx_end = sentence_idx[sent_idx]
 
-    effective_words = len(indexes)
-    effective_sentences = len(sentence_idx) # a little different from the original sentence_idx and effective_sentences
-    
-    # print(indexes[:10])
-    for i, item in enumerate(indexes):
-        c.indexes[i] = item
+            # step2: loop every tokens in this sentence, drop special tokens and use subsampling
+            for word_vocidx in indexes[idx_start: idx_end]:
+                if word_vocidx <= 3:
+                    continue
+                if c.sample and vlookup[word_vocidx].sample_int < random_int32(&c.next_random):
+                    continue
+                # NOTICE: c.sentence_idx[0] = 0  # indices of the first sentence always start at 0
+                # my sentence_idx is not started from 0
+                c.indexes[effective_words] = word_vocidx
+                effective_words +=1
+                if effective_words == MAX_SENTENCE_LEN:
+                    break  # TODO: log warning, tally overflow?
 
-    for i, item in enumerate(sentence_idx):
-        c.sentence_idx[i] = item
+            # step3: add the new idx_end for this sentence, that is, the value of effective_words
+            c.sentence_idx[effective_sentences] = effective_words
+            effective_sentences += 1
+            if effective_words == MAX_SENTENCE_LEN:
+                break  # TODO: log warning, tally overflow?
+
+    else:
+        # In this case, we don't drop special tokens or use downsampling 
+        effective_words = len(indexes)
+        effective_sentences = len(sentence_idx) # different from the original sentence_idx and effective_sentences
+        for i, item in enumerate(indexes):
+            c.indexes[i] = item
+        for i, item in enumerate(sentence_idx):
+            c.sentence_idx[i] = item
 
     # precompute "reduced window" offsets in a single randint() call
     for i, item in enumerate(model.random.randint(0, c.window, effective_words)):
         c.reduced_windows[i] = item
 
-    # skip_ngram model
-    # sg = c.sg
-    # print(sg)
+
     with nogil: # LESSION: you should notice this nogil, otherwise the threads are rubbish
         for sent_idx in range(effective_sentences):
             # idx_start and idx_end
@@ -991,41 +1050,60 @@ def train_batch_fieldembed_token(model, indexes, sentence_idx, alpha, _work, _ne
 
 ##############################################
 #--> NEW for 0X1
-def train_batch_fieldembed_0X1(model, indexes, sentence_idx, alpha, _work, _neu1, _work2, _neu2, compute_loss):
+def train_batch_fieldembed_0X1(model, indexes, sentence_idx, alpha, _work, _neu1, _work2, _neu2, compute_loss, subsampling = 1):
 
     cdef Word2VecConfig c
     cdef int i, j, k
     cdef int effective_words = 0, effective_sentences = 0
     cdef int sent_idx, idx_start, idx_end
+    cdef int word_vocidx
     # cdef int sg
     # print('before init')
     init_w2v_config_0X1(&c, model, alpha, compute_loss,  _work, _neu1, _work2, _neu2) # this is the difference between sg and cbow
     
-    # in this case, there is no:
-    #       if c.sample and word.sample_int < random_int32(&c.next_random):
-    #           continue
+    if subsampling:
+        vlookup = model.wv.vocab_values
+        for sent_idx in range(len(sentence_idx)):
+            # step1: get every sentence's idx_start and idx_end
+            if sent_idx == 0:
+                idx_start = 0
+            else:
+                idx_start = sentence_idx[sent_idx-1]
+            idx_end = sentence_idx[sent_idx]
 
-    effective_words = len(indexes)
-    effective_sentences = len(sentence_idx) # a little different from the original sentence_idx and effective_sentences
-    
-    # print(indexes[:10])
-    for i, item in enumerate(indexes):
-        c.indexes[i] = item
+            # step2: loop every tokens in this sentence, drop special tokens and use downsampling
+            for word_vocidx in indexes[idx_start: idx_end]:
+                if word_vocidx <= 3:
+                    continue
+                if c.sample and vlookup[word_vocidx].sample_int < random_int32(&c.next_random):
+                    continue
+                # NOTICE: c.sentence_idx[0] = 0  # indices of the first sentence always start at 0
+                # my sentence_idx is not started from 0
+                c.indexes[effective_words] = word_vocidx
+                effective_words +=1
+                if effective_words == MAX_SENTENCE_LEN:
+                    break  # TODO: log warning, tally overflow?
 
-    for i, item in enumerate(sentence_idx):
-        c.sentence_idx[i] = item
+            # step3: add the new idx_end for this sentence, that is, the value of effective_words
+            c.sentence_idx[effective_sentences] = effective_words
+            effective_sentences += 1
+            if effective_words == MAX_SENTENCE_LEN:
+                break  # TODO: log warning, tally overflow?
+
+    else:
+        # In this case, we don't drop special tokens or use downsampling 
+        effective_words = len(indexes)
+        effective_sentences = len(sentence_idx) # different from the original sentence_idx and effective_sentences
+        for i, item in enumerate(indexes):
+            c.indexes[i] = item
+        for i, item in enumerate(sentence_idx):
+            c.sentence_idx[i] = item
 
     # precompute "reduced window" offsets in a single randint() call
     for i, item in enumerate(model.random.randint(0, c.window, effective_words)):
         c.reduced_windows[i] = item
 
-    # skip_ngram model
-    # sg = c.sg
-    # print(sg)
     with nogil: # LESSION: you should notice this nogil, otherwise the threads are rubbish
-    # if True:
-        # print(indexes[:10])
-
         for sent_idx in range(effective_sentences):
             # idx_start and idx_end
             idx_end = c.sentence_idx[sent_idx]
@@ -1033,11 +1111,7 @@ def train_batch_fieldembed_0X1(model, indexes, sentence_idx, alpha, _work, _neu1
                 idx_start = 0
             else:
                 idx_start = c.sentence_idx[sent_idx-1]
-            
-            # then indexes[idx_start: idx_end] is the current sentence.
-            # print(idx_start, idx_end)
 
-            
             for i in range(idx_start, idx_end):
                 j = i - c.window + c.reduced_windows[i]
                 if j < idx_start:
@@ -1046,13 +1120,11 @@ def train_batch_fieldembed_0X1(model, indexes, sentence_idx, alpha, _work, _neu1
                 if k > idx_end:
                     k = idx_end
                 # print(j, i, k)
-                
-                # print(indexes[j:k])
+
                 if c.sg == 1:
                     for j in range(j, k): # change the first j to another name: such as t.
                         if j == i:
                             continue
-                        # build the batch here
                         c.next_random = fieldembed_token_neg_0X1(c.alpha, c.size, c.negative, c.cum_table, c.cum_table_len, 
                             c.indexes, i, j, j + 1, 
                             c.use_head, c.use_sub,  # new
