@@ -1,7 +1,4 @@
-
 ############# MY PROJECT ###########
-
-
 
 
 # Byte-compiled / optimized / DLL files
@@ -19,6 +16,8 @@ corpus/ccks/
 corpus/WikiTotal/
 corpus/medpos
 corpus/medicalSent*
+corpus/fudan
+
 
 output/
 embed/
@@ -31,7 +30,7 @@ sources/fudan
 *.py[cod]
 *$py.class
 
-
+eval_medical.py
 here.npy
 
 .DS_Store
