@@ -23,7 +23,9 @@ corpus/medicalSent*
 output/
 embed/
 data/
-
+models/
+sources/medical*
+sources/fudan
 *.pyc
 
 *.py[cod]
