@@ -51,7 +51,7 @@ class BaseKeyedVectors(utils.SaveLoad):
         self.vector_size = vector_size
         self.index2entity = []
 
-    def save(self, fname_or_handle, **kwargs):
+    def save(self, fname_or_handle, **kwargs):   
         super(BaseKeyedVectors, self).save(fname_or_handle, **kwargs)
 
     @classmethod
@@ -205,6 +205,24 @@ class BaseKeyedVectors(utils.SaveLoad):
         """Rank of the distance of `entity2` from `entity1`, in relation to distances of all entities from `entity1`."""
         return len(self.closer_than(entity1, entity2)) + 1
 
+
+    def set_merge_vectors(self):
+        if hasattr(self, 'DTU'):
+            merge_vectors = zeros((len(self.LTU), self.vector_size), dtype=REAL)
+            # vec = []
+            for word_vocidx in range(1, len(self.LTU)):
+                # word_vocidx = wv.DTU.get(w, 3)
+                grain_start = self.EndIdx[word_vocidx - 1]
+                grain_end   = self.EndIdx[word_vocidx]
+                grain_vocidx = [i for i in self.LookUp[grain_start:grain_end]]
+                field_word = self.vectors[grain_vocidx].mean(axis=0)
+                merge_vectors[word_vocidx] = field_word
+            self.merge_vectors = merge_vectors
+
+        else:
+            # then it is a head field, token or pos
+            self.merge_vectors = self.vectors
+
 class WordEmbeddingsKeyedVectors(BaseKeyedVectors):
     """Class containing common methods for operations over word vectors."""
     def __init__(self, vector_size):
@@ -226,28 +244,7 @@ class WordEmbeddingsKeyedVectors(BaseKeyedVectors):
     def index2entity(self, value):
         self.index2word = value
 
-    ########################
-    @property
-    @deprecated("Attribute will be removed in 4.0.0, use self.vectors instead")
-    def syn0(self):
-        return self.vectors
-
-    @syn0.setter
-    @deprecated("Attribute will be removed in 4.0.0, use self.vectors instead")
-    def syn0(self, value):
-        self.vectors = value
-
-    ########################
-    @property
-    @deprecated("Attribute will be removed in 4.0.0, use self.vectors_norm instead")
-    def syn0norm(self):
-        return self.vectors_norm
-
-    @syn0norm.setter
-    @deprecated("Attribute will be removed in 4.0.0, use self.vectors_norm instead")
-    def syn0norm(self, value):
-        self.vectors_norm = value
-    ########################
+    
 
     def __contains__(self, word):
         return word in self.vocab
@@ -799,7 +796,7 @@ class WordEmbeddingsKeyedVectors(BaseKeyedVectors):
             logger.info("%s: %.1f%% (%i/%i)", section['section'], 100.0 * score, correct, correct + incorrect)
             return score
 
-    def evaluate_word_analogies(self, analogies, restrict_vocab=300000, case_insensitive=True, dummy4unknown=False):
+    def evaluate_word_analogies(self, analogies, restrict_vocab=500000, case_insensitive=True, dummy4unknown=False):
         """Compute performance of the model on an analogy test set.
 
         This is modern variant of :meth:`~gensim.models.keyedvectors.WordEmbeddingsKeyedVectors.accuracy`, see
@@ -929,7 +926,7 @@ class WordEmbeddingsKeyedVectors(BaseKeyedVectors):
         logger.info('Spearman rank-order correlation coefficient against %s: %.4f', pairs, spearman[0])
         logger.info('Pairs with unknown words ratio: %.1f%%', oov)
 
-    def evaluate_word_pairs(self, pairs, delimiter='\t', restrict_vocab=300000, case_insensitive=True, dummy4unknown=False):
+    def evaluate_word_pairs(self, pairs, delimiter='\t', restrict_vocab=500000, case_insensitive=True, dummy4unknown=False):
         """Compute correlation of the model with human similarity judgments.
 
         Notes
@@ -1072,6 +1069,31 @@ class WordEmbeddingsKeyedVectors(BaseKeyedVectors):
         rcs = float(self.similarity(wa, wb)) / (sum(sim for _, sim in sims))
 
         return rcs
+
+    ########################
+    @property
+    @deprecated("Attribute will be removed in 4.0.0, use self.vectors instead")
+    def syn0(self):
+        return self.vectors
+
+    @syn0.setter
+    @deprecated("Attribute will be removed in 4.0.0, use self.vectors instead")
+    def syn0(self, value):
+        self.vectors = value
+
+    ########################
+    @property
+    @deprecated("Attribute will be removed in 4.0.0, use self.vectors_norm instead")
+    def syn0norm(self):
+        return self.vectors_norm
+
+    @syn0norm.setter
+    @deprecated("Attribute will be removed in 4.0.0, use self.vectors_norm instead")
+    def syn0norm(self, value):
+        self.vectors_norm = value
+    ########################
+
+
 
 class Word2VecKeyedVectors(WordEmbeddingsKeyedVectors):
     """Mapping between words and vectors for the :class:`~gensim.models.Word2Vec` model.
@@ -1444,4 +1466,6 @@ class WordEmbeddingSimilarityIndex(TermSimilarityIndex):
             for t2, similarity in most_similar:
                 if similarity > self.threshold:
                     yield (t2, similarity**self.exponent)
+
+
 

@@ -75,8 +75,8 @@ class BaseAny2VecModel(utils.SaveLoad):
         """Train a single batch. Return 2-tuple `(effective word count, total word count)`."""
         raise NotImplementedError()
 
-    def _worker_loop(self, job_queue, progress_queue, proj_num = 1):
-        thread_private_mem = self._get_thread_working_mem(proj_num = proj_num) # TODO: this is space to store gradients, change this.
+    def _worker_loop(self, job_queue, progress_queue):
+        thread_private_mem = self._get_thread_working_mem() # TODO: this is space to store gradients, change this.
         # eturn work, neu1
         jobs_processed = 0
         while True:
@@ -232,7 +232,7 @@ class BaseAny2VecModel(utils.SaveLoad):
         raise NotImplementedError()
 
     def _worker_loop_nlptext(self, job_queue, progress_queue, proj_num = 1):
-        thread_private_mem = self._get_thread_working_mem(proj_num = proj_num) # TODO: this is space to store gradients, change this.
+        thread_private_mem = self._get_thread_working_mem() # TODO: this is space to store gradients, change this.
         # eturn work, neu1
         jobs_processed = 0
         while True:
@@ -287,6 +287,7 @@ class BaseAny2VecModel(utils.SaveLoad):
             # assaure that the input is correct
             # TODO
             # print_sentence()
+            
             job_queue.put((indexes, sentence_idx, next_job_params))
 
             pushed_examples += len(sentence_idx)
@@ -331,7 +332,7 @@ class BaseAny2VecModel(utils.SaveLoad):
         workers = [
             threading.Thread(
                 target=self._worker_loop_nlptext,
-                args=(job_queue, progress_queue, self.proj_num))
+                args=(job_queue, progress_queue))
             for _ in range(self.workers)
         ]
         logger.info('\n the total_examples is:' + str(total_examples) + '   , the total words is:' + str(total_words) + '\n')
@@ -466,9 +467,10 @@ class BaseAny2VecModel(utils.SaveLoad):
 
 class BaseWordEmbeddingsModel(BaseAny2VecModel):
    
-    def _get_thread_working_mem(self, proj_num = 1):
+    def _get_thread_working_mem(self):
         work = matutils.zeros_aligned(self.trainables.layer1_size, dtype=REAL)  # per-thread private work memory
         neu1 = matutils.zeros_aligned(self.trainables.layer1_size, dtype=REAL)
+        return work, neu1
 
     def _clear_post_train(self):
         raise NotImplementedError()
@@ -555,8 +557,7 @@ class BaseWordEmbeddingsModel(BaseAny2VecModel):
         
         ## my code:
         if nlptext is not None:
-            print('Wrong in build_vocab if you see this')
-
+            self.build_vocab_nlptext(nlptext)
         else:
             #########################################################################
             # .vocabulary.scan_vocab and .vocabulary.prepare_vocab produces:
@@ -575,7 +576,7 @@ class BaseWordEmbeddingsModel(BaseAny2VecModel):
             report_values['memory'] = self.estimate_memory(vocab_size=report_values['num_retained_words'])
             
             print('-------> Prepare Trainable Weight....')
-            self.trainables.prepare_weights(self.hs, self.negative, self.wv, update=update, vocabulary=self.vocabulary)
+            self.trainables.prepare_weights(self, self.negative, update=update, vocabulary=self.vocabulary, neg_init = self.neg_init)
 
             print('======== The Voc and Parameters are Ready!'); e = datetime.now()
             print('======== Total Time: ', e - s)
