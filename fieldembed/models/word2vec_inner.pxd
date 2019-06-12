@@ -218,3 +218,47 @@ cdef unsigned long long fieldembed_token_neg_0X1(
     const int _compute_loss, 
     REAL_t *_running_training_loss_param) nogil
 #=================================================#
+
+
+#####################################################################################
+cdef init_w2v_config_0X1_neat(
+    Word2VecConfig *c, 
+    model, 
+    alpha, 
+    compute_loss, 
+    _work, 
+    _neu1)
+
+cdef unsigned long long fieldembed_token_neg_0X1_neat( 
+    const REAL_t alpha, 
+    const int size,
+    const int negative, 
+    np.uint32_t *cum_table, 
+    unsigned long long cum_table_len, 
+
+    const np.uint32_t indexes[MAX_SENTENCE_LEN], 
+    int i, # right word loc_idx
+    int j, # left  word loc_idx start
+    int k, # left  word loc_idx end
+
+    int use_head,                # 
+    int use_sub,                 # 
+    REAL_t *syn0, 
+    
+    REAL_t *syn0_1,
+    np.uint32_t *syn0_1_LookUp,  # 
+    np.uint32_t *syn0_1_EndIdx,  # 
+    REAL_t *syn0_1_LengInv,      # 
+    int syn0_1_leng_max,         # currently, it is not in use.
+
+    REAL_t *syn1neg, 
+    REAL_t *word_locks,
+
+    REAL_t *neu1,  
+    REAL_t *work,
+    
+    # int sg,
+    int cbow_mean, 
+    unsigned long long next_random, 
+    const int _compute_loss, 
+    REAL_t *_running_training_loss_param) nogil

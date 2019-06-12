@@ -36,6 +36,7 @@ logger = logging.getLogger(__name__)
 from .word2vec_inner import train_batch_sg_nlptext, train_batch_cbow_nlptext
 from .word2vec_inner import train_batch_fieldembed_token
 from .word2vec_inner import train_batch_fieldembed_0X1
+from .word2vec_inner import train_batch_fieldembed_0X1_neat
 
 
 from .fieldembed_inner import train_batch_fieldembed_M0X1, train_batch_fieldembed_M0X2, train_batch_fieldembed_M0XY, train_batch_fieldembed_M0XY_P
@@ -114,17 +115,163 @@ class FieldEmbedding(BaseWordEmbeddingsModel):
         # self.meta = {}
         # self.build_vocab makes wv, vocabulary, and trainables rich. see: BaseWordEmbeddingsModel
         super(FieldEmbedding, self).__init__(
-                nlptext = nlptext, workers=workers, vector_size=size, epochs=iter, 
-                callbacks=callbacks, batch_words=batch_words, sg=sg, alpha=alpha, window=window,
-                seed=seed, negative=negative, cbow_mean=cbow_mean, min_alpha=min_alpha, compute_loss=compute_loss,
-                fast_version=FAST_VERSION)
+            nlptext = nlptext, workers=workers, vector_size=size, epochs=iter, 
+            callbacks=callbacks, batch_words=batch_words, sg=sg, alpha=alpha, window=window,
+            seed=seed, negative=negative, cbow_mean=cbow_mean, min_alpha=min_alpha, compute_loss=compute_loss,
+            fast_version=FAST_VERSION)
+
+    def create_field_embedding(self, size, channel, LGU, DGU):
+        '''
+            size: embedding size
+            channel: field name
+            LGU: index2str
+            DGU: str2index
+            --------------
+            return and set a wv for fieldembed: wv_channel
+        '''
+        if channel == 'token':
+            return self.wv
+        else:
+            gw = Word2VecKeyedVectors(size)
+            gw.index2word = LGU 
+            for gr in DGU:
+                gw.vocab[gr] = Vocab(index=DGU[gr])
+            self.__setattr__('wv_' + channel, gw)
+            return self.__getattribute__('wv_' + channel)
+
+
+    # self.weights: collecting all the field embeddings
+
+    def prepare_field_info(self, nlptext):
+
+        if len(self.Field_Settings) == 0:
+            # CASE 1: no Field_Settings are provided!
+            # Only use token itself.
+            self.field_idx ['token']  = len(self.field_idx)
+            self.field_info['token'] = ['token']
+            self.field_head.append([])
+            self.field_head[self.field_idx['token']] = [1, self.wv] # CB-010 / SG-010
+            self.field_sub.append([])
+            self.field_sub [self.field_idx['token']]  = []
+            self.use_head = 1
+            self.use_sub  = 0
+            self.proj_num = self.use_head +  self.use_sub
+            self.weights['token'] = self.wv 
+
+        else:
+            for channel, f_setting in self.Field_Settings.items():
+                # Field_Settings is nlptext's Channel_Settings
+                if channel in Field_Info:
+
+                    hyper_field = channel
+                    LGU, DGU  = nlptext.getGrainUnique(hyper_field, tagScheme = 'BIOES') # A LESSION 
+
+                    wv = self.create_field_embedding(self.vector_size, hyper_field, LGU, DGU)
+                    self.weights[hyper_field] = wv
+                    
+                    if hyper_field in self.field_info:
+                        self.field_info[channel].append(channel)
+                    else:
+                        self.field_info[channel] = [channel]
+
+                    if hyper_field not in self.field_idx:
+                        self.field_idx[hyper_field]  = len(self.field_idx)
+
+                    if self.field_idx[hyper_field] == len(self.field_head):
+                        self.field_head.append([1, wv])
+                    elif self.field_idx[hyper_field] < len(self.field_head):
+                        self.field_head[self.field_idx[hyper_field]] = [1, wv]
+                    else:
+                        prnt('Error in field ')
+
+                    if self.field_idx[hyper_field] == len(self.field_sub):
+                        self.field_sub.append([])
+                        self.field_sub[self.field_idx[channel]] = []
+
+                else:
+                    data = get_field_info(nlptext, channel, **f_setting) 
+                    GU, LookUp, EndIdx, Leng_Inv, Leng_max, TU = data
+                    LGU, DGU = GU
+                    wv = self.create_field_embedding(self.vector_size, channel, LGU, DGU)
+                    self.weights[channel] = wv
+                    LTU, DTU = TU
+                    wv.LookUp  = LookUp
+                    wv.EndIdx  = EndIdx
+                    wv.Leng_Inv= Leng_Inv
+                    wv.Leng_max= Leng_max
+                    wv.LTU = LTU
+                    wv.DTU = DTU
+                    
+                    for field, subFields in  Field_Info.items():
+                        if channel in subFields:
+                            ######## deal with the field first
+                            if field not in self.field_idx:
+                                self.field_idx[field]  = len(self.field_idx)
+                            
+                            if self.field_idx[field] == len(self.field_head):
+                                self.field_head.append([0, None])
+                            ######## deal with the field first
+
+                            if self.field_idx[field] == len(self.field_sub):
+                                self.field_sub.append([])
+                                self.field_sub[self.field_idx[field]] = [ [wv, LookUp, EndIdx, Leng_Inv, Leng_max] ]
+
+                            elif self.field_idx[field] < len(self.field_sub):
+                                self.field_sub[self.field_idx[field]].append([wv, LookUp, EndIdx, Leng_Inv, Leng_max])
+                            else:
+                                prnt('Error in subfield ')
+
+                            if field in self.field_info:
+                                self.field_info[field].append(channel)
+                            else:
+                                self.field_info[field] = [channel]
+                            # print('subfield:', field)
+                            break
+            
+            self.use_head = sum([i[0] for i in self.field_head])
+            self.use_sub  = sum([len(i) for i in self.field_sub])
+            self.proj_num = self.use_head + self.use_sub
+        
+        pprint(self.field_idx)
+        pprint(self.field_info)
+        pprint(self.field_head)
+        pprint(self.field_sub)
+        for i, wv in self.weights.items():
+            print(i, wv.vectors.shape)
+        print('use_head:', self.use_head, 'use_sub:', self.use_sub)
+
+    def build_vocab(self, nlptext = None, **kwargs):
+        # scan_vocab and prepare_vocab
+        # build .wv.vocab + .wv.index2word + .wv.cum_table
+        update = False
+
+        print('!!!======== Build_vocab based on NLPText....'); s = datetime.now()
+
+        print('-------> Prepare Vocab....')
+        total_words, corpus_count,  report_values = self.vocabulary.scan_and_prepare_vocab_from_nlptext(self, nlptext, 
+                                                                    self.negative, update = update, **kwargs) 
+
+        self.corpus_count = corpus_count
+        self.corpus_total_words = total_words
+
+        print('-------> Prepare Field Info....')
+
+        self.prepare_field_info(nlptext)
+        
+        # self.create_field_embedding(size = self.size, )
+        report_values['memory'] = self.estimate_memory(vocab_size=report_values['num_retained_words'])
+
+        print('-------> Prepare Trainable Weight....')
+        self.trainables.prepare_weights_from_nlptext(self, self.negative, self.wv, update=update, vocabulary=self.vocabulary, neg_init = self.neg_init)
+
+        print('======== The Voc and Parameters are Ready!'); e = datetime.now()
+        print('======== Total Time: ', e - s)
 
     def _get_thread_working_mem(self, proj_num = 1):
-        return [matutils.zeros_aligned(self.trainables.layer1_size, dtype=REAL) for i in range(14)]
-
+        # produce vectors for field project vectors and gradient vectors.
+        return [matutils.zeros_aligned(self.trainables.layer1_size * proj_num, dtype=REAL) for i in range(2)]
 
     def _get_thread_working_mem_for_meager(self):
-        # if self.use_merger:
         work_m = matutils.zeros_aligned(self.trainables.layer1_size, dtype=REAL) 
         neu_m  = matutils.zeros_aligned(self.trainables.layer1_size, dtype=REAL) 
         return work_m, neu_m
@@ -138,6 +285,14 @@ class FieldEmbedding(BaseWordEmbeddingsModel):
     def _do_train_job_nlptext(self, indexes, sentence_idx, alpha, inits, merger_private_mem = None, pos_private_mem = None):
         tally = 0
         # print(self.mode)
+
+        if self.mode == 'fieldembed_0X1_neat':
+            work, neu1 = inits
+            # print(self.proj_num)
+            # print(work.shape)
+            # print(neu1.shape)
+            tally += train_batch_fieldembed_0X1_neat(self, indexes, sentence_idx, alpha, work, neu1, self.compute_loss)
+        
         if self.mode == 'M0XY_P':
             # print(self.mode)
             # version Final. On work
@@ -193,7 +348,6 @@ class FieldEmbedding(BaseWordEmbeddingsModel):
 
     def _worker_loop_nlptext(self, job_queue, progress_queue, proj_num = 1):
         thread_private_mem = self._get_thread_working_mem(proj_num = proj_num) # TODO: this is space to store gradients, change this.
-        # return work, neu1
         merger_private_mem = self._get_thread_working_mem_for_meager()
         pos_private_mem    = self._get_thread_working_mem_for_pos()
         jobs_processed = 0
@@ -279,7 +433,6 @@ class FieldEmbedding(BaseWordEmbeddingsModel):
     ################################################################### 
 
     def _train_epoch_nlptext(self, nlptext, cur_epoch=0, total_examples=None, total_words=None,queue_factor=2, report_delay=1.0):
-        
         ########### preprocess
         sentences_endidx = nlptext.SENT['EndIDXTokens']
         tokens_vocidx    = nlptext.TOKEN['ORIGTokenIndex']
@@ -328,140 +481,6 @@ class FieldEmbedding(BaseWordEmbeddingsModel):
 
         return trained_word_count, raw_word_count, job_tally
 
-    def create_field_embedding(self, size, channel, LGU, DGU):
-        # self.wv_neg = Word2VecKeyedVectors(size)
-        if channel == 'token':
-            # don't need create wv_token for token anymore, we have self.wv already.
-            # self.trainables_dict['syn0' ] = self.wv
-            return self.wv
-        else:
-            gw = Word2VecKeyedVectors(size)
-            gw.index2word = LGU 
-            for gr in DGU:
-                gw.vocab[gr] = Vocab(index=DGU[gr])
-            self.__setattr__('wv_' + channel, gw)
-            # self.trainables_dict['syn0_' + channel] = self.__getattribute__('wv_' + channel)
-            return self.__getattribute__('wv_' + channel)
-
-    def prepare_field_info(self, nlptext):
-
-        if len(self.Field_Settings) == 0:
-            self.field_idx['token']  = len(self.field_idx)
-            self.field_info['token'] = ['token']
-            self.field_head.append([])
-            self.field_head[self.field_idx['token']] = [1, self.wv] # CB-010 / SN-010
-            self.field_sub.append([])
-            self.field_sub[self.field_idx['token']]  = []
-            self.use_head = 1
-            self.use_sub  = 0
-            self.proj_num = 2 # change this frequently
-
-            self.weights['token'] = self.wv
-        else:
-            for channel, f_setting in self.Field_Settings.items():
-                # actually, Field_Settings is nlptext's Channel_Settings
-                if channel in Field_Info:
-                    field = channel
-                    LGU, DGU  = nlptext.getGrainUnique(field, tagScheme = 'BIOES') # A LESSION
-                    wv = self.create_field_embedding(self.vector_size, channel, LGU, DGU)
-                    self.weights[channel] = wv
-                    if field in self.field_info:
-                        self.field_info[channel].append(channel)
-                    else:
-                        self.field_info[channel] = [channel]
-
-                    if field not in self.field_idx:
-                        self.field_idx[field]  = len(self.field_idx)
-
-                    if self.field_idx[field] == len(self.field_head):
-                        self.field_head.append([1, wv])
-                    elif self.field_idx[field] < len(self.field_head):
-                        self.field_head[self.field_idx[field]] = [1, wv]
-                    else:
-                        prnt('Error in field ')
-
-                    if self.field_idx[field] == len(self.field_sub):
-                        self.field_sub.append([])
-                        self.field_sub[self.field_idx[channel]] = []
-
-                else:
-                    data = get_field_info(nlptext, channel, **f_setting) 
-                    GU, LookUp, EndIdx, Leng_Inv, Leng_max, TU = data
-                    LGU, DGU = GU
-                    wv = self.create_field_embedding(self.vector_size, channel, LGU, DGU)
-                    self.weights[channel] = wv
-                    LTU, DTU = TU
-                    wv.LookUp  = LookUp
-                    wv.EndIdx  = EndIdx
-                    wv.Leng_Inv= Leng_Inv
-                    wv.Leng_max= Leng_max
-                    wv.LTU = LTU
-                    wv.DTU = DTU
-                    
-                    for field, subFields in  Field_Info.items():
-                        if channel in subFields:
-                            ######## deal with the field first
-                            if field not in self.field_idx:
-                                self.field_idx[field]  = len(self.field_idx)
-                            
-                            if self.field_idx[field] == len(self.field_head):
-                                self.field_head.append([0, None])
-                            ######## deal with the field first
-
-                            if self.field_idx[field] == len(self.field_sub):
-                                self.field_sub.append([])
-                                self.field_sub[self.field_idx[field]] = [ [wv, LookUp, EndIdx, Leng_Inv, Leng_max] ]
-
-                            elif self.field_idx[field] < len(self.field_sub):
-                                self.field_sub[self.field_idx[field]].append([wv, LookUp, EndIdx, Leng_Inv, Leng_max])
-                            else:
-                                prnt('Error in subfield ')
-
-                            if field in self.field_info:
-                                self.field_info[field].append(channel)
-                            else:
-                                self.field_info[field] = [channel]
-                            # print('subfield:', field)
-                            break
-            
-            self.use_head = sum([i[0] for i in self.field_head])
-            self.use_sub  = sum([len(i) for i in self.field_sub])
-            self.proj_num = 2
-        
-        pprint(self.field_idx)
-        pprint(self.field_info)
-        pprint(self.field_head)
-        pprint(self.field_sub)
-        for i, wv in self.weights.items():
-            print(i, wv.vectors.shape)
-        print('use_head:', self.use_head, 'use_sub:', self.use_sub)
-
-    def build_vocab(self, nlptext = None, **kwargs):
-        # scan_vocab and prepare_vocab
-        # build .wv.vocab + .wv.index2word + .wv.cum_table
-        update = False
-
-        print('!!!======== Build_vocab based on NLPText....'); s = datetime.now()
-
-        print('-------> Prepare Vocab....')
-        total_words, corpus_count,  report_values = self.vocabulary.scan_and_prepare_vocab_from_nlptext(self, nlptext, 
-                                                                    self.negative, update = update, **kwargs) 
-
-        self.corpus_count = corpus_count
-        self.corpus_total_words = total_words
-
-        print('-------> Prepare Field Info....')
-
-        self.prepare_field_info(nlptext)
-        
-        # self.create_field_embedding(size = self.size, )
-        report_values['memory'] = self.estimate_memory(vocab_size=report_values['num_retained_words'])
-
-        print('-------> Prepare Trainable Weight....')
-        self.trainables.prepare_weights_from_nlptext(self, self.negative, self.wv, update=update, vocabulary=self.vocabulary, neg_init = self.neg_init)
-
-        print('======== The Voc and Parameters are Ready!'); e = datetime.now()
-        print('======== Total Time: ', e - s)
 
     def train(self, nlptext = None, total_examples=None, total_words=None,
               epochs=None, start_alpha=None, end_alpha=None, word_count=0,
@@ -686,7 +705,7 @@ class FieldEmbedTrainables(utils.SaveLoad):
     def reset_weights(self, model, negative, neg_init = 0):
         """Reset all projection weights to an initial (untrained) state, but keep the existing vocabulary."""
         logger.info("resetting layer weights")
-        
+
         # syn0
         for field, field_idx in model.field_idx.items():
             use, wv = model.field_head[field_idx]
