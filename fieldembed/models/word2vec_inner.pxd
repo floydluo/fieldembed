@@ -6,9 +6,7 @@
 #
 # shared type definitions for word2vec_inner
 # used by both word2vec_inner.pyx (automatically) and doc2vec_inner.pyx (by explicit cimport)
-#
-# Copyright (C) 2013 Radim Rehurek <me@radimrehurek.com>
-# Licensed under the GNU LGPL v2.1 - http://www.gnu.org/licenses/lgpl.html
+
 
 cimport numpy as np
 

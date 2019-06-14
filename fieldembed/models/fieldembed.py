@@ -36,11 +36,13 @@ logger = logging.getLogger(__name__)
 from .word2vec_inner import train_batch_sg_nlptext, train_batch_cbow_nlptext
 from .word2vec_inner import train_batch_fieldembed_token
 from .word2vec_inner import train_batch_fieldembed_0X1
-from .word2vec_inner import train_batch_fieldembed_0X1_neat
 
 
 from .fieldembed_inner import train_batch_fieldembed_M0X1, train_batch_fieldembed_M0X2, train_batch_fieldembed_M0XY, train_batch_fieldembed_M0XY_P
 from .fieldembed_inner import FAST_VERSION, MAX_WORDS_IN_BATCH
+
+
+from .fieldembed_core import train_batch_fieldembed_0X1_neat
 
 
 Field_Info = {
