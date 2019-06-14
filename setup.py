@@ -113,6 +113,25 @@ ext_modules = [
         sources=['./fieldembed/_matutils.c']),
 ]
 
+
+if not (os.name == 'nt' and sys.version_info[0] < 3):
+    extra_args = []
+    system = platform.system()
+
+    if system == 'Linux':
+        extra_args.append('-std=c++11')
+    elif system == 'Darwin':
+        extra_args.extend(['-stdlib=libc++', '-std=c++11'])
+
+    ext_modules.append(
+        Extension('fieldembed.models.fieldembed_core',
+                  sources=['./fieldembed/models/fieldembed_core.cpp'],
+                  language='c++',
+                  extra_compile_args=extra_args,
+                  extra_link_args=extra_args)
+    )
+
+
 setup(
     ext_modules=ext_modules,
     cmdclass=cmdclass,
