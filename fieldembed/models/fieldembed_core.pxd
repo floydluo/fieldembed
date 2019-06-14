@@ -50,25 +50,17 @@ cdef struct Word2VecConfig:
     REAL_t running_training_loss, alpha
     int hs, negative, sample, compute_loss, size, window, cbow_mean, workers, sg
     int use_sub, use_head, use_hyper
+
+    int sentence_idx[MAX_SENTENCE_LEN + 1]
+    np.uint32_t indexes[MAX_SENTENCE_LEN]            # for token (head only)
+    map[int, vector[np.uint32_t]] hyper_indexes_map  # for hyper : TODO, this may be not correct
     
-    map[int, REAL_t * ] syn0_map # use_sub --> use_head --> use_hyper
-    
-    # for sub only
+    map[int, REAL_t * ] syn0_map                     # use_sub --> use_head --> use_hyper
     map[int, np.uint32_t *] LookUp_map
     map[int, np.uint32_t *] EndIdx_map
     map[int, REAL_t *] LengInv_map
     map[int, int] leng_max_map
-    
-    REAL_t *syn0 # to remove it
-    #########################
-    REAL_t *syn0_1
-    np.uint32_t *syn0_1_LookUp
-    np.uint32_t *syn0_1_EndIdx
-    REAL_t *syn0_1_LengInv
-    int syn0_1_leng_max
-    #########################
 
-    
     REAL_t *work
     REAL_t *neu1
     REAL_t *word_locks
@@ -76,13 +68,6 @@ cdef struct Word2VecConfig:
     np.uint32_t reduced_windows[MAX_SENTENCE_LEN]
     np.uint32_t *cum_table
 
-    np.uint32_t indexes[MAX_SENTENCE_LEN]            # for token (head only)
-    map[int, vector[np.uint32_t]] hyper_indexes_map  # for hyper : TODO, this may be not correct
-    # map[int, np.uint32_t] hyper_indexes_map[MAX_SENTENCE_LEN]  # for hyper : TODO, this may be not correct
-    
-    int codelens[MAX_SENTENCE_LEN]
-    int sentence_idx[MAX_SENTENCE_LEN + 1]
-    
     REAL_t *syn1neg
     unsigned long long cum_table_len
     unsigned long long next_random
@@ -135,23 +120,12 @@ cdef unsigned long long fieldembed_token_neg_0X1_neat(
     map[int, REAL_t *] LengInv_map,
     map[int, int] leng_max_map,
 
-
-
-    REAL_t *syn0, 
-    
-    REAL_t *syn0_1,
-    np.uint32_t *syn0_1_LookUp,  # 
-    np.uint32_t *syn0_1_EndIdx,  # 
-    REAL_t *syn0_1_LengInv,      # 
-    int syn0_1_leng_max,         # currently, it is not in use.
-
     REAL_t *syn1neg, 
     REAL_t *word_locks,
 
     REAL_t *neu1,  
     REAL_t *work,
     
-    # int sg,
     int cbow_mean, 
     unsigned long long next_random, 
     const int _compute_loss, 
