@@ -59,16 +59,16 @@ Field_Idx = {
     'ner'  :2,
 }
 
-def get_field_info(nlptext, field = 'char', Max_Ngram = 1, end_grain = False):
+def get_subfield_info(nlptext, field = 'char', Max_Ngram = 1, end_grain = False):
     GU = nlptext.getGrainUnique(field, Max_Ngram=Max_Ngram, end_grain=end_grain)
-    charLookUp, TU = nlptext.getLookUp(field, Max_Ngram=Max_Ngram, end_grain=end_grain)
-    charLeng = np.array([len(i) for i in charLookUp], dtype = np.uint32)
+    LKP, TU = nlptext.getLookUp(field, Max_Ngram=Max_Ngram, end_grain=end_grain)
+    charLeng = np.array([len(i) for i in LKP], dtype = np.uint32)
     charLeng_max = np.max(charLeng)
     charEndIdx = np.cumsum(charLeng, dtype = np.uint32) # LESSION: ignoring the np.uint32 wastes me a lot of time
-    charLookUp = np.array(list(itertools.chain.from_iterable(charLookUp)), dtype = np.uint32)
+    charLookUp = np.array(list(itertools.chain.from_iterable(LKP)), dtype = np.uint32)
     charLeng_inv = 1 / charLeng
     charLeng_inv = charLeng_inv.astype(REAL)
-    return GU, charLookUp, charEndIdx, charLeng_inv, charLeng_max, TU
+    return GU, charLookUp, charEndIdx, charLeng_inv, charLeng_max, TU, LKP
 
 class FieldEmbedding(BaseWordEmbeddingsModel):
 
@@ -104,7 +104,7 @@ class FieldEmbedding(BaseWordEmbeddingsModel):
         # here only do initializations for wv, vocabulary, and trainables
         self.wv     = Word2VecKeyedVectors(size)
         self.wv_neg = Word2VecKeyedVectors(size)
-        # self.wv_neg = Word2VecKeyedVectors(size)
+       
         self.vocabulary = FieldEmbedVocab(sample=sample, ns_exponent=ns_exponent)
         self.trainables = FieldEmbedTrainables(seed=seed, vector_size=size, hashfxn=hashfxn)
 
@@ -191,18 +191,21 @@ class FieldEmbedding(BaseWordEmbeddingsModel):
                         self.field_sub[self.field_idx[channel]] = []
 
                 else:
-                    data = get_field_info(nlptext, channel, **f_setting) 
-                    GU, LookUp, EndIdx, Leng_Inv, Leng_max, TU = data
+                    # when the channls are the sub fields
+                    data = get_subfield_info(nlptext, channel, **f_setting) 
+                    GU, LookUp, EndIdx, Leng_Inv, Leng_max, TU, LKP = data
                     LGU, DGU = GU
                     wv = self.create_field_embedding(self.vector_size, channel, LGU, DGU)
                     self.weights[channel] = wv
                     LTU, DTU = TU
+                    # set different attributes
                     wv.LookUp  = LookUp
                     wv.EndIdx  = EndIdx
                     wv.Leng_Inv= Leng_Inv
                     wv.Leng_max= Leng_max
                     wv.LTU = LTU
                     wv.DTU = DTU
+                    wv.LKP = LKP
                     
                     for field, subFields in  Field_Info.items():
                         if channel in subFields:
@@ -227,7 +230,6 @@ class FieldEmbedding(BaseWordEmbeddingsModel):
                                 self.field_info[field].append(channel)
                             else:
                                 self.field_info[field] = [channel]
-                            # print('subfield:', field)
                             break
             
             self.use_head = sum([i[0] for i in self.field_head])
@@ -661,7 +663,6 @@ class FieldEmbedVocab(utils.SaveLoad):
 
         print('o-->', 'Compute Cum Table')
         s = datetime.now(); print('\tStart: ', s)
-        # e = datetime.now(); print('\tEnd  : ', e);print('\tTotal Time:', e - s )
         self.make_cum_table(model.wv)
         e = datetime.now(); print('\tEnd  : ', e);print('\tTotal Time:', e - s )
         return corpus_total_words, corpus_count,  report_values
@@ -695,11 +696,8 @@ class FieldEmbedTrainables(utils.SaveLoad):
         return (once.rand(vector_size) - 0.5) / vector_size
 
     def prepare_weights_from_nlptext(self, model, negative, wv, update=False, vocabulary=None, neg_init = 0):
-        # reset_weigths only
-        # currently, it is the same as self.reset_weights()
         print('o-->', 'Prepare Trainable Parameters')
         s = datetime.now(); print('\tStart: ', s)
-        # e = datetime.now(); print('\tEnd  : ', e);print('\tTotal Time:', e - s )
         self.reset_weights(model, negative, neg_init = neg_init)
         e = datetime.now(); print('\tEnd  : ', e);print('\tTotal Time:', e - s )
 
@@ -714,14 +712,12 @@ class FieldEmbedTrainables(utils.SaveLoad):
             if use:
                 wv.vectors = empty((len(wv.vocab), wv.vector_size), dtype=REAL)
                 for i in range(len(wv.vocab)): 
-                    # construct deterministic seed from word AND seed argument
                     wv.vectors[i] = self.seeded_vector(wv.index2word[i] + str(self.seed), self.layer1_size)
 
             for data in model.field_sub[field_idx]:
                 wv = data[0]
                 wv.vectors = empty((len(wv.vocab), wv.vector_size), dtype=REAL)
                 for i in range(len(wv.vocab)): 
-                    # construct deterministic seed from word AND seed argument
                     wv.vectors[i] = self.seeded_vector(wv.index2word[i] + str(self.seed), self.layer1_size)
 
         # syn1neg      
@@ -734,11 +730,10 @@ class FieldEmbedTrainables(utils.SaveLoad):
                     model.wv_neg.vectors[i] = self.seeded_vector(model.wv_neg.index2word[i] + neg_int + str(self.seed), 
                                                                  self.layer1_size)
             else:    
+                # we tend to init neg with zero vectors
                 print('init neg with 0')
                 model.wv_neg.vectors = zeros((len(model.wv.vocab), self.layer1_size), dtype=REAL)
             
-
-
             self.syn1neg = model.wv_neg.vectors
 
         model.wv.vocab_values = list(model.wv.vocab.values())

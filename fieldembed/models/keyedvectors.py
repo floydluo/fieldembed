@@ -205,6 +205,30 @@ class BaseKeyedVectors(utils.SaveLoad):
         """Rank of the distance of `entity2` from `entity1`, in relation to distances of all entities from `entity1`."""
         return len(self.closer_than(entity1, entity2)) + 1
 
+class WordEmbeddingsKeyedVectors(BaseKeyedVectors):
+    """Class containing common methods for operations over word vectors."""
+    def __init__(self, vector_size, LGU = [], DGU = {}):
+        super(WordEmbeddingsKeyedVectors, self).__init__(vector_size=vector_size)
+        self.vectors_norm = None
+        self.index2word = LGU
+        self.LGU = LGU 
+        self.DGU = DGU
+
+        self.GU     = self.LGU, self.DGU
+        self.vector = None
+
+        ######## The following parts are only suitable for the sub field channels ##########
+        self.LTU      = None 
+        self.DTU      = None 
+        self.TU = self.LTU, self.DTU
+        
+        self.LKP     = None 
+        self.LookUp  = None
+        self.EndIdx  = None
+        self.Leng_Inv= None
+        self.Leng_max= None
+        self.merge_vectors = None
+        ####################################################################################
 
     def set_merge_vectors(self):
         if hasattr(self, 'DTU'):
@@ -222,13 +246,6 @@ class BaseKeyedVectors(utils.SaveLoad):
         else:
             # then it is a head field, token or pos
             self.merge_vectors = self.vectors
-
-class WordEmbeddingsKeyedVectors(BaseKeyedVectors):
-    """Class containing common methods for operations over word vectors."""
-    def __init__(self, vector_size):
-        super(WordEmbeddingsKeyedVectors, self).__init__(vector_size=vector_size)
-        self.vectors_norm = None
-        self.index2word = [] # DT
 
     @property
     @deprecated("Attribute will be removed in 4.0.0, use self instead")
