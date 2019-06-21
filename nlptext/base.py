@@ -146,17 +146,12 @@ class BasicObject(object):
 
                 if anno and TOKENLevel == 'char': # TODO
                     #########################################################Anno
-                    for sset in SSETText:
-                        try:
-                            assert sset[0] == strText[sset[1]: sset[2]]
-                        except:
-                            print(SSETText, '\n', sset, '\n',origTextName, '\n',annoTextName)
-                        
                     if SSETText == []:
                         print('\nThe SSET of this Text is Empty!!!', '\n', strText, '\n')
                             
                     ############### PART One: Get CITText ###########
-                    CITText  = getCITText(strText, SSETText)
+                    # will check strText and SSET inside getCITText
+                    CITText  = getCITText(strText, SSETText) 
                     #################################################          
                         
                     ############### PART TWO: Get CITSents ##########
@@ -624,7 +619,24 @@ class BasicObject(object):
 
     #################
     @classmethod
-    def get_BIOES_Trans(cls, channel, tagScheme, TokenNum_Dir = None):
+    def get_BIOES_Trans(cls, channel, tagScheme, TokenNum_Dir = None, GU = None):
+        if GU:
+            TokenNum_Dir = 'tmp'
+            try:
+                return cls.BIOES_Trans[TokenNum_Dir][channel+tagScheme] # be caution, this may occur an issue
+            except:
+                ch = 'annoE' if 'anno' in  channel else channel
+                BIOES_GU = cls.getGrainUnique(ch, tagScheme = "BIOES")
+                new_GU   = GU
+                BIOES_LGU = BIOES_GU[0]
+                new_DGU   = new_GU[1]
+                cls.BIOES_Trans[TokenNum_Dir] = {} if TokenNum_Dir not in cls.BIOES_Trans else cls.BIOES_Trans[TokenNum_Dir]
+                cls.BIOES_Trans[TokenNum_Dir][channel+tagScheme] = {idx: new_DGU[trans_bioesTag(channel, bioesTag, tagScheme )] 
+                                                                    for idx, bioesTag in enumerate(BIOES_LGU)}
+                return cls.BIOES_Trans[TokenNum_Dir][channel+tagScheme] 
+
+
+
         if TokenNum_Dir:
             assert TokenNum_Dir != cls.TokenNum_Dir
             try:

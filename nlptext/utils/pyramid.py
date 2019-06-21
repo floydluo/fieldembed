@@ -277,9 +277,11 @@ def segSent2Tokens(sent, method = 'iter'):
 
 ##################################################################################################TEXT-ANNO
 def getCITText(strText, SSETText):
-    # len(SSETText) > 0
-    # for sset in SSETText:
-    #    assert strText[sset[1]: sset[2]] == sset[0]
+    # check strText and SSETText
+    len(SSETText) > 0
+    for sset in SSETText:
+       assert strText[sset[1]: sset[2]] == sset[0]
+
     CITAnnoText = []
     for sset in SSETText:
         # BIOES
@@ -306,18 +308,17 @@ def getCITSents(strSents, CITText):
     for strSent in strSents:
         CITSent = []
         for sentTokenIdx, c in enumerate(strSent):
-            # sentTokenIdx = txtTokenIdx - lenLastSent - collapse
+            # c is the char
+            # sentTokenIdx is the c's idx in sentence strSent
             txtTokenIdx = sentTokenIdx + lenLastSent + collapse
             cT, _, tT = CITText[txtTokenIdx]
             while c != cT:
                 collapse = collapse + 1
                 txtTokenIdx = sentTokenIdx + lenLastSent + collapse
                 cT, _, tT = CITText[txtTokenIdx]
-            CITSent.append([c,sentTokenIdx, tT])
+            CITSent.append([c, sentTokenIdx, tT])
         lenLastSent = lenLastSent + len(strSent)
         CITSents.append(CITSent)
-    # CITSents
-    # Here we get CITSents  
     return CITSents
        
 def getSSET_from_CIT(orig_seq, tag_seq, tag_seq_tagScheme = 'BIO', join_char = ''):
