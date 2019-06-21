@@ -1,4 +1,4 @@
-from __future__ import division  # py3 "true division"
+from __future__ import division 
 
 import logging
 import sys
@@ -23,27 +23,13 @@ from scipy.special import expit
 from six import iteritems, itervalues, string_types
 from six.moves import range
 
-from .. import utils, matutils  # utility fnc for pickling, common scipy operations etc
+from .. import utils, matutils  
 from ..utils import deprecated
 from ..utils import keep_vocab_item, call_on_class_only
 from .keyedvectors import Vocab, Word2VecKeyedVectors
-from .base_any2vec import BaseWordEmbeddingsModel
-
-
-logger = logging.getLogger(__name__)
-
-
-from .word2vec_inner import train_batch_sg_nlptext, train_batch_cbow_nlptext
-from .word2vec_inner import train_batch_fieldembed_token
-from .word2vec_inner import train_batch_fieldembed_0X1
-
-
-from .fieldembed_inner import train_batch_fieldembed_M0X1, train_batch_fieldembed_M0X2, train_batch_fieldembed_M0XY, train_batch_fieldembed_M0XY_P
-from .fieldembed_inner import FAST_VERSION, MAX_WORDS_IN_BATCH
-
-
 from .fieldembed_core import train_batch_fieldembed_0X1_neat
 
+logger = logging.getLogger(__name__)
 
 Field_Info = {
     #field: [head-subfield, subfield, subfield]
@@ -59,30 +45,13 @@ Field_Idx = {
     'ner'  :2,
 }
 
-def get_subfield_info(nlptext, field = 'char', Max_Ngram = 1, end_grain = False):
-    GU = nlptext.getGrainUnique(field, Max_Ngram=Max_Ngram, end_grain=end_grain)
-    LKP, TU = nlptext.getLookUp(field, Max_Ngram=Max_Ngram, end_grain=end_grain)
-    charLeng = np.array([len(i) for i in LKP], dtype = np.uint32)
-    charLeng_max = np.max(charLeng)
-    charEndIdx = np.cumsum(charLeng, dtype = np.uint32) # LESSION: ignoring the np.uint32 wastes me a lot of time
-    charLookUp = np.array(list(itertools.chain.from_iterable(LKP)), dtype = np.uint32)
-    charLeng_inv = 1 / charLeng
-    charLeng_inv = charLeng_inv.astype(REAL)
-    return GU, charLookUp, charEndIdx, charLeng_inv, charLeng_max, TU, LKP
 
-class FieldEmbedding(BaseWordEmbeddingsModel):
+class FieldEmbedding(utils.SaveLoad):
 
-    def __init__(self, nlptext = None, Field_Settings = {}, 
-        mode = 'sg_nlptext',
-        sg=0,
-        use_merger = 0, 
-        neg_init = 0,
-        standard_grad = 1,
-        size=100, alpha=0.025, window=5, sample=1e-3, seed=1, workers=3, min_alpha=0.0001,
-        negative=5, ns_exponent=0.75, 
-        cbow_mean=1, hashfxn=hash, iter=5,
+    def __init__(self, nlptext = None, Field_Settings = {}, mode = 'sg_nlptext', sg=0, use_merger = 0, 
+        neg_init = 0, standard_grad = 1, size=100, alpha=0.025, window=5, sample=1e-3, seed=1, workers=3, 
+        min_alpha=0.0001,negative=5, ns_exponent=0.75, cbow_mean=1, hashfxn=hash, iter=5,
         batch_words=MAX_WORDS_IN_BATCH, compute_loss=False, callbacks=()):
-
 
         self.standard_grad = standard_grad
         self.mode = mode
@@ -92,16 +61,8 @@ class FieldEmbedding(BaseWordEmbeddingsModel):
         self.use_merger = use_merger
         self.neg_init = neg_init
 
-        if 'token' in self.Field_Settings:
-            self.use_token = 1
-        else:
-            self.use_token = 0
-        if 'pos' in self.Field_Settings:
-            self.use_pos   = 1
-        else:
-            self.use_pos   = 0
-
         # here only do initializations for wv, vocabulary, and trainables
+        # there is a self.wv, and its vectors may be empty.
         self.wv     = Word2VecKeyedVectors(size)
         self.wv_neg = Word2VecKeyedVectors(size)
        
@@ -109,40 +70,81 @@ class FieldEmbedding(BaseWordEmbeddingsModel):
         self.trainables = FieldEmbedTrainables(seed=seed, vector_size=size, hashfxn=hashfxn)
 
         self.weights = {}
-        # self.trainables_dict = {} # will be added
-        self.field_info= {}
-        self.field_idx = {}
-        self.field_sub = []
-        self.field_head= []
-        # self.meta = {}
-        # self.build_vocab makes wv, vocabulary, and trainables rich. see: BaseWordEmbeddingsModel
-        super(FieldEmbedding, self).__init__(
-            nlptext = nlptext, workers=workers, vector_size=size, epochs=iter, 
-            callbacks=callbacks, batch_words=batch_words, sg=sg, alpha=alpha, window=window,
-            seed=seed, negative=negative, cbow_mean=cbow_mean, min_alpha=min_alpha, compute_loss=compute_loss,
-            fast_version=FAST_VERSION)
+        self.field_info = {}
+        self.field_idx  = {}
 
-    def create_field_embedding(self, size, channel, LGU, DGU):
-        '''
-            size: embedding size
-            channel: field name
-            LGU: index2str
-            DGU: str2index
-            --------------
-            return and set a wv for fieldembed: wv_channel
-        '''
-        if channel == 'token':
-            return self.wv
-        else:
-            gw = Word2VecKeyedVectors(size)
-            gw.index2word = LGU 
-            for gr in DGU:
-                gw.vocab[gr] = Vocab(index=DGU[gr])
-            self.__setattr__('wv_' + channel, gw)
-            return self.__getattribute__('wv_' + channel)
+        self.field_sub  = []
+        self.field_head = []
+        self.field_hyper= []
+        
+        if vector_size % 4 != 0:
+            logger.warning("consider setting layer size to a multiple of 4 for greater performance")
+        
+        self.window = int(window)
+        self.random = random.RandomState(seed) # random = seed
+        
+        self.sg = int(sg)
+
+        # self.hs = int(hs) # should be removed
+        self.negative = int(negative)
+
+        self.ns_exponent = ns_exponent
+        self.cbow_mean = int(cbow_mean)
+        self.compute_loss = bool(compute_loss)
+        self.running_training_loss = 0
+ 
+        self.alpha = float(alpha)
+        self.min_alpha_yet_reached = float(alpha)
+        self.min_alpha = float(min_alpha)
+
+        self.corpus_count = 0
+        self.corpus_total_words = 0
 
 
-    # self.weights: collecting all the field embeddings
+        self.vector_size = int(vector_size)
+        self.workers = int(workers)
+        self.epochs = epochs
+        self.train_count = 0
+        self.total_train_time = 0
+        self.batch_words = batch_words
+        self.model_trimmed_post_training = False
+        self.callbacks = callbacks
+
+        self.build_vocab(nlptext = nlptext)
+        
+        print('\n\n======== Training Start ....'); s = datetime.now()
+        self.train(nlptext = nlptext, total_examples=self.corpus_count,
+            total_words=self.corpus_total_words, epochs=self.epochs, 
+            start_alpha=self.alpha, end_alpha=self.min_alpha, compute_loss=compute_loss)
+        print('======== Training End ......'); e = datetime.now()
+        print('======== Total Time: ', e - s)
+
+    ################################################################################################################################################### build_vocab
+    def build_vocab(self, nlptext = None, **kwargs):
+        # scan_vocab and prepare_vocab
+        # build .wv.vocab + .wv.index2word + .wv.cum_table
+        update = False
+
+        print('!!!======== Build_vocab based on NLPText....'); s = datetime.now()
+
+        print('-------> Prepare Vocab....')
+        total_words, corpus_count, report_values = self.vocabulary.scan_and_prepare_vocab(self, nlptext, 
+                                                                    self.negative, update = update, **kwargs) 
+        self.corpus_count = corpus_count
+        self.corpus_total_words = total_words
+
+        print('-------> Prepare Field Info....')
+
+        self.prepare_field_info(nlptext)
+        
+        # self.create_field_embedding(size = self.size, )
+        report_values['memory'] = self.estimate_memory(vocab_size=report_values['num_retained_words'])
+
+        print('-------> Prepare Trainable Weight....')
+        self.trainables.prepare_weights(self, self.negative, self.wv, update=update, vocabulary=self.vocabulary, neg_init = self.neg_init)
+
+        print('======== The Voc and Parameters are Ready!'); e = datetime.now()
+        print('======== Total Time: ', e - s)
 
     def prepare_field_info(self, nlptext):
 
@@ -192,7 +194,7 @@ class FieldEmbedding(BaseWordEmbeddingsModel):
 
                 else:
                     # when the channls are the sub fields
-                    data = get_subfield_info(nlptext, channel, **f_setting) 
+                    data = self.get_subfield_info(nlptext, channel, **f_setting) 
                     GU, LookUp, EndIdx, Leng_Inv, Leng_max, TU, LKP = data
                     LGU, DGU = GU
                     wv = self.create_field_embedding(self.vector_size, channel, LGU, DGU)
@@ -244,146 +246,197 @@ class FieldEmbedding(BaseWordEmbeddingsModel):
             print(i, wv.vectors.shape)
         print('use_head:', self.use_head, 'use_sub:', self.use_sub)
 
-    def build_vocab(self, nlptext = None, **kwargs):
-        # scan_vocab and prepare_vocab
-        # build .wv.vocab + .wv.index2word + .wv.cum_table
-        update = False
+    def get_subfield_info(self, nlptext, field = 'char', Max_Ngram = 1, end_grain = False):
+        GU = nlptext.getGrainUnique(field, Max_Ngram=Max_Ngram, end_grain=end_grain)
+        LKP, TU = nlptext.getLookUp(field, Max_Ngram=Max_Ngram, end_grain=end_grain)
+        charLeng = np.array([len(i) for i in LKP], dtype = np.uint32)
+        charLeng_max = np.max(charLeng)
+        charEndIdx = np.cumsum(charLeng, dtype = np.uint32) # LESSION: ignoring the np.uint32 wastes me a lot of time
+        charLookUp = np.array(list(itertools.chain.from_iterable(LKP)), dtype = np.uint32)
+        charLeng_inv = 1 / charLeng
+        charLeng_inv = charLeng_inv.astype(REAL)
+        return GU, charLookUp, charEndIdx, charLeng_inv, charLeng_max, TU, LKP
 
-        print('!!!======== Build_vocab based on NLPText....'); s = datetime.now()
+    def create_field_embedding(self, size, channel, LGU, DGU):
+        '''
+            size: embedding size
+            channel: field name
+            LGU: index2str
+            DGU: str2index
+            --------------
+            return and set a wv for fieldembed: wv_channel
+        '''
+        if channel == 'token':
+            return self.wv
+        else:
+            gw = Word2VecKeyedVectors(size)
+            gw.index2word = LGU 
+            for gr in DGU:
+                gw.vocab[gr] = Vocab(index=DGU[gr])
+            self.__setattr__('wv_' + channel, gw)
+            return self.__getattribute__('wv_' + channel)
 
-        print('-------> Prepare Vocab....')
-        total_words, corpus_count,  report_values = self.vocabulary.scan_and_prepare_vocab_from_nlptext(self, nlptext, 
-                                                                    self.negative, update = update, **kwargs) 
+    def estimate_memory(self, vocab_size=None, report=None):
+        vocab_size = vocab_size or len(self.wv.vocab)
+        report = report or {}
+        report['vocab'] = vocab_size * (700 if self.hs else 500)
+        report['vectors'] = vocab_size * self.vector_size * dtype(REAL).itemsize
+        # if self.hs:
+        #     report['syn1'] = vocab_size * self.trainables.layer1_size * dtype(REAL).itemsize
+        if self.negative:
+            report['syn1neg'] = vocab_size * self.trainables.layer1_size * dtype(REAL).itemsize
+        report['total'] = sum(report.values())
+        logger.info(
+            "estimated required memory for %i words and %i dimensions: %i bytes",
+            vocab_size, self.vector_size, report['total']
+        )
+        return report
 
-        self.corpus_count = corpus_count
-        self.corpus_total_words = total_words
+    ################################################################################################################################################### train
+    def train(self, nlptext = None, total_examples=None, 
+        total_words=None, epochs=None, start_alpha=None, 
+        end_alpha=None, word_count=0,queue_factor=2, 
+        report_delay=1.0, compute_loss=False, callbacks=(), **kwargs):
 
-        print('-------> Prepare Field Info....')
-
-        self.prepare_field_info(nlptext)
+        #---------------------------------------------------------------
         
-        # self.create_field_embedding(size = self.size, )
-        report_values['memory'] = self.estimate_memory(vocab_size=report_values['num_retained_words'])
+        self.alpha = start_alpha or self.alpha
+        self.min_alpha = end_alpha or self.min_alpha
+        self.compute_loss = compute_loss
+        self.running_training_loss = 0.0
 
-        print('-------> Prepare Trainable Weight....')
-        self.trainables.prepare_weights_from_nlptext(self, self.negative, self.wv, update=update, vocabulary=self.vocabulary, neg_init = self.neg_init)
+        self._set_train_params(**kwargs)
+        if callbacks:
+            self.callbacks = callbacks
+        self.epochs = epochs
+        self._check_training_sanity(
+            epochs=epochs,
+            total_examples=total_examples,
+            total_words=total_words, **kwargs)
 
-        print('======== The Voc and Parameters are Ready!'); e = datetime.now()
-        print('======== Total Time: ', e - s)
+        for callback in self.callbacks:
+            callback.on_train_begin(self)
 
-    def _get_thread_working_mem(self, proj_num = 1):
-        # produce vectors for field project vectors and gradient vectors.
-        return [matutils.zeros_aligned(self.trainables.layer1_size * proj_num, dtype=REAL) for i in range(2)]
+        trained_word_count = 0
+        raw_word_count = 0
+        start = default_timer() - 0.00001
+        job_tally = 0
 
-    def _get_thread_working_mem_for_meager(self):
-        work_m = matutils.zeros_aligned(self.trainables.layer1_size, dtype=REAL) 
-        neu_m  = matutils.zeros_aligned(self.trainables.layer1_size, dtype=REAL) 
-        return work_m, neu_m
+        for cur_epoch in range(self.epochs):
+            for callback in self.callbacks:
+                callback.on_epoch_begin(self)
 
-    def _get_thread_working_mem_for_pos(self):
-        # if self.use_merger:
-        work_p = matutils.zeros_aligned(self.trainables.layer1_size, dtype=REAL) 
-        neu_p  = matutils.zeros_aligned(self.trainables.layer1_size, dtype=REAL) 
-        return work_p, neu_p
+            if nlptext is not None:
+                trained_word_count_epoch, raw_word_count_epoch, job_tally_epoch = self._train_epoch_nlptext(
+                    nlptext, cur_epoch=cur_epoch, total_examples=total_examples,
+                    total_words=total_words, queue_factor=queue_factor, report_delay=report_delay
+                )
+            else:
+                raise('No Training Data is Provided...')
 
-    def _do_train_job_nlptext(self, indexes, sentence_idx, alpha, inits, merger_private_mem = None, pos_private_mem = None):
-        tally = 0
-        # print(self.mode)
-
-        if self.mode == 'fieldembed_0X1_neat':
-            work, neu1 = inits
-            # print(self.proj_num)
-            # print(work.shape)
-            # print(neu1.shape)
-            tally += train_batch_fieldembed_0X1_neat(self, indexes, sentence_idx, alpha, work, neu1, self.compute_loss)
-        
-        if self.mode == 'M0XY_P':
-            # print(self.mode)
-            # version Final. On work
-            work,  neu1, work2, neu2, work3, neu3, work4, neu4, work5, neu5, work6,  neu6, work7, neu7  = inits
-            work_m, neu_m = merger_private_mem
-            work_p, neu_p = pos_private_mem
-            tally += train_batch_fieldembed_M0XY_P(self, indexes, sentence_idx, alpha, 
-                                                   work,  neu1, work2, neu2, 
-                                                   work3, neu3, work4, neu4, work5, neu5, work6,  neu6, work7, neu7, 
-                                                   work_m, neu_m, work_p, neu_p, self.compute_loss)
-
-        elif self.mode == 'M0XY':
-            # print(self.mode)
-            # version 4. On work
-            work,  neu1, work2, neu2, work3, neu3, work4, neu4, work5, neu5, work6,  neu6, work7, neu7  = inits
-            work_m, neu_m = merger_private_mem
-            tally += train_batch_fieldembed_M0XY(self, indexes, sentence_idx, alpha, 
-                                                 work,  neu1, work2, neu2, 
-                                                 work3, neu3, work4, neu4, work5, neu5, work6,  neu6, work7, neu7, 
-                                                 work_m, neu_m, self.compute_loss)
-
-        elif self.mode == 'M0X1':
-            # version 4. On work
-            work, neu1, work2, neu2 = inits[:4]
-            work_m, neu_m = merger_private_mem
-            tally += train_batch_fieldembed_M0X1(self, indexes, sentence_idx, alpha, 
-                                                 work, neu1, work2, neu2, work_m, neu_m, self.compute_loss)
-
-        elif self.mode == 'M0X2':
-            # version 4. On work
-            work, neu1, work2, neu2, work3, neu3 = inits[:6]
-            # print(neu3)
-            work_m, neu_m = merger_private_mem
-            tally += train_batch_fieldembed_M0X2(self, indexes, sentence_idx, alpha, 
-                                                 work, neu1, work2, neu2, work3, neu3, work_m, neu_m, self.compute_loss)
-
-        elif self.mode == 'fieldembed_0X1':
-            work, neu1, work2, neu2 = inits[:4]
-            tally += train_batch_fieldembed_0X1(self, indexes, sentence_idx, alpha, work, neu1, work2, neu2, self.compute_loss)
-
-        elif self.mode == 'fieldembed_token':
-            work, neu1 = inits[:2]
-            tally += train_batch_fieldembed_token(self, indexes, sentence_idx, alpha, work, neu1, self.compute_loss)
-
-        elif self.mode == 'sg_nlptext' and self.sg == 1:
-            work, neu1 = inits[:2]
-            tally += train_batch_sg_nlptext(self, indexes, sentence_idx, alpha, work, self.compute_loss)
-
-        elif self.mode == 'cbow_nlptext' and self.sg == 0:
-            work, neu1 = inits[:2]
-            tally += train_batch_cbow_nlptext(self, indexes, sentence_idx, alpha, work, neu1, self.compute_loss) 
-        return tally, sentence_idx[-1] # sentence_idx[-1] is the length of all tokens form this job sentences.
-
-    def _worker_loop_nlptext(self, job_queue, progress_queue, proj_num = 1):
-        thread_private_mem = self._get_thread_working_mem(proj_num = proj_num) # TODO: this is space to store gradients, change this.
-        merger_private_mem = self._get_thread_working_mem_for_meager()
-        pos_private_mem    = self._get_thread_working_mem_for_pos()
-        jobs_processed = 0
-        while True:
-            job = job_queue.get()
-            if job is None:
-                progress_queue.put(None)
-                break  # no more jobs => quit this worker
-            indexes, sentence_idx,  job_parameters = job 
+            trained_word_count += trained_word_count_epoch
+            raw_word_count += raw_word_count_epoch
+            job_tally += job_tally_epoch
 
             for callback in self.callbacks:
-                callback.on_batch_begin(self)
+                callback.on_epoch_end(self)
 
-            tally, raw_tally = self._do_train_job_nlptext(indexes, sentence_idx, job_parameters, 
-                                                          thread_private_mem, 
-                                                          merger_private_mem = merger_private_mem,
-                                                          pos_private_mem = pos_private_mem)
-            for callback in self.callbacks:
-                callback.on_batch_end(self)
+        total_elapsed = default_timer() - start
+        self._log_train_end(raw_word_count, trained_word_count, total_elapsed, job_tally)
 
-            progress_queue.put((len(sentence_idx), tally, raw_tally))  # report back progress
-            jobs_processed += 1
-        logger.debug("o----> Worker exiting, processed %i jobs", jobs_processed)
-    
-    def _job_producer_nlptext(self, 
-        sentences_endidx, total_examples, 
-        tokens_vocidx, pos_vocidx, total_words, 
-        batch_end_st_idx_list, job_no, job_queue,
-        cur_epoch=0):
+        self.train_count += 1  # number of times train() has been called
+        self._clear_post_train()
 
-        # (sentences_endidx, total_examples, tokens_vocidx, pos_vocidx, total_words, batch_end_st_idx_list, job_no, job_queue,)
+        for callback in self.callbacks:
+            callback.on_train_end(self)
+        return trained_word_count, raw_word_count
+
+    def _set_train_params(self, **kwargs):
+        if 'compute_loss' in kwargs:
+            self.compute_loss = kwargs['compute_loss']
+        self.running_training_loss = 0
+
+    def _check_training_sanity(self, epochs=None, total_examples=None, total_words=None, **kwargs):
+        if self.alpha > self.min_alpha_yet_reached:
+            logger.warning("Effective 'alpha' higher than previous training cycles")
+        if self.model_trimmed_post_training:
+            raise RuntimeError("Parameters for training were discarded using model_trimmed_post_training method")
+
+        if not self.wv.vocab:  # should be set by `build_vocab`
+            raise RuntimeError("you must first build vocabulary before training the model")
+
+        if not hasattr(self, 'corpus_count'):
+            raise ValueError(
+                "The number of examples in the training corpus is missing. "
+                "Please make sure this is set inside `build_vocab` function."
+                "Call the `build_vocab` function before calling `train`."
+            )
+
+        if total_words is None and total_examples is None:
+            raise ValueError(
+                "You must specify either total_examples or total_words, for proper job parameters updation"
+                "and progress calculations. "
+                "The usual value is total_examples=model.corpus_count."
+            )
+        if epochs is None:
+            raise ValueError("You must specify an explict epochs count. The usual value is epochs=model.epochs.")
+        logger.info(
+            "training model with %i workers on %i vocabulary and %i features, "
+            "using sg=%s hs=%s sample=%s negative=%s window=%s",
+            self.workers, len(self.wv.vocab), self.trainables.layer1_size, self.sg,
+            self.hs, self.vocabulary.sample, self.negative, self.window
+        )
+
+    ####################################################################################### 
+    def _train_epoch_nlptext(self, nlptext, cur_epoch=0, total_examples=None, total_words=None,queue_factor=2, report_delay=1.0):
+        ########### preprocess
+        sentences_endidx = nlptext.SENT['EndIDXTokens']
+        tokens_vocidx    = nlptext.TOKEN['ORIGTokenIndex']
+        print(len(tokens_vocidx))
+        total_examples  =  len(sentences_endidx)
+        total_words     =  len(tokens_vocidx)           
+
+
+        print('Start getting batch infos')
+        s = datetime.now(); print(s)
+        batch_end_st_idx_list, job_no = nlptext.Calculate_Infos(self.batch_words)
+        e = datetime.now(); print(e)
+        print('The time of finding batch_end_st_idx_list:', e - s)
+        print('Total job number is:', job_no)
+        
+
+        # sentences_endidx, tokens_vocidx, batch_end_st_idx_list, job_no, 
+        job_queue = Queue(maxsize=queue_factor * self.workers)
+        progress_queue = Queue(maxsize=(queue_factor + 1) * self.workers)
+
+        # in the future, make the selection here. or make selection here
+        # make more worker_loop_nlptext1, 2, 3, 4, 5
+        workers = [
+            threading.Thread(
+                target=self._worker_loop_nlptext,
+                args=(job_queue, progress_queue, self.proj_num))
+            for _ in range(self.workers)
+        ]
+        logger.info('\n the total_examples is:' + str(total_examples) + '   , the total words is:' + str(total_words) + '\n')
+        workers.append(threading.Thread(
+            target=self._job_producer_nlptext,
+            args=(sentences_endidx, total_examples, tokens_vocidx, pos_vocidx, total_words, batch_end_st_idx_list, job_no, job_queue,), # data_iterable is sentences
+            kwargs={'cur_epoch': cur_epoch,}))
+
+        for thread in workers:
+            thread.daemon = True  # make interrupting the process with ctrl+c easier
+            thread.start()
+
+        trained_word_count, raw_word_count, job_tally = self._log_epoch_progress(
+            progress_queue, job_queue, cur_epoch=cur_epoch, total_examples=total_examples, total_words=total_words,
+            report_delay=report_delay, is_corpus_file_mode=False)
+
+        return trained_word_count, raw_word_count, job_tally
+
+    def _job_producer_nlptext(self, sentences_endidx, total_examples, tokens_vocidx, pos_vocidx, 
+        total_words, batch_end_st_idx_list, job_no, job_queue, cur_epoch=0):
         #---------------------------------------------------# 
+
         job_batch, batch_size = [], 0
         pushed_words, pushed_examples = 0, 0 # examples refers to sentences
         next_job_params = self._get_job_params(cur_epoch) # current learning rate: cur_alpha
@@ -429,82 +482,210 @@ class FieldEmbedding(BaseWordEmbeddingsModel):
                 "train() called with an empty iterator (if not intended, "
                 "be sure to provide a corpus that offers restartable iteration = an iterable)."
             )
-
         # give the workers heads up that they can finish -- no more work!
         for _ in range(self.workers):
             job_queue.put(None) # at the end, give 4 None s if there are 4 calculation workers.
         logger.debug("----> Worker: Job Producer loop exiting, total %i jobs", job_no)
-    ################################################################### 
 
-    def _train_epoch_nlptext(self, nlptext, cur_epoch=0, total_examples=None, total_words=None,queue_factor=2, report_delay=1.0):
-        ########### preprocess
-        sentences_endidx = nlptext.SENT['EndIDXTokens']
-        tokens_vocidx    = nlptext.TOKEN['ORIGTokenIndex']
-        print(len(tokens_vocidx))
-        if self.use_pos:
-            pos_vocidx   = nlptext.TOKEN['posTokenIndex']
-        else:
-            pos_vocidx   = []
-        total_examples  =  len(sentences_endidx)
-        total_words     =  len(tokens_vocidx)           
+    def _get_job_params(self, cur_epoch):
+        alpha = self.alpha - ((self.alpha - self.min_alpha) * float(cur_epoch) / self.epochs)
+        return alpha
 
-        ####################################### get batch_end_st_idx_list and job_no
-        print('Start getting batch infos')
-        s = datetime.now(); print(s)
-        batch_end_st_idx_list, job_no = nlptext.Calculate_Infos(self.batch_words)
-        e = datetime.now(); print(e)
-        print('The time of finding batch_end_st_idx_list:', e - s)
-        print('Total job number is:', job_no)
-        ####################################### get batch_end_st_idx_list and job_no
+    def _update_job_params(self, job_params, epoch_progress, cur_epoch):
+        start_alpha = self.alpha
+        end_alpha = self.min_alpha
+        progress = (cur_epoch + epoch_progress) / self.epochs
+        next_alpha = start_alpha - (start_alpha - end_alpha) * progress
+        next_alpha = max(end_alpha, next_alpha)
+        self.min_alpha_yet_reached = next_alpha
+        return next_alpha
 
-        # sentences_endidx, tokens_vocidx, batch_end_st_idx_list, job_no, 
-        job_queue = Queue(maxsize=queue_factor * self.workers)
-        progress_queue = Queue(maxsize=(queue_factor + 1) * self.workers)
+    def _worker_loop_nlptext(self, job_queue, progress_queue, proj_num = 1):
+        thread_private_mem = self._get_thread_working_mem(proj_num = proj_num) 
+        merger_private_mem = self._get_thread_working_mem_for_meager()
+        jobs_processed = 0
+        while True:
+            job = job_queue.get()
+            if job is None:
+                progress_queue.put(None)
+                break  # no more jobs => quit this worker
+            indexes, sentence_idx,  job_parameters = job 
 
-        # in the future, make the selection here. or make selection here
-        # make more worker_loop_nlptext1, 2, 3, 4, 5
-        workers = [
-            threading.Thread(
-                target=self._worker_loop_nlptext,
-                args=(job_queue, progress_queue, self.proj_num))
-            for _ in range(self.workers)
-        ]
-        logger.info('\n the total_examples is:' + str(total_examples) + '   , the total words is:' + str(total_words) + '\n')
-        workers.append(threading.Thread(
-            target=self._job_producer_nlptext,
-            args=(sentences_endidx, total_examples, tokens_vocidx, pos_vocidx, total_words, batch_end_st_idx_list, job_no, job_queue,), # data_iterable is sentences
-            kwargs={'cur_epoch': cur_epoch,}))
+            for callback in self.callbacks:
+                callback.on_batch_begin(self)
 
-        for thread in workers:
-            thread.daemon = True  # make interrupting the process with ctrl+c easier
-            thread.start()
+            tally, raw_tally = self._do_train_job_nlptext(indexes, sentence_idx, job_parameters, 
+                                                          thread_private_mem, 
+                                                          merger_private_mem = merger_private_mem)
+            for callback in self.callbacks:
+                callback.on_batch_end(self)
 
-        trained_word_count, raw_word_count, job_tally = self._log_epoch_progress(
-            progress_queue, job_queue, cur_epoch=cur_epoch, total_examples=total_examples, total_words=total_words,
-            report_delay=report_delay, is_corpus_file_mode=False)
+            progress_queue.put((len(sentence_idx), tally, raw_tally))  # report back progress
+            jobs_processed += 1
+        logger.debug("o----> Worker exiting, processed %i jobs", jobs_processed)
 
+    def _get_thread_working_mem(self, proj_num = 1):
+        return [matutils.zeros_aligned(self.trainables.layer1_size * proj_num, dtype=REAL) for i in range(2)]
+
+    def _get_thread_working_mem_for_meager(self):
+        work_m = matutils.zeros_aligned(self.trainables.layer1_size, dtype=REAL) 
+        neu_m  = matutils.zeros_aligned(self.trainables.layer1_size, dtype=REAL) 
+        return work_m, neu_m
+
+    def _do_train_job_nlptext(self, indexes, sentence_idx, alpha, inits, merger_private_mem = None):
+        tally = 0
+        if self.mode == 'fieldembed_0X1_neat':
+            work, neu1 = inits
+            tally += train_batch_fieldembed_0X1_neat(self, indexes, sentence_idx, alpha, work, neu1, self.compute_loss)
+
+    ################################################################################################################################################### log
+    def _log_epoch_progress(self, progress_queue=None, job_queue=None, cur_epoch=0, total_examples=None,total_words=None, report_delay=10.0, is_corpus_file_mode=None):
+
+        example_count, trained_word_count, raw_word_count = 0, 0, 0
+        start, next_report = default_timer() - 0.00001, 1.0
+        job_tally = 0
+        unfinished_worker_count = self.workers
+
+        while unfinished_worker_count > 0:
+            report = progress_queue.get()  # blocks if workers too slow
+            if report is None:  # a thread reporting that it finished
+                unfinished_worker_count -= 1
+                logger.info("Worker thread finished; awaiting finish of %i more threads", unfinished_worker_count)
+                continue
+            examples, trained_words, raw_words = report
+            job_tally += 1
+
+            # update progress stats
+            example_count += examples
+            trained_word_count += trained_words  # only words in vocab & sampled
+            raw_word_count += raw_words
+
+            # log progress once every report_delay seconds
+            elapsed = default_timer() - start
+            if elapsed >= next_report:
+                self._log_progress(
+                    job_queue, progress_queue, cur_epoch, example_count, total_examples,
+                    raw_word_count, total_words, trained_word_count, elapsed)
+                next_report = elapsed + report_delay
+        # all done; report the final stats
+        elapsed = default_timer() - start
+        self._log_epoch_end(
+            cur_epoch, example_count, total_examples, raw_word_count, total_words,
+            trained_word_count, elapsed, is_corpus_file_mode)
+        self.total_train_time += elapsed
         return trained_word_count, raw_word_count, job_tally
 
+    def _log_progress(self, job_queue, progress_queue, cur_epoch, example_count, total_examples,
+        raw_word_count, total_words, trained_word_count, elapsed):
+        if total_examples:
+            # examples-based progress %
+            logger.info(
+                "EPOCH %i - PROGRESS: at %.2f%% examples, %.0f words/s, in_qsize %i, out_qsize %i",
+                cur_epoch + 1, 
+                100.0 * example_count / total_examples, 
+                trained_word_count / elapsed,
+                -1 if job_queue is None else utils.qsize(job_queue), 
+                utils.qsize(progress_queue)
+            )
+        else:
+            # words-based progress %
+            logger.info(
+                "EPOCH %i - PROGRESS: at %.2f%% words, %.0f words/s, in_qsize %i, out_qsize %i",
+                cur_epoch + 1, 
+                100.0 * raw_word_count / total_words, 
+                trained_word_count / elapsed,
+                -1 if job_queue is None else utils.qsize(job_queue), 
+                utils.qsize(progress_queue)
+            )
 
-    def train(self, nlptext = None, total_examples=None, total_words=None,
-              epochs=None, start_alpha=None, end_alpha=None, word_count=0,
-              queue_factor=2, report_delay=1.0, compute_loss=False, callbacks=(), 
-              **kwargs):
+    def _log_epoch_end(self, cur_epoch, example_count, total_examples, raw_word_count, total_words,
+        trained_word_count, elapsed, is_corpus_file_mode):
+        logger.info(
+            "EPOCH - %i : training on %i raw words (%i effective words) took %.1fs, %.0f effective words/s",
+            cur_epoch + 1, raw_word_count, trained_word_count, elapsed, trained_word_count / elapsed
+        )
 
-        return super(FieldEmbedding, self).train(
-            nlptext = nlptext, total_examples=total_examples, total_words=total_words,
-            epochs=epochs, start_alpha=start_alpha, end_alpha=end_alpha, word_count=word_count,
-            queue_factor=queue_factor, report_delay=report_delay, compute_loss=compute_loss, callbacks=callbacks)
+        # don't warn if training in file-based mode, because it's expected behavior
+        if is_corpus_file_mode:
+            return
+
+        # check that the input corpus hasn't changed during iteration
+        if total_examples and total_examples != example_count:
+            logger.warning(
+                "EPOCH - %i : supplied example count (%i) did not equal expected count (%i)", cur_epoch + 1,
+                example_count, total_examples
+            )
+        if total_words and total_words != raw_word_count:
+            logger.warning(
+                "EPOCH - %i : supplied raw word count (%i) did not equal expected count (%i)", cur_epoch + 1,
+                raw_word_count, total_words
+            )
+
+    def _log_train_end(self, raw_word_count, trained_word_count, total_elapsed, job_tally):
+
+        logger.info(
+            "training on a %i raw words (%i effective words) took %.1fs, %.0f effective words/s",
+            raw_word_count, trained_word_count, total_elapsed, trained_word_count / total_elapsed
+        )
+        if job_tally < 10 * self.workers:
+            logger.warning(
+                "under 10 jobs per worker: consider setting a smaller `batch_words' for smoother alpha decay"
+            )
+
+    ################################################################################################################################################### load and save
+    def save(self, *args, **kwargs):
+        kwargs['ignore'] = kwargs.get('ignore', ['vectors_norm', 'cum_table'])
+        super(FieldEmbedding, self).save(*args, **kwargs)
+
+    @classmethod
+    def load(cls, *args, **kwargs):
+        """Load a previously saved object (using :meth:`~gensim.models.base_any2vec.BaseWordEmbeddingsModel.save`) from file.
+        Also initializes extra instance attributes in case the loaded model does not include them.
+        `*args` or `**kwargs` **MUST** include the fname argument (path to saved file).
+        See :meth:`~gensim.utils.SaveLoad.load`.
+        Parameters
+        ----------
+        *args : object
+            Positional arguments passed to :meth:`~gensim.utils.SaveLoad.load`.
+        **kwargs : object
+            Key word arguments passed to :meth:`~gensim.utils.SaveLoad.load`.
+        See Also
+        --------
+        :meth:`~gensim.models.base_any2vec.BaseWordEmbeddingsModel.save`
+            Method for save a model.
+        Returns
+        -------
+        :class:`~gensim.models.base_any2vec.BaseWordEmbeddingsModel`
+            Model loaded from disk.
+        Raises
+        ------
+        IOError
+            When methods are called on instance (should be called from class).
+        """
+        model = super(FieldEmbedding, cls).load(*args, **kwargs)
+        if not hasattr(model, 'ns_exponent'):
+            model.ns_exponent = 0.75
+        if not hasattr(model.vocabulary, 'ns_exponent'):
+            model.vocabulary.ns_exponent = 0.75
+        if model.negative and hasattr(model.wv, 'index2word'):
+            model.vocabulary.make_cum_table(model.wv)  # rebuild cum_table from vocabulary
+        if not hasattr(model, 'corpus_count'):
+            model.corpus_count = None
+        if not hasattr(model, 'corpus_total_words'):
+            model.corpus_total_words = None
+        if not hasattr(model.trainables, 'vectors_lockf') and hasattr(model.wv, 'vectors'):
+            model.trainables.vectors_lockf = ones(len(model.wv.vectors), dtype=REAL)
+        if not hasattr(model, 'random'):
+            model.random = random.RandomState(model.trainables.seed)
+        if not hasattr(model, 'train_count'):
+            model.train_count = 0
+            model.total_train_time = 0
+        return model
+
+    ################################################################################################################################################### others
 
     def _clear_post_train(self):
-        """Remove all L2-normalized word vectors from the model."""
         self.wv.vectors_norm = None
-
-    def _set_train_params(self, **kwargs):
-        if 'compute_loss' in kwargs:
-            self.compute_loss = kwargs['compute_loss']
-        self.running_training_loss = 0
-
 
     def clear_sims(self):
         self.wv.vectors_norm = None
@@ -524,15 +705,6 @@ class FieldEmbedding(BaseWordEmbeddingsModel):
             self.init_sims(replace=True)
         self._minimize_model()
 
-    def save(self, *args, **kwargs):
-        kwargs['ignore'] = kwargs.get('ignore', ['vectors_norm', 'cum_table'])
-        super(FieldEmbedding, self).save(*args, **kwargs)
-
-    @classmethod
-    def load(cls, *args, **kwargs):
-        model = super(FieldEmbedding, cls).load(*args, **kwargs)
-        return model
-
     @staticmethod
     def log_accuracy(section):
         return Word2VecKeyedVectors.log_accuracy(section)
@@ -541,6 +713,7 @@ class FieldEmbedding(BaseWordEmbeddingsModel):
         return "%s(vocab=%s, size=%s, alpha=%s)" % (
             self.__class__.__name__, len(self.wv.index2word), self.wv.vector_size, self.alpha
         )
+
 
 class FieldEmbedVocab(utils.SaveLoad):
     """Vocabulary used by :class:`~gensim.models.word2vec.Word2Vec`."""
@@ -559,8 +732,7 @@ class FieldEmbedVocab(utils.SaveLoad):
         self.LTU     = None
         self.DTU     = None
 
-     # my new code
-    def scan_and_prepare_vocab_from_nlptext(self, model, nlptext, negative,  update=False, sample=None, **kwargs):
+    def scan_and_prepare_vocab(self, model, nlptext, negative,  update=False, sample=None, **kwargs):
         
         corpus_count       = nlptext.SENT['length']
         corpus_total_words = nlptext.TOKEN['length']
@@ -695,7 +867,7 @@ class FieldEmbedTrainables(utils.SaveLoad):
         once = random.RandomState(self.hashfxn(seed_string) & 0xffffffff)
         return (once.rand(vector_size) - 0.5) / vector_size
 
-    def prepare_weights_from_nlptext(self, model, negative, wv, update=False, vocabulary=None, neg_init = 0):
+    def prepare_weights(self, model, negative, wv, update=False, vocabulary=None, neg_init = 0):
         print('o-->', 'Prepare Trainable Parameters')
         s = datetime.now(); print('\tStart: ', s)
         self.reset_weights(model, negative, neg_init = neg_init)
