@@ -873,7 +873,6 @@ class FieldEmbedTrainables(utils.SaveLoad):
         self.reset_weights(model, negative, neg_init = neg_init)
         e = datetime.now(); print('\tEnd  : ', e);print('\tTotal Time:', e - s )
 
-    ###############################  INIT WEIGHTS HERE ########################## 
     def reset_weights(self, model, negative, neg_init = 0):
         """Reset all projection weights to an initial (untrained) state, but keep the existing vocabulary."""
         logger.info("resetting layer weights")
