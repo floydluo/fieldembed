@@ -1020,7 +1020,7 @@ typedef npy_double __pyx_t_5numpy_double_t;
  */
 typedef npy_longdouble __pyx_t_5numpy_longdouble_t;
 
-/* "models/fieldembed_core.pxd":17
+/* "models/fieldembed_core.pxd":14
  *     void* PyCObject_AsVoidPtr(object obj)
  * 
  * ctypedef np.float32_t REAL_t             # <<<<<<<<<<<<<<
@@ -1092,7 +1092,7 @@ typedef npy_clongdouble __pyx_t_5numpy_clongdouble_t;
 typedef npy_cdouble __pyx_t_5numpy_complex_t;
 struct __pyx_t_6models_15fieldembed_core_Word2VecConfig;
 
-/* "models/fieldembed_core.pxd":20
+/* "models/fieldembed_core.pxd":17
  * 
  * # BLAS routine signatures
  * ctypedef void (*scopy_ptr) (const int *N, const float *X, const int *incX, float *Y, const int *incY) nogil             # <<<<<<<<<<<<<<
@@ -1101,7 +1101,7 @@ struct __pyx_t_6models_15fieldembed_core_Word2VecConfig;
  */
 typedef void (*__pyx_t_6models_15fieldembed_core_scopy_ptr)(int const *, float const *, int const *, float *, int const *);
 
-/* "models/fieldembed_core.pxd":21
+/* "models/fieldembed_core.pxd":18
  * # BLAS routine signatures
  * ctypedef void (*scopy_ptr) (const int *N, const float *X, const int *incX, float *Y, const int *incY) nogil
  * ctypedef void (*saxpy_ptr) (const int *N, const float *alpha, const float *X, const int *incX, float *Y, const int *incY) nogil             # <<<<<<<<<<<<<<
@@ -1110,7 +1110,7 @@ typedef void (*__pyx_t_6models_15fieldembed_core_scopy_ptr)(int const *, float c
  */
 typedef void (*__pyx_t_6models_15fieldembed_core_saxpy_ptr)(int const *, float const *, float const *, int const *, float *, int const *);
 
-/* "models/fieldembed_core.pxd":22
+/* "models/fieldembed_core.pxd":19
  * ctypedef void (*scopy_ptr) (const int *N, const float *X, const int *incX, float *Y, const int *incY) nogil
  * ctypedef void (*saxpy_ptr) (const int *N, const float *alpha, const float *X, const int *incX, float *Y, const int *incY) nogil
  * ctypedef float (*sdot_ptr) (const int *N, const float *X, const int *incX, const float *Y, const int *incY) nogil             # <<<<<<<<<<<<<<
@@ -1119,7 +1119,7 @@ typedef void (*__pyx_t_6models_15fieldembed_core_saxpy_ptr)(int const *, float c
  */
 typedef float (*__pyx_t_6models_15fieldembed_core_sdot_ptr)(int const *, float const *, int const *, float const *, int const *);
 
-/* "models/fieldembed_core.pxd":23
+/* "models/fieldembed_core.pxd":20
  * ctypedef void (*saxpy_ptr) (const int *N, const float *alpha, const float *X, const int *incX, float *Y, const int *incY) nogil
  * ctypedef float (*sdot_ptr) (const int *N, const float *X, const int *incX, const float *Y, const int *incY) nogil
  * ctypedef double (*dsdot_ptr) (const int *N, const float *X, const int *incX, const float *Y, const int *incY) nogil             # <<<<<<<<<<<<<<
@@ -1128,7 +1128,7 @@ typedef float (*__pyx_t_6models_15fieldembed_core_sdot_ptr)(int const *, float c
  */
 typedef double (*__pyx_t_6models_15fieldembed_core_dsdot_ptr)(int const *, float const *, int const *, float const *, int const *);
 
-/* "models/fieldembed_core.pxd":24
+/* "models/fieldembed_core.pxd":21
  * ctypedef float (*sdot_ptr) (const int *N, const float *X, const int *incX, const float *Y, const int *incY) nogil
  * ctypedef double (*dsdot_ptr) (const int *N, const float *X, const int *incX, const float *Y, const int *incY) nogil
  * ctypedef double (*snrm2_ptr) (const int *N, const float *X, const int *incX) nogil             # <<<<<<<<<<<<<<
@@ -1137,7 +1137,7 @@ typedef double (*__pyx_t_6models_15fieldembed_core_dsdot_ptr)(int const *, float
  */
 typedef double (*__pyx_t_6models_15fieldembed_core_snrm2_ptr)(int const *, float const *, int const *);
 
-/* "models/fieldembed_core.pxd":25
+/* "models/fieldembed_core.pxd":22
  * ctypedef double (*dsdot_ptr) (const int *N, const float *X, const int *incX, const float *Y, const int *incY) nogil
  * ctypedef double (*snrm2_ptr) (const int *N, const float *X, const int *incX) nogil
  * ctypedef void (*sscal_ptr) (const int *N, const float *alpha, const float *X, const int *incX) nogil             # <<<<<<<<<<<<<<
@@ -1146,7 +1146,7 @@ typedef double (*__pyx_t_6models_15fieldembed_core_snrm2_ptr)(int const *, float
  */
 typedef void (*__pyx_t_6models_15fieldembed_core_sscal_ptr)(int const *, float const *, float const *, int const *);
 
-/* "models/fieldembed_core.pxd":42
+/* "models/fieldembed_core.pxd":39
  * 
  * # function implementations swapped based on BLAS detected in word2vec_inner.pyx init()
  * ctypedef REAL_t (*our_dot_ptr) (const int *N, const float *X, const int *incX, const float *Y, const int *incY) nogil             # <<<<<<<<<<<<<<
@@ -1155,7 +1155,7 @@ typedef void (*__pyx_t_6models_15fieldembed_core_sscal_ptr)(int const *, float c
  */
 typedef __pyx_t_6models_15fieldembed_core_REAL_t (*__pyx_t_6models_15fieldembed_core_our_dot_ptr)(int const *, float const *, int const *, float const *, int const *);
 
-/* "models/fieldembed_core.pxd":43
+/* "models/fieldembed_core.pxd":40
  * # function implementations swapped based on BLAS detected in word2vec_inner.pyx init()
  * ctypedef REAL_t (*our_dot_ptr) (const int *N, const float *X, const int *incX, const float *Y, const int *incY) nogil
  * ctypedef void (*our_saxpy_ptr) (const int *N, const float *alpha, const float *X, const int *incX, float *Y, const int *incY) nogil             # <<<<<<<<<<<<<<
@@ -1164,8 +1164,8 @@ typedef __pyx_t_6models_15fieldembed_core_REAL_t (*__pyx_t_6models_15fieldembed_
  */
 typedef void (*__pyx_t_6models_15fieldembed_core_our_saxpy_ptr)(int const *, float const *, float const *, int const *, float *, int const *);
 
-/* "models/fieldembed_core.pxd":49
- * 
+/* "models/fieldembed_core.pxd":62
+ * ###################################################################################################################################
  * 
  * cdef struct Word2VecConfig:             # <<<<<<<<<<<<<<
  *     REAL_t running_training_loss, alpha
@@ -1186,16 +1186,20 @@ struct __pyx_t_6models_15fieldembed_core_Word2VecConfig {
   int use_sub;
   int use_head;
   int use_hyper;
+  int use_merger;
   int sentence_idx[(0x2710 + 1)];
   __pyx_t_5numpy_uint32_t indexes[0x2710];
-  std::map<int,std::vector<__pyx_t_5numpy_uint32_t> >  hyper_indexes_map;
+  std::map<int,__pyx_t_5numpy_uint32_t *>  hyper_indexes;
   std::map<int,__pyx_t_6models_15fieldembed_core_REAL_t *>  syn0_map;
   std::map<int,__pyx_t_5numpy_uint32_t *>  LookUp_map;
   std::map<int,__pyx_t_5numpy_uint32_t *>  EndIdx_map;
   std::map<int,__pyx_t_6models_15fieldembed_core_REAL_t *>  LengInv_map;
   std::map<int,int>  leng_max_map;
+  __pyx_t_6models_15fieldembed_core_REAL_t *grad_mem;
   __pyx_t_6models_15fieldembed_core_REAL_t *work;
   __pyx_t_6models_15fieldembed_core_REAL_t *neu1;
+  __pyx_t_6models_15fieldembed_core_REAL_t *work_m;
+  __pyx_t_6models_15fieldembed_core_REAL_t *neu_m;
   __pyx_t_6models_15fieldembed_core_REAL_t *word_locks;
   __pyx_t_5numpy_uint32_t reduced_windows[0x2710];
   __pyx_t_5numpy_uint32_t *cum_table;
@@ -1355,6 +1359,9 @@ static CYTHON_INLINE int __Pyx_PyObject_SetAttrStr(PyObject* obj, PyObject* attr
 #define __Pyx_PyObject_SetAttrStr(o,n,v) PyObject_SetAttr(o,n,v)
 #endif
 
+/* GetModuleGlobalName.proto */
+static CYTHON_INLINE PyObject *__Pyx_GetModuleGlobalName(PyObject *name);
+
 /* PyThreadStateGet.proto */
 #if CYTHON_FAST_THREAD_STATE
 #define __Pyx_PyThreadState_declare  PyThreadState *__pyx_tstate;
@@ -1454,9 +1461,6 @@ static PyObject *__Pyx_Import(PyObject *name, PyObject *from_list, int level);
 
 /* ImportFrom.proto */
 static PyObject* __Pyx_ImportFrom(PyObject* module, PyObject* name);
-
-/* GetModuleGlobalName.proto */
-static CYTHON_INLINE PyObject *__Pyx_GetModuleGlobalName(PyObject *name);
 
 /* PyObjectCallNoArg.proto */
 #if CYTHON_COMPILING_IN_CPYTHON
@@ -1715,6 +1719,8 @@ static CYTHON_INLINE unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_bis
 static CYTHON_INLINE unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_random_int32(unsigned PY_LONG_LONG *); /*proto*/
 static PyObject *__pyx_f_6models_15fieldembed_core_init_w2v_config_0X1_neat(struct __pyx_t_6models_15fieldembed_core_Word2VecConfig *, PyObject *, PyObject *, PyObject *, PyObject *, PyObject *); /*proto*/
 static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_neg_0X1_neat(__pyx_t_6models_15fieldembed_core_REAL_t const , int const , int const , __pyx_t_5numpy_uint32_t *, unsigned PY_LONG_LONG, __pyx_t_5numpy_uint32_t const *, int, int, int, int, int, int, std::map<int,__pyx_t_6models_15fieldembed_core_REAL_t *> , std::map<int,__pyx_t_5numpy_uint32_t *> , std::map<int,__pyx_t_5numpy_uint32_t *> , std::map<int,__pyx_t_6models_15fieldembed_core_REAL_t *> , std::map<int,int> , __pyx_t_6models_15fieldembed_core_REAL_t *, __pyx_t_6models_15fieldembed_core_REAL_t *, __pyx_t_6models_15fieldembed_core_REAL_t *, __pyx_t_6models_15fieldembed_core_REAL_t *, int, unsigned PY_LONG_LONG, int const , __pyx_t_6models_15fieldembed_core_REAL_t *); /*proto*/
+static PyObject *__pyx_f_6models_15fieldembed_core_init_w2v_config(struct __pyx_t_6models_15fieldembed_core_Word2VecConfig *, PyObject *, PyObject *, PyObject *, PyObject *, PyObject *, PyObject *, PyObject *, PyObject *); /*proto*/
+static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_negsamp(__pyx_t_6models_15fieldembed_core_REAL_t const , int const , int const , __pyx_t_5numpy_uint32_t *, unsigned PY_LONG_LONG, __pyx_t_5numpy_uint32_t const *, std::map<int,__pyx_t_5numpy_uint32_t *> , int, int, int, int, int, int, int, std::map<int,__pyx_t_6models_15fieldembed_core_REAL_t *> , std::map<int,__pyx_t_5numpy_uint32_t *> , std::map<int,__pyx_t_5numpy_uint32_t *> , std::map<int,__pyx_t_6models_15fieldembed_core_REAL_t *> , __pyx_t_6models_15fieldembed_core_REAL_t *, __pyx_t_6models_15fieldembed_core_REAL_t *, __pyx_t_6models_15fieldembed_core_REAL_t *, __pyx_t_6models_15fieldembed_core_REAL_t *, __pyx_t_6models_15fieldembed_core_REAL_t *, __pyx_t_6models_15fieldembed_core_REAL_t *, __pyx_t_6models_15fieldembed_core_REAL_t *, int, unsigned PY_LONG_LONG, int const , __pyx_t_6models_15fieldembed_core_REAL_t *); /*proto*/
 #define __Pyx_MODULE_NAME "models.fieldembed_core"
 extern int __pyx_module_is_main_models__fieldembed_core;
 int __pyx_module_is_main_models__fieldembed_core = 0;
@@ -1734,7 +1740,7 @@ static const char __pyx_k_y[] = "y";
 static const char __pyx_k_np[] = "np";
 static const char __pyx_k_sg[] = "sg";
 static const char __pyx_k_wv[] = "wv";
-static const char __pyx_k__12[] = "*";
+static const char __pyx_k__15[] = "*";
 static const char __pyx_k_REAL[] = "REAL";
 static const char __pyx_k_init[] = "init";
 static const char __pyx_k_item[] = "item";
@@ -1747,8 +1753,10 @@ static const char __pyx_k_work[] = "_work";
 static const char __pyx_k_alpha[] = "alpha";
 static const char __pyx_k_d_res[] = "d_res";
 static const char __pyx_k_dsdot[] = "dsdot";
+static const char __pyx_k_dtype[] = "dtype";
 static const char __pyx_k_fblas[] = "fblas";
 static const char __pyx_k_model[] = "model";
+static const char __pyx_k_neu_m[] = "_neu_m";
 static const char __pyx_k_numpy[] = "numpy";
 static const char __pyx_k_p_res[] = "p_res";
 static const char __pyx_k_range[] = "range";
@@ -1756,22 +1764,27 @@ static const char __pyx_k_saxpy[] = "saxpy";
 static const char __pyx_k_scopy[] = "scopy";
 static const char __pyx_k_snrm2[] = "snrm2";
 static const char __pyx_k_sscal[] = "sscal";
+static const char __pyx_k_zeros[] = "zeros";
 static const char __pyx_k_import[] = "__import__";
 static const char __pyx_k_random[] = "random";
 static const char __pyx_k_sample[] = "sample";
 static const char __pyx_k_window[] = "window";
+static const char __pyx_k_work_m[] = "_work_m";
 static const char __pyx_k_wv_neg[] = "wv_neg";
 static const char __pyx_k_float32[] = "float32";
 static const char __pyx_k_idx_end[] = "idx_end";
 static const char __pyx_k_indexes[] = "indexes";
+static const char __pyx_k_loc_idx[] = "loc_idx";
 static const char __pyx_k_our_dot[] = "our_dot";
 static const char __pyx_k_randint[] = "randint";
+static const char __pyx_k_uin32_t[] = "uin32_t";
 static const char __pyx_k_use_sub[] = "use_sub";
 static const char __pyx_k_vectors[] = "vectors";
 static const char __pyx_k_vlookup[] = "vlookup";
 static const char __pyx_k_workers[] = "workers";
 static const char __pyx_k_cpointer[] = "_cpointer";
 static const char __pyx_k_expected[] = "expected";
+static const char __pyx_k_grad_mem[] = "_grad_mem";
 static const char __pyx_k_negative[] = "negative";
 static const char __pyx_k_pyx_capi[] = "__pyx_capi__";
 static const char __pyx_k_sent_idx[] = "sent_idx";
@@ -1782,20 +1795,25 @@ static const char __pyx_k_enumerate[] = "enumerate";
 static const char __pyx_k_field_sub[] = "field_sub";
 static const char __pyx_k_idx_start[] = "idx_start";
 static const char __pyx_k_our_saxpy[] = "our_saxpy";
+static const char __pyx_k_use_hyper[] = "use_hyper";
 static const char __pyx_k_ValueError[] = "ValueError";
 static const char __pyx_k_field_head[] = "field_head";
 static const char __pyx_k_sample_int[] = "sample_int";
 static const char __pyx_k_trainables[] = "trainables";
+static const char __pyx_k_use_merger[] = "use_merger";
 static const char __pyx_k_vocabulary[] = "vocabulary";
 static const char __pyx_k_ImportError[] = "ImportError";
+static const char __pyx_k_field_hyper[] = "field_hyper";
 static const char __pyx_k_subsampling[] = "subsampling";
 static const char __pyx_k_vector_size[] = "vector_size";
 static const char __pyx_k_word_vocidx[] = "word_vocidx";
 static const char __pyx_k_FAST_VERSION[] = "FAST_VERSION";
 static const char __pyx_k_RuntimeError[] = "RuntimeError";
 static const char __pyx_k_compute_loss[] = "compute_loss";
+static const char __pyx_k_hyper_vocidx[] = "hyper_vocidx";
 static const char __pyx_k_sentence_idx[] = "sentence_idx";
 static const char __pyx_k_vocab_values[] = "vocab_values";
+static const char __pyx_k_hyper_indexes[] = "hyper_indexes";
 static const char __pyx_k_standard_grad[] = "standard_grad";
 static const char __pyx_k_vectors_lockf[] = "vectors_lockf";
 static const char __pyx_k_effective_words[] = "effective_words";
@@ -1806,6 +1824,7 @@ static const char __pyx_k_effective_sentences[] = "effective_sentences";
 static const char __pyx_k_running_training_loss[] = "running_training_loss";
 static const char __pyx_k_models_fieldembed_core[] = "models.fieldembed_core";
 static const char __pyx_k_ndarray_is_not_C_contiguous[] = "ndarray is not C contiguous";
+static const char __pyx_k_train_batch_fieldembed_negsamp[] = "train_batch_fieldembed_negsamp";
 static const char __pyx_k_numpy_core_multiarray_failed_to[] = "numpy.core.multiarray failed to import";
 static const char __pyx_k_train_batch_fieldembed_0X1_neat[] = "train_batch_fieldembed_0X1_neat";
 static const char __pyx_k_unknown_dtype_code_in_numpy_pxd[] = "unknown dtype code in numpy.pxd (%d)";
@@ -1825,7 +1844,7 @@ static PyObject *__pyx_kp_u_Non_native_byte_order_not_suppor;
 static PyObject *__pyx_n_s_REAL;
 static PyObject *__pyx_n_s_RuntimeError;
 static PyObject *__pyx_n_s_ValueError;
-static PyObject *__pyx_n_s__12;
+static PyObject *__pyx_n_s__15;
 static PyObject *__pyx_n_s_alpha;
 static PyObject *__pyx_n_s_c;
 static PyObject *__pyx_n_s_cline_in_traceback;
@@ -1834,15 +1853,20 @@ static PyObject *__pyx_n_s_cpointer;
 static PyObject *__pyx_n_s_cum_table;
 static PyObject *__pyx_n_s_d_res;
 static PyObject *__pyx_n_s_dsdot;
+static PyObject *__pyx_n_s_dtype;
 static PyObject *__pyx_n_s_effective_sentences;
 static PyObject *__pyx_n_s_effective_words;
 static PyObject *__pyx_n_s_enumerate;
 static PyObject *__pyx_n_s_expected;
 static PyObject *__pyx_n_s_fblas;
 static PyObject *__pyx_n_s_field_head;
+static PyObject *__pyx_n_s_field_hyper;
 static PyObject *__pyx_n_s_field_sub;
 static PyObject *__pyx_kp_s_fieldembed_models_fieldembed_cor;
 static PyObject *__pyx_n_s_float32;
+static PyObject *__pyx_n_s_grad_mem;
+static PyObject *__pyx_n_s_hyper_indexes;
+static PyObject *__pyx_n_s_hyper_vocidx;
 static PyObject *__pyx_n_s_i;
 static PyObject *__pyx_n_s_idx_end;
 static PyObject *__pyx_n_s_idx_start;
@@ -1852,6 +1876,7 @@ static PyObject *__pyx_n_s_init;
 static PyObject *__pyx_n_s_item;
 static PyObject *__pyx_n_s_j;
 static PyObject *__pyx_n_s_k;
+static PyObject *__pyx_n_s_loc_idx;
 static PyObject *__pyx_n_s_main;
 static PyObject *__pyx_n_s_model;
 static PyObject *__pyx_n_s_models_fieldembed_core;
@@ -1859,6 +1884,7 @@ static PyObject *__pyx_kp_u_ndarray_is_not_C_contiguous;
 static PyObject *__pyx_kp_u_ndarray_is_not_Fortran_contiguou;
 static PyObject *__pyx_n_s_negative;
 static PyObject *__pyx_n_s_neu1;
+static PyObject *__pyx_n_s_neu_m;
 static PyObject *__pyx_n_s_np;
 static PyObject *__pyx_n_s_numpy;
 static PyObject *__pyx_kp_s_numpy_core_multiarray_failed_to;
@@ -1887,9 +1913,13 @@ static PyObject *__pyx_n_s_standard_grad;
 static PyObject *__pyx_n_s_subsampling;
 static PyObject *__pyx_n_s_test;
 static PyObject *__pyx_n_s_train_batch_fieldembed_0X1_neat;
+static PyObject *__pyx_n_s_train_batch_fieldembed_negsamp;
 static PyObject *__pyx_n_s_trainables;
+static PyObject *__pyx_n_s_uin32_t;
 static PyObject *__pyx_kp_u_unknown_dtype_code_in_numpy_pxd;
 static PyObject *__pyx_n_s_use_head;
+static PyObject *__pyx_n_s_use_hyper;
+static PyObject *__pyx_n_s_use_merger;
 static PyObject *__pyx_n_s_use_sub;
 static PyObject *__pyx_n_s_vector_size;
 static PyObject *__pyx_n_s_vectors;
@@ -1900,13 +1930,16 @@ static PyObject *__pyx_n_s_vocabulary;
 static PyObject *__pyx_n_s_window;
 static PyObject *__pyx_n_s_word_vocidx;
 static PyObject *__pyx_n_s_work;
+static PyObject *__pyx_n_s_work_m;
 static PyObject *__pyx_n_s_workers;
 static PyObject *__pyx_n_s_wv;
 static PyObject *__pyx_n_s_wv_neg;
 static PyObject *__pyx_n_s_x;
 static PyObject *__pyx_n_s_y;
+static PyObject *__pyx_n_s_zeros;
 static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_neat(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_model, PyObject *__pyx_v_indexes, PyObject *__pyx_v_sentence_idx, PyObject *__pyx_v_alpha, PyObject *__pyx_v__work, PyObject *__pyx_v__neu1, PyObject *__pyx_v_compute_loss, PyObject *__pyx_v_subsampling); /* proto */
-static PyObject *__pyx_pf_6models_15fieldembed_core_2init(CYTHON_UNUSED PyObject *__pyx_self); /* proto */
+static PyObject *__pyx_pf_6models_15fieldembed_core_2train_batch_fieldembed_negsamp(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_model, PyObject *__pyx_v_indexes, PyObject *__pyx_v_hyper_indexes, PyObject *__pyx_v_sentence_idx, PyObject *__pyx_v_alpha, PyObject *__pyx_v__work, PyObject *__pyx_v__neu1, PyObject *__pyx_v__work_m, PyObject *__pyx_v__neu_m, PyObject *__pyx_v__grad_mem, PyObject *__pyx_v_compute_loss, PyObject *__pyx_v_subsampling); /* proto */
+static PyObject *__pyx_pf_6models_15fieldembed_core_4init(CYTHON_UNUSED PyObject *__pyx_self); /* proto */
 static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, Py_buffer *__pyx_v_info, int __pyx_v_flags); /* proto */
 static void __pyx_pf_5numpy_7ndarray_2__releasebuffer__(PyArrayObject *__pyx_v_self, Py_buffer *__pyx_v_info); /* proto */
 static PyObject *__pyx_int_0;
@@ -1925,13 +1958,18 @@ static PyObject *__pyx_tuple__8;
 static PyObject *__pyx_tuple__9;
 static PyObject *__pyx_tuple__10;
 static PyObject *__pyx_tuple__11;
+static PyObject *__pyx_tuple__12;
 static PyObject *__pyx_tuple__13;
-static PyObject *__pyx_tuple__15;
-static PyObject *__pyx_codeobj__14;
-static PyObject *__pyx_codeobj__16;
+static PyObject *__pyx_tuple__14;
+static PyObject *__pyx_tuple__16;
+static PyObject *__pyx_tuple__18;
+static PyObject *__pyx_tuple__20;
+static PyObject *__pyx_codeobj__17;
+static PyObject *__pyx_codeobj__19;
+static PyObject *__pyx_codeobj__21;
 /* Late includes */
 
-/* "models/fieldembed_core.pyx":49
+/* "models/fieldembed_core.pyx":48
  * ############################################## UTILS TOOL
  * # for when fblas.sdot returns a double
  * cdef REAL_t our_dot_double(const int *N, const float *X, const int *incX, const float *Y, const int *incY) nogil:             # <<<<<<<<<<<<<<
@@ -1942,7 +1980,7 @@ static PyObject *__pyx_codeobj__16;
 static __pyx_t_6models_15fieldembed_core_REAL_t __pyx_f_6models_15fieldembed_core_our_dot_double(int const *__pyx_v_N, float const *__pyx_v_X, int const *__pyx_v_incX, float const *__pyx_v_Y, int const *__pyx_v_incY) {
   __pyx_t_6models_15fieldembed_core_REAL_t __pyx_r;
 
-  /* "models/fieldembed_core.pyx":50
+  /* "models/fieldembed_core.pyx":49
  * # for when fblas.sdot returns a double
  * cdef REAL_t our_dot_double(const int *N, const float *X, const int *incX, const float *Y, const int *incY) nogil:
  *     return <REAL_t>dsdot(N, X, incX, Y, incY)             # <<<<<<<<<<<<<<
@@ -1952,7 +1990,7 @@ static __pyx_t_6models_15fieldembed_core_REAL_t __pyx_f_6models_15fieldembed_cor
   __pyx_r = ((__pyx_t_6models_15fieldembed_core_REAL_t)__pyx_v_6models_15fieldembed_core_dsdot(__pyx_v_N, __pyx_v_X, __pyx_v_incX, __pyx_v_Y, __pyx_v_incY));
   goto __pyx_L0;
 
-  /* "models/fieldembed_core.pyx":49
+  /* "models/fieldembed_core.pyx":48
  * ############################################## UTILS TOOL
  * # for when fblas.sdot returns a double
  * cdef REAL_t our_dot_double(const int *N, const float *X, const int *incX, const float *Y, const int *incY) nogil:             # <<<<<<<<<<<<<<
@@ -1965,7 +2003,7 @@ static __pyx_t_6models_15fieldembed_core_REAL_t __pyx_f_6models_15fieldembed_cor
   return __pyx_r;
 }
 
-/* "models/fieldembed_core.pyx":53
+/* "models/fieldembed_core.pyx":52
  * 
  * # for when fblas.sdot returns a float
  * cdef REAL_t our_dot_float(const int *N, const float *X, const int *incX, const float *Y, const int *incY) nogil:             # <<<<<<<<<<<<<<
@@ -1976,7 +2014,7 @@ static __pyx_t_6models_15fieldembed_core_REAL_t __pyx_f_6models_15fieldembed_cor
 static __pyx_t_6models_15fieldembed_core_REAL_t __pyx_f_6models_15fieldembed_core_our_dot_float(int const *__pyx_v_N, float const *__pyx_v_X, int const *__pyx_v_incX, float const *__pyx_v_Y, int const *__pyx_v_incY) {
   __pyx_t_6models_15fieldembed_core_REAL_t __pyx_r;
 
-  /* "models/fieldembed_core.pyx":54
+  /* "models/fieldembed_core.pyx":53
  * # for when fblas.sdot returns a float
  * cdef REAL_t our_dot_float(const int *N, const float *X, const int *incX, const float *Y, const int *incY) nogil:
  *     return <REAL_t>sdot(N, X, incX, Y, incY)             # <<<<<<<<<<<<<<
@@ -1986,7 +2024,7 @@ static __pyx_t_6models_15fieldembed_core_REAL_t __pyx_f_6models_15fieldembed_cor
   __pyx_r = ((__pyx_t_6models_15fieldembed_core_REAL_t)__pyx_v_6models_15fieldembed_core_sdot(__pyx_v_N, __pyx_v_X, __pyx_v_incX, __pyx_v_Y, __pyx_v_incY));
   goto __pyx_L0;
 
-  /* "models/fieldembed_core.pyx":53
+  /* "models/fieldembed_core.pyx":52
  * 
  * # for when fblas.sdot returns a float
  * cdef REAL_t our_dot_float(const int *N, const float *X, const int *incX, const float *Y, const int *incY) nogil:             # <<<<<<<<<<<<<<
@@ -1999,7 +2037,7 @@ static __pyx_t_6models_15fieldembed_core_REAL_t __pyx_f_6models_15fieldembed_cor
   return __pyx_r;
 }
 
-/* "models/fieldembed_core.pyx":57
+/* "models/fieldembed_core.pyx":56
  * 
  * # for when no blas available
  * cdef REAL_t our_dot_noblas(const int *N, const float *X, const int *incX, const float *Y, const int *incY) nogil:             # <<<<<<<<<<<<<<
@@ -2013,7 +2051,7 @@ static __pyx_t_6models_15fieldembed_core_REAL_t __pyx_f_6models_15fieldembed_cor
   __pyx_t_6models_15fieldembed_core_REAL_t __pyx_r;
   int __pyx_t_1;
 
-  /* "models/fieldembed_core.pyx":61
+  /* "models/fieldembed_core.pyx":60
  *     cdef int i
  *     cdef REAL_t a
  *     a = <REAL_t>0.0             # <<<<<<<<<<<<<<
@@ -2022,7 +2060,7 @@ static __pyx_t_6models_15fieldembed_core_REAL_t __pyx_f_6models_15fieldembed_cor
  */
   __pyx_v_a = ((__pyx_t_6models_15fieldembed_core_REAL_t)0.0);
 
-  /* "models/fieldembed_core.pyx":62
+  /* "models/fieldembed_core.pyx":61
  *     cdef REAL_t a
  *     a = <REAL_t>0.0
  *     for i from 0 <= i < N[0] by 1:             # <<<<<<<<<<<<<<
@@ -2032,7 +2070,7 @@ static __pyx_t_6models_15fieldembed_core_REAL_t __pyx_f_6models_15fieldembed_cor
   __pyx_t_1 = (__pyx_v_N[0]);
   for (__pyx_v_i = 0; __pyx_v_i < __pyx_t_1; __pyx_v_i+=1) {
 
-    /* "models/fieldembed_core.pyx":63
+    /* "models/fieldembed_core.pyx":62
  *     a = <REAL_t>0.0
  *     for i from 0 <= i < N[0] by 1:
  *         a += X[i] * Y[i]             # <<<<<<<<<<<<<<
@@ -2042,7 +2080,7 @@ static __pyx_t_6models_15fieldembed_core_REAL_t __pyx_f_6models_15fieldembed_cor
     __pyx_v_a = (__pyx_v_a + ((__pyx_v_X[__pyx_v_i]) * (__pyx_v_Y[__pyx_v_i])));
   }
 
-  /* "models/fieldembed_core.pyx":64
+  /* "models/fieldembed_core.pyx":63
  *     for i from 0 <= i < N[0] by 1:
  *         a += X[i] * Y[i]
  *     return a             # <<<<<<<<<<<<<<
@@ -2052,7 +2090,7 @@ static __pyx_t_6models_15fieldembed_core_REAL_t __pyx_f_6models_15fieldembed_cor
   __pyx_r = __pyx_v_a;
   goto __pyx_L0;
 
-  /* "models/fieldembed_core.pyx":57
+  /* "models/fieldembed_core.pyx":56
  * 
  * # for when no blas available
  * cdef REAL_t our_dot_noblas(const int *N, const float *X, const int *incX, const float *Y, const int *incY) nogil:             # <<<<<<<<<<<<<<
@@ -2065,7 +2103,7 @@ static __pyx_t_6models_15fieldembed_core_REAL_t __pyx_f_6models_15fieldembed_cor
   return __pyx_r;
 }
 
-/* "models/fieldembed_core.pyx":67
+/* "models/fieldembed_core.pyx":66
  * 
  * # for when no blas available
  * cdef void our_saxpy_noblas(const int *N, const float *alpha, const float *X, const int *incX, float *Y, const int *incY) nogil:             # <<<<<<<<<<<<<<
@@ -2077,7 +2115,7 @@ static void __pyx_f_6models_15fieldembed_core_our_saxpy_noblas(int const *__pyx_
   int __pyx_v_i;
   int __pyx_t_1;
 
-  /* "models/fieldembed_core.pyx":69
+  /* "models/fieldembed_core.pyx":68
  * cdef void our_saxpy_noblas(const int *N, const float *alpha, const float *X, const int *incX, float *Y, const int *incY) nogil:
  *     cdef int i
  *     for i from 0 <= i < N[0] by 1:             # <<<<<<<<<<<<<<
@@ -2087,7 +2125,7 @@ static void __pyx_f_6models_15fieldembed_core_our_saxpy_noblas(int const *__pyx_
   __pyx_t_1 = (__pyx_v_N[0]);
   for (__pyx_v_i = 0; __pyx_v_i < __pyx_t_1; __pyx_v_i+=1) {
 
-    /* "models/fieldembed_core.pyx":70
+    /* "models/fieldembed_core.pyx":69
  *     cdef int i
  *     for i from 0 <= i < N[0] by 1:
  *         Y[i * (incY[0])] = (alpha[0]) * X[i * (incX[0])] + Y[i * (incY[0])]             # <<<<<<<<<<<<<<
@@ -2097,7 +2135,7 @@ static void __pyx_f_6models_15fieldembed_core_our_saxpy_noblas(int const *__pyx_
     (__pyx_v_Y[(__pyx_v_i * (__pyx_v_incY[0]))]) = (((__pyx_v_alpha[0]) * (__pyx_v_X[(__pyx_v_i * (__pyx_v_incX[0]))])) + (__pyx_v_Y[(__pyx_v_i * (__pyx_v_incY[0]))]));
   }
 
-  /* "models/fieldembed_core.pyx":67
+  /* "models/fieldembed_core.pyx":66
  * 
  * # for when no blas available
  * cdef void our_saxpy_noblas(const int *N, const float *alpha, const float *X, const int *incX, float *Y, const int *incY) nogil:             # <<<<<<<<<<<<<<
@@ -2108,7 +2146,7 @@ static void __pyx_f_6models_15fieldembed_core_our_saxpy_noblas(int const *__pyx_
   /* function exit code */
 }
 
-/* "models/fieldembed_core.pyx":73
+/* "models/fieldembed_core.pyx":72
  * 
  * # to support random draws from negative-sampling cum_table
  * cdef inline unsigned long long bisect_left(np.uint32_t *a, unsigned long long x, unsigned long long lo, unsigned long long hi) nogil:             # <<<<<<<<<<<<<<
@@ -2121,7 +2159,7 @@ static CYTHON_INLINE unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_bis
   unsigned PY_LONG_LONG __pyx_r;
   int __pyx_t_1;
 
-  /* "models/fieldembed_core.pyx":75
+  /* "models/fieldembed_core.pyx":74
  * cdef inline unsigned long long bisect_left(np.uint32_t *a, unsigned long long x, unsigned long long lo, unsigned long long hi) nogil:
  *     cdef unsigned long long mid
  *     while hi > lo:             # <<<<<<<<<<<<<<
@@ -2132,7 +2170,7 @@ static CYTHON_INLINE unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_bis
     __pyx_t_1 = ((__pyx_v_hi > __pyx_v_lo) != 0);
     if (!__pyx_t_1) break;
 
-    /* "models/fieldembed_core.pyx":76
+    /* "models/fieldembed_core.pyx":75
  *     cdef unsigned long long mid
  *     while hi > lo:
  *         mid = (lo + hi) >> 1             # <<<<<<<<<<<<<<
@@ -2141,7 +2179,7 @@ static CYTHON_INLINE unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_bis
  */
     __pyx_v_mid = ((__pyx_v_lo + __pyx_v_hi) >> 1);
 
-    /* "models/fieldembed_core.pyx":77
+    /* "models/fieldembed_core.pyx":76
  *     while hi > lo:
  *         mid = (lo + hi) >> 1
  *         if a[mid] >= x:             # <<<<<<<<<<<<<<
@@ -2151,7 +2189,7 @@ static CYTHON_INLINE unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_bis
     __pyx_t_1 = (((__pyx_v_a[__pyx_v_mid]) >= __pyx_v_x) != 0);
     if (__pyx_t_1) {
 
-      /* "models/fieldembed_core.pyx":78
+      /* "models/fieldembed_core.pyx":77
  *         mid = (lo + hi) >> 1
  *         if a[mid] >= x:
  *             hi = mid             # <<<<<<<<<<<<<<
@@ -2160,7 +2198,7 @@ static CYTHON_INLINE unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_bis
  */
       __pyx_v_hi = __pyx_v_mid;
 
-      /* "models/fieldembed_core.pyx":77
+      /* "models/fieldembed_core.pyx":76
  *     while hi > lo:
  *         mid = (lo + hi) >> 1
  *         if a[mid] >= x:             # <<<<<<<<<<<<<<
@@ -2170,7 +2208,7 @@ static CYTHON_INLINE unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_bis
       goto __pyx_L5;
     }
 
-    /* "models/fieldembed_core.pyx":80
+    /* "models/fieldembed_core.pyx":79
  *             hi = mid
  *         else:
  *             lo = mid + 1             # <<<<<<<<<<<<<<
@@ -2183,17 +2221,17 @@ static CYTHON_INLINE unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_bis
     __pyx_L5:;
   }
 
-  /* "models/fieldembed_core.pyx":81
+  /* "models/fieldembed_core.pyx":80
  *         else:
  *             lo = mid + 1
  *     return lo             # <<<<<<<<<<<<<<
  * 
- * # this quick & dirty RNG apparently matches Java's (non-Secure)Random
+ * cdef inline unsigned long long random_int32(unsigned long long *next_random) nogil:
  */
   __pyx_r = __pyx_v_lo;
   goto __pyx_L0;
 
-  /* "models/fieldembed_core.pyx":73
+  /* "models/fieldembed_core.pyx":72
  * 
  * # to support random draws from negative-sampling cum_table
  * cdef inline unsigned long long bisect_left(np.uint32_t *a, unsigned long long x, unsigned long long lo, unsigned long long hi) nogil:             # <<<<<<<<<<<<<<
@@ -2206,9 +2244,9 @@ static CYTHON_INLINE unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_bis
   return __pyx_r;
 }
 
-/* "models/fieldembed_core.pyx":85
- * # this quick & dirty RNG apparently matches Java's (non-Secure)Random
- * # note this function side-effects next_random to set up the next number
+/* "models/fieldembed_core.pyx":82
+ *     return lo
+ * 
  * cdef inline unsigned long long random_int32(unsigned long long *next_random) nogil:             # <<<<<<<<<<<<<<
  *     cdef unsigned long long this_random = next_random[0] >> 16
  *     next_random[0] = (next_random[0] * <unsigned long long>25214903917ULL + 11) & 281474976710655ULL
@@ -2218,8 +2256,8 @@ static CYTHON_INLINE unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_ran
   unsigned PY_LONG_LONG __pyx_v_this_random;
   unsigned PY_LONG_LONG __pyx_r;
 
-  /* "models/fieldembed_core.pyx":86
- * # note this function side-effects next_random to set up the next number
+  /* "models/fieldembed_core.pyx":83
+ * 
  * cdef inline unsigned long long random_int32(unsigned long long *next_random) nogil:
  *     cdef unsigned long long this_random = next_random[0] >> 16             # <<<<<<<<<<<<<<
  *     next_random[0] = (next_random[0] * <unsigned long long>25214903917ULL + 11) & 281474976710655ULL
@@ -2227,7 +2265,7 @@ static CYTHON_INLINE unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_ran
  */
   __pyx_v_this_random = ((__pyx_v_next_random[0]) >> 16);
 
-  /* "models/fieldembed_core.pyx":87
+  /* "models/fieldembed_core.pyx":84
  * cdef inline unsigned long long random_int32(unsigned long long *next_random) nogil:
  *     cdef unsigned long long this_random = next_random[0] >> 16
  *     next_random[0] = (next_random[0] * <unsigned long long>25214903917ULL + 11) & 281474976710655ULL             # <<<<<<<<<<<<<<
@@ -2236,7 +2274,7 @@ static CYTHON_INLINE unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_ran
  */
   (__pyx_v_next_random[0]) = ((((__pyx_v_next_random[0]) * ((unsigned PY_LONG_LONG)25214903917ULL)) + 11) & 281474976710655ULL);
 
-  /* "models/fieldembed_core.pyx":88
+  /* "models/fieldembed_core.pyx":85
  *     cdef unsigned long long this_random = next_random[0] >> 16
  *     next_random[0] = (next_random[0] * <unsigned long long>25214903917ULL + 11) & 281474976710655ULL
  *     return this_random             # <<<<<<<<<<<<<<
@@ -2246,9 +2284,9 @@ static CYTHON_INLINE unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_ran
   __pyx_r = __pyx_v_this_random;
   goto __pyx_L0;
 
-  /* "models/fieldembed_core.pyx":85
- * # this quick & dirty RNG apparently matches Java's (non-Secure)Random
- * # note this function side-effects next_random to set up the next number
+  /* "models/fieldembed_core.pyx":82
+ *     return lo
+ * 
  * cdef inline unsigned long long random_int32(unsigned long long *next_random) nogil:             # <<<<<<<<<<<<<<
  *     cdef unsigned long long this_random = next_random[0] >> 16
  *     next_random[0] = (next_random[0] * <unsigned long long>25214903917ULL + 11) & 281474976710655ULL
@@ -2259,7 +2297,7 @@ static CYTHON_INLINE unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_ran
   return __pyx_r;
 }
 
-/* "models/fieldembed_core.pyx":97
+/* "models/fieldembed_core.pyx":94
  * ################################################################# Field Embedding 0X1
  * #--> NEW for 0X1_neat
  * cdef init_w2v_config_0X1_neat(             # <<<<<<<<<<<<<<
@@ -2282,97 +2320,97 @@ static PyObject *__pyx_f_6models_15fieldembed_core_init_w2v_config_0X1_neat(stru
   unsigned PY_LONG_LONG __pyx_t_9;
   __Pyx_RefNannySetupContext("init_w2v_config_0X1_neat", 0);
 
-  /* "models/fieldembed_core.pyx":108
+  /* "models/fieldembed_core.pyx":105
  *     cdef int fld_idx
  * 
  *     c[0].sg = model.sg             # <<<<<<<<<<<<<<
  *     c[0].negative = model.negative
  *     c[0].sample = (model.vocabulary.sample != 0)
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_sg); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 108, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_sg); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 105, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 108, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 105, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   (__pyx_v_c[0]).sg = __pyx_t_2;
 
-  /* "models/fieldembed_core.pyx":109
+  /* "models/fieldembed_core.pyx":106
  * 
  *     c[0].sg = model.sg
  *     c[0].negative = model.negative             # <<<<<<<<<<<<<<
  *     c[0].sample = (model.vocabulary.sample != 0)
  *     c[0].cbow_mean = model.standard_grad
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_negative); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 109, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_negative); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 106, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 109, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 106, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   (__pyx_v_c[0]).negative = __pyx_t_2;
 
-  /* "models/fieldembed_core.pyx":110
+  /* "models/fieldembed_core.pyx":107
  *     c[0].sg = model.sg
  *     c[0].negative = model.negative
  *     c[0].sample = (model.vocabulary.sample != 0)             # <<<<<<<<<<<<<<
  *     c[0].cbow_mean = model.standard_grad
  *     c[0].window = model.window
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_vocabulary); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 110, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_vocabulary); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 107, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_sample); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 110, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_sample); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 107, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = PyObject_RichCompare(__pyx_t_3, __pyx_int_0, Py_NE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 110, __pyx_L1_error)
+  __pyx_t_1 = PyObject_RichCompare(__pyx_t_3, __pyx_int_0, Py_NE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 107, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 110, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 107, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   (__pyx_v_c[0]).sample = __pyx_t_2;
 
-  /* "models/fieldembed_core.pyx":111
+  /* "models/fieldembed_core.pyx":108
  *     c[0].negative = model.negative
  *     c[0].sample = (model.vocabulary.sample != 0)
  *     c[0].cbow_mean = model.standard_grad             # <<<<<<<<<<<<<<
  *     c[0].window = model.window
  *     c[0].workers = model.workers
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_standard_grad); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 111, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_standard_grad); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 108, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 111, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 108, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   (__pyx_v_c[0]).cbow_mean = __pyx_t_2;
 
-  /* "models/fieldembed_core.pyx":112
+  /* "models/fieldembed_core.pyx":109
  *     c[0].sample = (model.vocabulary.sample != 0)
  *     c[0].cbow_mean = model.standard_grad
  *     c[0].window = model.window             # <<<<<<<<<<<<<<
  *     c[0].workers = model.workers
  *     c[0].compute_loss = (1 if compute_loss else 0)
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_window); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 112, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_window); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 109, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 112, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 109, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   (__pyx_v_c[0]).window = __pyx_t_2;
 
-  /* "models/fieldembed_core.pyx":113
+  /* "models/fieldembed_core.pyx":110
  *     c[0].cbow_mean = model.standard_grad
  *     c[0].window = model.window
  *     c[0].workers = model.workers             # <<<<<<<<<<<<<<
  *     c[0].compute_loss = (1 if compute_loss else 0)
  *     c[0].running_training_loss = model.running_training_loss
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_workers); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 113, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_workers); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 110, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 113, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 110, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   (__pyx_v_c[0]).workers = __pyx_t_2;
 
-  /* "models/fieldembed_core.pyx":114
+  /* "models/fieldembed_core.pyx":111
  *     c[0].window = model.window
  *     c[0].workers = model.workers
  *     c[0].compute_loss = (1 if compute_loss else 0)             # <<<<<<<<<<<<<<
  *     c[0].running_training_loss = model.running_training_loss
  * 
  */
-  __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_v_compute_loss); if (unlikely(__pyx_t_4 < 0)) __PYX_ERR(0, 114, __pyx_L1_error)
+  __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_v_compute_loss); if (unlikely(__pyx_t_4 < 0)) __PYX_ERR(0, 111, __pyx_L1_error)
   if (__pyx_t_4) {
     __pyx_t_2 = 1;
   } else {
@@ -2380,20 +2418,20 @@ static PyObject *__pyx_f_6models_15fieldembed_core_init_w2v_config_0X1_neat(stru
   }
   (__pyx_v_c[0]).compute_loss = __pyx_t_2;
 
-  /* "models/fieldembed_core.pyx":115
+  /* "models/fieldembed_core.pyx":112
  *     c[0].workers = model.workers
  *     c[0].compute_loss = (1 if compute_loss else 0)
  *     c[0].running_training_loss = model.running_training_loss             # <<<<<<<<<<<<<<
  * 
  *     #######################################################################
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_running_training_loss); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 115, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_running_training_loss); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 112, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_5 = __pyx_PyFloat_AsFloat(__pyx_t_1); if (unlikely((__pyx_t_5 == ((npy_float32)-1)) && PyErr_Occurred())) __PYX_ERR(0, 115, __pyx_L1_error)
+  __pyx_t_5 = __pyx_PyFloat_AsFloat(__pyx_t_1); if (unlikely((__pyx_t_5 == ((npy_float32)-1)) && PyErr_Occurred())) __PYX_ERR(0, 112, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   (__pyx_v_c[0]).running_training_loss = __pyx_t_5;
 
-  /* "models/fieldembed_core.pyx":118
+  /* "models/fieldembed_core.pyx":115
  * 
  *     #######################################################################
  *     fld_idx = -1             # <<<<<<<<<<<<<<
@@ -2402,50 +2440,167 @@ static PyObject *__pyx_f_6models_15fieldembed_core_init_w2v_config_0X1_neat(stru
  */
   __pyx_v_fld_idx = -1;
 
-  /* "models/fieldembed_core.pyx":119
+  /* "models/fieldembed_core.pyx":116
  *     #######################################################################
  *     fld_idx = -1
  *     c[0].use_sub  = model.use_sub             # <<<<<<<<<<<<<<
  *     if c[0].use_sub:
- *         # c[0].syn0_1 = <REAL_t *>(np.PyArray_DATA(model.field_sub[0][0][0].vectors)) # currently, use this
+ *         fld_idx  = fld_idx + 1
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_use_sub); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 119, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_use_sub); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 116, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 119, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 116, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   (__pyx_v_c[0]).use_sub = __pyx_t_2;
 
-  /* "models/fieldembed_core.pyx":120
+  /* "models/fieldembed_core.pyx":117
  *     fld_idx = -1
  *     c[0].use_sub  = model.use_sub
  *     if c[0].use_sub:             # <<<<<<<<<<<<<<
- *         # c[0].syn0_1 = <REAL_t *>(np.PyArray_DATA(model.field_sub[0][0][0].vectors)) # currently, use this
- *         # c[0].syn0_1_LookUp   = <np.uint32_t *>(np.PyArray_DATA(model.field_sub[0][0][1]))  # lookup
+ *         fld_idx  = fld_idx + 1
+ *         c[0].syn0_map[fld_idx]    = <REAL_t *>(np.PyArray_DATA(model.field_sub[0][0].vectors))
  */
   __pyx_t_4 = ((__pyx_v_c[0]).use_sub != 0);
   if (__pyx_t_4) {
 
-    /* "models/fieldembed_core.pyx":127
- *         # c[0].syn0_1_leng_max = model.field_sub[0][0][4]                                    # leng_max
- * 
+    /* "models/fieldembed_core.pyx":118
+ *     c[0].use_sub  = model.use_sub
+ *     if c[0].use_sub:
  *         fld_idx  = fld_idx + 1             # <<<<<<<<<<<<<<
- *         c[0].syn0_map[fld_idx]    = <REAL_t *>(np.PyArray_DATA(model.field_sub[0][0][0].vectors))
- *         c[0].LookUp_map[fld_idx]  = <np.uint32_t *>(np.PyArray_DATA(model.field_sub[0][0][1]))
+ *         c[0].syn0_map[fld_idx]    = <REAL_t *>(np.PyArray_DATA(model.field_sub[0][0].vectors))
+ *         c[0].LookUp_map[fld_idx]  = <np.uint32_t *>(np.PyArray_DATA(model.field_sub[0][1]))
+ */
+    __pyx_v_fld_idx = (__pyx_v_fld_idx + 1);
+
+    /* "models/fieldembed_core.pyx":119
+ *     if c[0].use_sub:
+ *         fld_idx  = fld_idx + 1
+ *         c[0].syn0_map[fld_idx]    = <REAL_t *>(np.PyArray_DATA(model.field_sub[0][0].vectors))             # <<<<<<<<<<<<<<
+ *         c[0].LookUp_map[fld_idx]  = <np.uint32_t *>(np.PyArray_DATA(model.field_sub[0][1]))
+ *         c[0].EndIdx_map[fld_idx]  = <np.uint32_t *>(np.PyArray_DATA(model.field_sub[0][2]))
+ */
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_field_sub); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 119, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __pyx_t_3 = __Pyx_GetItemInt(__pyx_t_1, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 119, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    __pyx_t_1 = __Pyx_GetItemInt(__pyx_t_3, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 119, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_vectors); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 119, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 119, __pyx_L1_error)
+    ((__pyx_v_c[0]).syn0_map[__pyx_v_fld_idx]) = ((__pyx_t_6models_15fieldembed_core_REAL_t *)PyArray_DATA(((PyArrayObject *)__pyx_t_3)));
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+
+    /* "models/fieldembed_core.pyx":120
+ *         fld_idx  = fld_idx + 1
+ *         c[0].syn0_map[fld_idx]    = <REAL_t *>(np.PyArray_DATA(model.field_sub[0][0].vectors))
+ *         c[0].LookUp_map[fld_idx]  = <np.uint32_t *>(np.PyArray_DATA(model.field_sub[0][1]))             # <<<<<<<<<<<<<<
+ *         c[0].EndIdx_map[fld_idx]  = <np.uint32_t *>(np.PyArray_DATA(model.field_sub[0][2]))
+ *         c[0].LengInv_map[fld_idx] = <REAL_t *>(np.PyArray_DATA(model.field_sub[0][3]))
+ */
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_field_sub); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 120, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_1 = __Pyx_GetItemInt(__pyx_t_3, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 120, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = __Pyx_GetItemInt(__pyx_t_1, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 120, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 120, __pyx_L1_error)
+    ((__pyx_v_c[0]).LookUp_map[__pyx_v_fld_idx]) = ((__pyx_t_5numpy_uint32_t *)PyArray_DATA(((PyArrayObject *)__pyx_t_3)));
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+
+    /* "models/fieldembed_core.pyx":121
+ *         c[0].syn0_map[fld_idx]    = <REAL_t *>(np.PyArray_DATA(model.field_sub[0][0].vectors))
+ *         c[0].LookUp_map[fld_idx]  = <np.uint32_t *>(np.PyArray_DATA(model.field_sub[0][1]))
+ *         c[0].EndIdx_map[fld_idx]  = <np.uint32_t *>(np.PyArray_DATA(model.field_sub[0][2]))             # <<<<<<<<<<<<<<
+ *         c[0].LengInv_map[fld_idx] = <REAL_t *>(np.PyArray_DATA(model.field_sub[0][3]))
+ *         # c[0].leng_max_map[fld_idx]= model.field_sub[0][0][4]
+ */
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_field_sub); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 121, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_1 = __Pyx_GetItemInt(__pyx_t_3, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 121, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = __Pyx_GetItemInt(__pyx_t_1, 2, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 121, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 121, __pyx_L1_error)
+    ((__pyx_v_c[0]).EndIdx_map[__pyx_v_fld_idx]) = ((__pyx_t_5numpy_uint32_t *)PyArray_DATA(((PyArrayObject *)__pyx_t_3)));
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+
+    /* "models/fieldembed_core.pyx":122
+ *         c[0].LookUp_map[fld_idx]  = <np.uint32_t *>(np.PyArray_DATA(model.field_sub[0][1]))
+ *         c[0].EndIdx_map[fld_idx]  = <np.uint32_t *>(np.PyArray_DATA(model.field_sub[0][2]))
+ *         c[0].LengInv_map[fld_idx] = <REAL_t *>(np.PyArray_DATA(model.field_sub[0][3]))             # <<<<<<<<<<<<<<
+ *         # c[0].leng_max_map[fld_idx]= model.field_sub[0][0][4]
+ * 
+ */
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_field_sub); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 122, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_1 = __Pyx_GetItemInt(__pyx_t_3, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 122, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = __Pyx_GetItemInt(__pyx_t_1, 3, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 122, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 122, __pyx_L1_error)
+    ((__pyx_v_c[0]).LengInv_map[__pyx_v_fld_idx]) = ((__pyx_t_6models_15fieldembed_core_REAL_t *)PyArray_DATA(((PyArrayObject *)__pyx_t_3)));
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+
+    /* "models/fieldembed_core.pyx":117
+ *     fld_idx = -1
+ *     c[0].use_sub  = model.use_sub
+ *     if c[0].use_sub:             # <<<<<<<<<<<<<<
+ *         fld_idx  = fld_idx + 1
+ *         c[0].syn0_map[fld_idx]    = <REAL_t *>(np.PyArray_DATA(model.field_sub[0][0].vectors))
+ */
+  }
+
+  /* "models/fieldembed_core.pyx":125
+ *         # c[0].leng_max_map[fld_idx]= model.field_sub[0][0][4]
+ * 
+ *     c[0].use_head = model.use_head # token             # <<<<<<<<<<<<<<
+ *     if c[0].use_head:
+ *         fld_idx  = fld_idx + 1
+ */
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_use_head); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 125, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_3); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 125, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  (__pyx_v_c[0]).use_head = __pyx_t_2;
+
+  /* "models/fieldembed_core.pyx":126
+ * 
+ *     c[0].use_head = model.use_head # token
+ *     if c[0].use_head:             # <<<<<<<<<<<<<<
+ *         fld_idx  = fld_idx + 1
+ *         c[0].syn0_map[fld_idx] = <REAL_t *>(np.PyArray_DATA(model.field_head[0][0].vectors))
+ */
+  __pyx_t_4 = ((__pyx_v_c[0]).use_head != 0);
+  if (__pyx_t_4) {
+
+    /* "models/fieldembed_core.pyx":127
+ *     c[0].use_head = model.use_head # token
+ *     if c[0].use_head:
+ *         fld_idx  = fld_idx + 1             # <<<<<<<<<<<<<<
+ *         c[0].syn0_map[fld_idx] = <REAL_t *>(np.PyArray_DATA(model.field_head[0][0].vectors))
+ *     #######################################################################
  */
     __pyx_v_fld_idx = (__pyx_v_fld_idx + 1);
 
     /* "models/fieldembed_core.pyx":128
- * 
+ *     if c[0].use_head:
  *         fld_idx  = fld_idx + 1
- *         c[0].syn0_map[fld_idx]    = <REAL_t *>(np.PyArray_DATA(model.field_sub[0][0][0].vectors))             # <<<<<<<<<<<<<<
- *         c[0].LookUp_map[fld_idx]  = <np.uint32_t *>(np.PyArray_DATA(model.field_sub[0][0][1]))
- *         c[0].EndIdx_map[fld_idx]  = <np.uint32_t *>(np.PyArray_DATA(model.field_sub[0][0][2]))
+ *         c[0].syn0_map[fld_idx] = <REAL_t *>(np.PyArray_DATA(model.field_head[0][0].vectors))             # <<<<<<<<<<<<<<
+ *     #######################################################################
+ * 
  */
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_field_sub); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 128, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_3 = __Pyx_GetItemInt(__pyx_t_1, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 128, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_field_head); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 128, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_t_1 = __Pyx_GetItemInt(__pyx_t_3, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 128, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -2459,209 +2614,58 @@ static PyObject *__pyx_f_6models_15fieldembed_core_init_w2v_config_0X1_neat(stru
     ((__pyx_v_c[0]).syn0_map[__pyx_v_fld_idx]) = ((__pyx_t_6models_15fieldembed_core_REAL_t *)PyArray_DATA(((PyArrayObject *)__pyx_t_1)));
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "models/fieldembed_core.pyx":129
- *         fld_idx  = fld_idx + 1
- *         c[0].syn0_map[fld_idx]    = <REAL_t *>(np.PyArray_DATA(model.field_sub[0][0][0].vectors))
- *         c[0].LookUp_map[fld_idx]  = <np.uint32_t *>(np.PyArray_DATA(model.field_sub[0][0][1]))             # <<<<<<<<<<<<<<
- *         c[0].EndIdx_map[fld_idx]  = <np.uint32_t *>(np.PyArray_DATA(model.field_sub[0][0][2]))
- *         c[0].LengInv_map[fld_idx] = <REAL_t *>(np.PyArray_DATA(model.field_sub[0][0][3]))
- */
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_field_sub); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 129, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_3 = __Pyx_GetItemInt(__pyx_t_1, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 129, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = __Pyx_GetItemInt(__pyx_t_3, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 129, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = __Pyx_GetItemInt(__pyx_t_1, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 129, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 129, __pyx_L1_error)
-    ((__pyx_v_c[0]).LookUp_map[__pyx_v_fld_idx]) = ((__pyx_t_5numpy_uint32_t *)PyArray_DATA(((PyArrayObject *)__pyx_t_3)));
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-
-    /* "models/fieldembed_core.pyx":130
- *         c[0].syn0_map[fld_idx]    = <REAL_t *>(np.PyArray_DATA(model.field_sub[0][0][0].vectors))
- *         c[0].LookUp_map[fld_idx]  = <np.uint32_t *>(np.PyArray_DATA(model.field_sub[0][0][1]))
- *         c[0].EndIdx_map[fld_idx]  = <np.uint32_t *>(np.PyArray_DATA(model.field_sub[0][0][2]))             # <<<<<<<<<<<<<<
- *         c[0].LengInv_map[fld_idx] = <REAL_t *>(np.PyArray_DATA(model.field_sub[0][0][3]))
- *         c[0].leng_max_map[fld_idx]= model.field_sub[0][0][4]
- */
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_field_sub); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 130, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_1 = __Pyx_GetItemInt(__pyx_t_3, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 130, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = __Pyx_GetItemInt(__pyx_t_1, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 130, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = __Pyx_GetItemInt(__pyx_t_3, 2, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 130, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 130, __pyx_L1_error)
-    ((__pyx_v_c[0]).EndIdx_map[__pyx_v_fld_idx]) = ((__pyx_t_5numpy_uint32_t *)PyArray_DATA(((PyArrayObject *)__pyx_t_1)));
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-    /* "models/fieldembed_core.pyx":131
- *         c[0].LookUp_map[fld_idx]  = <np.uint32_t *>(np.PyArray_DATA(model.field_sub[0][0][1]))
- *         c[0].EndIdx_map[fld_idx]  = <np.uint32_t *>(np.PyArray_DATA(model.field_sub[0][0][2]))
- *         c[0].LengInv_map[fld_idx] = <REAL_t *>(np.PyArray_DATA(model.field_sub[0][0][3]))             # <<<<<<<<<<<<<<
- *         c[0].leng_max_map[fld_idx]= model.field_sub[0][0][4]
- * 
- */
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_field_sub); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 131, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_3 = __Pyx_GetItemInt(__pyx_t_1, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 131, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = __Pyx_GetItemInt(__pyx_t_3, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 131, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = __Pyx_GetItemInt(__pyx_t_1, 3, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 131, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 131, __pyx_L1_error)
-    ((__pyx_v_c[0]).LengInv_map[__pyx_v_fld_idx]) = ((__pyx_t_6models_15fieldembed_core_REAL_t *)PyArray_DATA(((PyArrayObject *)__pyx_t_3)));
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-
-    /* "models/fieldembed_core.pyx":132
- *         c[0].EndIdx_map[fld_idx]  = <np.uint32_t *>(np.PyArray_DATA(model.field_sub[0][0][2]))
- *         c[0].LengInv_map[fld_idx] = <REAL_t *>(np.PyArray_DATA(model.field_sub[0][0][3]))
- *         c[0].leng_max_map[fld_idx]= model.field_sub[0][0][4]             # <<<<<<<<<<<<<<
- * 
- * 
- */
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_field_sub); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 132, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_1 = __Pyx_GetItemInt(__pyx_t_3, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 132, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = __Pyx_GetItemInt(__pyx_t_1, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 132, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = __Pyx_GetItemInt(__pyx_t_3, 4, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 132, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 132, __pyx_L1_error)
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    ((__pyx_v_c[0]).leng_max_map[__pyx_v_fld_idx]) = __pyx_t_2;
-
-    /* "models/fieldembed_core.pyx":120
- *     fld_idx = -1
- *     c[0].use_sub  = model.use_sub
- *     if c[0].use_sub:             # <<<<<<<<<<<<<<
- *         # c[0].syn0_1 = <REAL_t *>(np.PyArray_DATA(model.field_sub[0][0][0].vectors)) # currently, use this
- *         # c[0].syn0_1_LookUp   = <np.uint32_t *>(np.PyArray_DATA(model.field_sub[0][0][1]))  # lookup
- */
-  }
-
-  /* "models/fieldembed_core.pyx":136
- * 
- * 
- *     c[0].use_head = model.use_head # token             # <<<<<<<<<<<<<<
- *     if c[0].use_head:
- *         # c[0].syn0  = <REAL_t *>(np.PyArray_DATA(model.field_head[0][1].vectors))
- */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_use_head); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 136, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 136, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  (__pyx_v_c[0]).use_head = __pyx_t_2;
-
-  /* "models/fieldembed_core.pyx":137
+    /* "models/fieldembed_core.pyx":126
  * 
  *     c[0].use_head = model.use_head # token
  *     if c[0].use_head:             # <<<<<<<<<<<<<<
- *         # c[0].syn0  = <REAL_t *>(np.PyArray_DATA(model.field_head[0][1].vectors))
- * 
- */
-  __pyx_t_4 = ((__pyx_v_c[0]).use_head != 0);
-  if (__pyx_t_4) {
-
-    /* "models/fieldembed_core.pyx":140
- *         # c[0].syn0  = <REAL_t *>(np.PyArray_DATA(model.field_head[0][1].vectors))
- * 
- *         fld_idx  = fld_idx + 1             # <<<<<<<<<<<<<<
- *         c[0].syn0_map[fld_idx] = <REAL_t *>(np.PyArray_DATA(model.field_head[0][1].vectors))
- *     #######################################################################
- */
-    __pyx_v_fld_idx = (__pyx_v_fld_idx + 1);
-
-    /* "models/fieldembed_core.pyx":141
- * 
  *         fld_idx  = fld_idx + 1
- *         c[0].syn0_map[fld_idx] = <REAL_t *>(np.PyArray_DATA(model.field_head[0][1].vectors))             # <<<<<<<<<<<<<<
- *     #######################################################################
- * 
- */
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_field_head); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 141, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_3 = __Pyx_GetItemInt(__pyx_t_1, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 141, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = __Pyx_GetItemInt(__pyx_t_3, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 141, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_vectors); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 141, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 141, __pyx_L1_error)
-    ((__pyx_v_c[0]).syn0_map[__pyx_v_fld_idx]) = ((__pyx_t_6models_15fieldembed_core_REAL_t *)PyArray_DATA(((PyArrayObject *)__pyx_t_3)));
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-
-    /* "models/fieldembed_core.pyx":137
- * 
- *     c[0].use_head = model.use_head # token
- *     if c[0].use_head:             # <<<<<<<<<<<<<<
- *         # c[0].syn0  = <REAL_t *>(np.PyArray_DATA(model.field_head[0][1].vectors))
- * 
+ *         c[0].syn0_map[fld_idx] = <REAL_t *>(np.PyArray_DATA(model.field_head[0][0].vectors))
  */
   }
 
-  /* "models/fieldembed_core.pyx":144
+  /* "models/fieldembed_core.pyx":131
  *     #######################################################################
  * 
  *     c[0].word_locks = <REAL_t *>(np.PyArray_DATA(model.trainables.vectors_lockf))             # <<<<<<<<<<<<<<
  *     c[0].alpha = alpha
  *     c[0].size = model.wv.vector_size
  */
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_trainables); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 144, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_vectors_lockf); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 144, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_trainables); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 131, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 144, __pyx_L1_error)
-  (__pyx_v_c[0]).word_locks = ((__pyx_t_6models_15fieldembed_core_REAL_t *)PyArray_DATA(((PyArrayObject *)__pyx_t_1)));
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_vectors_lockf); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 131, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 131, __pyx_L1_error)
+  (__pyx_v_c[0]).word_locks = ((__pyx_t_6models_15fieldembed_core_REAL_t *)PyArray_DATA(((PyArrayObject *)__pyx_t_3)));
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "models/fieldembed_core.pyx":145
+  /* "models/fieldembed_core.pyx":132
  * 
  *     c[0].word_locks = <REAL_t *>(np.PyArray_DATA(model.trainables.vectors_lockf))
  *     c[0].alpha = alpha             # <<<<<<<<<<<<<<
  *     c[0].size = model.wv.vector_size
  * 
  */
-  __pyx_t_5 = __pyx_PyFloat_AsFloat(__pyx_v_alpha); if (unlikely((__pyx_t_5 == ((npy_float32)-1)) && PyErr_Occurred())) __PYX_ERR(0, 145, __pyx_L1_error)
+  __pyx_t_5 = __pyx_PyFloat_AsFloat(__pyx_v_alpha); if (unlikely((__pyx_t_5 == ((npy_float32)-1)) && PyErr_Occurred())) __PYX_ERR(0, 132, __pyx_L1_error)
   (__pyx_v_c[0]).alpha = __pyx_t_5;
 
-  /* "models/fieldembed_core.pyx":146
+  /* "models/fieldembed_core.pyx":133
  *     c[0].word_locks = <REAL_t *>(np.PyArray_DATA(model.trainables.vectors_lockf))
  *     c[0].alpha = alpha
  *     c[0].size = model.wv.vector_size             # <<<<<<<<<<<<<<
  * 
  *     if c[0].negative:
  */
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_wv); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 146, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_vector_size); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 146, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_wv); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 133, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_3); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 146, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_vector_size); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 133, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 133, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   (__pyx_v_c[0]).size = __pyx_t_2;
 
-  /* "models/fieldembed_core.pyx":148
+  /* "models/fieldembed_core.pyx":135
  *     c[0].size = model.wv.vector_size
  * 
  *     if c[0].negative:             # <<<<<<<<<<<<<<
@@ -2671,55 +2675,55 @@ static PyObject *__pyx_f_6models_15fieldembed_core_init_w2v_config_0X1_neat(stru
   __pyx_t_4 = ((__pyx_v_c[0]).negative != 0);
   if (__pyx_t_4) {
 
-    /* "models/fieldembed_core.pyx":149
+    /* "models/fieldembed_core.pyx":136
  * 
  *     if c[0].negative:
  *         c[0].syn1neg   = <REAL_t *>(np.PyArray_DATA(model.wv_neg.vectors)) # why there is as ()             # <<<<<<<<<<<<<<
  *         c[0].cum_table = <np.uint32_t *>(np.PyArray_DATA(model.vocabulary.cum_table))
  *         c[0].cum_table_len = len(model.vocabulary.cum_table)
  */
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_wv_neg); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 149, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_vectors); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 149, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_wv_neg); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 136, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 149, __pyx_L1_error)
-    (__pyx_v_c[0]).syn1neg = ((__pyx_t_6models_15fieldembed_core_REAL_t *)PyArray_DATA(((PyArrayObject *)__pyx_t_1)));
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_vectors); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 136, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 136, __pyx_L1_error)
+    (__pyx_v_c[0]).syn1neg = ((__pyx_t_6models_15fieldembed_core_REAL_t *)PyArray_DATA(((PyArrayObject *)__pyx_t_3)));
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-    /* "models/fieldembed_core.pyx":150
+    /* "models/fieldembed_core.pyx":137
  *     if c[0].negative:
  *         c[0].syn1neg   = <REAL_t *>(np.PyArray_DATA(model.wv_neg.vectors)) # why there is as ()
  *         c[0].cum_table = <np.uint32_t *>(np.PyArray_DATA(model.vocabulary.cum_table))             # <<<<<<<<<<<<<<
  *         c[0].cum_table_len = len(model.vocabulary.cum_table)
  *     if c[0].negative or c[0].sample:
  */
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_vocabulary); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 150, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_cum_table); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 150, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_vocabulary); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 137, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 150, __pyx_L1_error)
-    (__pyx_v_c[0]).cum_table = ((__pyx_t_5numpy_uint32_t *)PyArray_DATA(((PyArrayObject *)__pyx_t_3)));
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_cum_table); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 137, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 137, __pyx_L1_error)
+    (__pyx_v_c[0]).cum_table = ((__pyx_t_5numpy_uint32_t *)PyArray_DATA(((PyArrayObject *)__pyx_t_1)));
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "models/fieldembed_core.pyx":151
+    /* "models/fieldembed_core.pyx":138
  *         c[0].syn1neg   = <REAL_t *>(np.PyArray_DATA(model.wv_neg.vectors)) # why there is as ()
  *         c[0].cum_table = <np.uint32_t *>(np.PyArray_DATA(model.vocabulary.cum_table))
  *         c[0].cum_table_len = len(model.vocabulary.cum_table)             # <<<<<<<<<<<<<<
  *     if c[0].negative or c[0].sample:
  *         c[0].next_random = (2**24) * model.random.randint(0, 2**24) + model.random.randint(0, 2**24)
  */
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_vocabulary); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 151, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_cum_table); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 151, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_vocabulary); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 138, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_6 = PyObject_Length(__pyx_t_1); if (unlikely(__pyx_t_6 == ((Py_ssize_t)-1))) __PYX_ERR(0, 151, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_cum_table); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 138, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    __pyx_t_6 = PyObject_Length(__pyx_t_3); if (unlikely(__pyx_t_6 == ((Py_ssize_t)-1))) __PYX_ERR(0, 138, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     (__pyx_v_c[0]).cum_table_len = __pyx_t_6;
 
-    /* "models/fieldembed_core.pyx":148
+    /* "models/fieldembed_core.pyx":135
  *     c[0].size = model.wv.vector_size
  * 
  *     if c[0].negative:             # <<<<<<<<<<<<<<
@@ -2728,7 +2732,7 @@ static PyObject *__pyx_f_6models_15fieldembed_core_init_w2v_config_0X1_neat(stru
  */
   }
 
-  /* "models/fieldembed_core.pyx":152
+  /* "models/fieldembed_core.pyx":139
  *         c[0].cum_table = <np.uint32_t *>(np.PyArray_DATA(model.vocabulary.cum_table))
  *         c[0].cum_table_len = len(model.vocabulary.cum_table)
  *     if c[0].negative or c[0].sample:             # <<<<<<<<<<<<<<
@@ -2746,41 +2750,41 @@ static PyObject *__pyx_f_6models_15fieldembed_core_init_w2v_config_0X1_neat(stru
   __pyx_L7_bool_binop_done:;
   if (__pyx_t_4) {
 
-    /* "models/fieldembed_core.pyx":153
+    /* "models/fieldembed_core.pyx":140
  *         c[0].cum_table_len = len(model.vocabulary.cum_table)
  *     if c[0].negative or c[0].sample:
  *         c[0].next_random = (2**24) * model.random.randint(0, 2**24) + model.random.randint(0, 2**24)             # <<<<<<<<<<<<<<
  * 
  *     # convert Python structures to primitive types, so we can release the GIL
  */
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_random); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 153, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_randint); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 153, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_random); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 140, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_tuple_, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 153, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_randint); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 140, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-    __pyx_t_3 = PyNumber_Multiply(__pyx_int_16777216, __pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 153, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_tuple_, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 140, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_random); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 153, __pyx_L1_error)
+    __pyx_t_1 = PyNumber_Multiply(__pyx_int_16777216, __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 140, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_randint); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 153, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_random); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 140, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_randint); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 140, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
-    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_tuple__2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 153, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_t_8, __pyx_tuple__2, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 140, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-    __pyx_t_8 = PyNumber_Add(__pyx_t_3, __pyx_t_1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 153, __pyx_L1_error)
+    __pyx_t_8 = PyNumber_Add(__pyx_t_1, __pyx_t_3); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 140, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
-    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-    __pyx_t_9 = __Pyx_PyInt_As_unsigned_PY_LONG_LONG(__pyx_t_8); if (unlikely((__pyx_t_9 == (unsigned PY_LONG_LONG)-1) && PyErr_Occurred())) __PYX_ERR(0, 153, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_9 = __Pyx_PyInt_As_unsigned_PY_LONG_LONG(__pyx_t_8); if (unlikely((__pyx_t_9 == (unsigned PY_LONG_LONG)-1) && PyErr_Occurred())) __PYX_ERR(0, 140, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
     (__pyx_v_c[0]).next_random = __pyx_t_9;
 
-    /* "models/fieldembed_core.pyx":152
+    /* "models/fieldembed_core.pyx":139
  *         c[0].cum_table = <np.uint32_t *>(np.PyArray_DATA(model.vocabulary.cum_table))
  *         c[0].cum_table_len = len(model.vocabulary.cum_table)
  *     if c[0].negative or c[0].sample:             # <<<<<<<<<<<<<<
@@ -2789,27 +2793,27 @@ static PyObject *__pyx_f_6models_15fieldembed_core_init_w2v_config_0X1_neat(stru
  */
   }
 
-  /* "models/fieldembed_core.pyx":156
+  /* "models/fieldembed_core.pyx":143
  * 
  *     # convert Python structures to primitive types, so we can release the GIL
  *     c[0].work = <REAL_t *>np.PyArray_DATA(_work)             # <<<<<<<<<<<<<<
  *     c[0].neu1 = <REAL_t *>np.PyArray_DATA(_neu1)
  * 
  */
-  if (!(likely(((__pyx_v__work) == Py_None) || likely(__Pyx_TypeTest(__pyx_v__work, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 156, __pyx_L1_error)
+  if (!(likely(((__pyx_v__work) == Py_None) || likely(__Pyx_TypeTest(__pyx_v__work, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 143, __pyx_L1_error)
   (__pyx_v_c[0]).work = ((__pyx_t_6models_15fieldembed_core_REAL_t *)PyArray_DATA(((PyArrayObject *)__pyx_v__work)));
 
-  /* "models/fieldembed_core.pyx":157
+  /* "models/fieldembed_core.pyx":144
  *     # convert Python structures to primitive types, so we can release the GIL
  *     c[0].work = <REAL_t *>np.PyArray_DATA(_work)
  *     c[0].neu1 = <REAL_t *>np.PyArray_DATA(_neu1)             # <<<<<<<<<<<<<<
  * 
- * 
+ * cdef unsigned long long fieldembed_token_neg_0X1_neat(
  */
-  if (!(likely(((__pyx_v__neu1) == Py_None) || likely(__Pyx_TypeTest(__pyx_v__neu1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 157, __pyx_L1_error)
+  if (!(likely(((__pyx_v__neu1) == Py_None) || likely(__Pyx_TypeTest(__pyx_v__neu1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 144, __pyx_L1_error)
   (__pyx_v_c[0]).neu1 = ((__pyx_t_6models_15fieldembed_core_REAL_t *)PyArray_DATA(((PyArrayObject *)__pyx_v__neu1)));
 
-  /* "models/fieldembed_core.pyx":97
+  /* "models/fieldembed_core.pyx":94
  * ################################################################# Field Embedding 0X1
  * #--> NEW for 0X1_neat
  * cdef init_w2v_config_0X1_neat(             # <<<<<<<<<<<<<<
@@ -2832,8 +2836,8 @@ static PyObject *__pyx_f_6models_15fieldembed_core_init_w2v_config_0X1_neat(stru
   return __pyx_r;
 }
 
-/* "models/fieldembed_core.pyx":160
- * 
+/* "models/fieldembed_core.pyx":146
+ *     c[0].neu1 = <REAL_t *>np.PyArray_DATA(_neu1)
  * 
  * cdef unsigned long long fieldembed_token_neg_0X1_neat(             # <<<<<<<<<<<<<<
  *     const REAL_t alpha,
@@ -2876,7 +2880,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
   __pyx_t_6models_15fieldembed_core_REAL_t __pyx_t_10;
   int __pyx_t_11;
 
-  /* "models/fieldembed_core.pyx":196
+  /* "models/fieldembed_core.pyx":182
  *     # cdef long long a
  *     cdef long long row2
  *     cdef unsigned long long modulo = 281474976710655ULL             # <<<<<<<<<<<<<<
@@ -2885,7 +2889,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
   __pyx_v_modulo = 281474976710655ULL;
 
-  /* "models/fieldembed_core.pyx":206
+  /* "models/fieldembed_core.pyx":192
  *     cdef int left_word
  *     cdef int gs, ge
  *     cdef int proj_num = use_head + use_sub             # <<<<<<<<<<<<<<
@@ -2894,7 +2898,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
   __pyx_v_proj_num = (__pyx_v_use_head + __pyx_v_use_sub);
 
-  /* "models/fieldembed_core.pyx":210
+  /* "models/fieldembed_core.pyx":196
  *     cdef np.uint32_t target_index, word_index,  grain_index # should left_word be an int?
  * 
  *     cdef REAL_t count,  inv_count = 1.0             # <<<<<<<<<<<<<<
@@ -2903,7 +2907,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
   __pyx_v_inv_count = 1.0;
 
-  /* "models/fieldembed_core.pyx":211
+  /* "models/fieldembed_core.pyx":197
  * 
  *     cdef REAL_t count,  inv_count = 1.0
  *     cdef REAL_t word_lenginv = 1.0             # <<<<<<<<<<<<<<
@@ -2912,7 +2916,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
   __pyx_v_word_lenginv = 1.0;
 
-  /* "models/fieldembed_core.pyx":214
+  /* "models/fieldembed_core.pyx":200
  * 
  *     # Here word_index is np.uint32_t. very interesting
  *     word_index = indexes[i]  ########### S: get index for right token voc_idx             # <<<<<<<<<<<<<<
@@ -2921,7 +2925,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
   __pyx_v_word_index = (__pyx_v_indexes[__pyx_v_i]);
 
-  /* "models/fieldembed_core.pyx":218
+  /* "models/fieldembed_core.pyx":204
  * 
  *     #################################### S: Count the left tokens number
  *     count = <REAL_t>0.0             # <<<<<<<<<<<<<<
@@ -2930,7 +2934,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
   __pyx_v_count = ((__pyx_t_6models_15fieldembed_core_REAL_t)0.0);
 
-  /* "models/fieldembed_core.pyx":219
+  /* "models/fieldembed_core.pyx":205
  *     #################################### S: Count the left tokens number
  *     count = <REAL_t>0.0
  *     for m in range(j, k):             # <<<<<<<<<<<<<<
@@ -2942,7 +2946,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
   for (__pyx_t_3 = __pyx_v_j; __pyx_t_3 < __pyx_t_2; __pyx_t_3+=1) {
     __pyx_v_m = __pyx_t_3;
 
-    /* "models/fieldembed_core.pyx":220
+    /* "models/fieldembed_core.pyx":206
  *     count = <REAL_t>0.0
  *     for m in range(j, k):
  *         if m == i: # j, m, i, k are int             # <<<<<<<<<<<<<<
@@ -2952,7 +2956,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
     __pyx_t_4 = ((__pyx_v_m == __pyx_v_i) != 0);
     if (__pyx_t_4) {
 
-      /* "models/fieldembed_core.pyx":221
+      /* "models/fieldembed_core.pyx":207
  *     for m in range(j, k):
  *         if m == i: # j, m, i, k are int
  *             continue             # <<<<<<<<<<<<<<
@@ -2961,7 +2965,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
       goto __pyx_L3_continue;
 
-      /* "models/fieldembed_core.pyx":220
+      /* "models/fieldembed_core.pyx":206
  *     count = <REAL_t>0.0
  *     for m in range(j, k):
  *         if m == i: # j, m, i, k are int             # <<<<<<<<<<<<<<
@@ -2970,7 +2974,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
     }
 
-    /* "models/fieldembed_core.pyx":223
+    /* "models/fieldembed_core.pyx":209
  *             continue
  *         else:
  *             count += ONEF             # <<<<<<<<<<<<<<
@@ -2983,7 +2987,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
     __pyx_L3_continue:;
   }
 
-  /* "models/fieldembed_core.pyx":224
+  /* "models/fieldembed_core.pyx":210
  *         else:
  *             count += ONEF
  *     if count > (<REAL_t>0.5):  # when using sg, count is 1. count is cw in word2vec.c             # <<<<<<<<<<<<<<
@@ -2993,7 +2997,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
   __pyx_t_4 = ((__pyx_v_count > ((__pyx_t_6models_15fieldembed_core_REAL_t)0.5)) != 0);
   if (__pyx_t_4) {
 
-    /* "models/fieldembed_core.pyx":225
+    /* "models/fieldembed_core.pyx":211
  *             count += ONEF
  *     if count > (<REAL_t>0.5):  # when using sg, count is 1. count is cw in word2vec.c
  *         inv_count = ONEF/count             # <<<<<<<<<<<<<<
@@ -3002,7 +3006,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
     __pyx_v_inv_count = (__pyx_v_6models_15fieldembed_core_ONEF / __pyx_v_count);
 
-    /* "models/fieldembed_core.pyx":224
+    /* "models/fieldembed_core.pyx":210
  *         else:
  *             count += ONEF
  *     if count > (<REAL_t>0.5):  # when using sg, count is 1. count is cw in word2vec.c             # <<<<<<<<<<<<<<
@@ -3011,7 +3015,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
   }
 
-  /* "models/fieldembed_core.pyx":228
+  /* "models/fieldembed_core.pyx":214
  *     #################################### E: Count the left tokens number
  * 
  *     memset(neu1, 0, proj_num * size * cython.sizeof(REAL_t))             # <<<<<<<<<<<<<<
@@ -3020,7 +3024,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
   (void)(memset(__pyx_v_neu1, 0, ((__pyx_v_proj_num * __pyx_v_size) * (sizeof(__pyx_t_6models_15fieldembed_core_REAL_t)))));
 
-  /* "models/fieldembed_core.pyx":230
+  /* "models/fieldembed_core.pyx":216
  *     memset(neu1, 0, proj_num * size * cython.sizeof(REAL_t))
  * 
  *     fld_idx = -1             # <<<<<<<<<<<<<<
@@ -3029,7 +3033,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
   __pyx_v_fld_idx = -1;
 
-  /* "models/fieldembed_core.pyx":233
+  /* "models/fieldembed_core.pyx":219
  * 
  *     #################################### S: calculate hProj from syn0
  *     if use_sub: # this is correct             # <<<<<<<<<<<<<<
@@ -3039,7 +3043,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
   __pyx_t_4 = (__pyx_v_use_sub != 0);
   if (__pyx_t_4) {
 
-    /* "models/fieldembed_core.pyx":234
+    /* "models/fieldembed_core.pyx":220
  *     #################################### S: calculate hProj from syn0
  *     if use_sub: # this is correct
  *         fld_idx = fld_idx + 1             # <<<<<<<<<<<<<<
@@ -3048,7 +3052,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
     __pyx_v_fld_idx = (__pyx_v_fld_idx + 1);
 
-    /* "models/fieldembed_core.pyx":235
+    /* "models/fieldembed_core.pyx":221
  *     if use_sub: # this is correct
  *         fld_idx = fld_idx + 1
  *         for m in range(j, k): # sg case: j = k; loop left tokens here             # <<<<<<<<<<<<<<
@@ -3060,7 +3064,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
     for (__pyx_t_3 = __pyx_v_j; __pyx_t_3 < __pyx_t_2; __pyx_t_3+=1) {
       __pyx_v_m = __pyx_t_3;
 
-      /* "models/fieldembed_core.pyx":236
+      /* "models/fieldembed_core.pyx":222
  *         fld_idx = fld_idx + 1
  *         for m in range(j, k): # sg case: j = k; loop left tokens here
  *             if m == i:             # <<<<<<<<<<<<<<
@@ -3070,7 +3074,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
       __pyx_t_4 = ((__pyx_v_m == __pyx_v_i) != 0);
       if (__pyx_t_4) {
 
-        /* "models/fieldembed_core.pyx":237
+        /* "models/fieldembed_core.pyx":223
  *         for m in range(j, k): # sg case: j = k; loop left tokens here
  *             if m == i:
  *                 continue             # <<<<<<<<<<<<<<
@@ -3079,7 +3083,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
         goto __pyx_L8_continue;
 
-        /* "models/fieldembed_core.pyx":236
+        /* "models/fieldembed_core.pyx":222
  *         fld_idx = fld_idx + 1
  *         for m in range(j, k): # sg case: j = k; loop left tokens here
  *             if m == i:             # <<<<<<<<<<<<<<
@@ -3088,7 +3092,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
       }
 
-      /* "models/fieldembed_core.pyx":239
+      /* "models/fieldembed_core.pyx":225
  *                 continue
  *             else:
  *                 left_word  = indexes[m]                  # left_word: uint32 to int             # <<<<<<<<<<<<<<
@@ -3098,7 +3102,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
       /*else*/ {
         __pyx_v_left_word = (__pyx_v_indexes[__pyx_v_m]);
 
-        /* "models/fieldembed_core.pyx":241
+        /* "models/fieldembed_core.pyx":227
  *                 left_word  = indexes[m]                  # left_word: uint32 to int
  *                 ###################################################################
  *                 word_lenginv = LengInv_map[fld_idx][left_word] # word_lenginv: REAL_t             # <<<<<<<<<<<<<<
@@ -3107,7 +3111,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
         __pyx_v_word_lenginv = ((__pyx_v_LengInv_map[__pyx_v_fld_idx])[__pyx_v_left_word]);
 
-        /* "models/fieldembed_core.pyx":242
+        /* "models/fieldembed_core.pyx":228
  *                 ###################################################################
  *                 word_lenginv = LengInv_map[fld_idx][left_word] # word_lenginv: REAL_t
  *                 gs = EndIdx_map[fld_idx][left_word-1]             # <<<<<<<<<<<<<<
@@ -3116,7 +3120,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
         __pyx_v_gs = ((__pyx_v_EndIdx_map[__pyx_v_fld_idx])[(__pyx_v_left_word - 1)]);
 
-        /* "models/fieldembed_core.pyx":243
+        /* "models/fieldembed_core.pyx":229
  *                 word_lenginv = LengInv_map[fld_idx][left_word] # word_lenginv: REAL_t
  *                 gs = EndIdx_map[fld_idx][left_word-1]
  *                 ge = EndIdx_map[fld_idx][left_word]             # <<<<<<<<<<<<<<
@@ -3125,7 +3129,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
         __pyx_v_ge = ((__pyx_v_EndIdx_map[__pyx_v_fld_idx])[__pyx_v_left_word]);
 
-        /* "models/fieldembed_core.pyx":244
+        /* "models/fieldembed_core.pyx":230
  *                 gs = EndIdx_map[fld_idx][left_word-1]
  *                 ge = EndIdx_map[fld_idx][left_word]
  *                 for n in range(gs, ge):             # <<<<<<<<<<<<<<
@@ -3137,7 +3141,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
         for (__pyx_t_7 = __pyx_v_gs; __pyx_t_7 < __pyx_t_6; __pyx_t_7+=1) {
           __pyx_v_n = __pyx_t_7;
 
-          /* "models/fieldembed_core.pyx":247
+          /* "models/fieldembed_core.pyx":233
  *                     # n is also np.uint_32
  *                     # should n be an int? just like m?
  *                     grain_index = LookUp_map[fld_idx][n] # syn0_1_LookUp is a np.uint_32             # <<<<<<<<<<<<<<
@@ -3146,7 +3150,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
           __pyx_v_grain_index = ((__pyx_v_LookUp_map[__pyx_v_fld_idx])[__pyx_v_n]);
 
-          /* "models/fieldembed_core.pyx":249
+          /* "models/fieldembed_core.pyx":235
  *                     grain_index = LookUp_map[fld_idx][n] # syn0_1_LookUp is a np.uint_32
  *                     # grain_index is also np.uint_32
  *                     our_saxpy(&size, &word_lenginv, &syn0_map[fld_idx][grain_index * size],  &ONE, &neu1[fld_idx*size], &ONE)             # <<<<<<<<<<<<<<
@@ -3159,7 +3163,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
       __pyx_L8_continue:;
     }
 
-    /* "models/fieldembed_core.pyx":252
+    /* "models/fieldembed_core.pyx":238
  *                 ###################################################################
  *         # if not sg:
  *         sscal(&size, &inv_count, &neu1[fld_idx*size], &ONE)  # (does this need BLAS-variants like saxpy? # no, you don't)             # <<<<<<<<<<<<<<
@@ -3168,7 +3172,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
     __pyx_v_6models_15fieldembed_core_sscal((&__pyx_v_size), (&__pyx_v_inv_count), (&(__pyx_v_neu1[(__pyx_v_fld_idx * __pyx_v_size)])), (&__pyx_v_6models_15fieldembed_core_ONE));
 
-    /* "models/fieldembed_core.pyx":233
+    /* "models/fieldembed_core.pyx":219
  * 
  *     #################################### S: calculate hProj from syn0
  *     if use_sub: # this is correct             # <<<<<<<<<<<<<<
@@ -3177,7 +3181,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
   }
 
-  /* "models/fieldembed_core.pyx":256
+  /* "models/fieldembed_core.pyx":242
  * 
  *     #################################### E: calculate hProj from syn0
  *     if use_head: # this is correct             # <<<<<<<<<<<<<<
@@ -3187,7 +3191,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
   __pyx_t_4 = (__pyx_v_use_head != 0);
   if (__pyx_t_4) {
 
-    /* "models/fieldembed_core.pyx":257
+    /* "models/fieldembed_core.pyx":243
  *     #################################### E: calculate hProj from syn0
  *     if use_head: # this is correct
  *         fld_idx = fld_idx + 1             # <<<<<<<<<<<<<<
@@ -3196,7 +3200,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
     __pyx_v_fld_idx = (__pyx_v_fld_idx + 1);
 
-    /* "models/fieldembed_core.pyx":259
+    /* "models/fieldembed_core.pyx":245
  *         fld_idx = fld_idx + 1
  *         # memset(neu1, 0, size * cython.sizeof(REAL_t))
  *         for m in range(j, k): # sg case: k = j+1; loop left tokens here             # <<<<<<<<<<<<<<
@@ -3208,7 +3212,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
     for (__pyx_t_3 = __pyx_v_j; __pyx_t_3 < __pyx_t_2; __pyx_t_3+=1) {
       __pyx_v_m = __pyx_t_3;
 
-      /* "models/fieldembed_core.pyx":260
+      /* "models/fieldembed_core.pyx":246
  *         # memset(neu1, 0, size * cython.sizeof(REAL_t))
  *         for m in range(j, k): # sg case: k = j+1; loop left tokens here
  *             if m == i: # j, m, i, k are int             # <<<<<<<<<<<<<<
@@ -3218,7 +3222,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
       __pyx_t_4 = ((__pyx_v_m == __pyx_v_i) != 0);
       if (__pyx_t_4) {
 
-        /* "models/fieldembed_core.pyx":261
+        /* "models/fieldembed_core.pyx":247
  *         for m in range(j, k): # sg case: k = j+1; loop left tokens here
  *             if m == i: # j, m, i, k are int
  *                 continue             # <<<<<<<<<<<<<<
@@ -3227,7 +3231,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
         goto __pyx_L14_continue;
 
-        /* "models/fieldembed_core.pyx":260
+        /* "models/fieldembed_core.pyx":246
  *         # memset(neu1, 0, size * cython.sizeof(REAL_t))
  *         for m in range(j, k): # sg case: k = j+1; loop left tokens here
  *             if m == i: # j, m, i, k are int             # <<<<<<<<<<<<<<
@@ -3236,7 +3240,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
       }
 
-      /* "models/fieldembed_core.pyx":264
+      /* "models/fieldembed_core.pyx":250
  *             else:
  *                 # cdef void our_saxpy_noblas(const int *N, const float *alpha, const float *X, const int *incX, float *Y, const int *incY) nogil:
  *                 our_saxpy(&size, &ONEF, &syn0_map[fld_idx][indexes[m] * size], &ONE, &neu1[fld_idx*size], &ONE)             # <<<<<<<<<<<<<<
@@ -3249,7 +3253,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
       __pyx_L14_continue:;
     }
 
-    /* "models/fieldembed_core.pyx":266
+    /* "models/fieldembed_core.pyx":252
  *                 our_saxpy(&size, &ONEF, &syn0_map[fld_idx][indexes[m] * size], &ONE, &neu1[fld_idx*size], &ONE)
  *         # if not sg:
  *         sscal(&size, &inv_count, &neu1[fld_idx*size], &ONE)  # (does this need BLAS-variants like saxpy? # no, you don't)             # <<<<<<<<<<<<<<
@@ -3258,7 +3262,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
     __pyx_v_6models_15fieldembed_core_sscal((&__pyx_v_size), (&__pyx_v_inv_count), (&(__pyx_v_neu1[(__pyx_v_fld_idx * __pyx_v_size)])), (&__pyx_v_6models_15fieldembed_core_ONE));
 
-    /* "models/fieldembed_core.pyx":256
+    /* "models/fieldembed_core.pyx":242
  * 
  *     #################################### E: calculate hProj from syn0
  *     if use_head: # this is correct             # <<<<<<<<<<<<<<
@@ -3267,7 +3271,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
   }
 
-  /* "models/fieldembed_core.pyx":270
+  /* "models/fieldembed_core.pyx":256
  * 
  *     #################################### S: calculate hProj_grad and update syn1neg
  *     memset(work,  0, proj_num * size * cython.sizeof(REAL_t))             # <<<<<<<<<<<<<<
@@ -3276,7 +3280,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
   (void)(memset(__pyx_v_work, 0, ((__pyx_v_proj_num * __pyx_v_size) * (sizeof(__pyx_t_6models_15fieldembed_core_REAL_t)))));
 
-  /* "models/fieldembed_core.pyx":272
+  /* "models/fieldembed_core.pyx":258
  *     memset(work,  0, proj_num * size * cython.sizeof(REAL_t))
  * 
  *     for d in range(negative+1):             # <<<<<<<<<<<<<<
@@ -3288,7 +3292,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
   for (__pyx_t_1 = 0; __pyx_t_1 < __pyx_t_9; __pyx_t_1+=1) {
     __pyx_v_d = __pyx_t_1;
 
-    /* "models/fieldembed_core.pyx":274
+    /* "models/fieldembed_core.pyx":260
  *     for d in range(negative+1):
  *         # d is int
  *         if d == 0:             # <<<<<<<<<<<<<<
@@ -3298,7 +3302,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
     __pyx_t_4 = ((__pyx_v_d == 0) != 0);
     if (__pyx_t_4) {
 
-      /* "models/fieldembed_core.pyx":275
+      /* "models/fieldembed_core.pyx":261
  *         # d is int
  *         if d == 0:
  *             target_index = word_index # word_index is vocab_index             # <<<<<<<<<<<<<<
@@ -3307,7 +3311,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
       __pyx_v_target_index = __pyx_v_word_index;
 
-      /* "models/fieldembed_core.pyx":276
+      /* "models/fieldembed_core.pyx":262
  *         if d == 0:
  *             target_index = word_index # word_index is vocab_index
  *             label = ONEF             # <<<<<<<<<<<<<<
@@ -3316,7 +3320,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
       __pyx_v_label = __pyx_v_6models_15fieldembed_core_ONEF;
 
-      /* "models/fieldembed_core.pyx":274
+      /* "models/fieldembed_core.pyx":260
  *     for d in range(negative+1):
  *         # d is int
  *         if d == 0:             # <<<<<<<<<<<<<<
@@ -3326,7 +3330,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
       goto __pyx_L19;
     }
 
-    /* "models/fieldembed_core.pyx":278
+    /* "models/fieldembed_core.pyx":264
  *             label = ONEF
  *         else:
  *             target_index = bisect_left(cum_table, (next_random >> 16) % cum_table[cum_table_len-1], 0, cum_table_len)             # <<<<<<<<<<<<<<
@@ -3336,7 +3340,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
     /*else*/ {
       __pyx_v_target_index = __pyx_f_6models_15fieldembed_core_bisect_left(__pyx_v_cum_table, ((__pyx_v_next_random >> 16) % (__pyx_v_cum_table[(__pyx_v_cum_table_len - 1)])), 0, __pyx_v_cum_table_len);
 
-      /* "models/fieldembed_core.pyx":279
+      /* "models/fieldembed_core.pyx":265
  *         else:
  *             target_index = bisect_left(cum_table, (next_random >> 16) % cum_table[cum_table_len-1], 0, cum_table_len)
  *             next_random = (next_random * <unsigned long long>25214903917ULL + 11) & modulo             # <<<<<<<<<<<<<<
@@ -3345,7 +3349,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
       __pyx_v_next_random = (((__pyx_v_next_random * ((unsigned PY_LONG_LONG)25214903917ULL)) + 11) & __pyx_v_modulo);
 
-      /* "models/fieldembed_core.pyx":280
+      /* "models/fieldembed_core.pyx":266
  *             target_index = bisect_left(cum_table, (next_random >> 16) % cum_table[cum_table_len-1], 0, cum_table_len)
  *             next_random = (next_random * <unsigned long long>25214903917ULL + 11) & modulo
  *             if target_index == word_index:             # <<<<<<<<<<<<<<
@@ -3355,7 +3359,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
       __pyx_t_4 = ((__pyx_v_target_index == __pyx_v_word_index) != 0);
       if (__pyx_t_4) {
 
-        /* "models/fieldembed_core.pyx":281
+        /* "models/fieldembed_core.pyx":267
  *             next_random = (next_random * <unsigned long long>25214903917ULL + 11) & modulo
  *             if target_index == word_index:
  *                 continue             # <<<<<<<<<<<<<<
@@ -3364,7 +3368,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
         goto __pyx_L17_continue;
 
-        /* "models/fieldembed_core.pyx":280
+        /* "models/fieldembed_core.pyx":266
  *             target_index = bisect_left(cum_table, (next_random >> 16) % cum_table[cum_table_len-1], 0, cum_table_len)
  *             next_random = (next_random * <unsigned long long>25214903917ULL + 11) & modulo
  *             if target_index == word_index:             # <<<<<<<<<<<<<<
@@ -3373,7 +3377,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
       }
 
-      /* "models/fieldembed_core.pyx":282
+      /* "models/fieldembed_core.pyx":268
  *             if target_index == word_index:
  *                 continue
  *             label = <REAL_t>0.0             # <<<<<<<<<<<<<<
@@ -3384,7 +3388,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
     }
     __pyx_L19:;
 
-    /* "models/fieldembed_core.pyx":284
+    /* "models/fieldembed_core.pyx":270
  *             label = <REAL_t>0.0
  * 
  *         row2 = target_index * size # target_index: np.uint32, size: int; row2: long long             # <<<<<<<<<<<<<<
@@ -3393,7 +3397,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
     __pyx_v_row2 = (__pyx_v_target_index * __pyx_v_size);
 
-    /* "models/fieldembed_core.pyx":287
+    /* "models/fieldembed_core.pyx":273
  *         ##########################################################################
  * 
  *         fld_idx = -1             # <<<<<<<<<<<<<<
@@ -3402,7 +3406,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
     __pyx_v_fld_idx = -1;
 
-    /* "models/fieldembed_core.pyx":288
+    /* "models/fieldembed_core.pyx":274
  * 
  *         fld_idx = -1
  *         if use_sub:             # <<<<<<<<<<<<<<
@@ -3412,7 +3416,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
     __pyx_t_4 = (__pyx_v_use_sub != 0);
     if (__pyx_t_4) {
 
-      /* "models/fieldembed_core.pyx":289
+      /* "models/fieldembed_core.pyx":275
  *         fld_idx = -1
  *         if use_sub:
  *             fld_idx = fld_idx + 1             # <<<<<<<<<<<<<<
@@ -3421,7 +3425,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
       __pyx_v_fld_idx = (__pyx_v_fld_idx + 1);
 
-      /* "models/fieldembed_core.pyx":291
+      /* "models/fieldembed_core.pyx":277
  *             fld_idx = fld_idx + 1
  *             ################################################################
  *             f_dot = our_dot(&size, &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)             # <<<<<<<<<<<<<<
@@ -3430,7 +3434,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
       __pyx_v_f_dot = __pyx_v_6models_15fieldembed_core_our_dot((&__pyx_v_size), (&(__pyx_v_neu1[(__pyx_v_fld_idx * __pyx_v_size)])), (&__pyx_v_6models_15fieldembed_core_ONE), (&(__pyx_v_syn1neg[__pyx_v_row2])), (&__pyx_v_6models_15fieldembed_core_ONE));
 
-      /* "models/fieldembed_core.pyx":292
+      /* "models/fieldembed_core.pyx":278
  *             ################################################################
  *             f_dot = our_dot(&size, &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)
  *             if _compute_loss == 1: # TODO             # <<<<<<<<<<<<<<
@@ -3440,7 +3444,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
       __pyx_t_4 = ((__pyx_v__compute_loss == 1) != 0);
       if (__pyx_t_4) {
 
-        /* "models/fieldembed_core.pyx":293
+        /* "models/fieldembed_core.pyx":279
  *             f_dot = our_dot(&size, &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)
  *             if _compute_loss == 1: # TODO
  *                 f_dot = (f_dot if d == 0  else -f_dot)             # <<<<<<<<<<<<<<
@@ -3454,7 +3458,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
         }
         __pyx_v_f_dot = __pyx_t_10;
 
-        /* "models/fieldembed_core.pyx":294
+        /* "models/fieldembed_core.pyx":280
  *             if _compute_loss == 1: # TODO
  *                 f_dot = (f_dot if d == 0  else -f_dot)
  *                 if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:             # <<<<<<<<<<<<<<
@@ -3472,7 +3476,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
         __pyx_L24_bool_binop_done:;
         if (__pyx_t_4) {
 
-          /* "models/fieldembed_core.pyx":295
+          /* "models/fieldembed_core.pyx":281
  *                 f_dot = (f_dot if d == 0  else -f_dot)
  *                 if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:
  *                     continue # this is still an issue             # <<<<<<<<<<<<<<
@@ -3481,7 +3485,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
           goto __pyx_L17_continue;
 
-          /* "models/fieldembed_core.pyx":294
+          /* "models/fieldembed_core.pyx":280
  *             if _compute_loss == 1: # TODO
  *                 f_dot = (f_dot if d == 0  else -f_dot)
  *                 if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:             # <<<<<<<<<<<<<<
@@ -3490,7 +3494,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
         }
 
-        /* "models/fieldembed_core.pyx":296
+        /* "models/fieldembed_core.pyx":282
  *                 if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:
  *                     continue # this is still an issue
  *                 log_e_f_dot = LOG_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]             # <<<<<<<<<<<<<<
@@ -3499,7 +3503,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
         __pyx_v_log_e_f_dot = (__pyx_v_6models_15fieldembed_core_LOG_TABLE[((int)((__pyx_v_f_dot + 6.0) * 83.0))]);
 
-        /* "models/fieldembed_core.pyx":297
+        /* "models/fieldembed_core.pyx":283
  *                     continue # this is still an issue
  *                 log_e_f_dot = LOG_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
  *                 _running_training_loss_param[0] = _running_training_loss_param[0] - log_e_f_dot # it seems when using *i, to query it, use *[0]             # <<<<<<<<<<<<<<
@@ -3508,7 +3512,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
         (__pyx_v__running_training_loss_param[0]) = ((__pyx_v__running_training_loss_param[0]) - __pyx_v_log_e_f_dot);
 
-        /* "models/fieldembed_core.pyx":292
+        /* "models/fieldembed_core.pyx":278
  *             ################################################################
  *             f_dot = our_dot(&size, &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)
  *             if _compute_loss == 1: # TODO             # <<<<<<<<<<<<<<
@@ -3517,7 +3521,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
       }
 
-      /* "models/fieldembed_core.pyx":299
+      /* "models/fieldembed_core.pyx":285
  *                 _running_training_loss_param[0] = _running_training_loss_param[0] - log_e_f_dot # it seems when using *i, to query it, use *[0]
  * 
  *             if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:             # <<<<<<<<<<<<<<
@@ -3535,7 +3539,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
       __pyx_L27_bool_binop_done:;
       if (__pyx_t_4) {
 
-        /* "models/fieldembed_core.pyx":300
+        /* "models/fieldembed_core.pyx":286
  * 
  *             if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:
  *                 continue             # <<<<<<<<<<<<<<
@@ -3544,7 +3548,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
         goto __pyx_L17_continue;
 
-        /* "models/fieldembed_core.pyx":299
+        /* "models/fieldembed_core.pyx":285
  *                 _running_training_loss_param[0] = _running_training_loss_param[0] - log_e_f_dot # it seems when using *i, to query it, use *[0]
  * 
  *             if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:             # <<<<<<<<<<<<<<
@@ -3553,7 +3557,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
       }
 
-      /* "models/fieldembed_core.pyx":301
+      /* "models/fieldembed_core.pyx":287
  *             if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:
  *                 continue
  *             f = EXP_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]             # <<<<<<<<<<<<<<
@@ -3562,7 +3566,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
       __pyx_v_f = (__pyx_v_6models_15fieldembed_core_EXP_TABLE[((int)((__pyx_v_f_dot + 6.0) * 83.0))]);
 
-      /* "models/fieldembed_core.pyx":303
+      /* "models/fieldembed_core.pyx":289
  *             f = EXP_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
  * 
  *             g2 = (label - f) * alpha # Convert this to an array             # <<<<<<<<<<<<<<
@@ -3571,7 +3575,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
       __pyx_v_g2 = ((__pyx_v_label - __pyx_v_f) * __pyx_v_alpha);
 
-      /* "models/fieldembed_core.pyx":304
+      /* "models/fieldembed_core.pyx":290
  * 
  *             g2 = (label - f) * alpha # Convert this to an array
  *             our_saxpy(&size, &g2, &syn1neg[row2], &ONE, &work[fld_idx*size], &ONE) # accumulate work             # <<<<<<<<<<<<<<
@@ -3580,7 +3584,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
       __pyx_v_6models_15fieldembed_core_our_saxpy((&__pyx_v_size), (&__pyx_v_g2), (&(__pyx_v_syn1neg[__pyx_v_row2])), (&__pyx_v_6models_15fieldembed_core_ONE), (&(__pyx_v_work[(__pyx_v_fld_idx * __pyx_v_size)])), (&__pyx_v_6models_15fieldembed_core_ONE));
 
-      /* "models/fieldembed_core.pyx":288
+      /* "models/fieldembed_core.pyx":274
  * 
  *         fld_idx = -1
  *         if use_sub:             # <<<<<<<<<<<<<<
@@ -3589,7 +3593,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
     }
 
-    /* "models/fieldembed_core.pyx":307
+    /* "models/fieldembed_core.pyx":293
  *             ################################################################
  * 
  *         if use_head:             # <<<<<<<<<<<<<<
@@ -3599,7 +3603,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
     __pyx_t_4 = (__pyx_v_use_head != 0);
     if (__pyx_t_4) {
 
-      /* "models/fieldembed_core.pyx":308
+      /* "models/fieldembed_core.pyx":294
  * 
  *         if use_head:
  *             fld_idx = fld_idx + 1             # <<<<<<<<<<<<<<
@@ -3608,7 +3612,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
       __pyx_v_fld_idx = (__pyx_v_fld_idx + 1);
 
-      /* "models/fieldembed_core.pyx":309
+      /* "models/fieldembed_core.pyx":295
  *         if use_head:
  *             fld_idx = fld_idx + 1
  *             f_dot = our_dot(&size, &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)             # <<<<<<<<<<<<<<
@@ -3617,7 +3621,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
       __pyx_v_f_dot = __pyx_v_6models_15fieldembed_core_our_dot((&__pyx_v_size), (&(__pyx_v_neu1[(__pyx_v_fld_idx * __pyx_v_size)])), (&__pyx_v_6models_15fieldembed_core_ONE), (&(__pyx_v_syn1neg[__pyx_v_row2])), (&__pyx_v_6models_15fieldembed_core_ONE));
 
-      /* "models/fieldembed_core.pyx":311
+      /* "models/fieldembed_core.pyx":297
  *             f_dot = our_dot(&size, &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)
  * 
  *             if _compute_loss == 1: # TODO             # <<<<<<<<<<<<<<
@@ -3627,7 +3631,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
       __pyx_t_4 = ((__pyx_v__compute_loss == 1) != 0);
       if (__pyx_t_4) {
 
-        /* "models/fieldembed_core.pyx":312
+        /* "models/fieldembed_core.pyx":298
  * 
  *             if _compute_loss == 1: # TODO
  *                 f_dot = (f_dot if d == 0  else -f_dot)             # <<<<<<<<<<<<<<
@@ -3641,7 +3645,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
         }
         __pyx_v_f_dot = __pyx_t_10;
 
-        /* "models/fieldembed_core.pyx":313
+        /* "models/fieldembed_core.pyx":299
  *             if _compute_loss == 1: # TODO
  *                 f_dot = (f_dot if d == 0  else -f_dot)
  *                 if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:             # <<<<<<<<<<<<<<
@@ -3659,7 +3663,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
         __pyx_L32_bool_binop_done:;
         if (__pyx_t_4) {
 
-          /* "models/fieldembed_core.pyx":314
+          /* "models/fieldembed_core.pyx":300
  *                 f_dot = (f_dot if d == 0  else -f_dot)
  *                 if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:
  *                     continue             # <<<<<<<<<<<<<<
@@ -3668,7 +3672,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
           goto __pyx_L17_continue;
 
-          /* "models/fieldembed_core.pyx":313
+          /* "models/fieldembed_core.pyx":299
  *             if _compute_loss == 1: # TODO
  *                 f_dot = (f_dot if d == 0  else -f_dot)
  *                 if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:             # <<<<<<<<<<<<<<
@@ -3677,7 +3681,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
         }
 
-        /* "models/fieldembed_core.pyx":315
+        /* "models/fieldembed_core.pyx":301
  *                 if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:
  *                     continue
  *                 log_e_f_dot = LOG_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]             # <<<<<<<<<<<<<<
@@ -3686,7 +3690,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
         __pyx_v_log_e_f_dot = (__pyx_v_6models_15fieldembed_core_LOG_TABLE[((int)((__pyx_v_f_dot + 6.0) * 83.0))]);
 
-        /* "models/fieldembed_core.pyx":316
+        /* "models/fieldembed_core.pyx":302
  *                     continue
  *                 log_e_f_dot = LOG_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
  *                 _running_training_loss_param[0] = _running_training_loss_param[0] - log_e_f_dot # it seems when using *i, to query it, use *[0]             # <<<<<<<<<<<<<<
@@ -3695,7 +3699,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
         (__pyx_v__running_training_loss_param[0]) = ((__pyx_v__running_training_loss_param[0]) - __pyx_v_log_e_f_dot);
 
-        /* "models/fieldembed_core.pyx":311
+        /* "models/fieldembed_core.pyx":297
  *             f_dot = our_dot(&size, &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)
  * 
  *             if _compute_loss == 1: # TODO             # <<<<<<<<<<<<<<
@@ -3704,7 +3708,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
       }
 
-      /* "models/fieldembed_core.pyx":318
+      /* "models/fieldembed_core.pyx":304
  *                 _running_training_loss_param[0] = _running_training_loss_param[0] - log_e_f_dot # it seems when using *i, to query it, use *[0]
  * 
  *             if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:             # <<<<<<<<<<<<<<
@@ -3722,7 +3726,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
       __pyx_L35_bool_binop_done:;
       if (__pyx_t_4) {
 
-        /* "models/fieldembed_core.pyx":319
+        /* "models/fieldembed_core.pyx":305
  * 
  *             if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:
  *                 continue # quit: this is unreasonable.             # <<<<<<<<<<<<<<
@@ -3731,7 +3735,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
         goto __pyx_L17_continue;
 
-        /* "models/fieldembed_core.pyx":318
+        /* "models/fieldembed_core.pyx":304
  *                 _running_training_loss_param[0] = _running_training_loss_param[0] - log_e_f_dot # it seems when using *i, to query it, use *[0]
  * 
  *             if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:             # <<<<<<<<<<<<<<
@@ -3740,7 +3744,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
       }
 
-      /* "models/fieldembed_core.pyx":320
+      /* "models/fieldembed_core.pyx":306
  *             if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:
  *                 continue # quit: this is unreasonable.
  *             f = EXP_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]             # <<<<<<<<<<<<<<
@@ -3749,7 +3753,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
       __pyx_v_f = (__pyx_v_6models_15fieldembed_core_EXP_TABLE[((int)((__pyx_v_f_dot + 6.0) * 83.0))]);
 
-      /* "models/fieldembed_core.pyx":322
+      /* "models/fieldembed_core.pyx":308
  *             f = EXP_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
  * 
  *             g = (label - f) * alpha             # <<<<<<<<<<<<<<
@@ -3758,7 +3762,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
       __pyx_v_g = ((__pyx_v_label - __pyx_v_f) * __pyx_v_alpha);
 
-      /* "models/fieldembed_core.pyx":323
+      /* "models/fieldembed_core.pyx":309
  * 
  *             g = (label - f) * alpha
  *             our_saxpy(&size, &g,  &syn1neg[row2], &ONE, &work[fld_idx*size], &ONE) # accumulate work             # <<<<<<<<<<<<<<
@@ -3767,7 +3771,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
       __pyx_v_6models_15fieldembed_core_our_saxpy((&__pyx_v_size), (&__pyx_v_g), (&(__pyx_v_syn1neg[__pyx_v_row2])), (&__pyx_v_6models_15fieldembed_core_ONE), (&(__pyx_v_work[(__pyx_v_fld_idx * __pyx_v_size)])), (&__pyx_v_6models_15fieldembed_core_ONE));
 
-      /* "models/fieldembed_core.pyx":307
+      /* "models/fieldembed_core.pyx":293
  *             ################################################################
  * 
  *         if use_head:             # <<<<<<<<<<<<<<
@@ -3776,7 +3780,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
     }
 
-    /* "models/fieldembed_core.pyx":328
+    /* "models/fieldembed_core.pyx":314
  * 
  *         ##########################################################################
  *         fld_idx = -1             # <<<<<<<<<<<<<<
@@ -3785,7 +3789,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
     __pyx_v_fld_idx = -1;
 
-    /* "models/fieldembed_core.pyx":329
+    /* "models/fieldembed_core.pyx":315
  *         ##########################################################################
  *         fld_idx = -1
  *         if use_sub:             # <<<<<<<<<<<<<<
@@ -3795,7 +3799,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
     __pyx_t_4 = (__pyx_v_use_sub != 0);
     if (__pyx_t_4) {
 
-      /* "models/fieldembed_core.pyx":330
+      /* "models/fieldembed_core.pyx":316
  *         fld_idx = -1
  *         if use_sub:
  *             fld_idx = fld_idx + 1             # <<<<<<<<<<<<<<
@@ -3804,7 +3808,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
       __pyx_v_fld_idx = (__pyx_v_fld_idx + 1);
 
-      /* "models/fieldembed_core.pyx":331
+      /* "models/fieldembed_core.pyx":317
  *         if use_sub:
  *             fld_idx = fld_idx + 1
  *             our_saxpy(&size, &g2, &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)             # <<<<<<<<<<<<<<
@@ -3813,7 +3817,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
       __pyx_v_6models_15fieldembed_core_our_saxpy((&__pyx_v_size), (&__pyx_v_g2), (&(__pyx_v_neu1[(__pyx_v_fld_idx * __pyx_v_size)])), (&__pyx_v_6models_15fieldembed_core_ONE), (&(__pyx_v_syn1neg[__pyx_v_row2])), (&__pyx_v_6models_15fieldembed_core_ONE));
 
-      /* "models/fieldembed_core.pyx":329
+      /* "models/fieldembed_core.pyx":315
  *         ##########################################################################
  *         fld_idx = -1
  *         if use_sub:             # <<<<<<<<<<<<<<
@@ -3822,7 +3826,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
     }
 
-    /* "models/fieldembed_core.pyx":332
+    /* "models/fieldembed_core.pyx":318
  *             fld_idx = fld_idx + 1
  *             our_saxpy(&size, &g2, &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)
  *         if use_head:             # <<<<<<<<<<<<<<
@@ -3832,7 +3836,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
     __pyx_t_4 = (__pyx_v_use_head != 0);
     if (__pyx_t_4) {
 
-      /* "models/fieldembed_core.pyx":333
+      /* "models/fieldembed_core.pyx":319
  *             our_saxpy(&size, &g2, &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)
  *         if use_head:
  *             fld_idx = fld_idx + 1             # <<<<<<<<<<<<<<
@@ -3841,7 +3845,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
       __pyx_v_fld_idx = (__pyx_v_fld_idx + 1);
 
-      /* "models/fieldembed_core.pyx":334
+      /* "models/fieldembed_core.pyx":320
  *         if use_head:
  *             fld_idx = fld_idx + 1
  *             our_saxpy(&size, &g,  &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)             # <<<<<<<<<<<<<<
@@ -3850,7 +3854,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
       __pyx_v_6models_15fieldembed_core_our_saxpy((&__pyx_v_size), (&__pyx_v_g), (&(__pyx_v_neu1[(__pyx_v_fld_idx * __pyx_v_size)])), (&__pyx_v_6models_15fieldembed_core_ONE), (&(__pyx_v_syn1neg[__pyx_v_row2])), (&__pyx_v_6models_15fieldembed_core_ONE));
 
-      /* "models/fieldembed_core.pyx":332
+      /* "models/fieldembed_core.pyx":318
  *             fld_idx = fld_idx + 1
  *             our_saxpy(&size, &g2, &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)
  *         if use_head:             # <<<<<<<<<<<<<<
@@ -3861,7 +3865,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
     __pyx_L17_continue:;
   }
 
-  /* "models/fieldembed_core.pyx":339
+  /* "models/fieldembed_core.pyx":325
  * 
  *     #################################### S: update syn0 gradient
  *     if cbow_mean:  # use standard grad             # <<<<<<<<<<<<<<
@@ -3871,7 +3875,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
   __pyx_t_4 = (__pyx_v_cbow_mean != 0);
   if (__pyx_t_4) {
 
-    /* "models/fieldembed_core.pyx":340
+    /* "models/fieldembed_core.pyx":326
  *     #################################### S: update syn0 gradient
  *     if cbow_mean:  # use standard grad
  *         fld_idx = -1             # <<<<<<<<<<<<<<
@@ -3880,7 +3884,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
     __pyx_v_fld_idx = -1;
 
-    /* "models/fieldembed_core.pyx":341
+    /* "models/fieldembed_core.pyx":327
  *     if cbow_mean:  # use standard grad
  *         fld_idx = -1
  *         if use_sub:             # <<<<<<<<<<<<<<
@@ -3890,7 +3894,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
     __pyx_t_4 = (__pyx_v_use_sub != 0);
     if (__pyx_t_4) {
 
-      /* "models/fieldembed_core.pyx":342
+      /* "models/fieldembed_core.pyx":328
  *         fld_idx = -1
  *         if use_sub:
  *             fld_idx = fld_idx + 1             # <<<<<<<<<<<<<<
@@ -3899,7 +3903,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
       __pyx_v_fld_idx = (__pyx_v_fld_idx + 1);
 
-      /* "models/fieldembed_core.pyx":343
+      /* "models/fieldembed_core.pyx":329
  *         if use_sub:
  *             fld_idx = fld_idx + 1
  *             sscal(&size, &inv_count, &work[fld_idx*size], &ONE)             # <<<<<<<<<<<<<<
@@ -3908,7 +3912,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
       __pyx_v_6models_15fieldembed_core_sscal((&__pyx_v_size), (&__pyx_v_inv_count), (&(__pyx_v_work[(__pyx_v_fld_idx * __pyx_v_size)])), (&__pyx_v_6models_15fieldembed_core_ONE));
 
-      /* "models/fieldembed_core.pyx":341
+      /* "models/fieldembed_core.pyx":327
  *     if cbow_mean:  # use standard grad
  *         fld_idx = -1
  *         if use_sub:             # <<<<<<<<<<<<<<
@@ -3917,7 +3921,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
     }
 
-    /* "models/fieldembed_core.pyx":344
+    /* "models/fieldembed_core.pyx":330
  *             fld_idx = fld_idx + 1
  *             sscal(&size, &inv_count, &work[fld_idx*size], &ONE)
  *         if use_head:             # <<<<<<<<<<<<<<
@@ -3927,7 +3931,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
     __pyx_t_4 = (__pyx_v_use_head != 0);
     if (__pyx_t_4) {
 
-      /* "models/fieldembed_core.pyx":345
+      /* "models/fieldembed_core.pyx":331
  *             sscal(&size, &inv_count, &work[fld_idx*size], &ONE)
  *         if use_head:
  *             fld_idx = fld_idx + 1             # <<<<<<<<<<<<<<
@@ -3936,7 +3940,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
       __pyx_v_fld_idx = (__pyx_v_fld_idx + 1);
 
-      /* "models/fieldembed_core.pyx":346
+      /* "models/fieldembed_core.pyx":332
  *         if use_head:
  *             fld_idx = fld_idx + 1
  *             sscal(&size, &inv_count, &work[fld_idx*size],  &ONE)  # (does this need BLAS-variants like saxpy?)             # <<<<<<<<<<<<<<
@@ -3945,7 +3949,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
       __pyx_v_6models_15fieldembed_core_sscal((&__pyx_v_size), (&__pyx_v_inv_count), (&(__pyx_v_work[(__pyx_v_fld_idx * __pyx_v_size)])), (&__pyx_v_6models_15fieldembed_core_ONE));
 
-      /* "models/fieldembed_core.pyx":344
+      /* "models/fieldembed_core.pyx":330
  *             fld_idx = fld_idx + 1
  *             sscal(&size, &inv_count, &work[fld_idx*size], &ONE)
  *         if use_head:             # <<<<<<<<<<<<<<
@@ -3954,7 +3958,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
     }
 
-    /* "models/fieldembed_core.pyx":339
+    /* "models/fieldembed_core.pyx":325
  * 
  *     #################################### S: update syn0 gradient
  *     if cbow_mean:  # use standard grad             # <<<<<<<<<<<<<<
@@ -3963,7 +3967,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
   }
 
-  /* "models/fieldembed_core.pyx":349
+  /* "models/fieldembed_core.pyx":335
  * 
  * 
  *     fld_idx = -1             # <<<<<<<<<<<<<<
@@ -3972,7 +3976,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
   __pyx_v_fld_idx = -1;
 
-  /* "models/fieldembed_core.pyx":351
+  /* "models/fieldembed_core.pyx":337
  *     fld_idx = -1
  * 
  *     if use_sub:             # <<<<<<<<<<<<<<
@@ -3982,7 +3986,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
   __pyx_t_4 = (__pyx_v_use_sub != 0);
   if (__pyx_t_4) {
 
-    /* "models/fieldembed_core.pyx":352
+    /* "models/fieldembed_core.pyx":338
  * 
  *     if use_sub:
  *         fld_idx = fld_idx + 1             # <<<<<<<<<<<<<<
@@ -3991,7 +3995,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
     __pyx_v_fld_idx = (__pyx_v_fld_idx + 1);
 
-    /* "models/fieldembed_core.pyx":353
+    /* "models/fieldembed_core.pyx":339
  *     if use_sub:
  *         fld_idx = fld_idx + 1
  *         for m in range(j, k): # sg case: j + 1 = k; loop left tokens here             # <<<<<<<<<<<<<<
@@ -4003,7 +4007,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
     for (__pyx_t_3 = __pyx_v_j; __pyx_t_3 < __pyx_t_2; __pyx_t_3+=1) {
       __pyx_v_m = __pyx_t_3;
 
-      /* "models/fieldembed_core.pyx":354
+      /* "models/fieldembed_core.pyx":340
  *         fld_idx = fld_idx + 1
  *         for m in range(j, k): # sg case: j + 1 = k; loop left tokens here
  *             if m == i:             # <<<<<<<<<<<<<<
@@ -4013,7 +4017,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
       __pyx_t_4 = ((__pyx_v_m == __pyx_v_i) != 0);
       if (__pyx_t_4) {
 
-        /* "models/fieldembed_core.pyx":355
+        /* "models/fieldembed_core.pyx":341
  *         for m in range(j, k): # sg case: j + 1 = k; loop left tokens here
  *             if m == i:
  *                 continue             # <<<<<<<<<<<<<<
@@ -4022,7 +4026,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
         goto __pyx_L43_continue;
 
-        /* "models/fieldembed_core.pyx":354
+        /* "models/fieldembed_core.pyx":340
  *         fld_idx = fld_idx + 1
  *         for m in range(j, k): # sg case: j + 1 = k; loop left tokens here
  *             if m == i:             # <<<<<<<<<<<<<<
@@ -4031,7 +4035,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
       }
 
-      /* "models/fieldembed_core.pyx":359
+      /* "models/fieldembed_core.pyx":345
  *                 ############### This four lines are important ###############
  *                 # left_word  #  from uint32 to int
  *                 left_word = indexes[m]             # <<<<<<<<<<<<<<
@@ -4041,7 +4045,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
       /*else*/ {
         __pyx_v_left_word = (__pyx_v_indexes[__pyx_v_m]);
 
-        /* "models/fieldembed_core.pyx":360
+        /* "models/fieldembed_core.pyx":346
  *                 # left_word  #  from uint32 to int
  *                 left_word = indexes[m]
  *                 word_lenginv = LengInv_map[fld_idx][left_word] # word_lenginv: REAL_t             # <<<<<<<<<<<<<<
@@ -4050,7 +4054,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
         __pyx_v_word_lenginv = ((__pyx_v_LengInv_map[__pyx_v_fld_idx])[__pyx_v_left_word]);
 
-        /* "models/fieldembed_core.pyx":361
+        /* "models/fieldembed_core.pyx":347
  *                 left_word = indexes[m]
  *                 word_lenginv = LengInv_map[fld_idx][left_word] # word_lenginv: REAL_t
  *                 gs = EndIdx_map[fld_idx][left_word-1]     #  from uint32 to int             # <<<<<<<<<<<<<<
@@ -4059,7 +4063,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
         __pyx_v_gs = ((__pyx_v_EndIdx_map[__pyx_v_fld_idx])[(__pyx_v_left_word - 1)]);
 
-        /* "models/fieldembed_core.pyx":362
+        /* "models/fieldembed_core.pyx":348
  *                 word_lenginv = LengInv_map[fld_idx][left_word] # word_lenginv: REAL_t
  *                 gs = EndIdx_map[fld_idx][left_word-1]     #  from uint32 to int
  *                 ge = EndIdx_map[fld_idx][left_word]       #  from uint32 to int             # <<<<<<<<<<<<<<
@@ -4068,7 +4072,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
         __pyx_v_ge = ((__pyx_v_EndIdx_map[__pyx_v_fld_idx])[__pyx_v_left_word]);
 
-        /* "models/fieldembed_core.pyx":363
+        /* "models/fieldembed_core.pyx":349
  *                 gs = EndIdx_map[fld_idx][left_word-1]     #  from uint32 to int
  *                 ge = EndIdx_map[fld_idx][left_word]       #  from uint32 to int
  *                 for n in range(gs, ge):                   #  n is int             # <<<<<<<<<<<<<<
@@ -4080,7 +4084,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
         for (__pyx_t_7 = __pyx_v_gs; __pyx_t_7 < __pyx_t_6; __pyx_t_7+=1) {
           __pyx_v_n = __pyx_t_7;
 
-          /* "models/fieldembed_core.pyx":364
+          /* "models/fieldembed_core.pyx":350
  *                 ge = EndIdx_map[fld_idx][left_word]       #  from uint32 to int
  *                 for n in range(gs, ge):                   #  n is int
  *                     grain_index = LookUp_map[fld_idx][n]  #  grain_index is uint             # <<<<<<<<<<<<<<
@@ -4089,7 +4093,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
           __pyx_v_grain_index = ((__pyx_v_LookUp_map[__pyx_v_fld_idx])[__pyx_v_n]);
 
-          /* "models/fieldembed_core.pyx":365
+          /* "models/fieldembed_core.pyx":351
  *                 for n in range(gs, ge):                   #  n is int
  *                     grain_index = LookUp_map[fld_idx][n]  #  grain_index is uint
  *                     our_saxpy(&size, &word_lenginv,       &work[fld_idx*size], &ONE, &syn0_map[fld_idx][grain_index * size], &ONE)             # <<<<<<<<<<<<<<
@@ -4102,7 +4106,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
       __pyx_L43_continue:;
     }
 
-    /* "models/fieldembed_core.pyx":351
+    /* "models/fieldembed_core.pyx":337
  *     fld_idx = -1
  * 
  *     if use_sub:             # <<<<<<<<<<<<<<
@@ -4111,7 +4115,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
   }
 
-  /* "models/fieldembed_core.pyx":367
+  /* "models/fieldembed_core.pyx":353
  *                     our_saxpy(&size, &word_lenginv,       &work[fld_idx*size], &ONE, &syn0_map[fld_idx][grain_index * size], &ONE)
  * 
  *     if use_head:             # <<<<<<<<<<<<<<
@@ -4121,7 +4125,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
   __pyx_t_4 = (__pyx_v_use_head != 0);
   if (__pyx_t_4) {
 
-    /* "models/fieldembed_core.pyx":368
+    /* "models/fieldembed_core.pyx":354
  * 
  *     if use_head:
  *         fld_idx = fld_idx + 1             # <<<<<<<<<<<<<<
@@ -4130,7 +4134,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
     __pyx_v_fld_idx = (__pyx_v_fld_idx + 1);
 
-    /* "models/fieldembed_core.pyx":369
+    /* "models/fieldembed_core.pyx":355
  *     if use_head:
  *         fld_idx = fld_idx + 1
  *         for m in range(j,k):             # <<<<<<<<<<<<<<
@@ -4142,7 +4146,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
     for (__pyx_t_3 = __pyx_v_j; __pyx_t_3 < __pyx_t_2; __pyx_t_3+=1) {
       __pyx_v_m = __pyx_t_3;
 
-      /* "models/fieldembed_core.pyx":370
+      /* "models/fieldembed_core.pyx":356
  *         fld_idx = fld_idx + 1
  *         for m in range(j,k):
  *             if m == i:             # <<<<<<<<<<<<<<
@@ -4152,7 +4156,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
       __pyx_t_4 = ((__pyx_v_m == __pyx_v_i) != 0);
       if (__pyx_t_4) {
 
-        /* "models/fieldembed_core.pyx":371
+        /* "models/fieldembed_core.pyx":357
  *         for m in range(j,k):
  *             if m == i:
  *                 continue             # <<<<<<<<<<<<<<
@@ -4161,7 +4165,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
         goto __pyx_L49_continue;
 
-        /* "models/fieldembed_core.pyx":370
+        /* "models/fieldembed_core.pyx":356
  *         fld_idx = fld_idx + 1
  *         for m in range(j,k):
  *             if m == i:             # <<<<<<<<<<<<<<
@@ -4170,7 +4174,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
       }
 
-      /* "models/fieldembed_core.pyx":373
+      /* "models/fieldembed_core.pyx":359
  *                 continue
  *             else:
  *                 our_saxpy(&size, &word_locks[indexes[m]], &work[fld_idx*size], &ONE, &syn0_map[fld_idx][ indexes[m] * size], &ONE)             # <<<<<<<<<<<<<<
@@ -4183,7 +4187,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
       __pyx_L49_continue:;
     }
 
-    /* "models/fieldembed_core.pyx":367
+    /* "models/fieldembed_core.pyx":353
  *                     our_saxpy(&size, &word_lenginv,       &work[fld_idx*size], &ONE, &syn0_map[fld_idx][grain_index * size], &ONE)
  * 
  *     if use_head:             # <<<<<<<<<<<<<<
@@ -4192,7 +4196,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
  */
   }
 
-  /* "models/fieldembed_core.pyx":376
+  /* "models/fieldembed_core.pyx":362
  * 
  *     ################################### E: update syn0 gradient
  *     return next_random             # <<<<<<<<<<<<<<
@@ -4202,8 +4206,8 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
   __pyx_r = __pyx_v_next_random;
   goto __pyx_L0;
 
-  /* "models/fieldembed_core.pyx":160
- * 
+  /* "models/fieldembed_core.pyx":146
+ *     c[0].neu1 = <REAL_t *>np.PyArray_DATA(_neu1)
  * 
  * cdef unsigned long long fieldembed_token_neg_0X1_neat(             # <<<<<<<<<<<<<<
  *     const REAL_t alpha,
@@ -4215,7 +4219,7 @@ static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_token_
   return __pyx_r;
 }
 
-/* "models/fieldembed_core.pyx":378
+/* "models/fieldembed_core.pyx":364
  *     return next_random
  * 
  * def train_batch_fieldembed_0X1_neat(model, indexes, sentence_idx, alpha, _work, _neu1, compute_loss, subsampling = 1):             # <<<<<<<<<<<<<<
@@ -4275,37 +4279,37 @@ static PyObject *__pyx_pw_6models_15fieldembed_core_1train_batch_fieldembed_0X1_
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_indexes)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("train_batch_fieldembed_0X1_neat", 0, 7, 8, 1); __PYX_ERR(0, 378, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("train_batch_fieldembed_0X1_neat", 0, 7, 8, 1); __PYX_ERR(0, 364, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  2:
         if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_sentence_idx)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("train_batch_fieldembed_0X1_neat", 0, 7, 8, 2); __PYX_ERR(0, 378, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("train_batch_fieldembed_0X1_neat", 0, 7, 8, 2); __PYX_ERR(0, 364, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  3:
         if (likely((values[3] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_alpha)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("train_batch_fieldembed_0X1_neat", 0, 7, 8, 3); __PYX_ERR(0, 378, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("train_batch_fieldembed_0X1_neat", 0, 7, 8, 3); __PYX_ERR(0, 364, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  4:
         if (likely((values[4] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_work)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("train_batch_fieldembed_0X1_neat", 0, 7, 8, 4); __PYX_ERR(0, 378, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("train_batch_fieldembed_0X1_neat", 0, 7, 8, 4); __PYX_ERR(0, 364, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  5:
         if (likely((values[5] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_neu1)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("train_batch_fieldembed_0X1_neat", 0, 7, 8, 5); __PYX_ERR(0, 378, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("train_batch_fieldembed_0X1_neat", 0, 7, 8, 5); __PYX_ERR(0, 364, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  6:
         if (likely((values[6] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_compute_loss)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("train_batch_fieldembed_0X1_neat", 0, 7, 8, 6); __PYX_ERR(0, 378, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("train_batch_fieldembed_0X1_neat", 0, 7, 8, 6); __PYX_ERR(0, 364, __pyx_L3_error)
         }
         CYTHON_FALLTHROUGH;
         case  7:
@@ -4315,7 +4319,7 @@ static PyObject *__pyx_pw_6models_15fieldembed_core_1train_batch_fieldembed_0X1_
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "train_batch_fieldembed_0X1_neat") < 0)) __PYX_ERR(0, 378, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "train_batch_fieldembed_0X1_neat") < 0)) __PYX_ERR(0, 364, __pyx_L3_error)
       }
     } else {
       switch (PyTuple_GET_SIZE(__pyx_args)) {
@@ -4343,7 +4347,7 @@ static PyObject *__pyx_pw_6models_15fieldembed_core_1train_batch_fieldembed_0X1_
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("train_batch_fieldembed_0X1_neat", 0, 7, 8, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 378, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("train_batch_fieldembed_0X1_neat", 0, 7, 8, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 364, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("models.fieldembed_core.train_batch_fieldembed_0X1_neat", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
@@ -4396,7 +4400,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
   int __pyx_t_23;
   __Pyx_RefNannySetupContext("train_batch_fieldembed_0X1_neat", 0);
 
-  /* "models/fieldembed_core.pyx":382
+  /* "models/fieldembed_core.pyx":368
  *     cdef Word2VecConfig c
  *     cdef int i, j, k
  *     cdef int effective_words = 0, effective_sentences = 0             # <<<<<<<<<<<<<<
@@ -4406,55 +4410,55 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
   __pyx_v_effective_words = 0;
   __pyx_v_effective_sentences = 0;
 
-  /* "models/fieldembed_core.pyx":386
+  /* "models/fieldembed_core.pyx":372
  *     cdef int word_vocidx
  * 
  *     init_w2v_config_0X1_neat(&c, model, alpha, compute_loss, _work, _neu1) # this is the difference between sg and cbow             # <<<<<<<<<<<<<<
  * 
  *     if subsampling:
  */
-  __pyx_t_1 = __pyx_f_6models_15fieldembed_core_init_w2v_config_0X1_neat((&__pyx_v_c), __pyx_v_model, __pyx_v_alpha, __pyx_v_compute_loss, __pyx_v__work, __pyx_v__neu1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 386, __pyx_L1_error)
+  __pyx_t_1 = __pyx_f_6models_15fieldembed_core_init_w2v_config_0X1_neat((&__pyx_v_c), __pyx_v_model, __pyx_v_alpha, __pyx_v_compute_loss, __pyx_v__work, __pyx_v__neu1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 372, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "models/fieldembed_core.pyx":388
+  /* "models/fieldembed_core.pyx":374
  *     init_w2v_config_0X1_neat(&c, model, alpha, compute_loss, _work, _neu1) # this is the difference between sg and cbow
  * 
  *     if subsampling:             # <<<<<<<<<<<<<<
  *         vlookup = model.wv.vocab_values
  *         for sent_idx in range(len(sentence_idx)):
  */
-  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_v_subsampling); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 388, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_v_subsampling); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 374, __pyx_L1_error)
   if (__pyx_t_2) {
 
-    /* "models/fieldembed_core.pyx":389
+    /* "models/fieldembed_core.pyx":375
  * 
  *     if subsampling:
  *         vlookup = model.wv.vocab_values             # <<<<<<<<<<<<<<
  *         for sent_idx in range(len(sentence_idx)):
  *             # step1: get every sentence's idx_start and idx_end
  */
-    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_wv); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 389, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_wv); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 375, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_vocab_values); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 389, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_vocab_values); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 375, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
     __pyx_v_vlookup = __pyx_t_3;
     __pyx_t_3 = 0;
 
-    /* "models/fieldembed_core.pyx":390
+    /* "models/fieldembed_core.pyx":376
  *     if subsampling:
  *         vlookup = model.wv.vocab_values
  *         for sent_idx in range(len(sentence_idx)):             # <<<<<<<<<<<<<<
  *             # step1: get every sentence's idx_start and idx_end
  *             if sent_idx == 0:
  */
-    __pyx_t_4 = PyObject_Length(__pyx_v_sentence_idx); if (unlikely(__pyx_t_4 == ((Py_ssize_t)-1))) __PYX_ERR(0, 390, __pyx_L1_error)
+    __pyx_t_4 = PyObject_Length(__pyx_v_sentence_idx); if (unlikely(__pyx_t_4 == ((Py_ssize_t)-1))) __PYX_ERR(0, 376, __pyx_L1_error)
     __pyx_t_5 = __pyx_t_4;
     for (__pyx_t_6 = 0; __pyx_t_6 < __pyx_t_5; __pyx_t_6+=1) {
       __pyx_v_sent_idx = __pyx_t_6;
 
-      /* "models/fieldembed_core.pyx":392
+      /* "models/fieldembed_core.pyx":378
  *         for sent_idx in range(len(sentence_idx)):
  *             # step1: get every sentence's idx_start and idx_end
  *             if sent_idx == 0:             # <<<<<<<<<<<<<<
@@ -4464,7 +4468,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
       __pyx_t_2 = ((__pyx_v_sent_idx == 0) != 0);
       if (__pyx_t_2) {
 
-        /* "models/fieldembed_core.pyx":393
+        /* "models/fieldembed_core.pyx":379
  *             # step1: get every sentence's idx_start and idx_end
  *             if sent_idx == 0:
  *                 idx_start = 0             # <<<<<<<<<<<<<<
@@ -4473,7 +4477,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
  */
         __pyx_v_idx_start = 0;
 
-        /* "models/fieldembed_core.pyx":392
+        /* "models/fieldembed_core.pyx":378
  *         for sent_idx in range(len(sentence_idx)):
  *             # step1: get every sentence's idx_start and idx_end
  *             if sent_idx == 0:             # <<<<<<<<<<<<<<
@@ -4483,7 +4487,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
         goto __pyx_L6;
       }
 
-      /* "models/fieldembed_core.pyx":395
+      /* "models/fieldembed_core.pyx":381
  *                 idx_start = 0
  *             else:
  *                 idx_start = sentence_idx[sent_idx-1]             # <<<<<<<<<<<<<<
@@ -4492,43 +4496,43 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
  */
       /*else*/ {
         __pyx_t_7 = (__pyx_v_sent_idx - 1);
-        __pyx_t_3 = __Pyx_GetItemInt(__pyx_v_sentence_idx, __pyx_t_7, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 395, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_GetItemInt(__pyx_v_sentence_idx, __pyx_t_7, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 381, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
-        __pyx_t_8 = __Pyx_PyInt_As_int(__pyx_t_3); if (unlikely((__pyx_t_8 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 395, __pyx_L1_error)
+        __pyx_t_8 = __Pyx_PyInt_As_int(__pyx_t_3); if (unlikely((__pyx_t_8 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 381, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         __pyx_v_idx_start = __pyx_t_8;
       }
       __pyx_L6:;
 
-      /* "models/fieldembed_core.pyx":396
+      /* "models/fieldembed_core.pyx":382
  *             else:
  *                 idx_start = sentence_idx[sent_idx-1]
  *             idx_end = sentence_idx[sent_idx]             # <<<<<<<<<<<<<<
  * 
  *             # step2: loop every tokens in this sentence, drop special tokens and use downsampling
  */
-      __pyx_t_3 = __Pyx_GetItemInt(__pyx_v_sentence_idx, __pyx_v_sent_idx, int, 1, __Pyx_PyInt_From_int, 0, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 396, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_GetItemInt(__pyx_v_sentence_idx, __pyx_v_sent_idx, int, 1, __Pyx_PyInt_From_int, 0, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 382, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_8 = __Pyx_PyInt_As_int(__pyx_t_3); if (unlikely((__pyx_t_8 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 396, __pyx_L1_error)
+      __pyx_t_8 = __Pyx_PyInt_As_int(__pyx_t_3); if (unlikely((__pyx_t_8 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 382, __pyx_L1_error)
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       __pyx_v_idx_end = __pyx_t_8;
 
-      /* "models/fieldembed_core.pyx":399
+      /* "models/fieldembed_core.pyx":385
  * 
  *             # step2: loop every tokens in this sentence, drop special tokens and use downsampling
  *             for word_vocidx in indexes[idx_start: idx_end]:             # <<<<<<<<<<<<<<
  *                 if word_vocidx <= 3:
  *                     continue
  */
-      __pyx_t_3 = __Pyx_PyObject_GetSlice(__pyx_v_indexes, __pyx_v_idx_start, __pyx_v_idx_end, NULL, NULL, NULL, 1, 1, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 399, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_GetSlice(__pyx_v_indexes, __pyx_v_idx_start, __pyx_v_idx_end, NULL, NULL, NULL, 1, 1, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 385, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       if (likely(PyList_CheckExact(__pyx_t_3)) || PyTuple_CheckExact(__pyx_t_3)) {
         __pyx_t_1 = __pyx_t_3; __Pyx_INCREF(__pyx_t_1); __pyx_t_9 = 0;
         __pyx_t_10 = NULL;
       } else {
-        __pyx_t_9 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 399, __pyx_L1_error)
+        __pyx_t_9 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 385, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
-        __pyx_t_10 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 399, __pyx_L1_error)
+        __pyx_t_10 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 385, __pyx_L1_error)
       }
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
       for (;;) {
@@ -4536,17 +4540,17 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
           if (likely(PyList_CheckExact(__pyx_t_1))) {
             if (__pyx_t_9 >= PyList_GET_SIZE(__pyx_t_1)) break;
             #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-            __pyx_t_3 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_9); __Pyx_INCREF(__pyx_t_3); __pyx_t_9++; if (unlikely(0 < 0)) __PYX_ERR(0, 399, __pyx_L1_error)
+            __pyx_t_3 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_9); __Pyx_INCREF(__pyx_t_3); __pyx_t_9++; if (unlikely(0 < 0)) __PYX_ERR(0, 385, __pyx_L1_error)
             #else
-            __pyx_t_3 = PySequence_ITEM(__pyx_t_1, __pyx_t_9); __pyx_t_9++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 399, __pyx_L1_error)
+            __pyx_t_3 = PySequence_ITEM(__pyx_t_1, __pyx_t_9); __pyx_t_9++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 385, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_3);
             #endif
           } else {
             if (__pyx_t_9 >= PyTuple_GET_SIZE(__pyx_t_1)) break;
             #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-            __pyx_t_3 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_9); __Pyx_INCREF(__pyx_t_3); __pyx_t_9++; if (unlikely(0 < 0)) __PYX_ERR(0, 399, __pyx_L1_error)
+            __pyx_t_3 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_9); __Pyx_INCREF(__pyx_t_3); __pyx_t_9++; if (unlikely(0 < 0)) __PYX_ERR(0, 385, __pyx_L1_error)
             #else
-            __pyx_t_3 = PySequence_ITEM(__pyx_t_1, __pyx_t_9); __pyx_t_9++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 399, __pyx_L1_error)
+            __pyx_t_3 = PySequence_ITEM(__pyx_t_1, __pyx_t_9); __pyx_t_9++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 385, __pyx_L1_error)
             __Pyx_GOTREF(__pyx_t_3);
             #endif
           }
@@ -4556,17 +4560,17 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
             PyObject* exc_type = PyErr_Occurred();
             if (exc_type) {
               if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-              else __PYX_ERR(0, 399, __pyx_L1_error)
+              else __PYX_ERR(0, 385, __pyx_L1_error)
             }
             break;
           }
           __Pyx_GOTREF(__pyx_t_3);
         }
-        __pyx_t_8 = __Pyx_PyInt_As_int(__pyx_t_3); if (unlikely((__pyx_t_8 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 399, __pyx_L1_error)
+        __pyx_t_8 = __Pyx_PyInt_As_int(__pyx_t_3); if (unlikely((__pyx_t_8 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 385, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
         __pyx_v_word_vocidx = __pyx_t_8;
 
-        /* "models/fieldembed_core.pyx":400
+        /* "models/fieldembed_core.pyx":386
  *             # step2: loop every tokens in this sentence, drop special tokens and use downsampling
  *             for word_vocidx in indexes[idx_start: idx_end]:
  *                 if word_vocidx <= 3:             # <<<<<<<<<<<<<<
@@ -4576,7 +4580,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
         __pyx_t_2 = ((__pyx_v_word_vocidx <= 3) != 0);
         if (__pyx_t_2) {
 
-          /* "models/fieldembed_core.pyx":401
+          /* "models/fieldembed_core.pyx":387
  *             for word_vocidx in indexes[idx_start: idx_end]:
  *                 if word_vocidx <= 3:
  *                     continue             # <<<<<<<<<<<<<<
@@ -4585,7 +4589,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
  */
           goto __pyx_L7_continue;
 
-          /* "models/fieldembed_core.pyx":400
+          /* "models/fieldembed_core.pyx":386
  *             # step2: loop every tokens in this sentence, drop special tokens and use downsampling
  *             for word_vocidx in indexes[idx_start: idx_end]:
  *                 if word_vocidx <= 3:             # <<<<<<<<<<<<<<
@@ -4594,7 +4598,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
  */
         }
 
-        /* "models/fieldembed_core.pyx":402
+        /* "models/fieldembed_core.pyx":388
  *                 if word_vocidx <= 3:
  *                     continue
  *                 if c.sample and vlookup[word_vocidx].sample_int < random_int32(&c.next_random):             # <<<<<<<<<<<<<<
@@ -4607,23 +4611,23 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
           __pyx_t_2 = __pyx_t_11;
           goto __pyx_L11_bool_binop_done;
         }
-        __pyx_t_3 = __Pyx_GetItemInt(__pyx_v_vlookup, __pyx_v_word_vocidx, int, 1, __Pyx_PyInt_From_int, 0, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 402, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_GetItemInt(__pyx_v_vlookup, __pyx_v_word_vocidx, int, 1, __Pyx_PyInt_From_int, 0, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 388, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
-        __pyx_t_12 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_sample_int); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 402, __pyx_L1_error)
+        __pyx_t_12 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_sample_int); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 388, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_12);
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __pyx_t_3 = __Pyx_PyInt_From_unsigned_PY_LONG_LONG(__pyx_f_6models_15fieldembed_core_random_int32((&__pyx_v_c.next_random))); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 402, __pyx_L1_error)
+        __pyx_t_3 = __Pyx_PyInt_From_unsigned_PY_LONG_LONG(__pyx_f_6models_15fieldembed_core_random_int32((&__pyx_v_c.next_random))); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 388, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_3);
-        __pyx_t_13 = PyObject_RichCompare(__pyx_t_12, __pyx_t_3, Py_LT); __Pyx_XGOTREF(__pyx_t_13); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 402, __pyx_L1_error)
+        __pyx_t_13 = PyObject_RichCompare(__pyx_t_12, __pyx_t_3, Py_LT); __Pyx_XGOTREF(__pyx_t_13); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 388, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_12); __pyx_t_12 = 0;
         __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-        __pyx_t_11 = __Pyx_PyObject_IsTrue(__pyx_t_13); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 402, __pyx_L1_error)
+        __pyx_t_11 = __Pyx_PyObject_IsTrue(__pyx_t_13); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 388, __pyx_L1_error)
         __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
         __pyx_t_2 = __pyx_t_11;
         __pyx_L11_bool_binop_done:;
         if (__pyx_t_2) {
 
-          /* "models/fieldembed_core.pyx":403
+          /* "models/fieldembed_core.pyx":389
  *                     continue
  *                 if c.sample and vlookup[word_vocidx].sample_int < random_int32(&c.next_random):
  *                     continue             # <<<<<<<<<<<<<<
@@ -4632,7 +4636,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
  */
           goto __pyx_L7_continue;
 
-          /* "models/fieldembed_core.pyx":402
+          /* "models/fieldembed_core.pyx":388
  *                 if word_vocidx <= 3:
  *                     continue
  *                 if c.sample and vlookup[word_vocidx].sample_int < random_int32(&c.next_random):             # <<<<<<<<<<<<<<
@@ -4641,7 +4645,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
  */
         }
 
-        /* "models/fieldembed_core.pyx":406
+        /* "models/fieldembed_core.pyx":392
  *                 # NOTICE: c.sentence_idx[0] = 0  # indices of the first sentence always start at 0
  *                 # my sentence_idx is not started from 0
  *                 c.indexes[effective_words] = word_vocidx             # <<<<<<<<<<<<<<
@@ -4650,7 +4654,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
  */
         (__pyx_v_c.indexes[__pyx_v_effective_words]) = __pyx_v_word_vocidx;
 
-        /* "models/fieldembed_core.pyx":407
+        /* "models/fieldembed_core.pyx":393
  *                 # my sentence_idx is not started from 0
  *                 c.indexes[effective_words] = word_vocidx
  *                 effective_words +=1             # <<<<<<<<<<<<<<
@@ -4659,7 +4663,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
  */
         __pyx_v_effective_words = (__pyx_v_effective_words + 1);
 
-        /* "models/fieldembed_core.pyx":408
+        /* "models/fieldembed_core.pyx":394
  *                 c.indexes[effective_words] = word_vocidx
  *                 effective_words +=1
  *                 if effective_words == MAX_SENTENCE_LEN:             # <<<<<<<<<<<<<<
@@ -4669,7 +4673,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
         __pyx_t_2 = ((__pyx_v_effective_words == 0x2710) != 0);
         if (__pyx_t_2) {
 
-          /* "models/fieldembed_core.pyx":409
+          /* "models/fieldembed_core.pyx":395
  *                 effective_words +=1
  *                 if effective_words == MAX_SENTENCE_LEN:
  *                     break  # TODO: log warning, tally overflow?             # <<<<<<<<<<<<<<
@@ -4678,7 +4682,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
  */
           goto __pyx_L8_break;
 
-          /* "models/fieldembed_core.pyx":408
+          /* "models/fieldembed_core.pyx":394
  *                 c.indexes[effective_words] = word_vocidx
  *                 effective_words +=1
  *                 if effective_words == MAX_SENTENCE_LEN:             # <<<<<<<<<<<<<<
@@ -4687,7 +4691,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
  */
         }
 
-        /* "models/fieldembed_core.pyx":399
+        /* "models/fieldembed_core.pyx":385
  * 
  *             # step2: loop every tokens in this sentence, drop special tokens and use downsampling
  *             for word_vocidx in indexes[idx_start: idx_end]:             # <<<<<<<<<<<<<<
@@ -4699,7 +4703,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
       __pyx_L8_break:;
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-      /* "models/fieldembed_core.pyx":412
+      /* "models/fieldembed_core.pyx":398
  * 
  *             # step3: add the new idx_end for this sentence, that is, the value of effective_words
  *             c.sentence_idx[effective_sentences] = effective_words             # <<<<<<<<<<<<<<
@@ -4708,7 +4712,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
  */
       (__pyx_v_c.sentence_idx[__pyx_v_effective_sentences]) = __pyx_v_effective_words;
 
-      /* "models/fieldembed_core.pyx":413
+      /* "models/fieldembed_core.pyx":399
  *             # step3: add the new idx_end for this sentence, that is, the value of effective_words
  *             c.sentence_idx[effective_sentences] = effective_words
  *             effective_sentences += 1             # <<<<<<<<<<<<<<
@@ -4717,7 +4721,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
  */
       __pyx_v_effective_sentences = (__pyx_v_effective_sentences + 1);
 
-      /* "models/fieldembed_core.pyx":414
+      /* "models/fieldembed_core.pyx":400
  *             c.sentence_idx[effective_sentences] = effective_words
  *             effective_sentences += 1
  *             if effective_words == MAX_SENTENCE_LEN:             # <<<<<<<<<<<<<<
@@ -4727,7 +4731,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
       __pyx_t_2 = ((__pyx_v_effective_words == 0x2710) != 0);
       if (__pyx_t_2) {
 
-        /* "models/fieldembed_core.pyx":415
+        /* "models/fieldembed_core.pyx":401
  *             effective_sentences += 1
  *             if effective_words == MAX_SENTENCE_LEN:
  *                 break  # TODO: log warning, tally overflow?             # <<<<<<<<<<<<<<
@@ -4736,7 +4740,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
  */
         goto __pyx_L5_break;
 
-        /* "models/fieldembed_core.pyx":414
+        /* "models/fieldembed_core.pyx":400
  *             c.sentence_idx[effective_sentences] = effective_words
  *             effective_sentences += 1
  *             if effective_words == MAX_SENTENCE_LEN:             # <<<<<<<<<<<<<<
@@ -4747,7 +4751,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
     }
     __pyx_L5_break:;
 
-    /* "models/fieldembed_core.pyx":388
+    /* "models/fieldembed_core.pyx":374
  *     init_w2v_config_0X1_neat(&c, model, alpha, compute_loss, _work, _neu1) # this is the difference between sg and cbow
  * 
  *     if subsampling:             # <<<<<<<<<<<<<<
@@ -4757,7 +4761,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
     goto __pyx_L3;
   }
 
-  /* "models/fieldembed_core.pyx":419
+  /* "models/fieldembed_core.pyx":405
  *     else:
  *         # In this case, we don't drop special tokens or use downsampling
  *         effective_words = len(indexes)             # <<<<<<<<<<<<<<
@@ -4765,20 +4769,20 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
  *         for i, item in enumerate(indexes):
  */
   /*else*/ {
-    __pyx_t_4 = PyObject_Length(__pyx_v_indexes); if (unlikely(__pyx_t_4 == ((Py_ssize_t)-1))) __PYX_ERR(0, 419, __pyx_L1_error)
+    __pyx_t_4 = PyObject_Length(__pyx_v_indexes); if (unlikely(__pyx_t_4 == ((Py_ssize_t)-1))) __PYX_ERR(0, 405, __pyx_L1_error)
     __pyx_v_effective_words = __pyx_t_4;
 
-    /* "models/fieldembed_core.pyx":420
+    /* "models/fieldembed_core.pyx":406
  *         # In this case, we don't drop special tokens or use downsampling
  *         effective_words = len(indexes)
  *         effective_sentences = len(sentence_idx) # different from the original sentence_idx and effective_sentences             # <<<<<<<<<<<<<<
  *         for i, item in enumerate(indexes):
  *             c.indexes[i] = item
  */
-    __pyx_t_4 = PyObject_Length(__pyx_v_sentence_idx); if (unlikely(__pyx_t_4 == ((Py_ssize_t)-1))) __PYX_ERR(0, 420, __pyx_L1_error)
+    __pyx_t_4 = PyObject_Length(__pyx_v_sentence_idx); if (unlikely(__pyx_t_4 == ((Py_ssize_t)-1))) __PYX_ERR(0, 406, __pyx_L1_error)
     __pyx_v_effective_sentences = __pyx_t_4;
 
-    /* "models/fieldembed_core.pyx":421
+    /* "models/fieldembed_core.pyx":407
  *         effective_words = len(indexes)
  *         effective_sentences = len(sentence_idx) # different from the original sentence_idx and effective_sentences
  *         for i, item in enumerate(indexes):             # <<<<<<<<<<<<<<
@@ -4790,26 +4794,26 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
       __pyx_t_1 = __pyx_v_indexes; __Pyx_INCREF(__pyx_t_1); __pyx_t_4 = 0;
       __pyx_t_10 = NULL;
     } else {
-      __pyx_t_4 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_v_indexes); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 421, __pyx_L1_error)
+      __pyx_t_4 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_v_indexes); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 407, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_10 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 421, __pyx_L1_error)
+      __pyx_t_10 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 407, __pyx_L1_error)
     }
     for (;;) {
       if (likely(!__pyx_t_10)) {
         if (likely(PyList_CheckExact(__pyx_t_1))) {
           if (__pyx_t_4 >= PyList_GET_SIZE(__pyx_t_1)) break;
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_13 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_4); __Pyx_INCREF(__pyx_t_13); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 421, __pyx_L1_error)
+          __pyx_t_13 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_4); __Pyx_INCREF(__pyx_t_13); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 407, __pyx_L1_error)
           #else
-          __pyx_t_13 = PySequence_ITEM(__pyx_t_1, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 421, __pyx_L1_error)
+          __pyx_t_13 = PySequence_ITEM(__pyx_t_1, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 407, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_13);
           #endif
         } else {
           if (__pyx_t_4 >= PyTuple_GET_SIZE(__pyx_t_1)) break;
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_13 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_4); __Pyx_INCREF(__pyx_t_13); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 421, __pyx_L1_error)
+          __pyx_t_13 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_4); __Pyx_INCREF(__pyx_t_13); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 407, __pyx_L1_error)
           #else
-          __pyx_t_13 = PySequence_ITEM(__pyx_t_1, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 421, __pyx_L1_error)
+          __pyx_t_13 = PySequence_ITEM(__pyx_t_1, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 407, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_13);
           #endif
         }
@@ -4819,7 +4823,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
           PyObject* exc_type = PyErr_Occurred();
           if (exc_type) {
             if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-            else __PYX_ERR(0, 421, __pyx_L1_error)
+            else __PYX_ERR(0, 407, __pyx_L1_error)
           }
           break;
         }
@@ -4830,17 +4834,17 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
       __pyx_v_i = __pyx_t_6;
       __pyx_t_6 = (__pyx_t_6 + 1);
 
-      /* "models/fieldembed_core.pyx":422
+      /* "models/fieldembed_core.pyx":408
  *         effective_sentences = len(sentence_idx) # different from the original sentence_idx and effective_sentences
  *         for i, item in enumerate(indexes):
  *             c.indexes[i] = item             # <<<<<<<<<<<<<<
  *         for i, item in enumerate(sentence_idx):
  *             c.sentence_idx[i] = item
  */
-      __pyx_t_14 = __Pyx_PyInt_As_npy_uint32(__pyx_v_item); if (unlikely((__pyx_t_14 == ((npy_uint32)-1)) && PyErr_Occurred())) __PYX_ERR(0, 422, __pyx_L1_error)
+      __pyx_t_14 = __Pyx_PyInt_As_npy_uint32(__pyx_v_item); if (unlikely((__pyx_t_14 == ((npy_uint32)-1)) && PyErr_Occurred())) __PYX_ERR(0, 408, __pyx_L1_error)
       (__pyx_v_c.indexes[__pyx_v_i]) = __pyx_t_14;
 
-      /* "models/fieldembed_core.pyx":421
+      /* "models/fieldembed_core.pyx":407
  *         effective_words = len(indexes)
  *         effective_sentences = len(sentence_idx) # different from the original sentence_idx and effective_sentences
  *         for i, item in enumerate(indexes):             # <<<<<<<<<<<<<<
@@ -4850,7 +4854,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
     }
     __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-    /* "models/fieldembed_core.pyx":423
+    /* "models/fieldembed_core.pyx":409
  *         for i, item in enumerate(indexes):
  *             c.indexes[i] = item
  *         for i, item in enumerate(sentence_idx):             # <<<<<<<<<<<<<<
@@ -4862,26 +4866,26 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
       __pyx_t_1 = __pyx_v_sentence_idx; __Pyx_INCREF(__pyx_t_1); __pyx_t_4 = 0;
       __pyx_t_10 = NULL;
     } else {
-      __pyx_t_4 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_v_sentence_idx); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 423, __pyx_L1_error)
+      __pyx_t_4 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_v_sentence_idx); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 409, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_1);
-      __pyx_t_10 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 423, __pyx_L1_error)
+      __pyx_t_10 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 409, __pyx_L1_error)
     }
     for (;;) {
       if (likely(!__pyx_t_10)) {
         if (likely(PyList_CheckExact(__pyx_t_1))) {
           if (__pyx_t_4 >= PyList_GET_SIZE(__pyx_t_1)) break;
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_13 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_4); __Pyx_INCREF(__pyx_t_13); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 423, __pyx_L1_error)
+          __pyx_t_13 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_4); __Pyx_INCREF(__pyx_t_13); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 409, __pyx_L1_error)
           #else
-          __pyx_t_13 = PySequence_ITEM(__pyx_t_1, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 423, __pyx_L1_error)
+          __pyx_t_13 = PySequence_ITEM(__pyx_t_1, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 409, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_13);
           #endif
         } else {
           if (__pyx_t_4 >= PyTuple_GET_SIZE(__pyx_t_1)) break;
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_13 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_4); __Pyx_INCREF(__pyx_t_13); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 423, __pyx_L1_error)
+          __pyx_t_13 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_4); __Pyx_INCREF(__pyx_t_13); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 409, __pyx_L1_error)
           #else
-          __pyx_t_13 = PySequence_ITEM(__pyx_t_1, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 423, __pyx_L1_error)
+          __pyx_t_13 = PySequence_ITEM(__pyx_t_1, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 409, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_13);
           #endif
         }
@@ -4891,7 +4895,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
           PyObject* exc_type = PyErr_Occurred();
           if (exc_type) {
             if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-            else __PYX_ERR(0, 423, __pyx_L1_error)
+            else __PYX_ERR(0, 409, __pyx_L1_error)
           }
           break;
         }
@@ -4902,17 +4906,17 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
       __pyx_v_i = __pyx_t_6;
       __pyx_t_6 = (__pyx_t_6 + 1);
 
-      /* "models/fieldembed_core.pyx":424
+      /* "models/fieldembed_core.pyx":410
  *             c.indexes[i] = item
  *         for i, item in enumerate(sentence_idx):
  *             c.sentence_idx[i] = item             # <<<<<<<<<<<<<<
  * 
  *     # precompute "reduced window" offsets in a single randint() call
  */
-      __pyx_t_8 = __Pyx_PyInt_As_int(__pyx_v_item); if (unlikely((__pyx_t_8 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 424, __pyx_L1_error)
+      __pyx_t_8 = __Pyx_PyInt_As_int(__pyx_v_item); if (unlikely((__pyx_t_8 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 410, __pyx_L1_error)
       (__pyx_v_c.sentence_idx[__pyx_v_i]) = __pyx_t_8;
 
-      /* "models/fieldembed_core.pyx":423
+      /* "models/fieldembed_core.pyx":409
  *         for i, item in enumerate(indexes):
  *             c.indexes[i] = item
  *         for i, item in enumerate(sentence_idx):             # <<<<<<<<<<<<<<
@@ -4924,7 +4928,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
   }
   __pyx_L3:;
 
-  /* "models/fieldembed_core.pyx":427
+  /* "models/fieldembed_core.pyx":413
  * 
  *     # precompute "reduced window" offsets in a single randint() call
  *     for i, item in enumerate(model.random.randint(0, c.window, effective_words)):             # <<<<<<<<<<<<<<
@@ -4932,14 +4936,14 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
  * 
  */
   __pyx_t_6 = 0;
-  __pyx_t_13 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_random); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 427, __pyx_L1_error)
+  __pyx_t_13 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_random); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 413, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_13);
-  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_13, __pyx_n_s_randint); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 427, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_13, __pyx_n_s_randint); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 413, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
-  __pyx_t_13 = __Pyx_PyInt_From_int(__pyx_v_c.window); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 427, __pyx_L1_error)
+  __pyx_t_13 = __Pyx_PyInt_From_int(__pyx_v_c.window); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 413, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_13);
-  __pyx_t_12 = __Pyx_PyInt_From_int(__pyx_v_effective_words); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 427, __pyx_L1_error)
+  __pyx_t_12 = __Pyx_PyInt_From_int(__pyx_v_effective_words); if (unlikely(!__pyx_t_12)) __PYX_ERR(0, 413, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_12);
   __pyx_t_15 = NULL;
   __pyx_t_8 = 0;
@@ -4956,7 +4960,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
   #if CYTHON_FAST_PYCALL
   if (PyFunction_Check(__pyx_t_3)) {
     PyObject *__pyx_temp[4] = {__pyx_t_15, __pyx_int_0, __pyx_t_13, __pyx_t_12};
-    __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_8, 3+__pyx_t_8); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 427, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_8, 3+__pyx_t_8); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 413, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_15); __pyx_t_15 = 0;
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
@@ -4966,7 +4970,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
   #if CYTHON_FAST_PYCCALL
   if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
     PyObject *__pyx_temp[4] = {__pyx_t_15, __pyx_int_0, __pyx_t_13, __pyx_t_12};
-    __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_8, 3+__pyx_t_8); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 427, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-__pyx_t_8, 3+__pyx_t_8); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 413, __pyx_L1_error)
     __Pyx_XDECREF(__pyx_t_15); __pyx_t_15 = 0;
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
@@ -4974,7 +4978,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
   } else
   #endif
   {
-    __pyx_t_16 = PyTuple_New(3+__pyx_t_8); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 427, __pyx_L1_error)
+    __pyx_t_16 = PyTuple_New(3+__pyx_t_8); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 413, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_16);
     if (__pyx_t_15) {
       __Pyx_GIVEREF(__pyx_t_15); PyTuple_SET_ITEM(__pyx_t_16, 0, __pyx_t_15); __pyx_t_15 = NULL;
@@ -4988,7 +4992,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
     PyTuple_SET_ITEM(__pyx_t_16, 2+__pyx_t_8, __pyx_t_12);
     __pyx_t_13 = 0;
     __pyx_t_12 = 0;
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_16, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 427, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_16, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 413, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
     __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
   }
@@ -4997,9 +5001,9 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
     __pyx_t_3 = __pyx_t_1; __Pyx_INCREF(__pyx_t_3); __pyx_t_4 = 0;
     __pyx_t_10 = NULL;
   } else {
-    __pyx_t_4 = -1; __pyx_t_3 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 427, __pyx_L1_error)
+    __pyx_t_4 = -1; __pyx_t_3 = PyObject_GetIter(__pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 413, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
-    __pyx_t_10 = Py_TYPE(__pyx_t_3)->tp_iternext; if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 427, __pyx_L1_error)
+    __pyx_t_10 = Py_TYPE(__pyx_t_3)->tp_iternext; if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 413, __pyx_L1_error)
   }
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   for (;;) {
@@ -5007,17 +5011,17 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
       if (likely(PyList_CheckExact(__pyx_t_3))) {
         if (__pyx_t_4 >= PyList_GET_SIZE(__pyx_t_3)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_1 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_4); __Pyx_INCREF(__pyx_t_1); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 427, __pyx_L1_error)
+        __pyx_t_1 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_4); __Pyx_INCREF(__pyx_t_1); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 413, __pyx_L1_error)
         #else
-        __pyx_t_1 = PySequence_ITEM(__pyx_t_3, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 427, __pyx_L1_error)
+        __pyx_t_1 = PySequence_ITEM(__pyx_t_3, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 413, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         #endif
       } else {
         if (__pyx_t_4 >= PyTuple_GET_SIZE(__pyx_t_3)) break;
         #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-        __pyx_t_1 = PyTuple_GET_ITEM(__pyx_t_3, __pyx_t_4); __Pyx_INCREF(__pyx_t_1); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 427, __pyx_L1_error)
+        __pyx_t_1 = PyTuple_GET_ITEM(__pyx_t_3, __pyx_t_4); __Pyx_INCREF(__pyx_t_1); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 413, __pyx_L1_error)
         #else
-        __pyx_t_1 = PySequence_ITEM(__pyx_t_3, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 427, __pyx_L1_error)
+        __pyx_t_1 = PySequence_ITEM(__pyx_t_3, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 413, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_1);
         #endif
       }
@@ -5027,7 +5031,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
         PyObject* exc_type = PyErr_Occurred();
         if (exc_type) {
           if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-          else __PYX_ERR(0, 427, __pyx_L1_error)
+          else __PYX_ERR(0, 413, __pyx_L1_error)
         }
         break;
       }
@@ -5038,17 +5042,17 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
     __pyx_v_i = __pyx_t_6;
     __pyx_t_6 = (__pyx_t_6 + 1);
 
-    /* "models/fieldembed_core.pyx":428
+    /* "models/fieldembed_core.pyx":414
  *     # precompute "reduced window" offsets in a single randint() call
  *     for i, item in enumerate(model.random.randint(0, c.window, effective_words)):
  *         c.reduced_windows[i] = item             # <<<<<<<<<<<<<<
  * 
  *     with nogil: # LESSION: you should notice this nogil, otherwise the threads are rubbish
  */
-    __pyx_t_14 = __Pyx_PyInt_As_npy_uint32(__pyx_v_item); if (unlikely((__pyx_t_14 == ((npy_uint32)-1)) && PyErr_Occurred())) __PYX_ERR(0, 428, __pyx_L1_error)
+    __pyx_t_14 = __Pyx_PyInt_As_npy_uint32(__pyx_v_item); if (unlikely((__pyx_t_14 == ((npy_uint32)-1)) && PyErr_Occurred())) __PYX_ERR(0, 414, __pyx_L1_error)
     (__pyx_v_c.reduced_windows[__pyx_v_i]) = __pyx_t_14;
 
-    /* "models/fieldembed_core.pyx":427
+    /* "models/fieldembed_core.pyx":413
  * 
  *     # precompute "reduced window" offsets in a single randint() call
  *     for i, item in enumerate(model.random.randint(0, c.window, effective_words)):             # <<<<<<<<<<<<<<
@@ -5058,7 +5062,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
   }
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "models/fieldembed_core.pyx":430
+  /* "models/fieldembed_core.pyx":416
  *         c.reduced_windows[i] = item
  * 
  *     with nogil: # LESSION: you should notice this nogil, otherwise the threads are rubbish             # <<<<<<<<<<<<<<
@@ -5073,7 +5077,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
       #endif
       /*try:*/ {
 
-        /* "models/fieldembed_core.pyx":431
+        /* "models/fieldembed_core.pyx":417
  * 
  *     with nogil: # LESSION: you should notice this nogil, otherwise the threads are rubbish
  *         for sent_idx in range(effective_sentences):             # <<<<<<<<<<<<<<
@@ -5085,7 +5089,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
         for (__pyx_t_17 = 0; __pyx_t_17 < __pyx_t_8; __pyx_t_17+=1) {
           __pyx_v_sent_idx = __pyx_t_17;
 
-          /* "models/fieldembed_core.pyx":433
+          /* "models/fieldembed_core.pyx":419
  *         for sent_idx in range(effective_sentences):
  *             # idx_start and idx_end
  *             idx_end = c.sentence_idx[sent_idx]             # <<<<<<<<<<<<<<
@@ -5094,7 +5098,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
  */
           __pyx_v_idx_end = (__pyx_v_c.sentence_idx[__pyx_v_sent_idx]);
 
-          /* "models/fieldembed_core.pyx":434
+          /* "models/fieldembed_core.pyx":420
  *             # idx_start and idx_end
  *             idx_end = c.sentence_idx[sent_idx]
  *             if sent_idx == 0:             # <<<<<<<<<<<<<<
@@ -5104,7 +5108,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
           __pyx_t_2 = ((__pyx_v_sent_idx == 0) != 0);
           if (__pyx_t_2) {
 
-            /* "models/fieldembed_core.pyx":435
+            /* "models/fieldembed_core.pyx":421
  *             idx_end = c.sentence_idx[sent_idx]
  *             if sent_idx == 0:
  *                 idx_start = 0             # <<<<<<<<<<<<<<
@@ -5113,7 +5117,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
  */
             __pyx_v_idx_start = 0;
 
-            /* "models/fieldembed_core.pyx":434
+            /* "models/fieldembed_core.pyx":420
  *             # idx_start and idx_end
  *             idx_end = c.sentence_idx[sent_idx]
  *             if sent_idx == 0:             # <<<<<<<<<<<<<<
@@ -5123,7 +5127,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
             goto __pyx_L26;
           }
 
-          /* "models/fieldembed_core.pyx":437
+          /* "models/fieldembed_core.pyx":423
  *                 idx_start = 0
  *             else:
  *                 idx_start = c.sentence_idx[sent_idx-1]             # <<<<<<<<<<<<<<
@@ -5135,7 +5139,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
           }
           __pyx_L26:;
 
-          /* "models/fieldembed_core.pyx":439
+          /* "models/fieldembed_core.pyx":425
  *                 idx_start = c.sentence_idx[sent_idx-1]
  * 
  *             for i in range(idx_start, idx_end):             # <<<<<<<<<<<<<<
@@ -5147,7 +5151,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
           for (__pyx_t_20 = __pyx_v_idx_start; __pyx_t_20 < __pyx_t_19; __pyx_t_20+=1) {
             __pyx_v_i = __pyx_t_20;
 
-            /* "models/fieldembed_core.pyx":440
+            /* "models/fieldembed_core.pyx":426
  * 
  *             for i in range(idx_start, idx_end):
  *                 j = i - c.window + c.reduced_windows[i]             # <<<<<<<<<<<<<<
@@ -5156,7 +5160,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
  */
             __pyx_v_j = ((__pyx_v_i - __pyx_v_c.window) + (__pyx_v_c.reduced_windows[__pyx_v_i]));
 
-            /* "models/fieldembed_core.pyx":441
+            /* "models/fieldembed_core.pyx":427
  *             for i in range(idx_start, idx_end):
  *                 j = i - c.window + c.reduced_windows[i]
  *                 if j < idx_start:             # <<<<<<<<<<<<<<
@@ -5166,7 +5170,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
             __pyx_t_2 = ((__pyx_v_j < __pyx_v_idx_start) != 0);
             if (__pyx_t_2) {
 
-              /* "models/fieldembed_core.pyx":442
+              /* "models/fieldembed_core.pyx":428
  *                 j = i - c.window + c.reduced_windows[i]
  *                 if j < idx_start:
  *                     j = idx_start             # <<<<<<<<<<<<<<
@@ -5175,7 +5179,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
  */
               __pyx_v_j = __pyx_v_idx_start;
 
-              /* "models/fieldembed_core.pyx":441
+              /* "models/fieldembed_core.pyx":427
  *             for i in range(idx_start, idx_end):
  *                 j = i - c.window + c.reduced_windows[i]
  *                 if j < idx_start:             # <<<<<<<<<<<<<<
@@ -5184,7 +5188,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
  */
             }
 
-            /* "models/fieldembed_core.pyx":443
+            /* "models/fieldembed_core.pyx":429
  *                 if j < idx_start:
  *                     j = idx_start
  *                 k = i + c.window + 1 - c.reduced_windows[i]             # <<<<<<<<<<<<<<
@@ -5193,7 +5197,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
  */
             __pyx_v_k = (((__pyx_v_i + __pyx_v_c.window) + 1) - (__pyx_v_c.reduced_windows[__pyx_v_i]));
 
-            /* "models/fieldembed_core.pyx":444
+            /* "models/fieldembed_core.pyx":430
  *                     j = idx_start
  *                 k = i + c.window + 1 - c.reduced_windows[i]
  *                 if k > idx_end:             # <<<<<<<<<<<<<<
@@ -5203,7 +5207,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
             __pyx_t_2 = ((__pyx_v_k > __pyx_v_idx_end) != 0);
             if (__pyx_t_2) {
 
-              /* "models/fieldembed_core.pyx":445
+              /* "models/fieldembed_core.pyx":431
  *                 k = i + c.window + 1 - c.reduced_windows[i]
  *                 if k > idx_end:
  *                     k = idx_end             # <<<<<<<<<<<<<<
@@ -5212,7 +5216,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
  */
               __pyx_v_k = __pyx_v_idx_end;
 
-              /* "models/fieldembed_core.pyx":444
+              /* "models/fieldembed_core.pyx":430
  *                     j = idx_start
  *                 k = i + c.window + 1 - c.reduced_windows[i]
  *                 if k > idx_end:             # <<<<<<<<<<<<<<
@@ -5221,7 +5225,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
  */
             }
 
-            /* "models/fieldembed_core.pyx":448
+            /* "models/fieldembed_core.pyx":434
  *                 # print(j, i, k)
  * 
  *                 if c.sg == 1:             # <<<<<<<<<<<<<<
@@ -5231,7 +5235,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
             __pyx_t_2 = ((__pyx_v_c.sg == 1) != 0);
             if (__pyx_t_2) {
 
-              /* "models/fieldembed_core.pyx":449
+              /* "models/fieldembed_core.pyx":435
  * 
  *                 if c.sg == 1:
  *                     for j in range(j, k): # change the first j to another name: such as t.             # <<<<<<<<<<<<<<
@@ -5243,7 +5247,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
               for (__pyx_t_23 = __pyx_v_j; __pyx_t_23 < __pyx_t_22; __pyx_t_23+=1) {
                 __pyx_v_j = __pyx_t_23;
 
-                /* "models/fieldembed_core.pyx":450
+                /* "models/fieldembed_core.pyx":436
  *                 if c.sg == 1:
  *                     for j in range(j, k): # change the first j to another name: such as t.
  *                         if j == i:             # <<<<<<<<<<<<<<
@@ -5253,7 +5257,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
                 __pyx_t_2 = ((__pyx_v_j == __pyx_v_i) != 0);
                 if (__pyx_t_2) {
 
-                  /* "models/fieldembed_core.pyx":451
+                  /* "models/fieldembed_core.pyx":437
  *                     for j in range(j, k): # change the first j to another name: such as t.
  *                         if j == i:
  *                             continue             # <<<<<<<<<<<<<<
@@ -5262,7 +5266,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
  */
                   goto __pyx_L32_continue;
 
-                  /* "models/fieldembed_core.pyx":450
+                  /* "models/fieldembed_core.pyx":436
  *                 if c.sg == 1:
  *                     for j in range(j, k): # change the first j to another name: such as t.
  *                         if j == i:             # <<<<<<<<<<<<<<
@@ -5271,7 +5275,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
  */
                 }
 
-                /* "models/fieldembed_core.pyx":452
+                /* "models/fieldembed_core.pyx":438
  *                         if j == i:
  *                             continue
  *                         c.next_random = fieldembed_token_neg_0X1_neat(c.alpha, c.size, c.negative, c.cum_table, c.cum_table_len,             # <<<<<<<<<<<<<<
@@ -5282,7 +5286,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
                 __pyx_L32_continue:;
               }
 
-              /* "models/fieldembed_core.pyx":448
+              /* "models/fieldembed_core.pyx":434
  *                 # print(j, i, k)
  * 
  *                 if c.sg == 1:             # <<<<<<<<<<<<<<
@@ -5292,7 +5296,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
               goto __pyx_L31;
             }
 
-            /* "models/fieldembed_core.pyx":466
+            /* "models/fieldembed_core.pyx":448
  *                 else:
  *                     # build the batch here
  *                     c.next_random = fieldembed_token_neg_0X1_neat(c.alpha, c.size, c.negative, c.cum_table, c.cum_table_len,             # <<<<<<<<<<<<<<
@@ -5301,7 +5305,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
  */
             /*else*/ {
 
-              /* "models/fieldembed_core.pyx":477
+              /* "models/fieldembed_core.pyx":454
  *                             c.syn1neg, c.word_locks,
  *                             c.neu1, c.work,
  *                             c.cbow_mean, c.next_random, c.compute_loss, &c.running_training_loss)             # <<<<<<<<<<<<<<
@@ -5315,7 +5319,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
         }
       }
 
-      /* "models/fieldembed_core.pyx":430
+      /* "models/fieldembed_core.pyx":416
  *         c.reduced_windows[i] = item
  * 
  *     with nogil: # LESSION: you should notice this nogil, otherwise the threads are rubbish             # <<<<<<<<<<<<<<
@@ -5334,19 +5338,19 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
       }
   }
 
-  /* "models/fieldembed_core.pyx":479
+  /* "models/fieldembed_core.pyx":456
  *                             c.cbow_mean, c.next_random, c.compute_loss, &c.running_training_loss)
  * 
  *     model.running_training_loss = c.running_training_loss             # <<<<<<<<<<<<<<
  *     return effective_words
  * 
  */
-  __pyx_t_3 = PyFloat_FromDouble(__pyx_v_c.running_training_loss); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 479, __pyx_L1_error)
+  __pyx_t_3 = PyFloat_FromDouble(__pyx_v_c.running_training_loss); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 456, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
-  if (__Pyx_PyObject_SetAttrStr(__pyx_v_model, __pyx_n_s_running_training_loss, __pyx_t_3) < 0) __PYX_ERR(0, 479, __pyx_L1_error)
+  if (__Pyx_PyObject_SetAttrStr(__pyx_v_model, __pyx_n_s_running_training_loss, __pyx_t_3) < 0) __PYX_ERR(0, 456, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
-  /* "models/fieldembed_core.pyx":480
+  /* "models/fieldembed_core.pyx":457
  * 
  *     model.running_training_loss = c.running_training_loss
  *     return effective_words             # <<<<<<<<<<<<<<
@@ -5354,13 +5358,13 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
  * ##############################################
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_effective_words); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 480, __pyx_L1_error)
+  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_effective_words); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 457, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __pyx_r = __pyx_t_3;
   __pyx_t_3 = 0;
   goto __pyx_L0;
 
-  /* "models/fieldembed_core.pyx":378
+  /* "models/fieldembed_core.pyx":364
  *     return next_random
  * 
  * def train_batch_fieldembed_0X1_neat(model, indexes, sentence_idx, alpha, _work, _neu1, compute_loss, subsampling = 1):             # <<<<<<<<<<<<<<
@@ -5386,8 +5390,4295 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
   return __pyx_r;
 }
 
-/* "models/fieldembed_core.pyx":484
+/* "models/fieldembed_core.pyx":461
  * ##############################################
+ * 
+ * cdef init_w2v_config(             # <<<<<<<<<<<<<<
+ *     Word2VecConfig *c,
+ *     model,
+ */
+
+static PyObject *__pyx_f_6models_15fieldembed_core_init_w2v_config(struct __pyx_t_6models_15fieldembed_core_Word2VecConfig *__pyx_v_c, PyObject *__pyx_v_model, PyObject *__pyx_v_alpha, PyObject *__pyx_v_compute_loss, PyObject *__pyx_v__work, PyObject *__pyx_v__neu1, PyObject *__pyx_v__work_m, PyObject *__pyx_v__neu_m, PyObject *__pyx_v__grad_mem) {
+  int __pyx_v_i;
+  int __pyx_v_fld_idx;
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  int __pyx_t_2;
+  PyObject *__pyx_t_3 = NULL;
+  int __pyx_t_4;
+  __pyx_t_6models_15fieldembed_core_REAL_t __pyx_t_5;
+  int __pyx_t_6;
+  int __pyx_t_7;
+  PyObject *__pyx_t_8 = NULL;
+  PyObject *__pyx_t_9 = NULL;
+  Py_ssize_t __pyx_t_10;
+  int __pyx_t_11;
+  unsigned PY_LONG_LONG __pyx_t_12;
+  __Pyx_RefNannySetupContext("init_w2v_config", 0);
+
+  /* "models/fieldembed_core.pyx":475
+ *     ####################################################################### index and configuration
+ *     cdef int i, fld_idx
+ *     c[0].sg = model.sg             # <<<<<<<<<<<<<<
+ *     c[0].negative = model.negative
+ *     c[0].sample = (model.vocabulary.sample != 0)
+ */
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_sg); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 475, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 475, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  (__pyx_v_c[0]).sg = __pyx_t_2;
+
+  /* "models/fieldembed_core.pyx":476
+ *     cdef int i, fld_idx
+ *     c[0].sg = model.sg
+ *     c[0].negative = model.negative             # <<<<<<<<<<<<<<
+ *     c[0].sample = (model.vocabulary.sample != 0)
+ *     c[0].cbow_mean = model.standard_grad
+ */
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_negative); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 476, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 476, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  (__pyx_v_c[0]).negative = __pyx_t_2;
+
+  /* "models/fieldembed_core.pyx":477
+ *     c[0].sg = model.sg
+ *     c[0].negative = model.negative
+ *     c[0].sample = (model.vocabulary.sample != 0)             # <<<<<<<<<<<<<<
+ *     c[0].cbow_mean = model.standard_grad
+ *     c[0].window = model.window
+ */
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_vocabulary); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 477, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_sample); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 477, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_1 = PyObject_RichCompare(__pyx_t_3, __pyx_int_0, Py_NE); __Pyx_XGOTREF(__pyx_t_1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 477, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 477, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  (__pyx_v_c[0]).sample = __pyx_t_2;
+
+  /* "models/fieldembed_core.pyx":478
+ *     c[0].negative = model.negative
+ *     c[0].sample = (model.vocabulary.sample != 0)
+ *     c[0].cbow_mean = model.standard_grad             # <<<<<<<<<<<<<<
+ *     c[0].window = model.window
+ *     c[0].workers = model.workers
+ */
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_standard_grad); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 478, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 478, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  (__pyx_v_c[0]).cbow_mean = __pyx_t_2;
+
+  /* "models/fieldembed_core.pyx":479
+ *     c[0].sample = (model.vocabulary.sample != 0)
+ *     c[0].cbow_mean = model.standard_grad
+ *     c[0].window = model.window             # <<<<<<<<<<<<<<
+ *     c[0].workers = model.workers
+ *     c[0].compute_loss = (1 if compute_loss else 0)
+ */
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_window); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 479, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 479, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  (__pyx_v_c[0]).window = __pyx_t_2;
+
+  /* "models/fieldembed_core.pyx":480
+ *     c[0].cbow_mean = model.standard_grad
+ *     c[0].window = model.window
+ *     c[0].workers = model.workers             # <<<<<<<<<<<<<<
+ *     c[0].compute_loss = (1 if compute_loss else 0)
+ *     c[0].running_training_loss = model.running_training_loss
+ */
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_workers); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 480, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 480, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  (__pyx_v_c[0]).workers = __pyx_t_2;
+
+  /* "models/fieldembed_core.pyx":481
+ *     c[0].window = model.window
+ *     c[0].workers = model.workers
+ *     c[0].compute_loss = (1 if compute_loss else 0)             # <<<<<<<<<<<<<<
+ *     c[0].running_training_loss = model.running_training_loss
+ * 
+ */
+  __pyx_t_4 = __Pyx_PyObject_IsTrue(__pyx_v_compute_loss); if (unlikely(__pyx_t_4 < 0)) __PYX_ERR(0, 481, __pyx_L1_error)
+  if (__pyx_t_4) {
+    __pyx_t_2 = 1;
+  } else {
+    __pyx_t_2 = 0;
+  }
+  (__pyx_v_c[0]).compute_loss = __pyx_t_2;
+
+  /* "models/fieldembed_core.pyx":482
+ *     c[0].workers = model.workers
+ *     c[0].compute_loss = (1 if compute_loss else 0)
+ *     c[0].running_training_loss = model.running_training_loss             # <<<<<<<<<<<<<<
+ * 
+ *     ####################################################################### sub_fields and head_fields
+ */
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_running_training_loss); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 482, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_5 = __pyx_PyFloat_AsFloat(__pyx_t_1); if (unlikely((__pyx_t_5 == ((npy_float32)-1)) && PyErr_Occurred())) __PYX_ERR(0, 482, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  (__pyx_v_c[0]).running_training_loss = __pyx_t_5;
+
+  /* "models/fieldembed_core.pyx":485
+ * 
+ *     ####################################################################### sub_fields and head_fields
+ *     fld_idx = -1             # <<<<<<<<<<<<<<
+ *     c[0].use_sub  = model.use_sub
+ *     if c[0].use_sub:
+ */
+  __pyx_v_fld_idx = -1;
+
+  /* "models/fieldembed_core.pyx":486
+ *     ####################################################################### sub_fields and head_fields
+ *     fld_idx = -1
+ *     c[0].use_sub  = model.use_sub             # <<<<<<<<<<<<<<
+ *     if c[0].use_sub:
+ *         for i in range(c[0].use_sub):
+ */
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_use_sub); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 486, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 486, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  (__pyx_v_c[0]).use_sub = __pyx_t_2;
+
+  /* "models/fieldembed_core.pyx":487
+ *     fld_idx = -1
+ *     c[0].use_sub  = model.use_sub
+ *     if c[0].use_sub:             # <<<<<<<<<<<<<<
+ *         for i in range(c[0].use_sub):
+ *             fld_idx  = fld_idx + 1
+ */
+  __pyx_t_4 = ((__pyx_v_c[0]).use_sub != 0);
+  if (__pyx_t_4) {
+
+    /* "models/fieldembed_core.pyx":488
+ *     c[0].use_sub  = model.use_sub
+ *     if c[0].use_sub:
+ *         for i in range(c[0].use_sub):             # <<<<<<<<<<<<<<
+ *             fld_idx  = fld_idx + 1
+ *             c[0].syn0_map[fld_idx]= <REAL_t *>(np.PyArray_DATA(model.field_sub[i][0].vectors))
+ */
+    __pyx_t_2 = (__pyx_v_c[0]).use_sub;
+    __pyx_t_6 = __pyx_t_2;
+    for (__pyx_t_7 = 0; __pyx_t_7 < __pyx_t_6; __pyx_t_7+=1) {
+      __pyx_v_i = __pyx_t_7;
+
+      /* "models/fieldembed_core.pyx":489
+ *     if c[0].use_sub:
+ *         for i in range(c[0].use_sub):
+ *             fld_idx  = fld_idx + 1             # <<<<<<<<<<<<<<
+ *             c[0].syn0_map[fld_idx]= <REAL_t *>(np.PyArray_DATA(model.field_sub[i][0].vectors))
+ *             c[0].LookUp_map[i]    = <np.uint32_t *>(np.PyArray_DATA(model.field_sub[i][1]))
+ */
+      __pyx_v_fld_idx = (__pyx_v_fld_idx + 1);
+
+      /* "models/fieldembed_core.pyx":490
+ *         for i in range(c[0].use_sub):
+ *             fld_idx  = fld_idx + 1
+ *             c[0].syn0_map[fld_idx]= <REAL_t *>(np.PyArray_DATA(model.field_sub[i][0].vectors))             # <<<<<<<<<<<<<<
+ *             c[0].LookUp_map[i]    = <np.uint32_t *>(np.PyArray_DATA(model.field_sub[i][1]))
+ *             c[0].EndIdx_map[i]    = <np.uint32_t *>(np.PyArray_DATA(model.field_sub[i][2]))
+ */
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_field_sub); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 490, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __pyx_t_3 = __Pyx_GetItemInt(__pyx_t_1, __pyx_v_i, int, 1, __Pyx_PyInt_From_int, 0, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 490, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      __pyx_t_1 = __Pyx_GetItemInt(__pyx_t_3, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 490, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_vectors); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 490, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 490, __pyx_L1_error)
+      ((__pyx_v_c[0]).syn0_map[__pyx_v_fld_idx]) = ((__pyx_t_6models_15fieldembed_core_REAL_t *)PyArray_DATA(((PyArrayObject *)__pyx_t_3)));
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+
+      /* "models/fieldembed_core.pyx":491
+ *             fld_idx  = fld_idx + 1
+ *             c[0].syn0_map[fld_idx]= <REAL_t *>(np.PyArray_DATA(model.field_sub[i][0].vectors))
+ *             c[0].LookUp_map[i]    = <np.uint32_t *>(np.PyArray_DATA(model.field_sub[i][1]))             # <<<<<<<<<<<<<<
+ *             c[0].EndIdx_map[i]    = <np.uint32_t *>(np.PyArray_DATA(model.field_sub[i][2]))
+ *             c[0].LengInv_map[i]   = <REAL_t *>(np.PyArray_DATA(model.field_sub[i][3]))
+ */
+      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_field_sub); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 491, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
+      __pyx_t_1 = __Pyx_GetItemInt(__pyx_t_3, __pyx_v_i, int, 1, __Pyx_PyInt_From_int, 0, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 491, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+      __pyx_t_3 = __Pyx_GetItemInt(__pyx_t_1, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 491, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 491, __pyx_L1_error)
+      ((__pyx_v_c[0]).LookUp_map[__pyx_v_i]) = ((__pyx_t_5numpy_uint32_t *)PyArray_DATA(((PyArrayObject *)__pyx_t_3)));
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+
+      /* "models/fieldembed_core.pyx":492
+ *             c[0].syn0_map[fld_idx]= <REAL_t *>(np.PyArray_DATA(model.field_sub[i][0].vectors))
+ *             c[0].LookUp_map[i]    = <np.uint32_t *>(np.PyArray_DATA(model.field_sub[i][1]))
+ *             c[0].EndIdx_map[i]    = <np.uint32_t *>(np.PyArray_DATA(model.field_sub[i][2]))             # <<<<<<<<<<<<<<
+ *             c[0].LengInv_map[i]   = <REAL_t *>(np.PyArray_DATA(model.field_sub[i][3]))
+ *             # c[0].leng_max_map[fld_idx]= model.field_sub[0][i][4]
+ */
+      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_field_sub); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 492, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
+      __pyx_t_1 = __Pyx_GetItemInt(__pyx_t_3, __pyx_v_i, int, 1, __Pyx_PyInt_From_int, 0, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 492, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+      __pyx_t_3 = __Pyx_GetItemInt(__pyx_t_1, 2, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 492, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 492, __pyx_L1_error)
+      ((__pyx_v_c[0]).EndIdx_map[__pyx_v_i]) = ((__pyx_t_5numpy_uint32_t *)PyArray_DATA(((PyArrayObject *)__pyx_t_3)));
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+
+      /* "models/fieldembed_core.pyx":493
+ *             c[0].LookUp_map[i]    = <np.uint32_t *>(np.PyArray_DATA(model.field_sub[i][1]))
+ *             c[0].EndIdx_map[i]    = <np.uint32_t *>(np.PyArray_DATA(model.field_sub[i][2]))
+ *             c[0].LengInv_map[i]   = <REAL_t *>(np.PyArray_DATA(model.field_sub[i][3]))             # <<<<<<<<<<<<<<
+ *             # c[0].leng_max_map[fld_idx]= model.field_sub[0][i][4]
+ * 
+ */
+      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_field_sub); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 493, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
+      __pyx_t_1 = __Pyx_GetItemInt(__pyx_t_3, __pyx_v_i, int, 1, __Pyx_PyInt_From_int, 0, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 493, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+      __pyx_t_3 = __Pyx_GetItemInt(__pyx_t_1, 3, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 493, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 493, __pyx_L1_error)
+      ((__pyx_v_c[0]).LengInv_map[__pyx_v_i]) = ((__pyx_t_6models_15fieldembed_core_REAL_t *)PyArray_DATA(((PyArrayObject *)__pyx_t_3)));
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    }
+
+    /* "models/fieldembed_core.pyx":487
+ *     fld_idx = -1
+ *     c[0].use_sub  = model.use_sub
+ *     if c[0].use_sub:             # <<<<<<<<<<<<<<
+ *         for i in range(c[0].use_sub):
+ *             fld_idx  = fld_idx + 1
+ */
+  }
+
+  /* "models/fieldembed_core.pyx":496
+ *             # c[0].leng_max_map[fld_idx]= model.field_sub[0][i][4]
+ * 
+ *     c[0].use_head = model.use_head             # <<<<<<<<<<<<<<
+ *     if c[0].use_head:
+ *         fld_idx  = fld_idx + 1
+ */
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_use_head); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 496, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_3); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 496, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  (__pyx_v_c[0]).use_head = __pyx_t_2;
+
+  /* "models/fieldembed_core.pyx":497
+ * 
+ *     c[0].use_head = model.use_head
+ *     if c[0].use_head:             # <<<<<<<<<<<<<<
+ *         fld_idx  = fld_idx + 1
+ *         c[0].syn0_map[fld_idx] = <REAL_t *>(np.PyArray_DATA(model.field_head[0][0].vectors))
+ */
+  __pyx_t_4 = ((__pyx_v_c[0]).use_head != 0);
+  if (__pyx_t_4) {
+
+    /* "models/fieldembed_core.pyx":498
+ *     c[0].use_head = model.use_head
+ *     if c[0].use_head:
+ *         fld_idx  = fld_idx + 1             # <<<<<<<<<<<<<<
+ *         c[0].syn0_map[fld_idx] = <REAL_t *>(np.PyArray_DATA(model.field_head[0][0].vectors))
+ * 
+ */
+    __pyx_v_fld_idx = (__pyx_v_fld_idx + 1);
+
+    /* "models/fieldembed_core.pyx":499
+ *     if c[0].use_head:
+ *         fld_idx  = fld_idx + 1
+ *         c[0].syn0_map[fld_idx] = <REAL_t *>(np.PyArray_DATA(model.field_head[0][0].vectors))             # <<<<<<<<<<<<<<
+ * 
+ *     c[0].use_hyper = model.use_hyper
+ */
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_field_head); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 499, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_1 = __Pyx_GetItemInt(__pyx_t_3, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 499, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = __Pyx_GetItemInt(__pyx_t_1, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 499, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_vectors); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 499, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 499, __pyx_L1_error)
+    ((__pyx_v_c[0]).syn0_map[__pyx_v_fld_idx]) = ((__pyx_t_6models_15fieldembed_core_REAL_t *)PyArray_DATA(((PyArrayObject *)__pyx_t_1)));
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+    /* "models/fieldembed_core.pyx":497
+ * 
+ *     c[0].use_head = model.use_head
+ *     if c[0].use_head:             # <<<<<<<<<<<<<<
+ *         fld_idx  = fld_idx + 1
+ *         c[0].syn0_map[fld_idx] = <REAL_t *>(np.PyArray_DATA(model.field_head[0][0].vectors))
+ */
+  }
+
+  /* "models/fieldembed_core.pyx":501
+ *         c[0].syn0_map[fld_idx] = <REAL_t *>(np.PyArray_DATA(model.field_head[0][0].vectors))
+ * 
+ *     c[0].use_hyper = model.use_hyper             # <<<<<<<<<<<<<<
+ *     if c[0].use_hyper:
+ *         for i in range(c[0].use_hyper):
+ */
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_use_hyper); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 501, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_1); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 501, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  (__pyx_v_c[0]).use_hyper = __pyx_t_2;
+
+  /* "models/fieldembed_core.pyx":502
+ * 
+ *     c[0].use_hyper = model.use_hyper
+ *     if c[0].use_hyper:             # <<<<<<<<<<<<<<
+ *         for i in range(c[0].use_hyper):
+ *             fld_idx  = fld_idx + 1
+ */
+  __pyx_t_4 = ((__pyx_v_c[0]).use_hyper != 0);
+  if (__pyx_t_4) {
+
+    /* "models/fieldembed_core.pyx":503
+ *     c[0].use_hyper = model.use_hyper
+ *     if c[0].use_hyper:
+ *         for i in range(c[0].use_hyper):             # <<<<<<<<<<<<<<
+ *             fld_idx  = fld_idx + 1
+ *             # you need to create field_hyper
+ */
+    __pyx_t_2 = (__pyx_v_c[0]).use_hyper;
+    __pyx_t_6 = __pyx_t_2;
+    for (__pyx_t_7 = 0; __pyx_t_7 < __pyx_t_6; __pyx_t_7+=1) {
+      __pyx_v_i = __pyx_t_7;
+
+      /* "models/fieldembed_core.pyx":504
+ *     if c[0].use_hyper:
+ *         for i in range(c[0].use_hyper):
+ *             fld_idx  = fld_idx + 1             # <<<<<<<<<<<<<<
+ *             # you need to create field_hyper
+ *             c[0].syn0_map[fld_idx] = <REAL_t *>(np.PyArray_DATA(model.field_hyper[i][0].vectors))
+ */
+      __pyx_v_fld_idx = (__pyx_v_fld_idx + 1);
+
+      /* "models/fieldembed_core.pyx":506
+ *             fld_idx  = fld_idx + 1
+ *             # you need to create field_hyper
+ *             c[0].syn0_map[fld_idx] = <REAL_t *>(np.PyArray_DATA(model.field_hyper[i][0].vectors))             # <<<<<<<<<<<<<<
+ *             # is there any other methods? is this right?
+ *             c[0].hyper_indexes[i]  = <np.uint32_t *>(np.PyArray_DATA(np.zeros(MAX_SENTENCE_LEN, dtype = np.uin32_t)))
+ */
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_field_hyper); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 506, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __pyx_t_3 = __Pyx_GetItemInt(__pyx_t_1, __pyx_v_i, int, 1, __Pyx_PyInt_From_int, 0, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 506, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      __pyx_t_1 = __Pyx_GetItemInt(__pyx_t_3, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 506, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+      __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_vectors); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 506, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 506, __pyx_L1_error)
+      ((__pyx_v_c[0]).syn0_map[__pyx_v_fld_idx]) = ((__pyx_t_6models_15fieldembed_core_REAL_t *)PyArray_DATA(((PyArrayObject *)__pyx_t_3)));
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+
+      /* "models/fieldembed_core.pyx":508
+ *             c[0].syn0_map[fld_idx] = <REAL_t *>(np.PyArray_DATA(model.field_hyper[i][0].vectors))
+ *             # is there any other methods? is this right?
+ *             c[0].hyper_indexes[i]  = <np.uint32_t *>(np.PyArray_DATA(np.zeros(MAX_SENTENCE_LEN, dtype = np.uin32_t)))             # <<<<<<<<<<<<<<
+ * 
+ *     c[0].grad_mem  = <REAL_t *>np.PyArray_DATA(_grad_mem)
+ */
+      __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 508, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
+      __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_zeros); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 508, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_1);
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+      __pyx_t_3 = __Pyx_PyDict_NewPresized(1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 508, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
+      __pyx_t_8 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 508, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_8);
+      __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_t_8, __pyx_n_s_uin32_t); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 508, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_9);
+      __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+      if (PyDict_SetItem(__pyx_t_3, __pyx_n_s_dtype, __pyx_t_9) < 0) __PYX_ERR(0, 508, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+      __pyx_t_9 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_tuple__3, __pyx_t_3); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 508, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_9);
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+      if (!(likely(((__pyx_t_9) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_9, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 508, __pyx_L1_error)
+      ((__pyx_v_c[0]).hyper_indexes[__pyx_v_i]) = ((__pyx_t_5numpy_uint32_t *)PyArray_DATA(((PyArrayObject *)__pyx_t_9)));
+      __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+    }
+
+    /* "models/fieldembed_core.pyx":502
+ * 
+ *     c[0].use_hyper = model.use_hyper
+ *     if c[0].use_hyper:             # <<<<<<<<<<<<<<
+ *         for i in range(c[0].use_hyper):
+ *             fld_idx  = fld_idx + 1
+ */
+  }
+
+  /* "models/fieldembed_core.pyx":510
+ *             c[0].hyper_indexes[i]  = <np.uint32_t *>(np.PyArray_DATA(np.zeros(MAX_SENTENCE_LEN, dtype = np.uin32_t)))
+ * 
+ *     c[0].grad_mem  = <REAL_t *>np.PyArray_DATA(_grad_mem)             # <<<<<<<<<<<<<<
+ * 
+ *     c[0].work   = <REAL_t *>np.PyArray_DATA(_work)
+ */
+  if (!(likely(((__pyx_v__grad_mem) == Py_None) || likely(__Pyx_TypeTest(__pyx_v__grad_mem, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 510, __pyx_L1_error)
+  (__pyx_v_c[0]).grad_mem = ((__pyx_t_6models_15fieldembed_core_REAL_t *)PyArray_DATA(((PyArrayObject *)__pyx_v__grad_mem)));
+
+  /* "models/fieldembed_core.pyx":512
+ *     c[0].grad_mem  = <REAL_t *>np.PyArray_DATA(_grad_mem)
+ * 
+ *     c[0].work   = <REAL_t *>np.PyArray_DATA(_work)             # <<<<<<<<<<<<<<
+ *     c[0].neu1   = <REAL_t *>np.PyArray_DATA(_neu1)
+ * 
+ */
+  if (!(likely(((__pyx_v__work) == Py_None) || likely(__Pyx_TypeTest(__pyx_v__work, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 512, __pyx_L1_error)
+  (__pyx_v_c[0]).work = ((__pyx_t_6models_15fieldembed_core_REAL_t *)PyArray_DATA(((PyArrayObject *)__pyx_v__work)));
+
+  /* "models/fieldembed_core.pyx":513
+ * 
+ *     c[0].work   = <REAL_t *>np.PyArray_DATA(_work)
+ *     c[0].neu1   = <REAL_t *>np.PyArray_DATA(_neu1)             # <<<<<<<<<<<<<<
+ * 
+ *     c[0].use_merger = model.use_merger
+ */
+  if (!(likely(((__pyx_v__neu1) == Py_None) || likely(__Pyx_TypeTest(__pyx_v__neu1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 513, __pyx_L1_error)
+  (__pyx_v_c[0]).neu1 = ((__pyx_t_6models_15fieldembed_core_REAL_t *)PyArray_DATA(((PyArrayObject *)__pyx_v__neu1)));
+
+  /* "models/fieldembed_core.pyx":515
+ *     c[0].neu1   = <REAL_t *>np.PyArray_DATA(_neu1)
+ * 
+ *     c[0].use_merger = model.use_merger             # <<<<<<<<<<<<<<
+ *     c[0].work_m = <REAL_t *>np.PyArray_DATA(_work_m)
+ *     c[0].neu_m  = <REAL_t *>np.PyArray_DATA(_neu_m)
+ */
+  __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_use_merger); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 515, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_9);
+  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_9); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 515, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+  (__pyx_v_c[0]).use_merger = __pyx_t_2;
+
+  /* "models/fieldembed_core.pyx":516
+ * 
+ *     c[0].use_merger = model.use_merger
+ *     c[0].work_m = <REAL_t *>np.PyArray_DATA(_work_m)             # <<<<<<<<<<<<<<
+ *     c[0].neu_m  = <REAL_t *>np.PyArray_DATA(_neu_m)
+ * 
+ */
+  if (!(likely(((__pyx_v__work_m) == Py_None) || likely(__Pyx_TypeTest(__pyx_v__work_m, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 516, __pyx_L1_error)
+  (__pyx_v_c[0]).work_m = ((__pyx_t_6models_15fieldembed_core_REAL_t *)PyArray_DATA(((PyArrayObject *)__pyx_v__work_m)));
+
+  /* "models/fieldembed_core.pyx":517
+ *     c[0].use_merger = model.use_merger
+ *     c[0].work_m = <REAL_t *>np.PyArray_DATA(_work_m)
+ *     c[0].neu_m  = <REAL_t *>np.PyArray_DATA(_neu_m)             # <<<<<<<<<<<<<<
+ * 
+ * 
+ */
+  if (!(likely(((__pyx_v__neu_m) == Py_None) || likely(__Pyx_TypeTest(__pyx_v__neu_m, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 517, __pyx_L1_error)
+  (__pyx_v_c[0]).neu_m = ((__pyx_t_6models_15fieldembed_core_REAL_t *)PyArray_DATA(((PyArrayObject *)__pyx_v__neu_m)));
+
+  /* "models/fieldembed_core.pyx":522
+ *     ####################################################################### hyper_parameters
+ *     # there may not be any model.wv, what if there is no model.wv? check it.
+ *     c[0].size = model.wv.vector_size             # <<<<<<<<<<<<<<
+ *     c[0].alpha = alpha
+ * 
+ */
+  __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_wv); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 522, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_9);
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_9, __pyx_n_s_vector_size); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 522, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+  __pyx_t_2 = __Pyx_PyInt_As_int(__pyx_t_3); if (unlikely((__pyx_t_2 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 522, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  (__pyx_v_c[0]).size = __pyx_t_2;
+
+  /* "models/fieldembed_core.pyx":523
+ *     # there may not be any model.wv, what if there is no model.wv? check it.
+ *     c[0].size = model.wv.vector_size
+ *     c[0].alpha = alpha             # <<<<<<<<<<<<<<
+ * 
+ *     ####################################################################### negative embeddings
+ */
+  __pyx_t_5 = __pyx_PyFloat_AsFloat(__pyx_v_alpha); if (unlikely((__pyx_t_5 == ((npy_float32)-1)) && PyErr_Occurred())) __PYX_ERR(0, 523, __pyx_L1_error)
+  (__pyx_v_c[0]).alpha = __pyx_t_5;
+
+  /* "models/fieldembed_core.pyx":526
+ * 
+ *     ####################################################################### negative embeddings
+ *     if c[0].negative:             # <<<<<<<<<<<<<<
+ *         c[0].syn1neg   = <REAL_t *>(np.PyArray_DATA(model.wv_neg.vectors)) # why there is as ()
+ *         c[0].cum_table = <np.uint32_t *>(np.PyArray_DATA(model.vocabulary.cum_table))
+ */
+  __pyx_t_4 = ((__pyx_v_c[0]).negative != 0);
+  if (__pyx_t_4) {
+
+    /* "models/fieldembed_core.pyx":527
+ *     ####################################################################### negative embeddings
+ *     if c[0].negative:
+ *         c[0].syn1neg   = <REAL_t *>(np.PyArray_DATA(model.wv_neg.vectors)) # why there is as ()             # <<<<<<<<<<<<<<
+ *         c[0].cum_table = <np.uint32_t *>(np.PyArray_DATA(model.vocabulary.cum_table))
+ *         c[0].cum_table_len = len(model.vocabulary.cum_table)
+ */
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_wv_neg); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 527, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_vectors); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 527, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_9);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    if (!(likely(((__pyx_t_9) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_9, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 527, __pyx_L1_error)
+    (__pyx_v_c[0]).syn1neg = ((__pyx_t_6models_15fieldembed_core_REAL_t *)PyArray_DATA(((PyArrayObject *)__pyx_t_9)));
+    __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+
+    /* "models/fieldembed_core.pyx":528
+ *     if c[0].negative:
+ *         c[0].syn1neg   = <REAL_t *>(np.PyArray_DATA(model.wv_neg.vectors)) # why there is as ()
+ *         c[0].cum_table = <np.uint32_t *>(np.PyArray_DATA(model.vocabulary.cum_table))             # <<<<<<<<<<<<<<
+ *         c[0].cum_table_len = len(model.vocabulary.cum_table)
+ *     if c[0].negative or c[0].sample:
+ */
+    __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_vocabulary); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 528, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_9);
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_9, __pyx_n_s_cum_table); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 528, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+    if (!(likely(((__pyx_t_3) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_3, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 528, __pyx_L1_error)
+    (__pyx_v_c[0]).cum_table = ((__pyx_t_5numpy_uint32_t *)PyArray_DATA(((PyArrayObject *)__pyx_t_3)));
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+
+    /* "models/fieldembed_core.pyx":529
+ *         c[0].syn1neg   = <REAL_t *>(np.PyArray_DATA(model.wv_neg.vectors)) # why there is as ()
+ *         c[0].cum_table = <np.uint32_t *>(np.PyArray_DATA(model.vocabulary.cum_table))
+ *         c[0].cum_table_len = len(model.vocabulary.cum_table)             # <<<<<<<<<<<<<<
+ *     if c[0].negative or c[0].sample:
+ *         c[0].next_random = (2**24) * model.random.randint(0, 2**24) + model.random.randint(0, 2**24)
+ */
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_vocabulary); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 529, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_cum_table); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 529, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_9);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_10 = PyObject_Length(__pyx_t_9); if (unlikely(__pyx_t_10 == ((Py_ssize_t)-1))) __PYX_ERR(0, 529, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+    (__pyx_v_c[0]).cum_table_len = __pyx_t_10;
+
+    /* "models/fieldembed_core.pyx":526
+ * 
+ *     ####################################################################### negative embeddings
+ *     if c[0].negative:             # <<<<<<<<<<<<<<
+ *         c[0].syn1neg   = <REAL_t *>(np.PyArray_DATA(model.wv_neg.vectors)) # why there is as ()
+ *         c[0].cum_table = <np.uint32_t *>(np.PyArray_DATA(model.vocabulary.cum_table))
+ */
+  }
+
+  /* "models/fieldembed_core.pyx":530
+ *         c[0].cum_table = <np.uint32_t *>(np.PyArray_DATA(model.vocabulary.cum_table))
+ *         c[0].cum_table_len = len(model.vocabulary.cum_table)
+ *     if c[0].negative or c[0].sample:             # <<<<<<<<<<<<<<
+ *         c[0].next_random = (2**24) * model.random.randint(0, 2**24) + model.random.randint(0, 2**24)
+ *     ####################################################################### use proj and grad vectors
+ */
+  __pyx_t_11 = ((__pyx_v_c[0]).negative != 0);
+  if (!__pyx_t_11) {
+  } else {
+    __pyx_t_4 = __pyx_t_11;
+    goto __pyx_L12_bool_binop_done;
+  }
+  __pyx_t_11 = ((__pyx_v_c[0]).sample != 0);
+  __pyx_t_4 = __pyx_t_11;
+  __pyx_L12_bool_binop_done:;
+  if (__pyx_t_4) {
+
+    /* "models/fieldembed_core.pyx":531
+ *         c[0].cum_table_len = len(model.vocabulary.cum_table)
+ *     if c[0].negative or c[0].sample:
+ *         c[0].next_random = (2**24) * model.random.randint(0, 2**24) + model.random.randint(0, 2**24)             # <<<<<<<<<<<<<<
+ *     ####################################################################### use proj and grad vectors
+ * 
+ */
+    __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_random); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 531, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_9);
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_9, __pyx_n_s_randint); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 531, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+    __pyx_t_9 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_tuple__4, NULL); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 531, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_9);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = PyNumber_Multiply(__pyx_int_16777216, __pyx_t_9); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 531, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+    __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_random); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 531, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_9);
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_9, __pyx_n_s_randint); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 531, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+    __pyx_t_9 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_tuple__5, NULL); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 531, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_9);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    __pyx_t_1 = PyNumber_Add(__pyx_t_3, __pyx_t_9); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 531, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+    __pyx_t_12 = __Pyx_PyInt_As_unsigned_PY_LONG_LONG(__pyx_t_1); if (unlikely((__pyx_t_12 == (unsigned PY_LONG_LONG)-1) && PyErr_Occurred())) __PYX_ERR(0, 531, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    (__pyx_v_c[0]).next_random = __pyx_t_12;
+
+    /* "models/fieldembed_core.pyx":530
+ *         c[0].cum_table = <np.uint32_t *>(np.PyArray_DATA(model.vocabulary.cum_table))
+ *         c[0].cum_table_len = len(model.vocabulary.cum_table)
+ *     if c[0].negative or c[0].sample:             # <<<<<<<<<<<<<<
+ *         c[0].next_random = (2**24) * model.random.randint(0, 2**24) + model.random.randint(0, 2**24)
+ *     ####################################################################### use proj and grad vectors
+ */
+  }
+
+  /* "models/fieldembed_core.pyx":535
+ * 
+ *     # lock the tokens that are not desired to be updated.
+ *     c[0].word_locks = <REAL_t *>(np.PyArray_DATA(model.trainables.vectors_lockf))             # <<<<<<<<<<<<<<
+ * 
+ * 
+ */
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_trainables); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 535, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_9 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_vectors_lockf); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 535, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_9);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (!(likely(((__pyx_t_9) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_9, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 535, __pyx_L1_error)
+  (__pyx_v_c[0]).word_locks = ((__pyx_t_6models_15fieldembed_core_REAL_t *)PyArray_DATA(((PyArrayObject *)__pyx_t_9)));
+  __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+
+  /* "models/fieldembed_core.pyx":461
+ * ##############################################
+ * 
+ * cdef init_w2v_config(             # <<<<<<<<<<<<<<
+ *     Word2VecConfig *c,
+ *     model,
+ */
+
+  /* function exit code */
+  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_8);
+  __Pyx_XDECREF(__pyx_t_9);
+  __Pyx_AddTraceback("models.fieldembed_core.init_w2v_config", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = 0;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "models/fieldembed_core.pyx":538
+ * 
+ * 
+ * cdef unsigned long long fieldembed_negsamp(             # <<<<<<<<<<<<<<
+ *     const REAL_t alpha,
+ *     const int size,
+ */
+
+static unsigned PY_LONG_LONG __pyx_f_6models_15fieldembed_core_fieldembed_negsamp(__pyx_t_6models_15fieldembed_core_REAL_t const __pyx_v_alpha, int const __pyx_v_size, int const __pyx_v_negative, __pyx_t_5numpy_uint32_t *__pyx_v_cum_table, unsigned PY_LONG_LONG __pyx_v_cum_table_len, __pyx_t_5numpy_uint32_t const *__pyx_v_indexes, std::map<int,__pyx_t_5numpy_uint32_t *>  __pyx_v_hyper_indexes, int __pyx_v_i, int __pyx_v_j, int __pyx_v_k, int __pyx_v_use_head, int __pyx_v_use_sub, int __pyx_v_use_hyper, int __pyx_v_use_merger, std::map<int,__pyx_t_6models_15fieldembed_core_REAL_t *>  __pyx_v_syn0_map, std::map<int,__pyx_t_5numpy_uint32_t *>  __pyx_v_LookUp_map, std::map<int,__pyx_t_5numpy_uint32_t *>  __pyx_v_EndIdx_map, std::map<int,__pyx_t_6models_15fieldembed_core_REAL_t *>  __pyx_v_LengInv_map, __pyx_t_6models_15fieldembed_core_REAL_t *__pyx_v_syn1neg, __pyx_t_6models_15fieldembed_core_REAL_t *__pyx_v_word_locks, __pyx_t_6models_15fieldembed_core_REAL_t *__pyx_v_grad_mem, __pyx_t_6models_15fieldembed_core_REAL_t *__pyx_v_neu1, __pyx_t_6models_15fieldembed_core_REAL_t *__pyx_v_work, __pyx_t_6models_15fieldembed_core_REAL_t *__pyx_v_neu_m, __pyx_t_6models_15fieldembed_core_REAL_t *__pyx_v_work_m, int __pyx_v_cbow_mean, unsigned PY_LONG_LONG __pyx_v_next_random, int const __pyx_v__compute_loss, __pyx_t_6models_15fieldembed_core_REAL_t *__pyx_v__running_training_loss_param) {
+  int __pyx_v_proj_num;
+  PY_LONG_LONG __pyx_v_row2;
+  unsigned PY_LONG_LONG __pyx_v_modulo;
+  __pyx_t_6models_15fieldembed_core_REAL_t __pyx_v_label;
+  __pyx_t_6models_15fieldembed_core_REAL_t __pyx_v_f_dot;
+  __pyx_t_6models_15fieldembed_core_REAL_t __pyx_v_f;
+  __pyx_t_6models_15fieldembed_core_REAL_t __pyx_v_log_e_f_dot;
+  __pyx_t_6models_15fieldembed_core_REAL_t __pyx_v_g_m;
+  int __pyx_v_d;
+  int __pyx_v_m;
+  int __pyx_v_n;
+  int __pyx_v_lpid;
+  int __pyx_v_left_word;
+  int __pyx_v_gs;
+  int __pyx_v_ge;
+  __pyx_t_5numpy_uint32_t __pyx_v_target_index;
+  __pyx_t_5numpy_uint32_t __pyx_v_word_index;
+  __pyx_t_5numpy_uint32_t __pyx_v_grain_index;
+  __pyx_t_5numpy_uint32_t __pyx_v_fld_idx;
+  __pyx_t_6models_15fieldembed_core_REAL_t __pyx_v_count;
+  __pyx_t_6models_15fieldembed_core_REAL_t __pyx_v_inv_count;
+  __pyx_t_6models_15fieldembed_core_REAL_t __pyx_v_word_lenginv;
+  __pyx_t_6models_15fieldembed_core_REAL_t __pyx_v_channel_no_inv;
+  unsigned PY_LONG_LONG __pyx_r;
+  int __pyx_t_1;
+  int __pyx_t_2;
+  int __pyx_t_3;
+  int __pyx_t_4;
+  int __pyx_t_5;
+  int __pyx_t_6;
+  int __pyx_t_7;
+  int __pyx_t_8;
+  int __pyx_t_9;
+  int __pyx_t_10;
+  long __pyx_t_11;
+  long __pyx_t_12;
+  int __pyx_t_13;
+  __pyx_t_6models_15fieldembed_core_REAL_t __pyx_t_14;
+
+  /* "models/fieldembed_core.pyx":579
+ *     #===========================================================================================#
+ * 
+ *     cdef int proj_num = use_sub + use_head + use_hyper             # <<<<<<<<<<<<<<
+ *     cdef long long row2
+ *     cdef unsigned long long modulo = 281474976710655ULL
+ */
+  __pyx_v_proj_num = ((__pyx_v_use_sub + __pyx_v_use_head) + __pyx_v_use_hyper);
+
+  /* "models/fieldembed_core.pyx":581
+ *     cdef int proj_num = use_sub + use_head + use_hyper
+ *     cdef long long row2
+ *     cdef unsigned long long modulo = 281474976710655ULL             # <<<<<<<<<<<<<<
+ * 
+ *     cdef REAL_t label
+ */
+  __pyx_v_modulo = 281474976710655ULL;
+
+  /* "models/fieldembed_core.pyx":594
+ *     # should left_word be an int?
+ *     cdef np.uint32_t target_index, word_index, grain_index, fld_idx
+ *     cdef REAL_t count, inv_count = 1.0, word_lenginv = 1.0, channel_no_inv = ONEF / (proj_num)             # <<<<<<<<<<<<<<
+ * 
+ *     ######################################################################## S: Initialize count and inv_count
+ */
+  __pyx_v_inv_count = 1.0;
+  __pyx_v_word_lenginv = 1.0;
+  __pyx_v_channel_no_inv = (__pyx_v_6models_15fieldembed_core_ONEF / __pyx_v_proj_num);
+
+  /* "models/fieldembed_core.pyx":597
+ * 
+ *     ######################################################################## S: Initialize count and inv_count
+ *     count = <REAL_t>0.0             # <<<<<<<<<<<<<<
+ *     for m in range(j, k):
+ *         # j, m, i, k are int
+ */
+  __pyx_v_count = ((__pyx_t_6models_15fieldembed_core_REAL_t)0.0);
+
+  /* "models/fieldembed_core.pyx":598
+ *     ######################################################################## S: Initialize count and inv_count
+ *     count = <REAL_t>0.0
+ *     for m in range(j, k):             # <<<<<<<<<<<<<<
+ *         # j, m, i, k are int
+ *         if m == i:
+ */
+  __pyx_t_1 = __pyx_v_k;
+  __pyx_t_2 = __pyx_t_1;
+  for (__pyx_t_3 = __pyx_v_j; __pyx_t_3 < __pyx_t_2; __pyx_t_3+=1) {
+    __pyx_v_m = __pyx_t_3;
+
+    /* "models/fieldembed_core.pyx":600
+ *     for m in range(j, k):
+ *         # j, m, i, k are int
+ *         if m == i:             # <<<<<<<<<<<<<<
+ *             continue
+ *         else:
+ */
+    __pyx_t_4 = ((__pyx_v_m == __pyx_v_i) != 0);
+    if (__pyx_t_4) {
+
+      /* "models/fieldembed_core.pyx":601
+ *         # j, m, i, k are int
+ *         if m == i:
+ *             continue             # <<<<<<<<<<<<<<
+ *         else:
+ *             count += ONEF
+ */
+      goto __pyx_L3_continue;
+
+      /* "models/fieldembed_core.pyx":600
+ *     for m in range(j, k):
+ *         # j, m, i, k are int
+ *         if m == i:             # <<<<<<<<<<<<<<
+ *             continue
+ *         else:
+ */
+    }
+
+    /* "models/fieldembed_core.pyx":603
+ *             continue
+ *         else:
+ *             count += ONEF             # <<<<<<<<<<<<<<
+ * 
+ *     # when using sg, count is 1. count is cw in word2vec.c
+ */
+    /*else*/ {
+      __pyx_v_count = (__pyx_v_count + __pyx_v_6models_15fieldembed_core_ONEF);
+    }
+    __pyx_L3_continue:;
+  }
+
+  /* "models/fieldembed_core.pyx":606
+ * 
+ *     # when using sg, count is 1. count is cw in word2vec.c
+ *     if count > (<REAL_t>0.5):             # <<<<<<<<<<<<<<
+ *         inv_count = ONEF/count
+ *     ######################################################################## E
+ */
+  __pyx_t_4 = ((__pyx_v_count > ((__pyx_t_6models_15fieldembed_core_REAL_t)0.5)) != 0);
+  if (__pyx_t_4) {
+
+    /* "models/fieldembed_core.pyx":607
+ *     # when using sg, count is 1. count is cw in word2vec.c
+ *     if count > (<REAL_t>0.5):
+ *         inv_count = ONEF/count             # <<<<<<<<<<<<<<
+ *     ######################################################################## E
+ * 
+ */
+    __pyx_v_inv_count = (__pyx_v_6models_15fieldembed_core_ONEF / __pyx_v_count);
+
+    /* "models/fieldembed_core.pyx":606
+ * 
+ *     # when using sg, count is 1. count is cw in word2vec.c
+ *     if count > (<REAL_t>0.5):             # <<<<<<<<<<<<<<
+ *         inv_count = ONEF/count
+ *     ######################################################################## E
+ */
+  }
+
+  /* "models/fieldembed_core.pyx":612
+ *     # here word_index is np.uint32_t, because indexes is np.int32_t (very interesting)
+ *     # word_index is the target word in this whole function
+ *     word_index = indexes[i]             # <<<<<<<<<<<<<<
+ * 
+ *     memset(neu1, 0, proj_num * size * cython.sizeof(REAL_t))
+ */
+  __pyx_v_word_index = (__pyx_v_indexes[__pyx_v_i]);
+
+  /* "models/fieldembed_core.pyx":614
+ *     word_index = indexes[i]
+ * 
+ *     memset(neu1, 0, proj_num * size * cython.sizeof(REAL_t))             # <<<<<<<<<<<<<<
+ *     ######################################################################## S: calculate proj from syn0
+ *     fld_idx = -1
+ */
+  (void)(memset(__pyx_v_neu1, 0, ((__pyx_v_proj_num * __pyx_v_size) * (sizeof(__pyx_t_6models_15fieldembed_core_REAL_t)))));
+
+  /* "models/fieldembed_core.pyx":616
+ *     memset(neu1, 0, proj_num * size * cython.sizeof(REAL_t))
+ *     ######################################################################## S: calculate proj from syn0
+ *     fld_idx = -1             # <<<<<<<<<<<<<<
+ *     if use_sub:
+ *         for lpid in range(use_sub):
+ */
+  __pyx_v_fld_idx = -1;
+
+  /* "models/fieldembed_core.pyx":617
+ *     ######################################################################## S: calculate proj from syn0
+ *     fld_idx = -1
+ *     if use_sub:             # <<<<<<<<<<<<<<
+ *         for lpid in range(use_sub):
+ *             fld_idx = fld_idx + 1
+ */
+  __pyx_t_4 = (__pyx_v_use_sub != 0);
+  if (__pyx_t_4) {
+
+    /* "models/fieldembed_core.pyx":618
+ *     fld_idx = -1
+ *     if use_sub:
+ *         for lpid in range(use_sub):             # <<<<<<<<<<<<<<
+ *             fld_idx = fld_idx + 1
+ *             # sg case: range(j, k) is range(j, j + 1)
+ */
+    __pyx_t_1 = __pyx_v_use_sub;
+    __pyx_t_2 = __pyx_t_1;
+    for (__pyx_t_3 = 0; __pyx_t_3 < __pyx_t_2; __pyx_t_3+=1) {
+      __pyx_v_lpid = __pyx_t_3;
+
+      /* "models/fieldembed_core.pyx":619
+ *     if use_sub:
+ *         for lpid in range(use_sub):
+ *             fld_idx = fld_idx + 1             # <<<<<<<<<<<<<<
+ *             # sg case: range(j, k) is range(j, j + 1)
+ *             # loop left tokens here
+ */
+      __pyx_v_fld_idx = (__pyx_v_fld_idx + 1);
+
+      /* "models/fieldembed_core.pyx":622
+ *             # sg case: range(j, k) is range(j, j + 1)
+ *             # loop left tokens here
+ *             for m in range(j, k):             # <<<<<<<<<<<<<<
+ *                 if m == i:
+ *                     continue
+ */
+      __pyx_t_5 = __pyx_v_k;
+      __pyx_t_6 = __pyx_t_5;
+      for (__pyx_t_7 = __pyx_v_j; __pyx_t_7 < __pyx_t_6; __pyx_t_7+=1) {
+        __pyx_v_m = __pyx_t_7;
+
+        /* "models/fieldembed_core.pyx":623
+ *             # loop left tokens here
+ *             for m in range(j, k):
+ *                 if m == i:             # <<<<<<<<<<<<<<
+ *                     continue
+ *                 else:
+ */
+        __pyx_t_4 = ((__pyx_v_m == __pyx_v_i) != 0);
+        if (__pyx_t_4) {
+
+          /* "models/fieldembed_core.pyx":624
+ *             for m in range(j, k):
+ *                 if m == i:
+ *                     continue             # <<<<<<<<<<<<<<
+ *                 else:
+ *                     # left_word: uint32 to int
+ */
+          goto __pyx_L10_continue;
+
+          /* "models/fieldembed_core.pyx":623
+ *             # loop left tokens here
+ *             for m in range(j, k):
+ *                 if m == i:             # <<<<<<<<<<<<<<
+ *                     continue
+ *                 else:
+ */
+        }
+
+        /* "models/fieldembed_core.pyx":627
+ *                 else:
+ *                     # left_word: uint32 to int
+ *                     left_word  = indexes[m]             # <<<<<<<<<<<<<<
+ *                     # word_lenginv: REAL_t
+ *                     word_lenginv = LengInv_map[lpid][left_word]
+ */
+        /*else*/ {
+          __pyx_v_left_word = (__pyx_v_indexes[__pyx_v_m]);
+
+          /* "models/fieldembed_core.pyx":629
+ *                     left_word  = indexes[m]
+ *                     # word_lenginv: REAL_t
+ *                     word_lenginv = LengInv_map[lpid][left_word]             # <<<<<<<<<<<<<<
+ *                     gs = EndIdx_map[lpid][left_word-1]
+ *                     ge = EndIdx_map[lpid][left_word]
+ */
+          __pyx_v_word_lenginv = ((__pyx_v_LengInv_map[__pyx_v_lpid])[__pyx_v_left_word]);
+
+          /* "models/fieldembed_core.pyx":630
+ *                     # word_lenginv: REAL_t
+ *                     word_lenginv = LengInv_map[lpid][left_word]
+ *                     gs = EndIdx_map[lpid][left_word-1]             # <<<<<<<<<<<<<<
+ *                     ge = EndIdx_map[lpid][left_word]
+ *                     for n in range(gs, ge):
+ */
+          __pyx_v_gs = ((__pyx_v_EndIdx_map[__pyx_v_lpid])[(__pyx_v_left_word - 1)]);
+
+          /* "models/fieldembed_core.pyx":631
+ *                     word_lenginv = LengInv_map[lpid][left_word]
+ *                     gs = EndIdx_map[lpid][left_word-1]
+ *                     ge = EndIdx_map[lpid][left_word]             # <<<<<<<<<<<<<<
+ *                     for n in range(gs, ge):
+ *                         # n is also np.uint_32
+ */
+          __pyx_v_ge = ((__pyx_v_EndIdx_map[__pyx_v_lpid])[__pyx_v_left_word]);
+
+          /* "models/fieldembed_core.pyx":632
+ *                     gs = EndIdx_map[lpid][left_word-1]
+ *                     ge = EndIdx_map[lpid][left_word]
+ *                     for n in range(gs, ge):             # <<<<<<<<<<<<<<
+ *                         # n is also np.uint_32
+ *                         # should n be an int? just like m?
+ */
+          __pyx_t_8 = __pyx_v_ge;
+          __pyx_t_9 = __pyx_t_8;
+          for (__pyx_t_10 = __pyx_v_gs; __pyx_t_10 < __pyx_t_9; __pyx_t_10+=1) {
+            __pyx_v_n = __pyx_t_10;
+
+            /* "models/fieldembed_core.pyx":635
+ *                         # n is also np.uint_32
+ *                         # should n be an int? just like m?
+ *                         grain_index = LookUp_map[lpid][n] # syn0_1_LookUp is a np.uint_32             # <<<<<<<<<<<<<<
+ *                         # grain_index is also np.uint_32
+ *                         our_saxpy(&size, &word_lenginv, &syn0_map[fld_idx][grain_index * size],  &ONE, &neu1[fld_idx*size], &ONE)
+ */
+            __pyx_v_grain_index = ((__pyx_v_LookUp_map[__pyx_v_lpid])[__pyx_v_n]);
+
+            /* "models/fieldembed_core.pyx":637
+ *                         grain_index = LookUp_map[lpid][n] # syn0_1_LookUp is a np.uint_32
+ *                         # grain_index is also np.uint_32
+ *                         our_saxpy(&size, &word_lenginv, &syn0_map[fld_idx][grain_index * size],  &ONE, &neu1[fld_idx*size], &ONE)             # <<<<<<<<<<<<<<
+ *             # (does this need BLAS-variants like saxpy? # no, you don't)
+ *             sscal(&size, &inv_count, &neu1[fld_idx*size], &ONE)
+ */
+            __pyx_v_6models_15fieldembed_core_our_saxpy((&__pyx_v_size), (&__pyx_v_word_lenginv), (&((__pyx_v_syn0_map[__pyx_v_fld_idx])[(__pyx_v_grain_index * __pyx_v_size)])), (&__pyx_v_6models_15fieldembed_core_ONE), (&(__pyx_v_neu1[(__pyx_v_fld_idx * __pyx_v_size)])), (&__pyx_v_6models_15fieldembed_core_ONE));
+          }
+        }
+        __pyx_L10_continue:;
+      }
+
+      /* "models/fieldembed_core.pyx":639
+ *                         our_saxpy(&size, &word_lenginv, &syn0_map[fld_idx][grain_index * size],  &ONE, &neu1[fld_idx*size], &ONE)
+ *             # (does this need BLAS-variants like saxpy? # no, you don't)
+ *             sscal(&size, &inv_count, &neu1[fld_idx*size], &ONE)             # <<<<<<<<<<<<<<
+ * 
+ *     if use_head:
+ */
+      __pyx_v_6models_15fieldembed_core_sscal((&__pyx_v_size), (&__pyx_v_inv_count), (&(__pyx_v_neu1[(__pyx_v_fld_idx * __pyx_v_size)])), (&__pyx_v_6models_15fieldembed_core_ONE));
+    }
+
+    /* "models/fieldembed_core.pyx":617
+ *     ######################################################################## S: calculate proj from syn0
+ *     fld_idx = -1
+ *     if use_sub:             # <<<<<<<<<<<<<<
+ *         for lpid in range(use_sub):
+ *             fld_idx = fld_idx + 1
+ */
+  }
+
+  /* "models/fieldembed_core.pyx":641
+ *             sscal(&size, &inv_count, &neu1[fld_idx*size], &ONE)
+ * 
+ *     if use_head:             # <<<<<<<<<<<<<<
+ *         fld_idx = fld_idx + 1
+ *         # sg case: range(j, k) is range(j, j + 1)
+ */
+  __pyx_t_4 = (__pyx_v_use_head != 0);
+  if (__pyx_t_4) {
+
+    /* "models/fieldembed_core.pyx":642
+ * 
+ *     if use_head:
+ *         fld_idx = fld_idx + 1             # <<<<<<<<<<<<<<
+ *         # sg case: range(j, k) is range(j, j + 1)
+ *         for m in range(j, k):
+ */
+    __pyx_v_fld_idx = (__pyx_v_fld_idx + 1);
+
+    /* "models/fieldembed_core.pyx":644
+ *         fld_idx = fld_idx + 1
+ *         # sg case: range(j, k) is range(j, j + 1)
+ *         for m in range(j, k):             # <<<<<<<<<<<<<<
+ *             # j, m, i, k are int
+ *             if m == i:
+ */
+    __pyx_t_1 = __pyx_v_k;
+    __pyx_t_2 = __pyx_t_1;
+    for (__pyx_t_3 = __pyx_v_j; __pyx_t_3 < __pyx_t_2; __pyx_t_3+=1) {
+      __pyx_v_m = __pyx_t_3;
+
+      /* "models/fieldembed_core.pyx":646
+ *         for m in range(j, k):
+ *             # j, m, i, k are int
+ *             if m == i:             # <<<<<<<<<<<<<<
+ *                 continue
+ *             else:
+ */
+      __pyx_t_4 = ((__pyx_v_m == __pyx_v_i) != 0);
+      if (__pyx_t_4) {
+
+        /* "models/fieldembed_core.pyx":647
+ *             # j, m, i, k are int
+ *             if m == i:
+ *                 continue             # <<<<<<<<<<<<<<
+ *             else:
+ *                 our_saxpy(&size, &ONEF, &syn0_map[fld_idx][indexes[m] * size], &ONE, &neu1[fld_idx*size], &ONE)
+ */
+        goto __pyx_L16_continue;
+
+        /* "models/fieldembed_core.pyx":646
+ *         for m in range(j, k):
+ *             # j, m, i, k are int
+ *             if m == i:             # <<<<<<<<<<<<<<
+ *                 continue
+ *             else:
+ */
+      }
+
+      /* "models/fieldembed_core.pyx":649
+ *                 continue
+ *             else:
+ *                 our_saxpy(&size, &ONEF, &syn0_map[fld_idx][indexes[m] * size], &ONE, &neu1[fld_idx*size], &ONE)             # <<<<<<<<<<<<<<
+ *         # if not sg:
+ *         # (does this need BLAS-variants like saxpy? # no, you don't)
+ */
+      /*else*/ {
+        __pyx_v_6models_15fieldembed_core_our_saxpy((&__pyx_v_size), (&__pyx_v_6models_15fieldembed_core_ONEF), (&((__pyx_v_syn0_map[__pyx_v_fld_idx])[((__pyx_v_indexes[__pyx_v_m]) * __pyx_v_size)])), (&__pyx_v_6models_15fieldembed_core_ONE), (&(__pyx_v_neu1[(__pyx_v_fld_idx * __pyx_v_size)])), (&__pyx_v_6models_15fieldembed_core_ONE));
+      }
+      __pyx_L16_continue:;
+    }
+
+    /* "models/fieldembed_core.pyx":652
+ *         # if not sg:
+ *         # (does this need BLAS-variants like saxpy? # no, you don't)
+ *         sscal(&size, &inv_count, &neu1[fld_idx*size], &ONE)             # <<<<<<<<<<<<<<
+ * 
+ *     if use_hyper:
+ */
+    __pyx_v_6models_15fieldembed_core_sscal((&__pyx_v_size), (&__pyx_v_inv_count), (&(__pyx_v_neu1[(__pyx_v_fld_idx * __pyx_v_size)])), (&__pyx_v_6models_15fieldembed_core_ONE));
+
+    /* "models/fieldembed_core.pyx":641
+ *             sscal(&size, &inv_count, &neu1[fld_idx*size], &ONE)
+ * 
+ *     if use_head:             # <<<<<<<<<<<<<<
+ *         fld_idx = fld_idx + 1
+ *         # sg case: range(j, k) is range(j, j + 1)
+ */
+  }
+
+  /* "models/fieldembed_core.pyx":654
+ *         sscal(&size, &inv_count, &neu1[fld_idx*size], &ONE)
+ * 
+ *     if use_hyper:             # <<<<<<<<<<<<<<
+ *         # here i is the int
+ *         for lpid in range(use_hyper):
+ */
+  __pyx_t_4 = (__pyx_v_use_hyper != 0);
+  if (__pyx_t_4) {
+
+    /* "models/fieldembed_core.pyx":656
+ *     if use_hyper:
+ *         # here i is the int
+ *         for lpid in range(use_hyper):             # <<<<<<<<<<<<<<
+ *             fld_idx = fld_idx + 1
+ *             # sg case: range(j, k) is range(j, j + 1)
+ */
+    __pyx_t_1 = __pyx_v_use_hyper;
+    __pyx_t_2 = __pyx_t_1;
+    for (__pyx_t_3 = 0; __pyx_t_3 < __pyx_t_2; __pyx_t_3+=1) {
+      __pyx_v_lpid = __pyx_t_3;
+
+      /* "models/fieldembed_core.pyx":657
+ *         # here i is the int
+ *         for lpid in range(use_hyper):
+ *             fld_idx = fld_idx + 1             # <<<<<<<<<<<<<<
+ *             # sg case: range(j, k) is range(j, j + 1)
+ *             for m in range(j, k):
+ */
+      __pyx_v_fld_idx = (__pyx_v_fld_idx + 1);
+
+      /* "models/fieldembed_core.pyx":659
+ *             fld_idx = fld_idx + 1
+ *             # sg case: range(j, k) is range(j, j + 1)
+ *             for m in range(j, k):             # <<<<<<<<<<<<<<
+ *                 # j, m, i, k are int
+ *                 if m == i:
+ */
+      __pyx_t_5 = __pyx_v_k;
+      __pyx_t_6 = __pyx_t_5;
+      for (__pyx_t_7 = __pyx_v_j; __pyx_t_7 < __pyx_t_6; __pyx_t_7+=1) {
+        __pyx_v_m = __pyx_t_7;
+
+        /* "models/fieldembed_core.pyx":661
+ *             for m in range(j, k):
+ *                 # j, m, i, k are int
+ *                 if m == i:             # <<<<<<<<<<<<<<
+ *                     continue
+ *                 else:
+ */
+        __pyx_t_4 = ((__pyx_v_m == __pyx_v_i) != 0);
+        if (__pyx_t_4) {
+
+          /* "models/fieldembed_core.pyx":662
+ *                 # j, m, i, k are int
+ *                 if m == i:
+ *                     continue             # <<<<<<<<<<<<<<
+ *                 else:
+ *                     our_saxpy(&size, &ONEF, &syn0_map[fld_idx][hyper_indexes[lpid][m] * size], &ONE, &neu1[fld_idx*size], &ONE)
+ */
+          goto __pyx_L22_continue;
+
+          /* "models/fieldembed_core.pyx":661
+ *             for m in range(j, k):
+ *                 # j, m, i, k are int
+ *                 if m == i:             # <<<<<<<<<<<<<<
+ *                     continue
+ *                 else:
+ */
+        }
+
+        /* "models/fieldembed_core.pyx":664
+ *                     continue
+ *                 else:
+ *                     our_saxpy(&size, &ONEF, &syn0_map[fld_idx][hyper_indexes[lpid][m] * size], &ONE, &neu1[fld_idx*size], &ONE)             # <<<<<<<<<<<<<<
+ *             sscal(&size, &inv_count, &neu1[fld_idx*size], &ONE)
+ * 
+ */
+        /*else*/ {
+          __pyx_v_6models_15fieldembed_core_our_saxpy((&__pyx_v_size), (&__pyx_v_6models_15fieldembed_core_ONEF), (&((__pyx_v_syn0_map[__pyx_v_fld_idx])[(((__pyx_v_hyper_indexes[__pyx_v_lpid])[__pyx_v_m]) * __pyx_v_size)])), (&__pyx_v_6models_15fieldembed_core_ONE), (&(__pyx_v_neu1[(__pyx_v_fld_idx * __pyx_v_size)])), (&__pyx_v_6models_15fieldembed_core_ONE));
+        }
+        __pyx_L22_continue:;
+      }
+
+      /* "models/fieldembed_core.pyx":665
+ *                 else:
+ *                     our_saxpy(&size, &ONEF, &syn0_map[fld_idx][hyper_indexes[lpid][m] * size], &ONE, &neu1[fld_idx*size], &ONE)
+ *             sscal(&size, &inv_count, &neu1[fld_idx*size], &ONE)             # <<<<<<<<<<<<<<
+ * 
+ *     if use_merger:
+ */
+      __pyx_v_6models_15fieldembed_core_sscal((&__pyx_v_size), (&__pyx_v_inv_count), (&(__pyx_v_neu1[(__pyx_v_fld_idx * __pyx_v_size)])), (&__pyx_v_6models_15fieldembed_core_ONE));
+    }
+
+    /* "models/fieldembed_core.pyx":654
+ *         sscal(&size, &inv_count, &neu1[fld_idx*size], &ONE)
+ * 
+ *     if use_hyper:             # <<<<<<<<<<<<<<
+ *         # here i is the int
+ *         for lpid in range(use_hyper):
+ */
+  }
+
+  /* "models/fieldembed_core.pyx":667
+ *             sscal(&size, &inv_count, &neu1[fld_idx*size], &ONE)
+ * 
+ *     if use_merger:             # <<<<<<<<<<<<<<
+ *         memset(neu_m,  0, size * cython.sizeof(REAL_t))
+ *         fld_idx = -1
+ */
+  __pyx_t_4 = (__pyx_v_use_merger != 0);
+  if (__pyx_t_4) {
+
+    /* "models/fieldembed_core.pyx":668
+ * 
+ *     if use_merger:
+ *         memset(neu_m,  0, size * cython.sizeof(REAL_t))             # <<<<<<<<<<<<<<
+ *         fld_idx = -1
+ *         for lpid in range(proj_num):
+ */
+    (void)(memset(__pyx_v_neu_m, 0, (__pyx_v_size * (sizeof(__pyx_t_6models_15fieldembed_core_REAL_t)))));
+
+    /* "models/fieldembed_core.pyx":669
+ *     if use_merger:
+ *         memset(neu_m,  0, size * cython.sizeof(REAL_t))
+ *         fld_idx = -1             # <<<<<<<<<<<<<<
+ *         for lpid in range(proj_num):
+ *             fld_idx = fld_idx + 1
+ */
+    __pyx_v_fld_idx = -1;
+
+    /* "models/fieldembed_core.pyx":670
+ *         memset(neu_m,  0, size * cython.sizeof(REAL_t))
+ *         fld_idx = -1
+ *         for lpid in range(proj_num):             # <<<<<<<<<<<<<<
+ *             fld_idx = fld_idx + 1
+ *             # enrich neu_m
+ */
+    __pyx_t_1 = __pyx_v_proj_num;
+    __pyx_t_2 = __pyx_t_1;
+    for (__pyx_t_3 = 0; __pyx_t_3 < __pyx_t_2; __pyx_t_3+=1) {
+      __pyx_v_lpid = __pyx_t_3;
+
+      /* "models/fieldembed_core.pyx":671
+ *         fld_idx = -1
+ *         for lpid in range(proj_num):
+ *             fld_idx = fld_idx + 1             # <<<<<<<<<<<<<<
+ *             # enrich neu_m
+ *             our_saxpy(&size, &channel_no_inv, &neu1[fld_idx*size],  &ONE, neu_m, &ONE)
+ */
+      __pyx_v_fld_idx = (__pyx_v_fld_idx + 1);
+
+      /* "models/fieldembed_core.pyx":673
+ *             fld_idx = fld_idx + 1
+ *             # enrich neu_m
+ *             our_saxpy(&size, &channel_no_inv, &neu1[fld_idx*size],  &ONE, neu_m, &ONE)             # <<<<<<<<<<<<<<
+ *     ######################################################################## E
+ * 
+ */
+      __pyx_v_6models_15fieldembed_core_our_saxpy((&__pyx_v_size), (&__pyx_v_channel_no_inv), (&(__pyx_v_neu1[(__pyx_v_fld_idx * __pyx_v_size)])), (&__pyx_v_6models_15fieldembed_core_ONE), __pyx_v_neu_m, (&__pyx_v_6models_15fieldembed_core_ONE));
+    }
+
+    /* "models/fieldembed_core.pyx":667
+ *             sscal(&size, &inv_count, &neu1[fld_idx*size], &ONE)
+ * 
+ *     if use_merger:             # <<<<<<<<<<<<<<
+ *         memset(neu_m,  0, size * cython.sizeof(REAL_t))
+ *         fld_idx = -1
+ */
+  }
+
+  /* "models/fieldembed_core.pyx":678
+ * 
+ *     ######################################################################## S: calculate grad and update syn1neg
+ *     memset(work,  0, proj_num * size * cython.sizeof(REAL_t))             # <<<<<<<<<<<<<<
+ * 
+ *     # d is int
+ */
+  (void)(memset(__pyx_v_work, 0, ((__pyx_v_proj_num * __pyx_v_size) * (sizeof(__pyx_t_6models_15fieldembed_core_REAL_t)))));
+
+  /* "models/fieldembed_core.pyx":681
+ * 
+ *     # d is int
+ *     for d in range(negative+1):             # <<<<<<<<<<<<<<
+ * 
+ *         ##################################################################################### get relation d and true and false target word
+ */
+  __pyx_t_11 = (__pyx_v_negative + 1);
+  __pyx_t_12 = __pyx_t_11;
+  for (__pyx_t_1 = 0; __pyx_t_1 < __pyx_t_12; __pyx_t_1+=1) {
+    __pyx_v_d = __pyx_t_1;
+
+    /* "models/fieldembed_core.pyx":685
+ *         ##################################################################################### get relation d and true and false target word
+ *         # here we get our data (1. ctx words [j:k]; 2. target word; 3. relationship d or label)
+ *         if d == 0:             # <<<<<<<<<<<<<<
+ *             # word_index is vocab_index
+ *             target_index = word_index
+ */
+    __pyx_t_4 = ((__pyx_v_d == 0) != 0);
+    if (__pyx_t_4) {
+
+      /* "models/fieldembed_core.pyx":687
+ *         if d == 0:
+ *             # word_index is vocab_index
+ *             target_index = word_index             # <<<<<<<<<<<<<<
+ *             label = ONEF
+ *         else:
+ */
+      __pyx_v_target_index = __pyx_v_word_index;
+
+      /* "models/fieldembed_core.pyx":688
+ *             # word_index is vocab_index
+ *             target_index = word_index
+ *             label = ONEF             # <<<<<<<<<<<<<<
+ *         else:
+ *             target_index = bisect_left(cum_table, (next_random >> 16) % cum_table[cum_table_len-1], 0, cum_table_len)
+ */
+      __pyx_v_label = __pyx_v_6models_15fieldembed_core_ONEF;
+
+      /* "models/fieldembed_core.pyx":685
+ *         ##################################################################################### get relation d and true and false target word
+ *         # here we get our data (1. ctx words [j:k]; 2. target word; 3. relationship d or label)
+ *         if d == 0:             # <<<<<<<<<<<<<<
+ *             # word_index is vocab_index
+ *             target_index = word_index
+ */
+      goto __pyx_L30;
+    }
+
+    /* "models/fieldembed_core.pyx":690
+ *             label = ONEF
+ *         else:
+ *             target_index = bisect_left(cum_table, (next_random >> 16) % cum_table[cum_table_len-1], 0, cum_table_len)             # <<<<<<<<<<<<<<
+ *             next_random = (next_random * <unsigned long long>25214903917ULL + 11) & modulo
+ *             if target_index == word_index:
+ */
+    /*else*/ {
+      __pyx_v_target_index = __pyx_f_6models_15fieldembed_core_bisect_left(__pyx_v_cum_table, ((__pyx_v_next_random >> 16) % (__pyx_v_cum_table[(__pyx_v_cum_table_len - 1)])), 0, __pyx_v_cum_table_len);
+
+      /* "models/fieldembed_core.pyx":691
+ *         else:
+ *             target_index = bisect_left(cum_table, (next_random >> 16) % cum_table[cum_table_len-1], 0, cum_table_len)
+ *             next_random = (next_random * <unsigned long long>25214903917ULL + 11) & modulo             # <<<<<<<<<<<<<<
+ *             if target_index == word_index:
+ *                 continue
+ */
+      __pyx_v_next_random = (((__pyx_v_next_random * ((unsigned PY_LONG_LONG)25214903917ULL)) + 11) & __pyx_v_modulo);
+
+      /* "models/fieldembed_core.pyx":692
+ *             target_index = bisect_left(cum_table, (next_random >> 16) % cum_table[cum_table_len-1], 0, cum_table_len)
+ *             next_random = (next_random * <unsigned long long>25214903917ULL + 11) & modulo
+ *             if target_index == word_index:             # <<<<<<<<<<<<<<
+ *                 continue
+ *             label = <REAL_t>0.0
+ */
+      __pyx_t_4 = ((__pyx_v_target_index == __pyx_v_word_index) != 0);
+      if (__pyx_t_4) {
+
+        /* "models/fieldembed_core.pyx":693
+ *             next_random = (next_random * <unsigned long long>25214903917ULL + 11) & modulo
+ *             if target_index == word_index:
+ *                 continue             # <<<<<<<<<<<<<<
+ *             label = <REAL_t>0.0
+ *         # target_index: np.uint32, size: int; row2: long long
+ */
+        goto __pyx_L28_continue;
+
+        /* "models/fieldembed_core.pyx":692
+ *             target_index = bisect_left(cum_table, (next_random >> 16) % cum_table[cum_table_len-1], 0, cum_table_len)
+ *             next_random = (next_random * <unsigned long long>25214903917ULL + 11) & modulo
+ *             if target_index == word_index:             # <<<<<<<<<<<<<<
+ *                 continue
+ *             label = <REAL_t>0.0
+ */
+      }
+
+      /* "models/fieldembed_core.pyx":694
+ *             if target_index == word_index:
+ *                 continue
+ *             label = <REAL_t>0.0             # <<<<<<<<<<<<<<
+ *         # target_index: np.uint32, size: int; row2: long long
+ *         row2 = target_index * size
+ */
+      __pyx_v_label = ((__pyx_t_6models_15fieldembed_core_REAL_t)0.0);
+    }
+    __pyx_L30:;
+
+    /* "models/fieldembed_core.pyx":696
+ *             label = <REAL_t>0.0
+ *         # target_index: np.uint32, size: int; row2: long long
+ *         row2 = target_index * size             # <<<<<<<<<<<<<<
+ * 
+ *         ##################################################################################### use proj (neu1) to calculate grad (work) for each field
+ */
+    __pyx_v_row2 = (__pyx_v_target_index * __pyx_v_size);
+
+    /* "models/fieldembed_core.pyx":699
+ * 
+ *         ##################################################################################### use proj (neu1) to calculate grad (work) for each field
+ *         fld_idx = -1             # <<<<<<<<<<<<<<
+ *         if use_sub:
+ *             for lpid in range(use_sub):
+ */
+    __pyx_v_fld_idx = -1;
+
+    /* "models/fieldembed_core.pyx":700
+ *         ##################################################################################### use proj (neu1) to calculate grad (work) for each field
+ *         fld_idx = -1
+ *         if use_sub:             # <<<<<<<<<<<<<<
+ *             for lpid in range(use_sub):
+ *                 fld_idx = fld_idx + 1
+ */
+    __pyx_t_4 = (__pyx_v_use_sub != 0);
+    if (__pyx_t_4) {
+
+      /* "models/fieldembed_core.pyx":701
+ *         fld_idx = -1
+ *         if use_sub:
+ *             for lpid in range(use_sub):             # <<<<<<<<<<<<<<
+ *                 fld_idx = fld_idx + 1
+ * 
+ */
+      __pyx_t_2 = __pyx_v_use_sub;
+      __pyx_t_3 = __pyx_t_2;
+      for (__pyx_t_5 = 0; __pyx_t_5 < __pyx_t_3; __pyx_t_5+=1) {
+        __pyx_v_lpid = __pyx_t_5;
+
+        /* "models/fieldembed_core.pyx":702
+ *         if use_sub:
+ *             for lpid in range(use_sub):
+ *                 fld_idx = fld_idx + 1             # <<<<<<<<<<<<<<
+ * 
+ *                 f_dot = our_dot(&size, &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)
+ */
+        __pyx_v_fld_idx = (__pyx_v_fld_idx + 1);
+
+        /* "models/fieldembed_core.pyx":704
+ *                 fld_idx = fld_idx + 1
+ * 
+ *                 f_dot = our_dot(&size, &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)             # <<<<<<<<<<<<<<
+ *                 if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:
+ *                     continue
+ */
+        __pyx_v_f_dot = __pyx_v_6models_15fieldembed_core_our_dot((&__pyx_v_size), (&(__pyx_v_neu1[(__pyx_v_fld_idx * __pyx_v_size)])), (&__pyx_v_6models_15fieldembed_core_ONE), (&(__pyx_v_syn1neg[__pyx_v_row2])), (&__pyx_v_6models_15fieldembed_core_ONE));
+
+        /* "models/fieldembed_core.pyx":705
+ * 
+ *                 f_dot = our_dot(&size, &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)
+ *                 if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:             # <<<<<<<<<<<<<<
+ *                     continue
+ * 
+ */
+        __pyx_t_13 = ((__pyx_v_f_dot <= -6.0) != 0);
+        if (!__pyx_t_13) {
+        } else {
+          __pyx_t_4 = __pyx_t_13;
+          goto __pyx_L36_bool_binop_done;
+        }
+        __pyx_t_13 = ((__pyx_v_f_dot >= 6.0) != 0);
+        __pyx_t_4 = __pyx_t_13;
+        __pyx_L36_bool_binop_done:;
+        if (__pyx_t_4) {
+
+          /* "models/fieldembed_core.pyx":706
+ *                 f_dot = our_dot(&size, &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)
+ *                 if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:
+ *                     continue             # <<<<<<<<<<<<<<
+ * 
+ *                 f = EXP_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
+ */
+          goto __pyx_L33_continue;
+
+          /* "models/fieldembed_core.pyx":705
+ * 
+ *                 f_dot = our_dot(&size, &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)
+ *                 if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:             # <<<<<<<<<<<<<<
+ *                     continue
+ * 
+ */
+        }
+
+        /* "models/fieldembed_core.pyx":708
+ *                     continue
+ * 
+ *                 f = EXP_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]             # <<<<<<<<<<<<<<
+ *                 grad_mem[fld_idx] = (label - f) * alpha
+ * 
+ */
+        __pyx_v_f = (__pyx_v_6models_15fieldembed_core_EXP_TABLE[((int)((__pyx_v_f_dot + 6.0) * 83.0))]);
+
+        /* "models/fieldembed_core.pyx":709
+ * 
+ *                 f = EXP_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
+ *                 grad_mem[fld_idx] = (label - f) * alpha             # <<<<<<<<<<<<<<
+ * 
+ *                 if _compute_loss == 1:
+ */
+        (__pyx_v_grad_mem[__pyx_v_fld_idx]) = ((__pyx_v_label - __pyx_v_f) * __pyx_v_alpha);
+
+        /* "models/fieldembed_core.pyx":711
+ *                 grad_mem[fld_idx] = (label - f) * alpha
+ * 
+ *                 if _compute_loss == 1:             # <<<<<<<<<<<<<<
+ *                     # change f_dot according to the pair relationship: d
+ *                     f_dot = (f_dot if d == 0  else -f_dot)
+ */
+        __pyx_t_4 = ((__pyx_v__compute_loss == 1) != 0);
+        if (__pyx_t_4) {
+
+          /* "models/fieldembed_core.pyx":713
+ *                 if _compute_loss == 1:
+ *                     # change f_dot according to the pair relationship: d
+ *                     f_dot = (f_dot if d == 0  else -f_dot)             # <<<<<<<<<<<<<<
+ *                     log_e_f_dot = LOG_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
+ *                     _running_training_loss_param[0] = _running_training_loss_param[0] - log_e_f_dot
+ */
+          if (((__pyx_v_d == 0) != 0)) {
+            __pyx_t_14 = __pyx_v_f_dot;
+          } else {
+            __pyx_t_14 = (-__pyx_v_f_dot);
+          }
+          __pyx_v_f_dot = __pyx_t_14;
+
+          /* "models/fieldembed_core.pyx":714
+ *                     # change f_dot according to the pair relationship: d
+ *                     f_dot = (f_dot if d == 0  else -f_dot)
+ *                     log_e_f_dot = LOG_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]             # <<<<<<<<<<<<<<
+ *                     _running_training_loss_param[0] = _running_training_loss_param[0] - log_e_f_dot
+ *                 # accumulate grad (work) and do not update syn1neg now.
+ */
+          __pyx_v_log_e_f_dot = (__pyx_v_6models_15fieldembed_core_LOG_TABLE[((int)((__pyx_v_f_dot + 6.0) * 83.0))]);
+
+          /* "models/fieldembed_core.pyx":715
+ *                     f_dot = (f_dot if d == 0  else -f_dot)
+ *                     log_e_f_dot = LOG_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
+ *                     _running_training_loss_param[0] = _running_training_loss_param[0] - log_e_f_dot             # <<<<<<<<<<<<<<
+ *                 # accumulate grad (work) and do not update syn1neg now.
+ *                 our_saxpy(&size, &grad_mem[fld_idx], &syn1neg[row2], &ONE, &work[fld_idx*size], &ONE)
+ */
+          (__pyx_v__running_training_loss_param[0]) = ((__pyx_v__running_training_loss_param[0]) - __pyx_v_log_e_f_dot);
+
+          /* "models/fieldembed_core.pyx":711
+ *                 grad_mem[fld_idx] = (label - f) * alpha
+ * 
+ *                 if _compute_loss == 1:             # <<<<<<<<<<<<<<
+ *                     # change f_dot according to the pair relationship: d
+ *                     f_dot = (f_dot if d == 0  else -f_dot)
+ */
+        }
+
+        /* "models/fieldembed_core.pyx":717
+ *                     _running_training_loss_param[0] = _running_training_loss_param[0] - log_e_f_dot
+ *                 # accumulate grad (work) and do not update syn1neg now.
+ *                 our_saxpy(&size, &grad_mem[fld_idx], &syn1neg[row2], &ONE, &work[fld_idx*size], &ONE)             # <<<<<<<<<<<<<<
+ * 
+ *         if use_head:
+ */
+        __pyx_v_6models_15fieldembed_core_our_saxpy((&__pyx_v_size), (&(__pyx_v_grad_mem[__pyx_v_fld_idx])), (&(__pyx_v_syn1neg[__pyx_v_row2])), (&__pyx_v_6models_15fieldembed_core_ONE), (&(__pyx_v_work[(__pyx_v_fld_idx * __pyx_v_size)])), (&__pyx_v_6models_15fieldembed_core_ONE));
+        __pyx_L33_continue:;
+      }
+
+      /* "models/fieldembed_core.pyx":700
+ *         ##################################################################################### use proj (neu1) to calculate grad (work) for each field
+ *         fld_idx = -1
+ *         if use_sub:             # <<<<<<<<<<<<<<
+ *             for lpid in range(use_sub):
+ *                 fld_idx = fld_idx + 1
+ */
+    }
+
+    /* "models/fieldembed_core.pyx":719
+ *                 our_saxpy(&size, &grad_mem[fld_idx], &syn1neg[row2], &ONE, &work[fld_idx*size], &ONE)
+ * 
+ *         if use_head:             # <<<<<<<<<<<<<<
+ *             fld_idx = fld_idx + 1
+ *             f_dot = our_dot(&size, &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)
+ */
+    __pyx_t_4 = (__pyx_v_use_head != 0);
+    if (__pyx_t_4) {
+
+      /* "models/fieldembed_core.pyx":720
+ * 
+ *         if use_head:
+ *             fld_idx = fld_idx + 1             # <<<<<<<<<<<<<<
+ *             f_dot = our_dot(&size, &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)
+ *             if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:
+ */
+      __pyx_v_fld_idx = (__pyx_v_fld_idx + 1);
+
+      /* "models/fieldembed_core.pyx":721
+ *         if use_head:
+ *             fld_idx = fld_idx + 1
+ *             f_dot = our_dot(&size, &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)             # <<<<<<<<<<<<<<
+ *             if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:
+ *                 continue
+ */
+      __pyx_v_f_dot = __pyx_v_6models_15fieldembed_core_our_dot((&__pyx_v_size), (&(__pyx_v_neu1[(__pyx_v_fld_idx * __pyx_v_size)])), (&__pyx_v_6models_15fieldembed_core_ONE), (&(__pyx_v_syn1neg[__pyx_v_row2])), (&__pyx_v_6models_15fieldembed_core_ONE));
+
+      /* "models/fieldembed_core.pyx":722
+ *             fld_idx = fld_idx + 1
+ *             f_dot = our_dot(&size, &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)
+ *             if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:             # <<<<<<<<<<<<<<
+ *                 continue
+ * 
+ */
+      __pyx_t_13 = ((__pyx_v_f_dot <= -6.0) != 0);
+      if (!__pyx_t_13) {
+      } else {
+        __pyx_t_4 = __pyx_t_13;
+        goto __pyx_L41_bool_binop_done;
+      }
+      __pyx_t_13 = ((__pyx_v_f_dot >= 6.0) != 0);
+      __pyx_t_4 = __pyx_t_13;
+      __pyx_L41_bool_binop_done:;
+      if (__pyx_t_4) {
+
+        /* "models/fieldembed_core.pyx":723
+ *             f_dot = our_dot(&size, &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)
+ *             if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:
+ *                 continue             # <<<<<<<<<<<<<<
+ * 
+ *             f = EXP_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
+ */
+        goto __pyx_L28_continue;
+
+        /* "models/fieldembed_core.pyx":722
+ *             fld_idx = fld_idx + 1
+ *             f_dot = our_dot(&size, &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)
+ *             if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:             # <<<<<<<<<<<<<<
+ *                 continue
+ * 
+ */
+      }
+
+      /* "models/fieldembed_core.pyx":725
+ *                 continue
+ * 
+ *             f = EXP_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]             # <<<<<<<<<<<<<<
+ *             grad_mem[fld_idx] = (label - f) * alpha
+ * 
+ */
+      __pyx_v_f = (__pyx_v_6models_15fieldembed_core_EXP_TABLE[((int)((__pyx_v_f_dot + 6.0) * 83.0))]);
+
+      /* "models/fieldembed_core.pyx":726
+ * 
+ *             f = EXP_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
+ *             grad_mem[fld_idx] = (label - f) * alpha             # <<<<<<<<<<<<<<
+ * 
+ *             if _compute_loss == 1:
+ */
+      (__pyx_v_grad_mem[__pyx_v_fld_idx]) = ((__pyx_v_label - __pyx_v_f) * __pyx_v_alpha);
+
+      /* "models/fieldembed_core.pyx":728
+ *             grad_mem[fld_idx] = (label - f) * alpha
+ * 
+ *             if _compute_loss == 1:             # <<<<<<<<<<<<<<
+ *                 # change f_dot according to the pair relationship: d
+ *                 f_dot = (f_dot if d == 0  else -f_dot)
+ */
+      __pyx_t_4 = ((__pyx_v__compute_loss == 1) != 0);
+      if (__pyx_t_4) {
+
+        /* "models/fieldembed_core.pyx":730
+ *             if _compute_loss == 1:
+ *                 # change f_dot according to the pair relationship: d
+ *                 f_dot = (f_dot if d == 0  else -f_dot)             # <<<<<<<<<<<<<<
+ *                 log_e_f_dot = LOG_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
+ *                 _running_training_loss_param[0] = _running_training_loss_param[0] - log_e_f_dot
+ */
+        if (((__pyx_v_d == 0) != 0)) {
+          __pyx_t_14 = __pyx_v_f_dot;
+        } else {
+          __pyx_t_14 = (-__pyx_v_f_dot);
+        }
+        __pyx_v_f_dot = __pyx_t_14;
+
+        /* "models/fieldembed_core.pyx":731
+ *                 # change f_dot according to the pair relationship: d
+ *                 f_dot = (f_dot if d == 0  else -f_dot)
+ *                 log_e_f_dot = LOG_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]             # <<<<<<<<<<<<<<
+ *                 _running_training_loss_param[0] = _running_training_loss_param[0] - log_e_f_dot
+ * 
+ */
+        __pyx_v_log_e_f_dot = (__pyx_v_6models_15fieldembed_core_LOG_TABLE[((int)((__pyx_v_f_dot + 6.0) * 83.0))]);
+
+        /* "models/fieldembed_core.pyx":732
+ *                 f_dot = (f_dot if d == 0  else -f_dot)
+ *                 log_e_f_dot = LOG_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
+ *                 _running_training_loss_param[0] = _running_training_loss_param[0] - log_e_f_dot             # <<<<<<<<<<<<<<
+ * 
+ *             our_saxpy(&size, &grad_mem[fld_idx], &syn1neg[row2], &ONE, &work[fld_idx*size], &ONE)
+ */
+        (__pyx_v__running_training_loss_param[0]) = ((__pyx_v__running_training_loss_param[0]) - __pyx_v_log_e_f_dot);
+
+        /* "models/fieldembed_core.pyx":728
+ *             grad_mem[fld_idx] = (label - f) * alpha
+ * 
+ *             if _compute_loss == 1:             # <<<<<<<<<<<<<<
+ *                 # change f_dot according to the pair relationship: d
+ *                 f_dot = (f_dot if d == 0  else -f_dot)
+ */
+      }
+
+      /* "models/fieldembed_core.pyx":734
+ *                 _running_training_loss_param[0] = _running_training_loss_param[0] - log_e_f_dot
+ * 
+ *             our_saxpy(&size, &grad_mem[fld_idx], &syn1neg[row2], &ONE, &work[fld_idx*size], &ONE)             # <<<<<<<<<<<<<<
+ * 
+ *         if use_hyper:
+ */
+      __pyx_v_6models_15fieldembed_core_our_saxpy((&__pyx_v_size), (&(__pyx_v_grad_mem[__pyx_v_fld_idx])), (&(__pyx_v_syn1neg[__pyx_v_row2])), (&__pyx_v_6models_15fieldembed_core_ONE), (&(__pyx_v_work[(__pyx_v_fld_idx * __pyx_v_size)])), (&__pyx_v_6models_15fieldembed_core_ONE));
+
+      /* "models/fieldembed_core.pyx":719
+ *                 our_saxpy(&size, &grad_mem[fld_idx], &syn1neg[row2], &ONE, &work[fld_idx*size], &ONE)
+ * 
+ *         if use_head:             # <<<<<<<<<<<<<<
+ *             fld_idx = fld_idx + 1
+ *             f_dot = our_dot(&size, &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)
+ */
+    }
+
+    /* "models/fieldembed_core.pyx":736
+ *             our_saxpy(&size, &grad_mem[fld_idx], &syn1neg[row2], &ONE, &work[fld_idx*size], &ONE)
+ * 
+ *         if use_hyper:             # <<<<<<<<<<<<<<
+ *             for lpid in range(use_hyper):
+ *                 fld_idx = fld_idx + 1
+ */
+    __pyx_t_4 = (__pyx_v_use_hyper != 0);
+    if (__pyx_t_4) {
+
+      /* "models/fieldembed_core.pyx":737
+ * 
+ *         if use_hyper:
+ *             for lpid in range(use_hyper):             # <<<<<<<<<<<<<<
+ *                 fld_idx = fld_idx + 1
+ * 
+ */
+      __pyx_t_2 = __pyx_v_use_hyper;
+      __pyx_t_3 = __pyx_t_2;
+      for (__pyx_t_5 = 0; __pyx_t_5 < __pyx_t_3; __pyx_t_5+=1) {
+        __pyx_v_lpid = __pyx_t_5;
+
+        /* "models/fieldembed_core.pyx":738
+ *         if use_hyper:
+ *             for lpid in range(use_hyper):
+ *                 fld_idx = fld_idx + 1             # <<<<<<<<<<<<<<
+ * 
+ *                 f_dot = our_dot(&size, &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)
+ */
+        __pyx_v_fld_idx = (__pyx_v_fld_idx + 1);
+
+        /* "models/fieldembed_core.pyx":740
+ *                 fld_idx = fld_idx + 1
+ * 
+ *                 f_dot = our_dot(&size, &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)             # <<<<<<<<<<<<<<
+ *                 if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:
+ *                     continue
+ */
+        __pyx_v_f_dot = __pyx_v_6models_15fieldembed_core_our_dot((&__pyx_v_size), (&(__pyx_v_neu1[(__pyx_v_fld_idx * __pyx_v_size)])), (&__pyx_v_6models_15fieldembed_core_ONE), (&(__pyx_v_syn1neg[__pyx_v_row2])), (&__pyx_v_6models_15fieldembed_core_ONE));
+
+        /* "models/fieldembed_core.pyx":741
+ * 
+ *                 f_dot = our_dot(&size, &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)
+ *                 if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:             # <<<<<<<<<<<<<<
+ *                     continue
+ * 
+ */
+        __pyx_t_13 = ((__pyx_v_f_dot <= -6.0) != 0);
+        if (!__pyx_t_13) {
+        } else {
+          __pyx_t_4 = __pyx_t_13;
+          goto __pyx_L48_bool_binop_done;
+        }
+        __pyx_t_13 = ((__pyx_v_f_dot >= 6.0) != 0);
+        __pyx_t_4 = __pyx_t_13;
+        __pyx_L48_bool_binop_done:;
+        if (__pyx_t_4) {
+
+          /* "models/fieldembed_core.pyx":742
+ *                 f_dot = our_dot(&size, &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)
+ *                 if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:
+ *                     continue             # <<<<<<<<<<<<<<
+ * 
+ *                 f = EXP_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
+ */
+          goto __pyx_L45_continue;
+
+          /* "models/fieldembed_core.pyx":741
+ * 
+ *                 f_dot = our_dot(&size, &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)
+ *                 if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:             # <<<<<<<<<<<<<<
+ *                     continue
+ * 
+ */
+        }
+
+        /* "models/fieldembed_core.pyx":744
+ *                     continue
+ * 
+ *                 f = EXP_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]             # <<<<<<<<<<<<<<
+ *                 grad_mem[fld_idx] = (label - f) * alpha
+ * 
+ */
+        __pyx_v_f = (__pyx_v_6models_15fieldembed_core_EXP_TABLE[((int)((__pyx_v_f_dot + 6.0) * 83.0))]);
+
+        /* "models/fieldembed_core.pyx":745
+ * 
+ *                 f = EXP_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
+ *                 grad_mem[fld_idx] = (label - f) * alpha             # <<<<<<<<<<<<<<
+ * 
+ *                 if _compute_loss == 1:
+ */
+        (__pyx_v_grad_mem[__pyx_v_fld_idx]) = ((__pyx_v_label - __pyx_v_f) * __pyx_v_alpha);
+
+        /* "models/fieldembed_core.pyx":747
+ *                 grad_mem[fld_idx] = (label - f) * alpha
+ * 
+ *                 if _compute_loss == 1:             # <<<<<<<<<<<<<<
+ *                     # change f_dot according to the pair relationship: d
+ *                     f_dot = (f_dot if d == 0  else -f_dot)
+ */
+        __pyx_t_4 = ((__pyx_v__compute_loss == 1) != 0);
+        if (__pyx_t_4) {
+
+          /* "models/fieldembed_core.pyx":749
+ *                 if _compute_loss == 1:
+ *                     # change f_dot according to the pair relationship: d
+ *                     f_dot = (f_dot if d == 0  else -f_dot)             # <<<<<<<<<<<<<<
+ *                     log_e_f_dot = LOG_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
+ *                     _running_training_loss_param[0] = _running_training_loss_param[0] - log_e_f_dot
+ */
+          if (((__pyx_v_d == 0) != 0)) {
+            __pyx_t_14 = __pyx_v_f_dot;
+          } else {
+            __pyx_t_14 = (-__pyx_v_f_dot);
+          }
+          __pyx_v_f_dot = __pyx_t_14;
+
+          /* "models/fieldembed_core.pyx":750
+ *                     # change f_dot according to the pair relationship: d
+ *                     f_dot = (f_dot if d == 0  else -f_dot)
+ *                     log_e_f_dot = LOG_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]             # <<<<<<<<<<<<<<
+ *                     _running_training_loss_param[0] = _running_training_loss_param[0] - log_e_f_dot
+ *                 # accumulate work
+ */
+          __pyx_v_log_e_f_dot = (__pyx_v_6models_15fieldembed_core_LOG_TABLE[((int)((__pyx_v_f_dot + 6.0) * 83.0))]);
+
+          /* "models/fieldembed_core.pyx":751
+ *                     f_dot = (f_dot if d == 0  else -f_dot)
+ *                     log_e_f_dot = LOG_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
+ *                     _running_training_loss_param[0] = _running_training_loss_param[0] - log_e_f_dot             # <<<<<<<<<<<<<<
+ *                 # accumulate work
+ *                 our_saxpy(&size, &grad_mem[fld_idx], &syn1neg[row2], &ONE, &work[fld_idx*size], &ONE)
+ */
+          (__pyx_v__running_training_loss_param[0]) = ((__pyx_v__running_training_loss_param[0]) - __pyx_v_log_e_f_dot);
+
+          /* "models/fieldembed_core.pyx":747
+ *                 grad_mem[fld_idx] = (label - f) * alpha
+ * 
+ *                 if _compute_loss == 1:             # <<<<<<<<<<<<<<
+ *                     # change f_dot according to the pair relationship: d
+ *                     f_dot = (f_dot if d == 0  else -f_dot)
+ */
+        }
+
+        /* "models/fieldembed_core.pyx":753
+ *                     _running_training_loss_param[0] = _running_training_loss_param[0] - log_e_f_dot
+ *                 # accumulate work
+ *                 our_saxpy(&size, &grad_mem[fld_idx], &syn1neg[row2], &ONE, &work[fld_idx*size], &ONE)             # <<<<<<<<<<<<<<
+ * 
+ *         ##################################################################################### calculate the grad for merger
+ */
+        __pyx_v_6models_15fieldembed_core_our_saxpy((&__pyx_v_size), (&(__pyx_v_grad_mem[__pyx_v_fld_idx])), (&(__pyx_v_syn1neg[__pyx_v_row2])), (&__pyx_v_6models_15fieldembed_core_ONE), (&(__pyx_v_work[(__pyx_v_fld_idx * __pyx_v_size)])), (&__pyx_v_6models_15fieldembed_core_ONE));
+        __pyx_L45_continue:;
+      }
+
+      /* "models/fieldembed_core.pyx":736
+ *             our_saxpy(&size, &grad_mem[fld_idx], &syn1neg[row2], &ONE, &work[fld_idx*size], &ONE)
+ * 
+ *         if use_hyper:             # <<<<<<<<<<<<<<
+ *             for lpid in range(use_hyper):
+ *                 fld_idx = fld_idx + 1
+ */
+    }
+
+    /* "models/fieldembed_core.pyx":756
+ * 
+ *         ##################################################################################### calculate the grad for merger
+ *         if use_merger:             # <<<<<<<<<<<<<<
+ *             f_dot = our_dot(&size, neu_m, &ONE, &syn1neg[row2], &ONE)
+ *             if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:
+ */
+    __pyx_t_4 = (__pyx_v_use_merger != 0);
+    if (__pyx_t_4) {
+
+      /* "models/fieldembed_core.pyx":757
+ *         ##################################################################################### calculate the grad for merger
+ *         if use_merger:
+ *             f_dot = our_dot(&size, neu_m, &ONE, &syn1neg[row2], &ONE)             # <<<<<<<<<<<<<<
+ *             if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:
+ *                 continue
+ */
+      __pyx_v_f_dot = __pyx_v_6models_15fieldembed_core_our_dot((&__pyx_v_size), __pyx_v_neu_m, (&__pyx_v_6models_15fieldembed_core_ONE), (&(__pyx_v_syn1neg[__pyx_v_row2])), (&__pyx_v_6models_15fieldembed_core_ONE));
+
+      /* "models/fieldembed_core.pyx":758
+ *         if use_merger:
+ *             f_dot = our_dot(&size, neu_m, &ONE, &syn1neg[row2], &ONE)
+ *             if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:             # <<<<<<<<<<<<<<
+ *                 continue
+ * 
+ */
+      __pyx_t_13 = ((__pyx_v_f_dot <= -6.0) != 0);
+      if (!__pyx_t_13) {
+      } else {
+        __pyx_t_4 = __pyx_t_13;
+        goto __pyx_L53_bool_binop_done;
+      }
+      __pyx_t_13 = ((__pyx_v_f_dot >= 6.0) != 0);
+      __pyx_t_4 = __pyx_t_13;
+      __pyx_L53_bool_binop_done:;
+      if (__pyx_t_4) {
+
+        /* "models/fieldembed_core.pyx":759
+ *             f_dot = our_dot(&size, neu_m, &ONE, &syn1neg[row2], &ONE)
+ *             if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:
+ *                 continue             # <<<<<<<<<<<<<<
+ * 
+ *             f = EXP_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
+ */
+        goto __pyx_L28_continue;
+
+        /* "models/fieldembed_core.pyx":758
+ *         if use_merger:
+ *             f_dot = our_dot(&size, neu_m, &ONE, &syn1neg[row2], &ONE)
+ *             if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:             # <<<<<<<<<<<<<<
+ *                 continue
+ * 
+ */
+      }
+
+      /* "models/fieldembed_core.pyx":761
+ *                 continue
+ * 
+ *             f = EXP_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]             # <<<<<<<<<<<<<<
+ *             g_m = (label - f) * alpha
+ * 
+ */
+      __pyx_v_f = (__pyx_v_6models_15fieldembed_core_EXP_TABLE[((int)((__pyx_v_f_dot + 6.0) * 83.0))]);
+
+      /* "models/fieldembed_core.pyx":762
+ * 
+ *             f = EXP_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
+ *             g_m = (label - f) * alpha             # <<<<<<<<<<<<<<
+ * 
+ *             if _compute_loss == 1:
+ */
+      __pyx_v_g_m = ((__pyx_v_label - __pyx_v_f) * __pyx_v_alpha);
+
+      /* "models/fieldembed_core.pyx":764
+ *             g_m = (label - f) * alpha
+ * 
+ *             if _compute_loss == 1:             # <<<<<<<<<<<<<<
+ *                 # change f_dot according to the pair relationship: d
+ *                 f_dot = (f_dot if d == 0  else -f_dot)
+ */
+      __pyx_t_4 = ((__pyx_v__compute_loss == 1) != 0);
+      if (__pyx_t_4) {
+
+        /* "models/fieldembed_core.pyx":766
+ *             if _compute_loss == 1:
+ *                 # change f_dot according to the pair relationship: d
+ *                 f_dot = (f_dot if d == 0  else -f_dot)             # <<<<<<<<<<<<<<
+ *                 log_e_f_dot = LOG_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
+ *                 _running_training_loss_param[0] = _running_training_loss_param[0] - log_e_f_dot
+ */
+        if (((__pyx_v_d == 0) != 0)) {
+          __pyx_t_14 = __pyx_v_f_dot;
+        } else {
+          __pyx_t_14 = (-__pyx_v_f_dot);
+        }
+        __pyx_v_f_dot = __pyx_t_14;
+
+        /* "models/fieldembed_core.pyx":767
+ *                 # change f_dot according to the pair relationship: d
+ *                 f_dot = (f_dot if d == 0  else -f_dot)
+ *                 log_e_f_dot = LOG_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]             # <<<<<<<<<<<<<<
+ *                 _running_training_loss_param[0] = _running_training_loss_param[0] - log_e_f_dot
+ * 
+ */
+        __pyx_v_log_e_f_dot = (__pyx_v_6models_15fieldembed_core_LOG_TABLE[((int)((__pyx_v_f_dot + 6.0) * 83.0))]);
+
+        /* "models/fieldembed_core.pyx":768
+ *                 f_dot = (f_dot if d == 0  else -f_dot)
+ *                 log_e_f_dot = LOG_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
+ *                 _running_training_loss_param[0] = _running_training_loss_param[0] - log_e_f_dot             # <<<<<<<<<<<<<<
+ * 
+ *             our_saxpy(&size, &g_m, &syn1neg[row2], &ONE, &work[fld_idx*size], &ONE)
+ */
+        (__pyx_v__running_training_loss_param[0]) = ((__pyx_v__running_training_loss_param[0]) - __pyx_v_log_e_f_dot);
+
+        /* "models/fieldembed_core.pyx":764
+ *             g_m = (label - f) * alpha
+ * 
+ *             if _compute_loss == 1:             # <<<<<<<<<<<<<<
+ *                 # change f_dot according to the pair relationship: d
+ *                 f_dot = (f_dot if d == 0  else -f_dot)
+ */
+      }
+
+      /* "models/fieldembed_core.pyx":770
+ *                 _running_training_loss_param[0] = _running_training_loss_param[0] - log_e_f_dot
+ * 
+ *             our_saxpy(&size, &g_m, &syn1neg[row2], &ONE, &work[fld_idx*size], &ONE)             # <<<<<<<<<<<<<<
+ * 
+ *         ##################################################################################### update syn1neg based on all projs
+ */
+      __pyx_v_6models_15fieldembed_core_our_saxpy((&__pyx_v_size), (&__pyx_v_g_m), (&(__pyx_v_syn1neg[__pyx_v_row2])), (&__pyx_v_6models_15fieldembed_core_ONE), (&(__pyx_v_work[(__pyx_v_fld_idx * __pyx_v_size)])), (&__pyx_v_6models_15fieldembed_core_ONE));
+
+      /* "models/fieldembed_core.pyx":756
+ * 
+ *         ##################################################################################### calculate the grad for merger
+ *         if use_merger:             # <<<<<<<<<<<<<<
+ *             f_dot = our_dot(&size, neu_m, &ONE, &syn1neg[row2], &ONE)
+ *             if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:
+ */
+    }
+
+    /* "models/fieldembed_core.pyx":773
+ * 
+ *         ##################################################################################### update syn1neg based on all projs
+ *         fld_idx = -1             # <<<<<<<<<<<<<<
+ *         if use_sub:
+ *             for lpid in range(use_sub):
+ */
+    __pyx_v_fld_idx = -1;
+
+    /* "models/fieldembed_core.pyx":774
+ *         ##################################################################################### update syn1neg based on all projs
+ *         fld_idx = -1
+ *         if use_sub:             # <<<<<<<<<<<<<<
+ *             for lpid in range(use_sub):
+ *                 fld_idx = fld_idx + 1
+ */
+    __pyx_t_4 = (__pyx_v_use_sub != 0);
+    if (__pyx_t_4) {
+
+      /* "models/fieldembed_core.pyx":775
+ *         fld_idx = -1
+ *         if use_sub:
+ *             for lpid in range(use_sub):             # <<<<<<<<<<<<<<
+ *                 fld_idx = fld_idx + 1
+ *                 our_saxpy(&size, &grad_mem[fld_idx], &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)
+ */
+      __pyx_t_2 = __pyx_v_use_sub;
+      __pyx_t_3 = __pyx_t_2;
+      for (__pyx_t_5 = 0; __pyx_t_5 < __pyx_t_3; __pyx_t_5+=1) {
+        __pyx_v_lpid = __pyx_t_5;
+
+        /* "models/fieldembed_core.pyx":776
+ *         if use_sub:
+ *             for lpid in range(use_sub):
+ *                 fld_idx = fld_idx + 1             # <<<<<<<<<<<<<<
+ *                 our_saxpy(&size, &grad_mem[fld_idx], &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)
+ * 
+ */
+        __pyx_v_fld_idx = (__pyx_v_fld_idx + 1);
+
+        /* "models/fieldembed_core.pyx":777
+ *             for lpid in range(use_sub):
+ *                 fld_idx = fld_idx + 1
+ *                 our_saxpy(&size, &grad_mem[fld_idx], &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)             # <<<<<<<<<<<<<<
+ * 
+ *         if use_head:
+ */
+        __pyx_v_6models_15fieldembed_core_our_saxpy((&__pyx_v_size), (&(__pyx_v_grad_mem[__pyx_v_fld_idx])), (&(__pyx_v_neu1[(__pyx_v_fld_idx * __pyx_v_size)])), (&__pyx_v_6models_15fieldembed_core_ONE), (&(__pyx_v_syn1neg[__pyx_v_row2])), (&__pyx_v_6models_15fieldembed_core_ONE));
+      }
+
+      /* "models/fieldembed_core.pyx":774
+ *         ##################################################################################### update syn1neg based on all projs
+ *         fld_idx = -1
+ *         if use_sub:             # <<<<<<<<<<<<<<
+ *             for lpid in range(use_sub):
+ *                 fld_idx = fld_idx + 1
+ */
+    }
+
+    /* "models/fieldembed_core.pyx":779
+ *                 our_saxpy(&size, &grad_mem[fld_idx], &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)
+ * 
+ *         if use_head:             # <<<<<<<<<<<<<<
+ *             fld_idx = fld_idx + 1
+ *             our_saxpy(&size, &grad_mem[fld_idx], &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)
+ */
+    __pyx_t_4 = (__pyx_v_use_head != 0);
+    if (__pyx_t_4) {
+
+      /* "models/fieldembed_core.pyx":780
+ * 
+ *         if use_head:
+ *             fld_idx = fld_idx + 1             # <<<<<<<<<<<<<<
+ *             our_saxpy(&size, &grad_mem[fld_idx], &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)
+ * 
+ */
+      __pyx_v_fld_idx = (__pyx_v_fld_idx + 1);
+
+      /* "models/fieldembed_core.pyx":781
+ *         if use_head:
+ *             fld_idx = fld_idx + 1
+ *             our_saxpy(&size, &grad_mem[fld_idx], &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)             # <<<<<<<<<<<<<<
+ * 
+ *         if use_hyper:
+ */
+      __pyx_v_6models_15fieldembed_core_our_saxpy((&__pyx_v_size), (&(__pyx_v_grad_mem[__pyx_v_fld_idx])), (&(__pyx_v_neu1[(__pyx_v_fld_idx * __pyx_v_size)])), (&__pyx_v_6models_15fieldembed_core_ONE), (&(__pyx_v_syn1neg[__pyx_v_row2])), (&__pyx_v_6models_15fieldembed_core_ONE));
+
+      /* "models/fieldembed_core.pyx":779
+ *                 our_saxpy(&size, &grad_mem[fld_idx], &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)
+ * 
+ *         if use_head:             # <<<<<<<<<<<<<<
+ *             fld_idx = fld_idx + 1
+ *             our_saxpy(&size, &grad_mem[fld_idx], &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)
+ */
+    }
+
+    /* "models/fieldembed_core.pyx":783
+ *             our_saxpy(&size, &grad_mem[fld_idx], &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)
+ * 
+ *         if use_hyper:             # <<<<<<<<<<<<<<
+ *             for lpid in range(use_hyper):
+ *                 fld_idx = fld_idx + 1
+ */
+    __pyx_t_4 = (__pyx_v_use_hyper != 0);
+    if (__pyx_t_4) {
+
+      /* "models/fieldembed_core.pyx":784
+ * 
+ *         if use_hyper:
+ *             for lpid in range(use_hyper):             # <<<<<<<<<<<<<<
+ *                 fld_idx = fld_idx + 1
+ *                 our_saxpy(&size, &grad_mem[fld_idx], &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)
+ */
+      __pyx_t_2 = __pyx_v_use_hyper;
+      __pyx_t_3 = __pyx_t_2;
+      for (__pyx_t_5 = 0; __pyx_t_5 < __pyx_t_3; __pyx_t_5+=1) {
+        __pyx_v_lpid = __pyx_t_5;
+
+        /* "models/fieldembed_core.pyx":785
+ *         if use_hyper:
+ *             for lpid in range(use_hyper):
+ *                 fld_idx = fld_idx + 1             # <<<<<<<<<<<<<<
+ *                 our_saxpy(&size, &grad_mem[fld_idx], &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)
+ * 
+ */
+        __pyx_v_fld_idx = (__pyx_v_fld_idx + 1);
+
+        /* "models/fieldembed_core.pyx":786
+ *             for lpid in range(use_hyper):
+ *                 fld_idx = fld_idx + 1
+ *                 our_saxpy(&size, &grad_mem[fld_idx], &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)             # <<<<<<<<<<<<<<
+ * 
+ *         if use_merger:
+ */
+        __pyx_v_6models_15fieldembed_core_our_saxpy((&__pyx_v_size), (&(__pyx_v_grad_mem[__pyx_v_fld_idx])), (&(__pyx_v_neu1[(__pyx_v_fld_idx * __pyx_v_size)])), (&__pyx_v_6models_15fieldembed_core_ONE), (&(__pyx_v_syn1neg[__pyx_v_row2])), (&__pyx_v_6models_15fieldembed_core_ONE));
+      }
+
+      /* "models/fieldembed_core.pyx":783
+ *             our_saxpy(&size, &grad_mem[fld_idx], &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)
+ * 
+ *         if use_hyper:             # <<<<<<<<<<<<<<
+ *             for lpid in range(use_hyper):
+ *                 fld_idx = fld_idx + 1
+ */
+    }
+
+    /* "models/fieldembed_core.pyx":788
+ *                 our_saxpy(&size, &grad_mem[fld_idx], &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)
+ * 
+ *         if use_merger:             # <<<<<<<<<<<<<<
+ *             # notice the difference between neu_m and neu1[fld_idx*size]
+ *             our_saxpy(&size, &g_m, neu_m, &ONE, &syn1neg[row2], &ONE)
+ */
+    __pyx_t_4 = (__pyx_v_use_merger != 0);
+    if (__pyx_t_4) {
+
+      /* "models/fieldembed_core.pyx":790
+ *         if use_merger:
+ *             # notice the difference between neu_m and neu1[fld_idx*size]
+ *             our_saxpy(&size, &g_m, neu_m, &ONE, &syn1neg[row2], &ONE)             # <<<<<<<<<<<<<<
+ *     ######################################################################## E
+ * 
+ */
+      __pyx_v_6models_15fieldembed_core_our_saxpy((&__pyx_v_size), (&__pyx_v_g_m), __pyx_v_neu_m, (&__pyx_v_6models_15fieldembed_core_ONE), (&(__pyx_v_syn1neg[__pyx_v_row2])), (&__pyx_v_6models_15fieldembed_core_ONE));
+
+      /* "models/fieldembed_core.pyx":788
+ *                 our_saxpy(&size, &grad_mem[fld_idx], &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)
+ * 
+ *         if use_merger:             # <<<<<<<<<<<<<<
+ *             # notice the difference between neu_m and neu1[fld_idx*size]
+ *             our_saxpy(&size, &g_m, neu_m, &ONE, &syn1neg[row2], &ONE)
+ */
+    }
+    __pyx_L28_continue:;
+  }
+
+  /* "models/fieldembed_core.pyx":795
+ * 
+ *     ######################################################################## S: assign the grad_m (work_m) to each grad (work)
+ *     if use_merger:             # <<<<<<<<<<<<<<
+ *         fld_idx = -1
+ *         if use_sub:
+ */
+  __pyx_t_4 = (__pyx_v_use_merger != 0);
+  if (__pyx_t_4) {
+
+    /* "models/fieldembed_core.pyx":796
+ *     ######################################################################## S: assign the grad_m (work_m) to each grad (work)
+ *     if use_merger:
+ *         fld_idx = -1             # <<<<<<<<<<<<<<
+ *         if use_sub:
+ *             for lpid in range(use_sub):
+ */
+    __pyx_v_fld_idx = -1;
+
+    /* "models/fieldembed_core.pyx":797
+ *     if use_merger:
+ *         fld_idx = -1
+ *         if use_sub:             # <<<<<<<<<<<<<<
+ *             for lpid in range(use_sub):
+ *                 fld_idx = fld_idx + 1
+ */
+    __pyx_t_4 = (__pyx_v_use_sub != 0);
+    if (__pyx_t_4) {
+
+      /* "models/fieldembed_core.pyx":798
+ *         fld_idx = -1
+ *         if use_sub:
+ *             for lpid in range(use_sub):             # <<<<<<<<<<<<<<
+ *                 fld_idx = fld_idx + 1
+ *                 our_saxpy(&size, &channel_no_inv, work_m, &ONE, &work[fld_idx*size], &ONE)
+ */
+      __pyx_t_1 = __pyx_v_use_sub;
+      __pyx_t_2 = __pyx_t_1;
+      for (__pyx_t_3 = 0; __pyx_t_3 < __pyx_t_2; __pyx_t_3+=1) {
+        __pyx_v_lpid = __pyx_t_3;
+
+        /* "models/fieldembed_core.pyx":799
+ *         if use_sub:
+ *             for lpid in range(use_sub):
+ *                 fld_idx = fld_idx + 1             # <<<<<<<<<<<<<<
+ *                 our_saxpy(&size, &channel_no_inv, work_m, &ONE, &work[fld_idx*size], &ONE)
+ * 
+ */
+        __pyx_v_fld_idx = (__pyx_v_fld_idx + 1);
+
+        /* "models/fieldembed_core.pyx":800
+ *             for lpid in range(use_sub):
+ *                 fld_idx = fld_idx + 1
+ *                 our_saxpy(&size, &channel_no_inv, work_m, &ONE, &work[fld_idx*size], &ONE)             # <<<<<<<<<<<<<<
+ * 
+ *         if use_head:
+ */
+        __pyx_v_6models_15fieldembed_core_our_saxpy((&__pyx_v_size), (&__pyx_v_channel_no_inv), __pyx_v_work_m, (&__pyx_v_6models_15fieldembed_core_ONE), (&(__pyx_v_work[(__pyx_v_fld_idx * __pyx_v_size)])), (&__pyx_v_6models_15fieldembed_core_ONE));
+      }
+
+      /* "models/fieldembed_core.pyx":797
+ *     if use_merger:
+ *         fld_idx = -1
+ *         if use_sub:             # <<<<<<<<<<<<<<
+ *             for lpid in range(use_sub):
+ *                 fld_idx = fld_idx + 1
+ */
+    }
+
+    /* "models/fieldembed_core.pyx":802
+ *                 our_saxpy(&size, &channel_no_inv, work_m, &ONE, &work[fld_idx*size], &ONE)
+ * 
+ *         if use_head:             # <<<<<<<<<<<<<<
+ *             fld_idx = fld_idx + 1
+ *             our_saxpy(&size, &channel_no_inv, work_m, &ONE, &work[fld_idx*size], &ONE)
+ */
+    __pyx_t_4 = (__pyx_v_use_head != 0);
+    if (__pyx_t_4) {
+
+      /* "models/fieldembed_core.pyx":803
+ * 
+ *         if use_head:
+ *             fld_idx = fld_idx + 1             # <<<<<<<<<<<<<<
+ *             our_saxpy(&size, &channel_no_inv, work_m, &ONE, &work[fld_idx*size], &ONE)
+ * 
+ */
+      __pyx_v_fld_idx = (__pyx_v_fld_idx + 1);
+
+      /* "models/fieldembed_core.pyx":804
+ *         if use_head:
+ *             fld_idx = fld_idx + 1
+ *             our_saxpy(&size, &channel_no_inv, work_m, &ONE, &work[fld_idx*size], &ONE)             # <<<<<<<<<<<<<<
+ * 
+ *         if use_hyper:
+ */
+      __pyx_v_6models_15fieldembed_core_our_saxpy((&__pyx_v_size), (&__pyx_v_channel_no_inv), __pyx_v_work_m, (&__pyx_v_6models_15fieldembed_core_ONE), (&(__pyx_v_work[(__pyx_v_fld_idx * __pyx_v_size)])), (&__pyx_v_6models_15fieldembed_core_ONE));
+
+      /* "models/fieldembed_core.pyx":802
+ *                 our_saxpy(&size, &channel_no_inv, work_m, &ONE, &work[fld_idx*size], &ONE)
+ * 
+ *         if use_head:             # <<<<<<<<<<<<<<
+ *             fld_idx = fld_idx + 1
+ *             our_saxpy(&size, &channel_no_inv, work_m, &ONE, &work[fld_idx*size], &ONE)
+ */
+    }
+
+    /* "models/fieldembed_core.pyx":806
+ *             our_saxpy(&size, &channel_no_inv, work_m, &ONE, &work[fld_idx*size], &ONE)
+ * 
+ *         if use_hyper:             # <<<<<<<<<<<<<<
+ *             for lpid in range(use_hyper):
+ *                 fld_idx = fld_idx + 1
+ */
+    __pyx_t_4 = (__pyx_v_use_hyper != 0);
+    if (__pyx_t_4) {
+
+      /* "models/fieldembed_core.pyx":807
+ * 
+ *         if use_hyper:
+ *             for lpid in range(use_hyper):             # <<<<<<<<<<<<<<
+ *                 fld_idx = fld_idx + 1
+ *                 our_saxpy(&size, &channel_no_inv, work_m, &ONE, &work[fld_idx*size], &ONE)
+ */
+      __pyx_t_1 = __pyx_v_use_hyper;
+      __pyx_t_2 = __pyx_t_1;
+      for (__pyx_t_3 = 0; __pyx_t_3 < __pyx_t_2; __pyx_t_3+=1) {
+        __pyx_v_lpid = __pyx_t_3;
+
+        /* "models/fieldembed_core.pyx":808
+ *         if use_hyper:
+ *             for lpid in range(use_hyper):
+ *                 fld_idx = fld_idx + 1             # <<<<<<<<<<<<<<
+ *                 our_saxpy(&size, &channel_no_inv, work_m, &ONE, &work[fld_idx*size], &ONE)
+ *     ######################################################################## E
+ */
+        __pyx_v_fld_idx = (__pyx_v_fld_idx + 1);
+
+        /* "models/fieldembed_core.pyx":809
+ *             for lpid in range(use_hyper):
+ *                 fld_idx = fld_idx + 1
+ *                 our_saxpy(&size, &channel_no_inv, work_m, &ONE, &work[fld_idx*size], &ONE)             # <<<<<<<<<<<<<<
+ *     ######################################################################## E
+ * 
+ */
+        __pyx_v_6models_15fieldembed_core_our_saxpy((&__pyx_v_size), (&__pyx_v_channel_no_inv), __pyx_v_work_m, (&__pyx_v_6models_15fieldembed_core_ONE), (&(__pyx_v_work[(__pyx_v_fld_idx * __pyx_v_size)])), (&__pyx_v_6models_15fieldembed_core_ONE));
+      }
+
+      /* "models/fieldembed_core.pyx":806
+ *             our_saxpy(&size, &channel_no_inv, work_m, &ONE, &work[fld_idx*size], &ONE)
+ * 
+ *         if use_hyper:             # <<<<<<<<<<<<<<
+ *             for lpid in range(use_hyper):
+ *                 fld_idx = fld_idx + 1
+ */
+    }
+
+    /* "models/fieldembed_core.pyx":795
+ * 
+ *     ######################################################################## S: assign the grad_m (work_m) to each grad (work)
+ *     if use_merger:             # <<<<<<<<<<<<<<
+ *         fld_idx = -1
+ *         if use_sub:
+ */
+  }
+
+  /* "models/fieldembed_core.pyx":814
+ * 
+ *     ######################################################################## S: use standard grad
+ *     if cbow_mean and count > (<REAL_t>0.5):             # <<<<<<<<<<<<<<
+ *         fld_idx = -1
+ *         if use_sub:
+ */
+  __pyx_t_13 = (__pyx_v_cbow_mean != 0);
+  if (__pyx_t_13) {
+  } else {
+    __pyx_t_4 = __pyx_t_13;
+    goto __pyx_L73_bool_binop_done;
+  }
+  __pyx_t_13 = ((__pyx_v_count > ((__pyx_t_6models_15fieldembed_core_REAL_t)0.5)) != 0);
+  __pyx_t_4 = __pyx_t_13;
+  __pyx_L73_bool_binop_done:;
+  if (__pyx_t_4) {
+
+    /* "models/fieldembed_core.pyx":815
+ *     ######################################################################## S: use standard grad
+ *     if cbow_mean and count > (<REAL_t>0.5):
+ *         fld_idx = -1             # <<<<<<<<<<<<<<
+ *         if use_sub:
+ *             for lpid in range(use_sub):
+ */
+    __pyx_v_fld_idx = -1;
+
+    /* "models/fieldembed_core.pyx":816
+ *     if cbow_mean and count > (<REAL_t>0.5):
+ *         fld_idx = -1
+ *         if use_sub:             # <<<<<<<<<<<<<<
+ *             for lpid in range(use_sub):
+ *                 fld_idx = fld_idx + 1
+ */
+    __pyx_t_4 = (__pyx_v_use_sub != 0);
+    if (__pyx_t_4) {
+
+      /* "models/fieldembed_core.pyx":817
+ *         fld_idx = -1
+ *         if use_sub:
+ *             for lpid in range(use_sub):             # <<<<<<<<<<<<<<
+ *                 fld_idx = fld_idx + 1
+ *                 sscal(&size, &inv_count, &work[fld_idx*size], &ONE)
+ */
+      __pyx_t_1 = __pyx_v_use_sub;
+      __pyx_t_2 = __pyx_t_1;
+      for (__pyx_t_3 = 0; __pyx_t_3 < __pyx_t_2; __pyx_t_3+=1) {
+        __pyx_v_lpid = __pyx_t_3;
+
+        /* "models/fieldembed_core.pyx":818
+ *         if use_sub:
+ *             for lpid in range(use_sub):
+ *                 fld_idx = fld_idx + 1             # <<<<<<<<<<<<<<
+ *                 sscal(&size, &inv_count, &work[fld_idx*size], &ONE)
+ *         if use_head:
+ */
+        __pyx_v_fld_idx = (__pyx_v_fld_idx + 1);
+
+        /* "models/fieldembed_core.pyx":819
+ *             for lpid in range(use_sub):
+ *                 fld_idx = fld_idx + 1
+ *                 sscal(&size, &inv_count, &work[fld_idx*size], &ONE)             # <<<<<<<<<<<<<<
+ *         if use_head:
+ *             fld_idx = fld_idx + 1
+ */
+        __pyx_v_6models_15fieldembed_core_sscal((&__pyx_v_size), (&__pyx_v_inv_count), (&(__pyx_v_work[(__pyx_v_fld_idx * __pyx_v_size)])), (&__pyx_v_6models_15fieldembed_core_ONE));
+      }
+
+      /* "models/fieldembed_core.pyx":816
+ *     if cbow_mean and count > (<REAL_t>0.5):
+ *         fld_idx = -1
+ *         if use_sub:             # <<<<<<<<<<<<<<
+ *             for lpid in range(use_sub):
+ *                 fld_idx = fld_idx + 1
+ */
+    }
+
+    /* "models/fieldembed_core.pyx":820
+ *                 fld_idx = fld_idx + 1
+ *                 sscal(&size, &inv_count, &work[fld_idx*size], &ONE)
+ *         if use_head:             # <<<<<<<<<<<<<<
+ *             fld_idx = fld_idx + 1
+ *             sscal(&size, &inv_count, &work[fld_idx*size], &ONE)
+ */
+    __pyx_t_4 = (__pyx_v_use_head != 0);
+    if (__pyx_t_4) {
+
+      /* "models/fieldembed_core.pyx":821
+ *                 sscal(&size, &inv_count, &work[fld_idx*size], &ONE)
+ *         if use_head:
+ *             fld_idx = fld_idx + 1             # <<<<<<<<<<<<<<
+ *             sscal(&size, &inv_count, &work[fld_idx*size], &ONE)
+ *         if use_hyper:
+ */
+      __pyx_v_fld_idx = (__pyx_v_fld_idx + 1);
+
+      /* "models/fieldembed_core.pyx":822
+ *         if use_head:
+ *             fld_idx = fld_idx + 1
+ *             sscal(&size, &inv_count, &work[fld_idx*size], &ONE)             # <<<<<<<<<<<<<<
+ *         if use_hyper:
+ *             for lpid in range(use_hyper):
+ */
+      __pyx_v_6models_15fieldembed_core_sscal((&__pyx_v_size), (&__pyx_v_inv_count), (&(__pyx_v_work[(__pyx_v_fld_idx * __pyx_v_size)])), (&__pyx_v_6models_15fieldembed_core_ONE));
+
+      /* "models/fieldembed_core.pyx":820
+ *                 fld_idx = fld_idx + 1
+ *                 sscal(&size, &inv_count, &work[fld_idx*size], &ONE)
+ *         if use_head:             # <<<<<<<<<<<<<<
+ *             fld_idx = fld_idx + 1
+ *             sscal(&size, &inv_count, &work[fld_idx*size], &ONE)
+ */
+    }
+
+    /* "models/fieldembed_core.pyx":823
+ *             fld_idx = fld_idx + 1
+ *             sscal(&size, &inv_count, &work[fld_idx*size], &ONE)
+ *         if use_hyper:             # <<<<<<<<<<<<<<
+ *             for lpid in range(use_hyper):
+ *                 fld_idx = fld_idx + 1
+ */
+    __pyx_t_4 = (__pyx_v_use_hyper != 0);
+    if (__pyx_t_4) {
+
+      /* "models/fieldembed_core.pyx":824
+ *             sscal(&size, &inv_count, &work[fld_idx*size], &ONE)
+ *         if use_hyper:
+ *             for lpid in range(use_hyper):             # <<<<<<<<<<<<<<
+ *                 fld_idx = fld_idx + 1
+ *                 sscal(&size, &inv_count, &work[fld_idx*size], &ONE)
+ */
+      __pyx_t_1 = __pyx_v_use_hyper;
+      __pyx_t_2 = __pyx_t_1;
+      for (__pyx_t_3 = 0; __pyx_t_3 < __pyx_t_2; __pyx_t_3+=1) {
+        __pyx_v_lpid = __pyx_t_3;
+
+        /* "models/fieldembed_core.pyx":825
+ *         if use_hyper:
+ *             for lpid in range(use_hyper):
+ *                 fld_idx = fld_idx + 1             # <<<<<<<<<<<<<<
+ *                 sscal(&size, &inv_count, &work[fld_idx*size], &ONE)
+ * 
+ */
+        __pyx_v_fld_idx = (__pyx_v_fld_idx + 1);
+
+        /* "models/fieldembed_core.pyx":826
+ *             for lpid in range(use_hyper):
+ *                 fld_idx = fld_idx + 1
+ *                 sscal(&size, &inv_count, &work[fld_idx*size], &ONE)             # <<<<<<<<<<<<<<
+ * 
+ * 
+ */
+        __pyx_v_6models_15fieldembed_core_sscal((&__pyx_v_size), (&__pyx_v_inv_count), (&(__pyx_v_work[(__pyx_v_fld_idx * __pyx_v_size)])), (&__pyx_v_6models_15fieldembed_core_ONE));
+      }
+
+      /* "models/fieldembed_core.pyx":823
+ *             fld_idx = fld_idx + 1
+ *             sscal(&size, &inv_count, &work[fld_idx*size], &ONE)
+ *         if use_hyper:             # <<<<<<<<<<<<<<
+ *             for lpid in range(use_hyper):
+ *                 fld_idx = fld_idx + 1
+ */
+    }
+
+    /* "models/fieldembed_core.pyx":814
+ * 
+ *     ######################################################################## S: use standard grad
+ *     if cbow_mean and count > (<REAL_t>0.5):             # <<<<<<<<<<<<<<
+ *         fld_idx = -1
+ *         if use_sub:
+ */
+  }
+
+  /* "models/fieldembed_core.pyx":830
+ * 
+ *     ######################################################################## S: update each syn0 by using the grad (work)
+ *     fld_idx = -1             # <<<<<<<<<<<<<<
+ *     if use_sub:
+ *         for lpid in range(use_sub):
+ */
+  __pyx_v_fld_idx = -1;
+
+  /* "models/fieldembed_core.pyx":831
+ *     ######################################################################## S: update each syn0 by using the grad (work)
+ *     fld_idx = -1
+ *     if use_sub:             # <<<<<<<<<<<<<<
+ *         for lpid in range(use_sub):
+ *             fld_idx = fld_idx + 1
+ */
+  __pyx_t_4 = (__pyx_v_use_sub != 0);
+  if (__pyx_t_4) {
+
+    /* "models/fieldembed_core.pyx":832
+ *     fld_idx = -1
+ *     if use_sub:
+ *         for lpid in range(use_sub):             # <<<<<<<<<<<<<<
+ *             fld_idx = fld_idx + 1
+ *             # sg case: j + 1 = k; loop left tokens here
+ */
+    __pyx_t_1 = __pyx_v_use_sub;
+    __pyx_t_2 = __pyx_t_1;
+    for (__pyx_t_3 = 0; __pyx_t_3 < __pyx_t_2; __pyx_t_3+=1) {
+      __pyx_v_lpid = __pyx_t_3;
+
+      /* "models/fieldembed_core.pyx":833
+ *     if use_sub:
+ *         for lpid in range(use_sub):
+ *             fld_idx = fld_idx + 1             # <<<<<<<<<<<<<<
+ *             # sg case: j + 1 = k; loop left tokens here
+ *             for m in range(j, k):
+ */
+      __pyx_v_fld_idx = (__pyx_v_fld_idx + 1);
+
+      /* "models/fieldembed_core.pyx":835
+ *             fld_idx = fld_idx + 1
+ *             # sg case: j + 1 = k; loop left tokens here
+ *             for m in range(j, k):             # <<<<<<<<<<<<<<
+ *                 if m == i:
+ *                     continue
+ */
+      __pyx_t_5 = __pyx_v_k;
+      __pyx_t_6 = __pyx_t_5;
+      for (__pyx_t_7 = __pyx_v_j; __pyx_t_7 < __pyx_t_6; __pyx_t_7+=1) {
+        __pyx_v_m = __pyx_t_7;
+
+        /* "models/fieldembed_core.pyx":836
+ *             # sg case: j + 1 = k; loop left tokens here
+ *             for m in range(j, k):
+ *                 if m == i:             # <<<<<<<<<<<<<<
+ *                     continue
+ *                 else:
+ */
+        __pyx_t_4 = ((__pyx_v_m == __pyx_v_i) != 0);
+        if (__pyx_t_4) {
+
+          /* "models/fieldembed_core.pyx":837
+ *             for m in range(j, k):
+ *                 if m == i:
+ *                     continue             # <<<<<<<<<<<<<<
+ *                 else:
+ *                     ############### This four lines are important ###############
+ */
+          goto __pyx_L85_continue;
+
+          /* "models/fieldembed_core.pyx":836
+ *             # sg case: j + 1 = k; loop left tokens here
+ *             for m in range(j, k):
+ *                 if m == i:             # <<<<<<<<<<<<<<
+ *                     continue
+ *                 else:
+ */
+        }
+
+        /* "models/fieldembed_core.pyx":841
+ *                     ############### This four lines are important ###############
+ *                     # left_word  #  from uint32 to int
+ *                     left_word = indexes[m]             # <<<<<<<<<<<<<<
+ *                     # word_lenginv: REAL_t
+ *                     word_lenginv = LengInv_map[lpid][left_word]
+ */
+        /*else*/ {
+          __pyx_v_left_word = (__pyx_v_indexes[__pyx_v_m]);
+
+          /* "models/fieldembed_core.pyx":843
+ *                     left_word = indexes[m]
+ *                     # word_lenginv: REAL_t
+ *                     word_lenginv = LengInv_map[lpid][left_word]             # <<<<<<<<<<<<<<
+ *                     # from uint32 to int
+ *                     gs = EndIdx_map[lpid][left_word-1]
+ */
+          __pyx_v_word_lenginv = ((__pyx_v_LengInv_map[__pyx_v_lpid])[__pyx_v_left_word]);
+
+          /* "models/fieldembed_core.pyx":845
+ *                     word_lenginv = LengInv_map[lpid][left_word]
+ *                     # from uint32 to int
+ *                     gs = EndIdx_map[lpid][left_word-1]             # <<<<<<<<<<<<<<
+ *                     # from uint32 to int
+ *                     ge = EndIdx_map[lpid][left_word]
+ */
+          __pyx_v_gs = ((__pyx_v_EndIdx_map[__pyx_v_lpid])[(__pyx_v_left_word - 1)]);
+
+          /* "models/fieldembed_core.pyx":847
+ *                     gs = EndIdx_map[lpid][left_word-1]
+ *                     # from uint32 to int
+ *                     ge = EndIdx_map[lpid][left_word]             # <<<<<<<<<<<<<<
+ *                     # n is int
+ *                     for n in range(gs, ge):
+ */
+          __pyx_v_ge = ((__pyx_v_EndIdx_map[__pyx_v_lpid])[__pyx_v_left_word]);
+
+          /* "models/fieldembed_core.pyx":849
+ *                     ge = EndIdx_map[lpid][left_word]
+ *                     # n is int
+ *                     for n in range(gs, ge):             # <<<<<<<<<<<<<<
+ *                         # grain_index is uint
+ *                         grain_index = LookUp_map[lpid][n]
+ */
+          __pyx_t_8 = __pyx_v_ge;
+          __pyx_t_9 = __pyx_t_8;
+          for (__pyx_t_10 = __pyx_v_gs; __pyx_t_10 < __pyx_t_9; __pyx_t_10+=1) {
+            __pyx_v_n = __pyx_t_10;
+
+            /* "models/fieldembed_core.pyx":851
+ *                     for n in range(gs, ge):
+ *                         # grain_index is uint
+ *                         grain_index = LookUp_map[lpid][n]             # <<<<<<<<<<<<<<
+ *                         our_saxpy(&size, &word_lenginv, &work[fld_idx*size], &ONE, &syn0_map[fld_idx][grain_index * size], &ONE)
+ *     if use_head:
+ */
+            __pyx_v_grain_index = ((__pyx_v_LookUp_map[__pyx_v_lpid])[__pyx_v_n]);
+
+            /* "models/fieldembed_core.pyx":852
+ *                         # grain_index is uint
+ *                         grain_index = LookUp_map[lpid][n]
+ *                         our_saxpy(&size, &word_lenginv, &work[fld_idx*size], &ONE, &syn0_map[fld_idx][grain_index * size], &ONE)             # <<<<<<<<<<<<<<
+ *     if use_head:
+ *         fld_idx = fld_idx + 1
+ */
+            __pyx_v_6models_15fieldembed_core_our_saxpy((&__pyx_v_size), (&__pyx_v_word_lenginv), (&(__pyx_v_work[(__pyx_v_fld_idx * __pyx_v_size)])), (&__pyx_v_6models_15fieldembed_core_ONE), (&((__pyx_v_syn0_map[__pyx_v_fld_idx])[(__pyx_v_grain_index * __pyx_v_size)])), (&__pyx_v_6models_15fieldembed_core_ONE));
+          }
+        }
+        __pyx_L85_continue:;
+      }
+    }
+
+    /* "models/fieldembed_core.pyx":831
+ *     ######################################################################## S: update each syn0 by using the grad (work)
+ *     fld_idx = -1
+ *     if use_sub:             # <<<<<<<<<<<<<<
+ *         for lpid in range(use_sub):
+ *             fld_idx = fld_idx + 1
+ */
+  }
+
+  /* "models/fieldembed_core.pyx":853
+ *                         grain_index = LookUp_map[lpid][n]
+ *                         our_saxpy(&size, &word_lenginv, &work[fld_idx*size], &ONE, &syn0_map[fld_idx][grain_index * size], &ONE)
+ *     if use_head:             # <<<<<<<<<<<<<<
+ *         fld_idx = fld_idx + 1
+ *         for m in range(j,k):
+ */
+  __pyx_t_4 = (__pyx_v_use_head != 0);
+  if (__pyx_t_4) {
+
+    /* "models/fieldembed_core.pyx":854
+ *                         our_saxpy(&size, &word_lenginv, &work[fld_idx*size], &ONE, &syn0_map[fld_idx][grain_index * size], &ONE)
+ *     if use_head:
+ *         fld_idx = fld_idx + 1             # <<<<<<<<<<<<<<
+ *         for m in range(j,k):
+ *             if m == i:
+ */
+    __pyx_v_fld_idx = (__pyx_v_fld_idx + 1);
+
+    /* "models/fieldembed_core.pyx":855
+ *     if use_head:
+ *         fld_idx = fld_idx + 1
+ *         for m in range(j,k):             # <<<<<<<<<<<<<<
+ *             if m == i:
+ *                 continue
+ */
+    __pyx_t_1 = __pyx_v_k;
+    __pyx_t_2 = __pyx_t_1;
+    for (__pyx_t_3 = __pyx_v_j; __pyx_t_3 < __pyx_t_2; __pyx_t_3+=1) {
+      __pyx_v_m = __pyx_t_3;
+
+      /* "models/fieldembed_core.pyx":856
+ *         fld_idx = fld_idx + 1
+ *         for m in range(j,k):
+ *             if m == i:             # <<<<<<<<<<<<<<
+ *                 continue
+ *             else:
+ */
+      __pyx_t_4 = ((__pyx_v_m == __pyx_v_i) != 0);
+      if (__pyx_t_4) {
+
+        /* "models/fieldembed_core.pyx":857
+ *         for m in range(j,k):
+ *             if m == i:
+ *                 continue             # <<<<<<<<<<<<<<
+ *             else:
+ *                 our_saxpy(&size, &word_locks[indexes[m]], &work[fld_idx*size], &ONE, &syn0_map[fld_idx][ indexes[m] * size], &ONE)
+ */
+        goto __pyx_L91_continue;
+
+        /* "models/fieldembed_core.pyx":856
+ *         fld_idx = fld_idx + 1
+ *         for m in range(j,k):
+ *             if m == i:             # <<<<<<<<<<<<<<
+ *                 continue
+ *             else:
+ */
+      }
+
+      /* "models/fieldembed_core.pyx":859
+ *                 continue
+ *             else:
+ *                 our_saxpy(&size, &word_locks[indexes[m]], &work[fld_idx*size], &ONE, &syn0_map[fld_idx][ indexes[m] * size], &ONE)             # <<<<<<<<<<<<<<
+ * 
+ *     if use_hyper:
+ */
+      /*else*/ {
+        __pyx_v_6models_15fieldembed_core_our_saxpy((&__pyx_v_size), (&(__pyx_v_word_locks[(__pyx_v_indexes[__pyx_v_m])])), (&(__pyx_v_work[(__pyx_v_fld_idx * __pyx_v_size)])), (&__pyx_v_6models_15fieldembed_core_ONE), (&((__pyx_v_syn0_map[__pyx_v_fld_idx])[((__pyx_v_indexes[__pyx_v_m]) * __pyx_v_size)])), (&__pyx_v_6models_15fieldembed_core_ONE));
+      }
+      __pyx_L91_continue:;
+    }
+
+    /* "models/fieldembed_core.pyx":853
+ *                         grain_index = LookUp_map[lpid][n]
+ *                         our_saxpy(&size, &word_lenginv, &work[fld_idx*size], &ONE, &syn0_map[fld_idx][grain_index * size], &ONE)
+ *     if use_head:             # <<<<<<<<<<<<<<
+ *         fld_idx = fld_idx + 1
+ *         for m in range(j,k):
+ */
+  }
+
+  /* "models/fieldembed_core.pyx":861
+ *                 our_saxpy(&size, &word_locks[indexes[m]], &work[fld_idx*size], &ONE, &syn0_map[fld_idx][ indexes[m] * size], &ONE)
+ * 
+ *     if use_hyper:             # <<<<<<<<<<<<<<
+ *         for lpid in range(use_hyper):
+ *             fld_idx = fld_idx + 1
+ */
+  __pyx_t_4 = (__pyx_v_use_hyper != 0);
+  if (__pyx_t_4) {
+
+    /* "models/fieldembed_core.pyx":862
+ * 
+ *     if use_hyper:
+ *         for lpid in range(use_hyper):             # <<<<<<<<<<<<<<
+ *             fld_idx = fld_idx + 1
+ *             for m in range(j, k):
+ */
+    __pyx_t_1 = __pyx_v_use_hyper;
+    __pyx_t_2 = __pyx_t_1;
+    for (__pyx_t_3 = 0; __pyx_t_3 < __pyx_t_2; __pyx_t_3+=1) {
+      __pyx_v_lpid = __pyx_t_3;
+
+      /* "models/fieldembed_core.pyx":863
+ *     if use_hyper:
+ *         for lpid in range(use_hyper):
+ *             fld_idx = fld_idx + 1             # <<<<<<<<<<<<<<
+ *             for m in range(j, k):
+ *                 if m == i:
+ */
+      __pyx_v_fld_idx = (__pyx_v_fld_idx + 1);
+
+      /* "models/fieldembed_core.pyx":864
+ *         for lpid in range(use_hyper):
+ *             fld_idx = fld_idx + 1
+ *             for m in range(j, k):             # <<<<<<<<<<<<<<
+ *                 if m == i:
+ *                     continue
+ */
+      __pyx_t_5 = __pyx_v_k;
+      __pyx_t_6 = __pyx_t_5;
+      for (__pyx_t_7 = __pyx_v_j; __pyx_t_7 < __pyx_t_6; __pyx_t_7+=1) {
+        __pyx_v_m = __pyx_t_7;
+
+        /* "models/fieldembed_core.pyx":865
+ *             fld_idx = fld_idx + 1
+ *             for m in range(j, k):
+ *                 if m == i:             # <<<<<<<<<<<<<<
+ *                     continue
+ *                 else:
+ */
+        __pyx_t_4 = ((__pyx_v_m == __pyx_v_i) != 0);
+        if (__pyx_t_4) {
+
+          /* "models/fieldembed_core.pyx":866
+ *             for m in range(j, k):
+ *                 if m == i:
+ *                     continue             # <<<<<<<<<<<<<<
+ *                 else:
+ *                     our_saxpy(&size, &ONEF, &work[fld_idx*size], &ONE, &syn0_map[fld_idx][hyper_indexes[lpid][m] * size], &ONE)
+ */
+          goto __pyx_L97_continue;
+
+          /* "models/fieldembed_core.pyx":865
+ *             fld_idx = fld_idx + 1
+ *             for m in range(j, k):
+ *                 if m == i:             # <<<<<<<<<<<<<<
+ *                     continue
+ *                 else:
+ */
+        }
+
+        /* "models/fieldembed_core.pyx":868
+ *                     continue
+ *                 else:
+ *                     our_saxpy(&size, &ONEF, &work[fld_idx*size], &ONE, &syn0_map[fld_idx][hyper_indexes[lpid][m] * size], &ONE)             # <<<<<<<<<<<<<<
+ *     ######################################################################## E
+ * 
+ */
+        /*else*/ {
+          __pyx_v_6models_15fieldembed_core_our_saxpy((&__pyx_v_size), (&__pyx_v_6models_15fieldembed_core_ONEF), (&(__pyx_v_work[(__pyx_v_fld_idx * __pyx_v_size)])), (&__pyx_v_6models_15fieldembed_core_ONE), (&((__pyx_v_syn0_map[__pyx_v_fld_idx])[(((__pyx_v_hyper_indexes[__pyx_v_lpid])[__pyx_v_m]) * __pyx_v_size)])), (&__pyx_v_6models_15fieldembed_core_ONE));
+        }
+        __pyx_L97_continue:;
+      }
+    }
+
+    /* "models/fieldembed_core.pyx":861
+ *                 our_saxpy(&size, &word_locks[indexes[m]], &work[fld_idx*size], &ONE, &syn0_map[fld_idx][ indexes[m] * size], &ONE)
+ * 
+ *     if use_hyper:             # <<<<<<<<<<<<<<
+ *         for lpid in range(use_hyper):
+ *             fld_idx = fld_idx + 1
+ */
+  }
+
+  /* "models/fieldembed_core.pyx":871
+ *     ######################################################################## E
+ * 
+ *     return next_random             # <<<<<<<<<<<<<<
+ * 
+ * def train_batch_fieldembed_negsamp(
+ */
+  __pyx_r = __pyx_v_next_random;
+  goto __pyx_L0;
+
+  /* "models/fieldembed_core.pyx":538
+ * 
+ * 
+ * cdef unsigned long long fieldembed_negsamp(             # <<<<<<<<<<<<<<
+ *     const REAL_t alpha,
+ *     const int size,
+ */
+
+  /* function exit code */
+  __pyx_L0:;
+  return __pyx_r;
+}
+
+/* "models/fieldembed_core.pyx":873
+ *     return next_random
+ * 
+ * def train_batch_fieldembed_negsamp(             # <<<<<<<<<<<<<<
+ *     model,
+ *     # make sure the length of indexes are less than MAX_SENTENCE_LEN
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_6models_15fieldembed_core_3train_batch_fieldembed_negsamp(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds); /*proto*/
+static char __pyx_doc_6models_15fieldembed_core_2train_batch_fieldembed_negsamp[] = "train_batch_fieldembed_negsamp(model, indexes, hyper_indexes, sentence_idx, alpha, _work, _neu1, _work_m, _neu_m, _grad_mem, compute_loss, subsampling=1)";
+static PyMethodDef __pyx_mdef_6models_15fieldembed_core_3train_batch_fieldembed_negsamp = {"train_batch_fieldembed_negsamp", (PyCFunction)__pyx_pw_6models_15fieldembed_core_3train_batch_fieldembed_negsamp, METH_VARARGS|METH_KEYWORDS, __pyx_doc_6models_15fieldembed_core_2train_batch_fieldembed_negsamp};
+static PyObject *__pyx_pw_6models_15fieldembed_core_3train_batch_fieldembed_negsamp(PyObject *__pyx_self, PyObject *__pyx_args, PyObject *__pyx_kwds) {
+  PyObject *__pyx_v_model = 0;
+  PyObject *__pyx_v_indexes = 0;
+  PyObject *__pyx_v_hyper_indexes = 0;
+  PyObject *__pyx_v_sentence_idx = 0;
+  PyObject *__pyx_v_alpha = 0;
+  PyObject *__pyx_v__work = 0;
+  PyObject *__pyx_v__neu1 = 0;
+  PyObject *__pyx_v__work_m = 0;
+  PyObject *__pyx_v__neu_m = 0;
+  PyObject *__pyx_v__grad_mem = 0;
+  PyObject *__pyx_v_compute_loss = 0;
+  PyObject *__pyx_v_subsampling = 0;
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("train_batch_fieldembed_negsamp (wrapper)", 0);
+  {
+    static PyObject **__pyx_pyargnames[] = {&__pyx_n_s_model,&__pyx_n_s_indexes,&__pyx_n_s_hyper_indexes,&__pyx_n_s_sentence_idx,&__pyx_n_s_alpha,&__pyx_n_s_work,&__pyx_n_s_neu1,&__pyx_n_s_work_m,&__pyx_n_s_neu_m,&__pyx_n_s_grad_mem,&__pyx_n_s_compute_loss,&__pyx_n_s_subsampling,0};
+    PyObject* values[12] = {0,0,0,0,0,0,0,0,0,0,0,0};
+    values[11] = ((PyObject *)__pyx_int_1);
+    if (unlikely(__pyx_kwds)) {
+      Py_ssize_t kw_args;
+      const Py_ssize_t pos_args = PyTuple_GET_SIZE(__pyx_args);
+      switch (pos_args) {
+        case 12: values[11] = PyTuple_GET_ITEM(__pyx_args, 11);
+        CYTHON_FALLTHROUGH;
+        case 11: values[10] = PyTuple_GET_ITEM(__pyx_args, 10);
+        CYTHON_FALLTHROUGH;
+        case 10: values[9] = PyTuple_GET_ITEM(__pyx_args, 9);
+        CYTHON_FALLTHROUGH;
+        case  9: values[8] = PyTuple_GET_ITEM(__pyx_args, 8);
+        CYTHON_FALLTHROUGH;
+        case  8: values[7] = PyTuple_GET_ITEM(__pyx_args, 7);
+        CYTHON_FALLTHROUGH;
+        case  7: values[6] = PyTuple_GET_ITEM(__pyx_args, 6);
+        CYTHON_FALLTHROUGH;
+        case  6: values[5] = PyTuple_GET_ITEM(__pyx_args, 5);
+        CYTHON_FALLTHROUGH;
+        case  5: values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
+        CYTHON_FALLTHROUGH;
+        case  4: values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
+        CYTHON_FALLTHROUGH;
+        case  3: values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+        CYTHON_FALLTHROUGH;
+        case  2: values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+        CYTHON_FALLTHROUGH;
+        case  1: values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+        CYTHON_FALLTHROUGH;
+        case  0: break;
+        default: goto __pyx_L5_argtuple_error;
+      }
+      kw_args = PyDict_Size(__pyx_kwds);
+      switch (pos_args) {
+        case  0:
+        if (likely((values[0] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_model)) != 0)) kw_args--;
+        else goto __pyx_L5_argtuple_error;
+        CYTHON_FALLTHROUGH;
+        case  1:
+        if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_indexes)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("train_batch_fieldembed_negsamp", 0, 11, 12, 1); __PYX_ERR(0, 873, __pyx_L3_error)
+        }
+        CYTHON_FALLTHROUGH;
+        case  2:
+        if (likely((values[2] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_hyper_indexes)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("train_batch_fieldembed_negsamp", 0, 11, 12, 2); __PYX_ERR(0, 873, __pyx_L3_error)
+        }
+        CYTHON_FALLTHROUGH;
+        case  3:
+        if (likely((values[3] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_sentence_idx)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("train_batch_fieldembed_negsamp", 0, 11, 12, 3); __PYX_ERR(0, 873, __pyx_L3_error)
+        }
+        CYTHON_FALLTHROUGH;
+        case  4:
+        if (likely((values[4] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_alpha)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("train_batch_fieldembed_negsamp", 0, 11, 12, 4); __PYX_ERR(0, 873, __pyx_L3_error)
+        }
+        CYTHON_FALLTHROUGH;
+        case  5:
+        if (likely((values[5] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_work)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("train_batch_fieldembed_negsamp", 0, 11, 12, 5); __PYX_ERR(0, 873, __pyx_L3_error)
+        }
+        CYTHON_FALLTHROUGH;
+        case  6:
+        if (likely((values[6] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_neu1)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("train_batch_fieldembed_negsamp", 0, 11, 12, 6); __PYX_ERR(0, 873, __pyx_L3_error)
+        }
+        CYTHON_FALLTHROUGH;
+        case  7:
+        if (likely((values[7] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_work_m)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("train_batch_fieldembed_negsamp", 0, 11, 12, 7); __PYX_ERR(0, 873, __pyx_L3_error)
+        }
+        CYTHON_FALLTHROUGH;
+        case  8:
+        if (likely((values[8] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_neu_m)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("train_batch_fieldembed_negsamp", 0, 11, 12, 8); __PYX_ERR(0, 873, __pyx_L3_error)
+        }
+        CYTHON_FALLTHROUGH;
+        case  9:
+        if (likely((values[9] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_grad_mem)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("train_batch_fieldembed_negsamp", 0, 11, 12, 9); __PYX_ERR(0, 873, __pyx_L3_error)
+        }
+        CYTHON_FALLTHROUGH;
+        case 10:
+        if (likely((values[10] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_compute_loss)) != 0)) kw_args--;
+        else {
+          __Pyx_RaiseArgtupleInvalid("train_batch_fieldembed_negsamp", 0, 11, 12, 10); __PYX_ERR(0, 873, __pyx_L3_error)
+        }
+        CYTHON_FALLTHROUGH;
+        case 11:
+        if (kw_args > 0) {
+          PyObject* value = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_subsampling);
+          if (value) { values[11] = value; kw_args--; }
+        }
+      }
+      if (unlikely(kw_args > 0)) {
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "train_batch_fieldembed_negsamp") < 0)) __PYX_ERR(0, 873, __pyx_L3_error)
+      }
+    } else {
+      switch (PyTuple_GET_SIZE(__pyx_args)) {
+        case 12: values[11] = PyTuple_GET_ITEM(__pyx_args, 11);
+        CYTHON_FALLTHROUGH;
+        case 11: values[10] = PyTuple_GET_ITEM(__pyx_args, 10);
+        values[9] = PyTuple_GET_ITEM(__pyx_args, 9);
+        values[8] = PyTuple_GET_ITEM(__pyx_args, 8);
+        values[7] = PyTuple_GET_ITEM(__pyx_args, 7);
+        values[6] = PyTuple_GET_ITEM(__pyx_args, 6);
+        values[5] = PyTuple_GET_ITEM(__pyx_args, 5);
+        values[4] = PyTuple_GET_ITEM(__pyx_args, 4);
+        values[3] = PyTuple_GET_ITEM(__pyx_args, 3);
+        values[2] = PyTuple_GET_ITEM(__pyx_args, 2);
+        values[1] = PyTuple_GET_ITEM(__pyx_args, 1);
+        values[0] = PyTuple_GET_ITEM(__pyx_args, 0);
+        break;
+        default: goto __pyx_L5_argtuple_error;
+      }
+    }
+    __pyx_v_model = values[0];
+    __pyx_v_indexes = values[1];
+    __pyx_v_hyper_indexes = values[2];
+    __pyx_v_sentence_idx = values[3];
+    __pyx_v_alpha = values[4];
+    __pyx_v__work = values[5];
+    __pyx_v__neu1 = values[6];
+    __pyx_v__work_m = values[7];
+    __pyx_v__neu_m = values[8];
+    __pyx_v__grad_mem = values[9];
+    __pyx_v_compute_loss = values[10];
+    __pyx_v_subsampling = values[11];
+  }
+  goto __pyx_L4_argument_unpacking_done;
+  __pyx_L5_argtuple_error:;
+  __Pyx_RaiseArgtupleInvalid("train_batch_fieldembed_negsamp", 0, 11, 12, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 873, __pyx_L3_error)
+  __pyx_L3_error:;
+  __Pyx_AddTraceback("models.fieldembed_core.train_batch_fieldembed_negsamp", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __Pyx_RefNannyFinishContext();
+  return NULL;
+  __pyx_L4_argument_unpacking_done:;
+  __pyx_r = __pyx_pf_6models_15fieldembed_core_2train_batch_fieldembed_negsamp(__pyx_self, __pyx_v_model, __pyx_v_indexes, __pyx_v_hyper_indexes, __pyx_v_sentence_idx, __pyx_v_alpha, __pyx_v__work, __pyx_v__neu1, __pyx_v__work_m, __pyx_v__neu_m, __pyx_v__grad_mem, __pyx_v_compute_loss, __pyx_v_subsampling);
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_6models_15fieldembed_core_2train_batch_fieldembed_negsamp(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_model, PyObject *__pyx_v_indexes, PyObject *__pyx_v_hyper_indexes, PyObject *__pyx_v_sentence_idx, PyObject *__pyx_v_alpha, PyObject *__pyx_v__work, PyObject *__pyx_v__neu1, PyObject *__pyx_v__work_m, PyObject *__pyx_v__neu_m, PyObject *__pyx_v__grad_mem, PyObject *__pyx_v_compute_loss, PyObject *__pyx_v_subsampling) {
+  struct __pyx_t_6models_15fieldembed_core_Word2VecConfig __pyx_v_c;
+  int __pyx_v_i;
+  int __pyx_v_j;
+  int __pyx_v_k;
+  int __pyx_v_effective_words;
+  int __pyx_v_effective_sentences;
+  int __pyx_v_sent_idx;
+  int __pyx_v_idx_start;
+  int __pyx_v_idx_end;
+  int __pyx_v_word_vocidx;
+  int __pyx_v_hyper_vocidx;
+  int __pyx_v_loc_idx;
+  PyObject *__pyx_v_vlookup = NULL;
+  PyObject *__pyx_v_item = NULL;
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  int __pyx_t_2;
+  PyObject *__pyx_t_3 = NULL;
+  Py_ssize_t __pyx_t_4;
+  Py_ssize_t __pyx_t_5;
+  int __pyx_t_6;
+  long __pyx_t_7;
+  int __pyx_t_8;
+  int __pyx_t_9;
+  int __pyx_t_10;
+  int __pyx_t_11;
+  int __pyx_t_12;
+  PyObject *__pyx_t_13 = NULL;
+  Py_ssize_t __pyx_t_14;
+  Py_ssize_t __pyx_t_15;
+  int __pyx_t_16;
+  PyObject *(*__pyx_t_17)(PyObject *);
+  __pyx_t_5numpy_uint32_t __pyx_t_18;
+  PyObject *__pyx_t_19 = NULL;
+  PyObject *__pyx_t_20 = NULL;
+  PyObject *__pyx_t_21 = NULL;
+  int __pyx_t_22;
+  int __pyx_t_23;
+  int __pyx_t_24;
+  __Pyx_RefNannySetupContext("train_batch_fieldembed_negsamp", 0);
+
+  /* "models/fieldembed_core.pyx":892
+ *     cdef Word2VecConfig c
+ *     cdef int i, j, k
+ *     cdef int effective_words = 0, effective_sentences = 0             # <<<<<<<<<<<<<<
+ *     cdef int sent_idx, idx_start, idx_end
+ *     # here set word_vocidx and hyper_vocidx as int are ok, they will be converted to np.uint32_t
+ */
+  __pyx_v_effective_words = 0;
+  __pyx_v_effective_sentences = 0;
+
+  /* "models/fieldembed_core.pyx":895
+ *     cdef int sent_idx, idx_start, idx_end
+ *     # here set word_vocidx and hyper_vocidx as int are ok, they will be converted to np.uint32_t
+ *     cdef int word_vocidx, hyper_vocidx = 0             # <<<<<<<<<<<<<<
+ *     cdef int loc_idx
+ * 
+ */
+  __pyx_v_hyper_vocidx = 0;
+
+  /* "models/fieldembed_core.pyx":898
+ *     cdef int loc_idx
+ * 
+ *     init_w2v_config(&c, model, alpha, compute_loss, _work, _neu1, _work_m, _neu_m, _grad_mem) # this is the difference between sg and cbow             # <<<<<<<<<<<<<<
+ * 
+ *     if subsampling:
+ */
+  __pyx_t_1 = __pyx_f_6models_15fieldembed_core_init_w2v_config((&__pyx_v_c), __pyx_v_model, __pyx_v_alpha, __pyx_v_compute_loss, __pyx_v__work, __pyx_v__neu1, __pyx_v__work_m, __pyx_v__neu_m, __pyx_v__grad_mem); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 898, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "models/fieldembed_core.pyx":900
+ *     init_w2v_config(&c, model, alpha, compute_loss, _work, _neu1, _work_m, _neu_m, _grad_mem) # this is the difference between sg and cbow
+ * 
+ *     if subsampling:             # <<<<<<<<<<<<<<
+ *         vlookup = model.wv.vocab_values
+ *         for sent_idx in range(len(sentence_idx)):
+ */
+  __pyx_t_2 = __Pyx_PyObject_IsTrue(__pyx_v_subsampling); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 900, __pyx_L1_error)
+  if (__pyx_t_2) {
+
+    /* "models/fieldembed_core.pyx":901
+ * 
+ *     if subsampling:
+ *         vlookup = model.wv.vocab_values             # <<<<<<<<<<<<<<
+ *         for sent_idx in range(len(sentence_idx)):
+ *             # step1: get every sentence's idx_start and idx_end
+ */
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_wv); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 901, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_vocab_values); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 901, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    __pyx_v_vlookup = __pyx_t_3;
+    __pyx_t_3 = 0;
+
+    /* "models/fieldembed_core.pyx":902
+ *     if subsampling:
+ *         vlookup = model.wv.vocab_values
+ *         for sent_idx in range(len(sentence_idx)):             # <<<<<<<<<<<<<<
+ *             # step1: get every sentence's idx_start and idx_end
+ *             if sent_idx == 0:
+ */
+    __pyx_t_4 = PyObject_Length(__pyx_v_sentence_idx); if (unlikely(__pyx_t_4 == ((Py_ssize_t)-1))) __PYX_ERR(0, 902, __pyx_L1_error)
+    __pyx_t_5 = __pyx_t_4;
+    for (__pyx_t_6 = 0; __pyx_t_6 < __pyx_t_5; __pyx_t_6+=1) {
+      __pyx_v_sent_idx = __pyx_t_6;
+
+      /* "models/fieldembed_core.pyx":904
+ *         for sent_idx in range(len(sentence_idx)):
+ *             # step1: get every sentence's idx_start and idx_end
+ *             if sent_idx == 0:             # <<<<<<<<<<<<<<
+ *                 idx_start = 0
+ *             else:
+ */
+      __pyx_t_2 = ((__pyx_v_sent_idx == 0) != 0);
+      if (__pyx_t_2) {
+
+        /* "models/fieldembed_core.pyx":905
+ *             # step1: get every sentence's idx_start and idx_end
+ *             if sent_idx == 0:
+ *                 idx_start = 0             # <<<<<<<<<<<<<<
+ *             else:
+ *                 idx_start = sentence_idx[sent_idx-1]
+ */
+        __pyx_v_idx_start = 0;
+
+        /* "models/fieldembed_core.pyx":904
+ *         for sent_idx in range(len(sentence_idx)):
+ *             # step1: get every sentence's idx_start and idx_end
+ *             if sent_idx == 0:             # <<<<<<<<<<<<<<
+ *                 idx_start = 0
+ *             else:
+ */
+        goto __pyx_L6;
+      }
+
+      /* "models/fieldembed_core.pyx":907
+ *                 idx_start = 0
+ *             else:
+ *                 idx_start = sentence_idx[sent_idx-1]             # <<<<<<<<<<<<<<
+ *             idx_end = sentence_idx[sent_idx]
+ * 
+ */
+      /*else*/ {
+        __pyx_t_7 = (__pyx_v_sent_idx - 1);
+        __pyx_t_3 = __Pyx_GetItemInt(__pyx_v_sentence_idx, __pyx_t_7, long, 1, __Pyx_PyInt_From_long, 0, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 907, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_3);
+        __pyx_t_8 = __Pyx_PyInt_As_int(__pyx_t_3); if (unlikely((__pyx_t_8 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 907, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+        __pyx_v_idx_start = __pyx_t_8;
+      }
+      __pyx_L6:;
+
+      /* "models/fieldembed_core.pyx":908
+ *             else:
+ *                 idx_start = sentence_idx[sent_idx-1]
+ *             idx_end = sentence_idx[sent_idx]             # <<<<<<<<<<<<<<
+ * 
+ *             # step2: loop every tokens in this sentence, drop special tokens and use downsampling
+ */
+      __pyx_t_3 = __Pyx_GetItemInt(__pyx_v_sentence_idx, __pyx_v_sent_idx, int, 1, __Pyx_PyInt_From_int, 0, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 908, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
+      __pyx_t_8 = __Pyx_PyInt_As_int(__pyx_t_3); if (unlikely((__pyx_t_8 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 908, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+      __pyx_v_idx_end = __pyx_t_8;
+
+      /* "models/fieldembed_core.pyx":911
+ * 
+ *             # step2: loop every tokens in this sentence, drop special tokens and use downsampling
+ *             for loc_idx in range(idx_start, idx_end):             # <<<<<<<<<<<<<<
+ *                 # loc_idx = i + idx_start
+ *                 word_vocidx = indexes[loc_idx]
+ */
+      __pyx_t_8 = __pyx_v_idx_end;
+      __pyx_t_9 = __pyx_t_8;
+      for (__pyx_t_10 = __pyx_v_idx_start; __pyx_t_10 < __pyx_t_9; __pyx_t_10+=1) {
+        __pyx_v_loc_idx = __pyx_t_10;
+
+        /* "models/fieldembed_core.pyx":913
+ *             for loc_idx in range(idx_start, idx_end):
+ *                 # loc_idx = i + idx_start
+ *                 word_vocidx = indexes[loc_idx]             # <<<<<<<<<<<<<<
+ * 
+ *                 # filter high and low freq tokens, is these necessary?
+ */
+        __pyx_t_3 = __Pyx_GetItemInt(__pyx_v_indexes, __pyx_v_loc_idx, int, 1, __Pyx_PyInt_From_int, 0, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 913, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_3);
+        __pyx_t_11 = __Pyx_PyInt_As_int(__pyx_t_3); if (unlikely((__pyx_t_11 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 913, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+        __pyx_v_word_vocidx = __pyx_t_11;
+
+        /* "models/fieldembed_core.pyx":916
+ * 
+ *                 # filter high and low freq tokens, is these necessary?
+ *                 if word_vocidx <= 3:             # <<<<<<<<<<<<<<
+ *                     continue
+ *                 if c.sample and vlookup[word_vocidx].sample_int < random_int32(&c.next_random):
+ */
+        __pyx_t_2 = ((__pyx_v_word_vocidx <= 3) != 0);
+        if (__pyx_t_2) {
+
+          /* "models/fieldembed_core.pyx":917
+ *                 # filter high and low freq tokens, is these necessary?
+ *                 if word_vocidx <= 3:
+ *                     continue             # <<<<<<<<<<<<<<
+ *                 if c.sample and vlookup[word_vocidx].sample_int < random_int32(&c.next_random):
+ *                     continue
+ */
+          goto __pyx_L7_continue;
+
+          /* "models/fieldembed_core.pyx":916
+ * 
+ *                 # filter high and low freq tokens, is these necessary?
+ *                 if word_vocidx <= 3:             # <<<<<<<<<<<<<<
+ *                     continue
+ *                 if c.sample and vlookup[word_vocidx].sample_int < random_int32(&c.next_random):
+ */
+        }
+
+        /* "models/fieldembed_core.pyx":918
+ *                 if word_vocidx <= 3:
+ *                     continue
+ *                 if c.sample and vlookup[word_vocidx].sample_int < random_int32(&c.next_random):             # <<<<<<<<<<<<<<
+ *                     continue
+ * 
+ */
+        __pyx_t_12 = (__pyx_v_c.sample != 0);
+        if (__pyx_t_12) {
+        } else {
+          __pyx_t_2 = __pyx_t_12;
+          goto __pyx_L11_bool_binop_done;
+        }
+        __pyx_t_3 = __Pyx_GetItemInt(__pyx_v_vlookup, __pyx_v_word_vocidx, int, 1, __Pyx_PyInt_From_int, 0, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 918, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_3);
+        __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_sample_int); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 918, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_1);
+        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+        __pyx_t_3 = __Pyx_PyInt_From_unsigned_PY_LONG_LONG(__pyx_f_6models_15fieldembed_core_random_int32((&__pyx_v_c.next_random))); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 918, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_3);
+        __pyx_t_13 = PyObject_RichCompare(__pyx_t_1, __pyx_t_3, Py_LT); __Pyx_XGOTREF(__pyx_t_13); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 918, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+        __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+        __pyx_t_12 = __Pyx_PyObject_IsTrue(__pyx_t_13); if (unlikely(__pyx_t_12 < 0)) __PYX_ERR(0, 918, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
+        __pyx_t_2 = __pyx_t_12;
+        __pyx_L11_bool_binop_done:;
+        if (__pyx_t_2) {
+
+          /* "models/fieldembed_core.pyx":919
+ *                     continue
+ *                 if c.sample and vlookup[word_vocidx].sample_int < random_int32(&c.next_random):
+ *                     continue             # <<<<<<<<<<<<<<
+ * 
+ *                 c.indexes[effective_words] = word_vocidx
+ */
+          goto __pyx_L7_continue;
+
+          /* "models/fieldembed_core.pyx":918
+ *                 if word_vocidx <= 3:
+ *                     continue
+ *                 if c.sample and vlookup[word_vocidx].sample_int < random_int32(&c.next_random):             # <<<<<<<<<<<<<<
+ *                     continue
+ * 
+ */
+        }
+
+        /* "models/fieldembed_core.pyx":921
+ *                     continue
+ * 
+ *                 c.indexes[effective_words] = word_vocidx             # <<<<<<<<<<<<<<
+ * 
+ *                 if c.use_hyper:
+ */
+        (__pyx_v_c.indexes[__pyx_v_effective_words]) = __pyx_v_word_vocidx;
+
+        /* "models/fieldembed_core.pyx":923
+ *                 c.indexes[effective_words] = word_vocidx
+ * 
+ *                 if c.use_hyper:             # <<<<<<<<<<<<<<
+ *                     for i in range(len(hyper_indexes)):
+ *                         # np.uint32_t
+ */
+        __pyx_t_2 = (__pyx_v_c.use_hyper != 0);
+        if (__pyx_t_2) {
+
+          /* "models/fieldembed_core.pyx":924
+ * 
+ *                 if c.use_hyper:
+ *                     for i in range(len(hyper_indexes)):             # <<<<<<<<<<<<<<
+ *                         # np.uint32_t
+ *                         hyper_vocidx = hyper_indexes[i][loc_idx]
+ */
+          __pyx_t_14 = PyObject_Length(__pyx_v_hyper_indexes); if (unlikely(__pyx_t_14 == ((Py_ssize_t)-1))) __PYX_ERR(0, 924, __pyx_L1_error)
+          __pyx_t_15 = __pyx_t_14;
+          for (__pyx_t_11 = 0; __pyx_t_11 < __pyx_t_15; __pyx_t_11+=1) {
+            __pyx_v_i = __pyx_t_11;
+
+            /* "models/fieldembed_core.pyx":926
+ *                     for i in range(len(hyper_indexes)):
+ *                         # np.uint32_t
+ *                         hyper_vocidx = hyper_indexes[i][loc_idx]             # <<<<<<<<<<<<<<
+ *                         c.hyper_indexes[i][effective_words] = hyper_vocidx
+ *                         # print('current loc_idx is', loc_idx)
+ */
+            __pyx_t_13 = __Pyx_GetItemInt(__pyx_v_hyper_indexes, __pyx_v_i, int, 1, __Pyx_PyInt_From_int, 0, 0, 0); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 926, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_13);
+            __pyx_t_3 = __Pyx_GetItemInt(__pyx_t_13, __pyx_v_loc_idx, int, 1, __Pyx_PyInt_From_int, 0, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 926, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_3);
+            __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
+            __pyx_t_16 = __Pyx_PyInt_As_int(__pyx_t_3); if (unlikely((__pyx_t_16 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 926, __pyx_L1_error)
+            __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+            __pyx_v_hyper_vocidx = __pyx_t_16;
+
+            /* "models/fieldembed_core.pyx":927
+ *                         # np.uint32_t
+ *                         hyper_vocidx = hyper_indexes[i][loc_idx]
+ *                         c.hyper_indexes[i][effective_words] = hyper_vocidx             # <<<<<<<<<<<<<<
+ *                         # print('current loc_idx is', loc_idx)
+ *                         # print('get hyper_vocidx is', hyper_vocidx
+ */
+            ((__pyx_v_c.hyper_indexes[__pyx_v_i])[__pyx_v_effective_words]) = __pyx_v_hyper_vocidx;
+          }
+
+          /* "models/fieldembed_core.pyx":923
+ *                 c.indexes[effective_words] = word_vocidx
+ * 
+ *                 if c.use_hyper:             # <<<<<<<<<<<<<<
+ *                     for i in range(len(hyper_indexes)):
+ *                         # np.uint32_t
+ */
+        }
+
+        /* "models/fieldembed_core.pyx":930
+ *                         # print('current loc_idx is', loc_idx)
+ *                         # print('get hyper_vocidx is', hyper_vocidx
+ *                 effective_words +=1             # <<<<<<<<<<<<<<
+ * 
+ *                 if effective_words == MAX_SENTENCE_LEN:
+ */
+        __pyx_v_effective_words = (__pyx_v_effective_words + 1);
+
+        /* "models/fieldembed_core.pyx":932
+ *                 effective_words +=1
+ * 
+ *                 if effective_words == MAX_SENTENCE_LEN:             # <<<<<<<<<<<<<<
+ *                     # TODO: log warning, tally overflow?
+ *                     break
+ */
+        __pyx_t_2 = ((__pyx_v_effective_words == 0x2710) != 0);
+        if (__pyx_t_2) {
+
+          /* "models/fieldembed_core.pyx":934
+ *                 if effective_words == MAX_SENTENCE_LEN:
+ *                     # TODO: log warning, tally overflow?
+ *                     break             # <<<<<<<<<<<<<<
+ * 
+ *             # step3: add the new idx_end for this sentence, that is, the value of effective_words
+ */
+          goto __pyx_L8_break;
+
+          /* "models/fieldembed_core.pyx":932
+ *                 effective_words +=1
+ * 
+ *                 if effective_words == MAX_SENTENCE_LEN:             # <<<<<<<<<<<<<<
+ *                     # TODO: log warning, tally overflow?
+ *                     break
+ */
+        }
+        __pyx_L7_continue:;
+      }
+      __pyx_L8_break:;
+
+      /* "models/fieldembed_core.pyx":937
+ * 
+ *             # step3: add the new idx_end for this sentence, that is, the value of effective_words
+ *             c.sentence_idx[effective_sentences] = effective_words             # <<<<<<<<<<<<<<
+ *             effective_sentences += 1
+ *             if effective_words == MAX_SENTENCE_LEN:
+ */
+      (__pyx_v_c.sentence_idx[__pyx_v_effective_sentences]) = __pyx_v_effective_words;
+
+      /* "models/fieldembed_core.pyx":938
+ *             # step3: add the new idx_end for this sentence, that is, the value of effective_words
+ *             c.sentence_idx[effective_sentences] = effective_words
+ *             effective_sentences += 1             # <<<<<<<<<<<<<<
+ *             if effective_words == MAX_SENTENCE_LEN:
+ *                 # TODO: log warning, tally overflow?
+ */
+      __pyx_v_effective_sentences = (__pyx_v_effective_sentences + 1);
+
+      /* "models/fieldembed_core.pyx":939
+ *             c.sentence_idx[effective_sentences] = effective_words
+ *             effective_sentences += 1
+ *             if effective_words == MAX_SENTENCE_LEN:             # <<<<<<<<<<<<<<
+ *                 # TODO: log warning, tally overflow?
+ *                 break
+ */
+      __pyx_t_2 = ((__pyx_v_effective_words == 0x2710) != 0);
+      if (__pyx_t_2) {
+
+        /* "models/fieldembed_core.pyx":941
+ *             if effective_words == MAX_SENTENCE_LEN:
+ *                 # TODO: log warning, tally overflow?
+ *                 break             # <<<<<<<<<<<<<<
+ * 
+ *     else:
+ */
+        goto __pyx_L5_break;
+
+        /* "models/fieldembed_core.pyx":939
+ *             c.sentence_idx[effective_sentences] = effective_words
+ *             effective_sentences += 1
+ *             if effective_words == MAX_SENTENCE_LEN:             # <<<<<<<<<<<<<<
+ *                 # TODO: log warning, tally overflow?
+ *                 break
+ */
+      }
+    }
+    __pyx_L5_break:;
+
+    /* "models/fieldembed_core.pyx":900
+ *     init_w2v_config(&c, model, alpha, compute_loss, _work, _neu1, _work_m, _neu_m, _grad_mem) # this is the difference between sg and cbow
+ * 
+ *     if subsampling:             # <<<<<<<<<<<<<<
+ *         vlookup = model.wv.vocab_values
+ *         for sent_idx in range(len(sentence_idx)):
+ */
+    goto __pyx_L3;
+  }
+
+  /* "models/fieldembed_core.pyx":945
+ *     else:
+ *         # In this case, we don't drop special tokens or use downsampling
+ *         effective_words = len(indexes)             # <<<<<<<<<<<<<<
+ *         # different from the original sentence_idx and effective_sentences
+ *         effective_sentences = len(sentence_idx)
+ */
+  /*else*/ {
+    __pyx_t_4 = PyObject_Length(__pyx_v_indexes); if (unlikely(__pyx_t_4 == ((Py_ssize_t)-1))) __PYX_ERR(0, 945, __pyx_L1_error)
+    __pyx_v_effective_words = __pyx_t_4;
+
+    /* "models/fieldembed_core.pyx":947
+ *         effective_words = len(indexes)
+ *         # different from the original sentence_idx and effective_sentences
+ *         effective_sentences = len(sentence_idx)             # <<<<<<<<<<<<<<
+ *         for i, item in enumerate(indexes):
+ *             c.indexes[i] = item
+ */
+    __pyx_t_4 = PyObject_Length(__pyx_v_sentence_idx); if (unlikely(__pyx_t_4 == ((Py_ssize_t)-1))) __PYX_ERR(0, 947, __pyx_L1_error)
+    __pyx_v_effective_sentences = __pyx_t_4;
+
+    /* "models/fieldembed_core.pyx":948
+ *         # different from the original sentence_idx and effective_sentences
+ *         effective_sentences = len(sentence_idx)
+ *         for i, item in enumerate(indexes):             # <<<<<<<<<<<<<<
+ *             c.indexes[i] = item
+ * 
+ */
+    __pyx_t_6 = 0;
+    if (likely(PyList_CheckExact(__pyx_v_indexes)) || PyTuple_CheckExact(__pyx_v_indexes)) {
+      __pyx_t_3 = __pyx_v_indexes; __Pyx_INCREF(__pyx_t_3); __pyx_t_4 = 0;
+      __pyx_t_17 = NULL;
+    } else {
+      __pyx_t_4 = -1; __pyx_t_3 = PyObject_GetIter(__pyx_v_indexes); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 948, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
+      __pyx_t_17 = Py_TYPE(__pyx_t_3)->tp_iternext; if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 948, __pyx_L1_error)
+    }
+    for (;;) {
+      if (likely(!__pyx_t_17)) {
+        if (likely(PyList_CheckExact(__pyx_t_3))) {
+          if (__pyx_t_4 >= PyList_GET_SIZE(__pyx_t_3)) break;
+          #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+          __pyx_t_13 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_4); __Pyx_INCREF(__pyx_t_13); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 948, __pyx_L1_error)
+          #else
+          __pyx_t_13 = PySequence_ITEM(__pyx_t_3, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 948, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_13);
+          #endif
+        } else {
+          if (__pyx_t_4 >= PyTuple_GET_SIZE(__pyx_t_3)) break;
+          #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+          __pyx_t_13 = PyTuple_GET_ITEM(__pyx_t_3, __pyx_t_4); __Pyx_INCREF(__pyx_t_13); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 948, __pyx_L1_error)
+          #else
+          __pyx_t_13 = PySequence_ITEM(__pyx_t_3, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 948, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_13);
+          #endif
+        }
+      } else {
+        __pyx_t_13 = __pyx_t_17(__pyx_t_3);
+        if (unlikely(!__pyx_t_13)) {
+          PyObject* exc_type = PyErr_Occurred();
+          if (exc_type) {
+            if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
+            else __PYX_ERR(0, 948, __pyx_L1_error)
+          }
+          break;
+        }
+        __Pyx_GOTREF(__pyx_t_13);
+      }
+      __Pyx_XDECREF_SET(__pyx_v_item, __pyx_t_13);
+      __pyx_t_13 = 0;
+      __pyx_v_i = __pyx_t_6;
+      __pyx_t_6 = (__pyx_t_6 + 1);
+
+      /* "models/fieldembed_core.pyx":949
+ *         effective_sentences = len(sentence_idx)
+ *         for i, item in enumerate(indexes):
+ *             c.indexes[i] = item             # <<<<<<<<<<<<<<
+ * 
+ *         for k in range(len(hyper_indexes)):
+ */
+      __pyx_t_18 = __Pyx_PyInt_As_npy_uint32(__pyx_v_item); if (unlikely((__pyx_t_18 == ((npy_uint32)-1)) && PyErr_Occurred())) __PYX_ERR(0, 949, __pyx_L1_error)
+      (__pyx_v_c.indexes[__pyx_v_i]) = __pyx_t_18;
+
+      /* "models/fieldembed_core.pyx":948
+ *         # different from the original sentence_idx and effective_sentences
+ *         effective_sentences = len(sentence_idx)
+ *         for i, item in enumerate(indexes):             # <<<<<<<<<<<<<<
+ *             c.indexes[i] = item
+ * 
+ */
+    }
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+
+    /* "models/fieldembed_core.pyx":951
+ *             c.indexes[i] = item
+ * 
+ *         for k in range(len(hyper_indexes)):             # <<<<<<<<<<<<<<
+ *             for i, item in enumerate(hyper_indexes[k]):
+ *                 c.hyper_indexes[k][i] = item
+ */
+    __pyx_t_4 = PyObject_Length(__pyx_v_hyper_indexes); if (unlikely(__pyx_t_4 == ((Py_ssize_t)-1))) __PYX_ERR(0, 951, __pyx_L1_error)
+    __pyx_t_5 = __pyx_t_4;
+    for (__pyx_t_6 = 0; __pyx_t_6 < __pyx_t_5; __pyx_t_6+=1) {
+      __pyx_v_k = __pyx_t_6;
+
+      /* "models/fieldembed_core.pyx":952
+ * 
+ *         for k in range(len(hyper_indexes)):
+ *             for i, item in enumerate(hyper_indexes[k]):             # <<<<<<<<<<<<<<
+ *                 c.hyper_indexes[k][i] = item
+ * 
+ */
+      __pyx_t_8 = 0;
+      __pyx_t_3 = __Pyx_GetItemInt(__pyx_v_hyper_indexes, __pyx_v_k, int, 1, __Pyx_PyInt_From_int, 0, 0, 0); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 952, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_3);
+      if (likely(PyList_CheckExact(__pyx_t_3)) || PyTuple_CheckExact(__pyx_t_3)) {
+        __pyx_t_13 = __pyx_t_3; __Pyx_INCREF(__pyx_t_13); __pyx_t_14 = 0;
+        __pyx_t_17 = NULL;
+      } else {
+        __pyx_t_14 = -1; __pyx_t_13 = PyObject_GetIter(__pyx_t_3); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 952, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_13);
+        __pyx_t_17 = Py_TYPE(__pyx_t_13)->tp_iternext; if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 952, __pyx_L1_error)
+      }
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+      for (;;) {
+        if (likely(!__pyx_t_17)) {
+          if (likely(PyList_CheckExact(__pyx_t_13))) {
+            if (__pyx_t_14 >= PyList_GET_SIZE(__pyx_t_13)) break;
+            #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+            __pyx_t_3 = PyList_GET_ITEM(__pyx_t_13, __pyx_t_14); __Pyx_INCREF(__pyx_t_3); __pyx_t_14++; if (unlikely(0 < 0)) __PYX_ERR(0, 952, __pyx_L1_error)
+            #else
+            __pyx_t_3 = PySequence_ITEM(__pyx_t_13, __pyx_t_14); __pyx_t_14++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 952, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_3);
+            #endif
+          } else {
+            if (__pyx_t_14 >= PyTuple_GET_SIZE(__pyx_t_13)) break;
+            #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+            __pyx_t_3 = PyTuple_GET_ITEM(__pyx_t_13, __pyx_t_14); __Pyx_INCREF(__pyx_t_3); __pyx_t_14++; if (unlikely(0 < 0)) __PYX_ERR(0, 952, __pyx_L1_error)
+            #else
+            __pyx_t_3 = PySequence_ITEM(__pyx_t_13, __pyx_t_14); __pyx_t_14++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 952, __pyx_L1_error)
+            __Pyx_GOTREF(__pyx_t_3);
+            #endif
+          }
+        } else {
+          __pyx_t_3 = __pyx_t_17(__pyx_t_13);
+          if (unlikely(!__pyx_t_3)) {
+            PyObject* exc_type = PyErr_Occurred();
+            if (exc_type) {
+              if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
+              else __PYX_ERR(0, 952, __pyx_L1_error)
+            }
+            break;
+          }
+          __Pyx_GOTREF(__pyx_t_3);
+        }
+        __Pyx_XDECREF_SET(__pyx_v_item, __pyx_t_3);
+        __pyx_t_3 = 0;
+        __pyx_v_i = __pyx_t_8;
+        __pyx_t_8 = (__pyx_t_8 + 1);
+
+        /* "models/fieldembed_core.pyx":953
+ *         for k in range(len(hyper_indexes)):
+ *             for i, item in enumerate(hyper_indexes[k]):
+ *                 c.hyper_indexes[k][i] = item             # <<<<<<<<<<<<<<
+ * 
+ *         for i, item in enumerate(sentence_idx):
+ */
+        __pyx_t_18 = __Pyx_PyInt_As_npy_uint32(__pyx_v_item); if (unlikely((__pyx_t_18 == ((npy_uint32)-1)) && PyErr_Occurred())) __PYX_ERR(0, 953, __pyx_L1_error)
+        ((__pyx_v_c.hyper_indexes[__pyx_v_k])[__pyx_v_i]) = __pyx_t_18;
+
+        /* "models/fieldembed_core.pyx":952
+ * 
+ *         for k in range(len(hyper_indexes)):
+ *             for i, item in enumerate(hyper_indexes[k]):             # <<<<<<<<<<<<<<
+ *                 c.hyper_indexes[k][i] = item
+ * 
+ */
+      }
+      __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
+    }
+
+    /* "models/fieldembed_core.pyx":955
+ *                 c.hyper_indexes[k][i] = item
+ * 
+ *         for i, item in enumerate(sentence_idx):             # <<<<<<<<<<<<<<
+ *             c.sentence_idx[i] = item
+ * 
+ */
+    __pyx_t_6 = 0;
+    if (likely(PyList_CheckExact(__pyx_v_sentence_idx)) || PyTuple_CheckExact(__pyx_v_sentence_idx)) {
+      __pyx_t_13 = __pyx_v_sentence_idx; __Pyx_INCREF(__pyx_t_13); __pyx_t_4 = 0;
+      __pyx_t_17 = NULL;
+    } else {
+      __pyx_t_4 = -1; __pyx_t_13 = PyObject_GetIter(__pyx_v_sentence_idx); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 955, __pyx_L1_error)
+      __Pyx_GOTREF(__pyx_t_13);
+      __pyx_t_17 = Py_TYPE(__pyx_t_13)->tp_iternext; if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 955, __pyx_L1_error)
+    }
+    for (;;) {
+      if (likely(!__pyx_t_17)) {
+        if (likely(PyList_CheckExact(__pyx_t_13))) {
+          if (__pyx_t_4 >= PyList_GET_SIZE(__pyx_t_13)) break;
+          #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+          __pyx_t_3 = PyList_GET_ITEM(__pyx_t_13, __pyx_t_4); __Pyx_INCREF(__pyx_t_3); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 955, __pyx_L1_error)
+          #else
+          __pyx_t_3 = PySequence_ITEM(__pyx_t_13, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 955, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_3);
+          #endif
+        } else {
+          if (__pyx_t_4 >= PyTuple_GET_SIZE(__pyx_t_13)) break;
+          #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+          __pyx_t_3 = PyTuple_GET_ITEM(__pyx_t_13, __pyx_t_4); __Pyx_INCREF(__pyx_t_3); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 955, __pyx_L1_error)
+          #else
+          __pyx_t_3 = PySequence_ITEM(__pyx_t_13, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 955, __pyx_L1_error)
+          __Pyx_GOTREF(__pyx_t_3);
+          #endif
+        }
+      } else {
+        __pyx_t_3 = __pyx_t_17(__pyx_t_13);
+        if (unlikely(!__pyx_t_3)) {
+          PyObject* exc_type = PyErr_Occurred();
+          if (exc_type) {
+            if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
+            else __PYX_ERR(0, 955, __pyx_L1_error)
+          }
+          break;
+        }
+        __Pyx_GOTREF(__pyx_t_3);
+      }
+      __Pyx_XDECREF_SET(__pyx_v_item, __pyx_t_3);
+      __pyx_t_3 = 0;
+      __pyx_v_i = __pyx_t_6;
+      __pyx_t_6 = (__pyx_t_6 + 1);
+
+      /* "models/fieldembed_core.pyx":956
+ * 
+ *         for i, item in enumerate(sentence_idx):
+ *             c.sentence_idx[i] = item             # <<<<<<<<<<<<<<
+ * 
+ *     # precompute "reduced window" offsets in a single randint() call
+ */
+      __pyx_t_8 = __Pyx_PyInt_As_int(__pyx_v_item); if (unlikely((__pyx_t_8 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 956, __pyx_L1_error)
+      (__pyx_v_c.sentence_idx[__pyx_v_i]) = __pyx_t_8;
+
+      /* "models/fieldembed_core.pyx":955
+ *                 c.hyper_indexes[k][i] = item
+ * 
+ *         for i, item in enumerate(sentence_idx):             # <<<<<<<<<<<<<<
+ *             c.sentence_idx[i] = item
+ * 
+ */
+    }
+    __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
+  }
+  __pyx_L3:;
+
+  /* "models/fieldembed_core.pyx":959
+ * 
+ *     # precompute "reduced window" offsets in a single randint() call
+ *     for i, item in enumerate(model.random.randint(0, c.window, effective_words)):             # <<<<<<<<<<<<<<
+ *         c.reduced_windows[i] = item
+ * 
+ */
+  __pyx_t_6 = 0;
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_model, __pyx_n_s_random); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 959, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_randint); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 959, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_c.window); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 959, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_19 = __Pyx_PyInt_From_int(__pyx_v_effective_words); if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 959, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_19);
+  __pyx_t_20 = NULL;
+  __pyx_t_8 = 0;
+  if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_1))) {
+    __pyx_t_20 = PyMethod_GET_SELF(__pyx_t_1);
+    if (likely(__pyx_t_20)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_1);
+      __Pyx_INCREF(__pyx_t_20);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_1, function);
+      __pyx_t_8 = 1;
+    }
+  }
+  #if CYTHON_FAST_PYCALL
+  if (PyFunction_Check(__pyx_t_1)) {
+    PyObject *__pyx_temp[4] = {__pyx_t_20, __pyx_int_0, __pyx_t_3, __pyx_t_19};
+    __pyx_t_13 = __Pyx_PyFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_8, 3+__pyx_t_8); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 959, __pyx_L1_error)
+    __Pyx_XDECREF(__pyx_t_20); __pyx_t_20 = 0;
+    __Pyx_GOTREF(__pyx_t_13);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __Pyx_DECREF(__pyx_t_19); __pyx_t_19 = 0;
+  } else
+  #endif
+  #if CYTHON_FAST_PYCCALL
+  if (__Pyx_PyFastCFunction_Check(__pyx_t_1)) {
+    PyObject *__pyx_temp[4] = {__pyx_t_20, __pyx_int_0, __pyx_t_3, __pyx_t_19};
+    __pyx_t_13 = __Pyx_PyCFunction_FastCall(__pyx_t_1, __pyx_temp+1-__pyx_t_8, 3+__pyx_t_8); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 959, __pyx_L1_error)
+    __Pyx_XDECREF(__pyx_t_20); __pyx_t_20 = 0;
+    __Pyx_GOTREF(__pyx_t_13);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __Pyx_DECREF(__pyx_t_19); __pyx_t_19 = 0;
+  } else
+  #endif
+  {
+    __pyx_t_21 = PyTuple_New(3+__pyx_t_8); if (unlikely(!__pyx_t_21)) __PYX_ERR(0, 959, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_21);
+    if (__pyx_t_20) {
+      __Pyx_GIVEREF(__pyx_t_20); PyTuple_SET_ITEM(__pyx_t_21, 0, __pyx_t_20); __pyx_t_20 = NULL;
+    }
+    __Pyx_INCREF(__pyx_int_0);
+    __Pyx_GIVEREF(__pyx_int_0);
+    PyTuple_SET_ITEM(__pyx_t_21, 0+__pyx_t_8, __pyx_int_0);
+    __Pyx_GIVEREF(__pyx_t_3);
+    PyTuple_SET_ITEM(__pyx_t_21, 1+__pyx_t_8, __pyx_t_3);
+    __Pyx_GIVEREF(__pyx_t_19);
+    PyTuple_SET_ITEM(__pyx_t_21, 2+__pyx_t_8, __pyx_t_19);
+    __pyx_t_3 = 0;
+    __pyx_t_19 = 0;
+    __pyx_t_13 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_t_21, NULL); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 959, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_13);
+    __Pyx_DECREF(__pyx_t_21); __pyx_t_21 = 0;
+  }
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  if (likely(PyList_CheckExact(__pyx_t_13)) || PyTuple_CheckExact(__pyx_t_13)) {
+    __pyx_t_1 = __pyx_t_13; __Pyx_INCREF(__pyx_t_1); __pyx_t_4 = 0;
+    __pyx_t_17 = NULL;
+  } else {
+    __pyx_t_4 = -1; __pyx_t_1 = PyObject_GetIter(__pyx_t_13); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 959, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __pyx_t_17 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 959, __pyx_L1_error)
+  }
+  __Pyx_DECREF(__pyx_t_13); __pyx_t_13 = 0;
+  for (;;) {
+    if (likely(!__pyx_t_17)) {
+      if (likely(PyList_CheckExact(__pyx_t_1))) {
+        if (__pyx_t_4 >= PyList_GET_SIZE(__pyx_t_1)) break;
+        #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+        __pyx_t_13 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_4); __Pyx_INCREF(__pyx_t_13); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 959, __pyx_L1_error)
+        #else
+        __pyx_t_13 = PySequence_ITEM(__pyx_t_1, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 959, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_13);
+        #endif
+      } else {
+        if (__pyx_t_4 >= PyTuple_GET_SIZE(__pyx_t_1)) break;
+        #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+        __pyx_t_13 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_4); __Pyx_INCREF(__pyx_t_13); __pyx_t_4++; if (unlikely(0 < 0)) __PYX_ERR(0, 959, __pyx_L1_error)
+        #else
+        __pyx_t_13 = PySequence_ITEM(__pyx_t_1, __pyx_t_4); __pyx_t_4++; if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 959, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_13);
+        #endif
+      }
+    } else {
+      __pyx_t_13 = __pyx_t_17(__pyx_t_1);
+      if (unlikely(!__pyx_t_13)) {
+        PyObject* exc_type = PyErr_Occurred();
+        if (exc_type) {
+          if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
+          else __PYX_ERR(0, 959, __pyx_L1_error)
+        }
+        break;
+      }
+      __Pyx_GOTREF(__pyx_t_13);
+    }
+    __Pyx_XDECREF_SET(__pyx_v_item, __pyx_t_13);
+    __pyx_t_13 = 0;
+    __pyx_v_i = __pyx_t_6;
+    __pyx_t_6 = (__pyx_t_6 + 1);
+
+    /* "models/fieldembed_core.pyx":960
+ *     # precompute "reduced window" offsets in a single randint() call
+ *     for i, item in enumerate(model.random.randint(0, c.window, effective_words)):
+ *         c.reduced_windows[i] = item             # <<<<<<<<<<<<<<
+ * 
+ *     # LESSION: you should notice this nogil, otherwise threads are rubbish
+ */
+    __pyx_t_18 = __Pyx_PyInt_As_npy_uint32(__pyx_v_item); if (unlikely((__pyx_t_18 == ((npy_uint32)-1)) && PyErr_Occurred())) __PYX_ERR(0, 960, __pyx_L1_error)
+    (__pyx_v_c.reduced_windows[__pyx_v_i]) = __pyx_t_18;
+
+    /* "models/fieldembed_core.pyx":959
+ * 
+ *     # precompute "reduced window" offsets in a single randint() call
+ *     for i, item in enumerate(model.random.randint(0, c.window, effective_words)):             # <<<<<<<<<<<<<<
+ *         c.reduced_windows[i] = item
+ * 
+ */
+  }
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "models/fieldembed_core.pyx":963
+ * 
+ *     # LESSION: you should notice this nogil, otherwise threads are rubbish
+ *     with nogil:             # <<<<<<<<<<<<<<
+ *         for sent_idx in range(effective_sentences):
+ *             # idx_start and idx_end
+ */
+  {
+      #ifdef WITH_THREAD
+      PyThreadState *_save;
+      Py_UNBLOCK_THREADS
+      __Pyx_FastGIL_Remember();
+      #endif
+      /*try:*/ {
+
+        /* "models/fieldembed_core.pyx":964
+ *     # LESSION: you should notice this nogil, otherwise threads are rubbish
+ *     with nogil:
+ *         for sent_idx in range(effective_sentences):             # <<<<<<<<<<<<<<
+ *             # idx_start and idx_end
+ *             idx_end = c.sentence_idx[sent_idx]
+ */
+        __pyx_t_6 = __pyx_v_effective_sentences;
+        __pyx_t_8 = __pyx_t_6;
+        for (__pyx_t_9 = 0; __pyx_t_9 < __pyx_t_8; __pyx_t_9+=1) {
+          __pyx_v_sent_idx = __pyx_t_9;
+
+          /* "models/fieldembed_core.pyx":966
+ *         for sent_idx in range(effective_sentences):
+ *             # idx_start and idx_end
+ *             idx_end = c.sentence_idx[sent_idx]             # <<<<<<<<<<<<<<
+ *             if sent_idx == 0:
+ *                 idx_start = 0
+ */
+          __pyx_v_idx_end = (__pyx_v_c.sentence_idx[__pyx_v_sent_idx]);
+
+          /* "models/fieldembed_core.pyx":967
+ *             # idx_start and idx_end
+ *             idx_end = c.sentence_idx[sent_idx]
+ *             if sent_idx == 0:             # <<<<<<<<<<<<<<
+ *                 idx_start = 0
+ *             else:
+ */
+          __pyx_t_2 = ((__pyx_v_sent_idx == 0) != 0);
+          if (__pyx_t_2) {
+
+            /* "models/fieldembed_core.pyx":968
+ *             idx_end = c.sentence_idx[sent_idx]
+ *             if sent_idx == 0:
+ *                 idx_start = 0             # <<<<<<<<<<<<<<
+ *             else:
+ *                 idx_start = c.sentence_idx[sent_idx-1]
+ */
+            __pyx_v_idx_start = 0;
+
+            /* "models/fieldembed_core.pyx":967
+ *             # idx_start and idx_end
+ *             idx_end = c.sentence_idx[sent_idx]
+ *             if sent_idx == 0:             # <<<<<<<<<<<<<<
+ *                 idx_start = 0
+ *             else:
+ */
+            goto __pyx_L33;
+          }
+
+          /* "models/fieldembed_core.pyx":970
+ *                 idx_start = 0
+ *             else:
+ *                 idx_start = c.sentence_idx[sent_idx-1]             # <<<<<<<<<<<<<<
+ * 
+ *             for i in range(idx_start, idx_end):
+ */
+          /*else*/ {
+            __pyx_v_idx_start = (__pyx_v_c.sentence_idx[(__pyx_v_sent_idx - 1)]);
+          }
+          __pyx_L33:;
+
+          /* "models/fieldembed_core.pyx":972
+ *                 idx_start = c.sentence_idx[sent_idx-1]
+ * 
+ *             for i in range(idx_start, idx_end):             # <<<<<<<<<<<<<<
+ *                 j = i - c.window + c.reduced_windows[i]
+ *                 if j < idx_start:
+ */
+          __pyx_t_10 = __pyx_v_idx_end;
+          __pyx_t_11 = __pyx_t_10;
+          for (__pyx_t_16 = __pyx_v_idx_start; __pyx_t_16 < __pyx_t_11; __pyx_t_16+=1) {
+            __pyx_v_i = __pyx_t_16;
+
+            /* "models/fieldembed_core.pyx":973
+ * 
+ *             for i in range(idx_start, idx_end):
+ *                 j = i - c.window + c.reduced_windows[i]             # <<<<<<<<<<<<<<
+ *                 if j < idx_start:
+ *                     j = idx_start
+ */
+            __pyx_v_j = ((__pyx_v_i - __pyx_v_c.window) + (__pyx_v_c.reduced_windows[__pyx_v_i]));
+
+            /* "models/fieldembed_core.pyx":974
+ *             for i in range(idx_start, idx_end):
+ *                 j = i - c.window + c.reduced_windows[i]
+ *                 if j < idx_start:             # <<<<<<<<<<<<<<
+ *                     j = idx_start
+ *                 k = i + c.window + 1 - c.reduced_windows[i]
+ */
+            __pyx_t_2 = ((__pyx_v_j < __pyx_v_idx_start) != 0);
+            if (__pyx_t_2) {
+
+              /* "models/fieldembed_core.pyx":975
+ *                 j = i - c.window + c.reduced_windows[i]
+ *                 if j < idx_start:
+ *                     j = idx_start             # <<<<<<<<<<<<<<
+ *                 k = i + c.window + 1 - c.reduced_windows[i]
+ *                 if k > idx_end:
+ */
+              __pyx_v_j = __pyx_v_idx_start;
+
+              /* "models/fieldembed_core.pyx":974
+ *             for i in range(idx_start, idx_end):
+ *                 j = i - c.window + c.reduced_windows[i]
+ *                 if j < idx_start:             # <<<<<<<<<<<<<<
+ *                     j = idx_start
+ *                 k = i + c.window + 1 - c.reduced_windows[i]
+ */
+            }
+
+            /* "models/fieldembed_core.pyx":976
+ *                 if j < idx_start:
+ *                     j = idx_start
+ *                 k = i + c.window + 1 - c.reduced_windows[i]             # <<<<<<<<<<<<<<
+ *                 if k > idx_end:
+ *                     k = idx_end
+ */
+            __pyx_v_k = (((__pyx_v_i + __pyx_v_c.window) + 1) - (__pyx_v_c.reduced_windows[__pyx_v_i]));
+
+            /* "models/fieldembed_core.pyx":977
+ *                     j = idx_start
+ *                 k = i + c.window + 1 - c.reduced_windows[i]
+ *                 if k > idx_end:             # <<<<<<<<<<<<<<
+ *                     k = idx_end
+ *                 # print(j, i, k)
+ */
+            __pyx_t_2 = ((__pyx_v_k > __pyx_v_idx_end) != 0);
+            if (__pyx_t_2) {
+
+              /* "models/fieldembed_core.pyx":978
+ *                 k = i + c.window + 1 - c.reduced_windows[i]
+ *                 if k > idx_end:
+ *                     k = idx_end             # <<<<<<<<<<<<<<
+ *                 # print(j, i, k)
+ *                 if c.sg == 1:
+ */
+              __pyx_v_k = __pyx_v_idx_end;
+
+              /* "models/fieldembed_core.pyx":977
+ *                     j = idx_start
+ *                 k = i + c.window + 1 - c.reduced_windows[i]
+ *                 if k > idx_end:             # <<<<<<<<<<<<<<
+ *                     k = idx_end
+ *                 # print(j, i, k)
+ */
+            }
+
+            /* "models/fieldembed_core.pyx":980
+ *                     k = idx_end
+ *                 # print(j, i, k)
+ *                 if c.sg == 1:             # <<<<<<<<<<<<<<
+ *                     # change the first j to another name: such as t.
+ *                     for j in range(j, k):
+ */
+            __pyx_t_2 = ((__pyx_v_c.sg == 1) != 0);
+            if (__pyx_t_2) {
+
+              /* "models/fieldembed_core.pyx":982
+ *                 if c.sg == 1:
+ *                     # change the first j to another name: such as t.
+ *                     for j in range(j, k):             # <<<<<<<<<<<<<<
+ *                         if j == i:
+ *                             continue
+ */
+              __pyx_t_22 = __pyx_v_k;
+              __pyx_t_23 = __pyx_t_22;
+              for (__pyx_t_24 = __pyx_v_j; __pyx_t_24 < __pyx_t_23; __pyx_t_24+=1) {
+                __pyx_v_j = __pyx_t_24;
+
+                /* "models/fieldembed_core.pyx":983
+ *                     # change the first j to another name: such as t.
+ *                     for j in range(j, k):
+ *                         if j == i:             # <<<<<<<<<<<<<<
+ *                             continue
+ *                         c.next_random = fieldembed_negsamp(c.alpha, c.size, c.negative, c.cum_table, c.cum_table_len,
+ */
+                __pyx_t_2 = ((__pyx_v_j == __pyx_v_i) != 0);
+                if (__pyx_t_2) {
+
+                  /* "models/fieldembed_core.pyx":984
+ *                     for j in range(j, k):
+ *                         if j == i:
+ *                             continue             # <<<<<<<<<<<<<<
+ *                         c.next_random = fieldembed_negsamp(c.alpha, c.size, c.negative, c.cum_table, c.cum_table_len,
+ *                             c.indexes, c.hyper_indexes, i, j, j + 1,
+ */
+                  goto __pyx_L39_continue;
+
+                  /* "models/fieldembed_core.pyx":983
+ *                     # change the first j to another name: such as t.
+ *                     for j in range(j, k):
+ *                         if j == i:             # <<<<<<<<<<<<<<
+ *                             continue
+ *                         c.next_random = fieldembed_negsamp(c.alpha, c.size, c.negative, c.cum_table, c.cum_table_len,
+ */
+                }
+
+                /* "models/fieldembed_core.pyx":985
+ *                         if j == i:
+ *                             continue
+ *                         c.next_random = fieldembed_negsamp(c.alpha, c.size, c.negative, c.cum_table, c.cum_table_len,             # <<<<<<<<<<<<<<
+ *                             c.indexes, c.hyper_indexes, i, j, j + 1,
+ *                             c.use_head, c.use_sub,  c.use_hyper, c.use_merger,
+ */
+                __pyx_v_c.next_random = __pyx_f_6models_15fieldembed_core_fieldembed_negsamp(__pyx_v_c.alpha, __pyx_v_c.size, __pyx_v_c.negative, __pyx_v_c.cum_table, __pyx_v_c.cum_table_len, __pyx_v_c.indexes, __pyx_v_c.hyper_indexes, __pyx_v_i, __pyx_v_j, (__pyx_v_j + 1), __pyx_v_c.use_head, __pyx_v_c.use_sub, __pyx_v_c.use_hyper, __pyx_v_c.use_merger, __pyx_v_c.syn0_map, __pyx_v_c.LookUp_map, __pyx_v_c.EndIdx_map, __pyx_v_c.LengInv_map, __pyx_v_c.syn1neg, __pyx_v_c.word_locks, __pyx_v_c.grad_mem, __pyx_v_c.neu1, __pyx_v_c.work, __pyx_v_c.neu_m, __pyx_v_c.work_m, __pyx_v_c.cbow_mean, __pyx_v_c.next_random, __pyx_v_c.compute_loss, (&__pyx_v_c.running_training_loss));
+                __pyx_L39_continue:;
+              }
+
+              /* "models/fieldembed_core.pyx":980
+ *                     k = idx_end
+ *                 # print(j, i, k)
+ *                 if c.sg == 1:             # <<<<<<<<<<<<<<
+ *                     # change the first j to another name: such as t.
+ *                     for j in range(j, k):
+ */
+              goto __pyx_L38;
+            }
+
+            /* "models/fieldembed_core.pyx":994
+ *                 else:
+ *                     # build the batch here
+ *                     c.next_random = fieldembed_negsamp(c.alpha, c.size, c.negative, c.cum_table, c.cum_table_len,             # <<<<<<<<<<<<<<
+ *                             c.indexes, c.hyper_indexes, i, j, k,
+ *                             c.use_head, c.use_sub,  c.use_hyper,  c.use_merger,
+ */
+            /*else*/ {
+
+              /* "models/fieldembed_core.pyx":1000
+ *                             c.syn1neg, c.word_locks,
+ *                             c.grad_mem, c.neu1, c.work, c.neu_m, c.work_m,
+ *                             c.cbow_mean, c.next_random, c.compute_loss, &c.running_training_loss)             # <<<<<<<<<<<<<<
+ * 
+ *     model.running_training_loss = c.running_training_loss
+ */
+              __pyx_v_c.next_random = __pyx_f_6models_15fieldembed_core_fieldembed_negsamp(__pyx_v_c.alpha, __pyx_v_c.size, __pyx_v_c.negative, __pyx_v_c.cum_table, __pyx_v_c.cum_table_len, __pyx_v_c.indexes, __pyx_v_c.hyper_indexes, __pyx_v_i, __pyx_v_j, __pyx_v_k, __pyx_v_c.use_head, __pyx_v_c.use_sub, __pyx_v_c.use_hyper, __pyx_v_c.use_merger, __pyx_v_c.syn0_map, __pyx_v_c.LookUp_map, __pyx_v_c.EndIdx_map, __pyx_v_c.LengInv_map, __pyx_v_c.syn1neg, __pyx_v_c.word_locks, __pyx_v_c.grad_mem, __pyx_v_c.neu1, __pyx_v_c.work, __pyx_v_c.neu_m, __pyx_v_c.work_m, __pyx_v_c.cbow_mean, __pyx_v_c.next_random, __pyx_v_c.compute_loss, (&__pyx_v_c.running_training_loss));
+            }
+            __pyx_L38:;
+          }
+        }
+      }
+
+      /* "models/fieldembed_core.pyx":963
+ * 
+ *     # LESSION: you should notice this nogil, otherwise threads are rubbish
+ *     with nogil:             # <<<<<<<<<<<<<<
+ *         for sent_idx in range(effective_sentences):
+ *             # idx_start and idx_end
+ */
+      /*finally:*/ {
+        /*normal exit:*/{
+          #ifdef WITH_THREAD
+          __Pyx_FastGIL_Forget();
+          Py_BLOCK_THREADS
+          #endif
+          goto __pyx_L30;
+        }
+        __pyx_L30:;
+      }
+  }
+
+  /* "models/fieldembed_core.pyx":1002
+ *                             c.cbow_mean, c.next_random, c.compute_loss, &c.running_training_loss)
+ * 
+ *     model.running_training_loss = c.running_training_loss             # <<<<<<<<<<<<<<
+ *     return effective_words
+ * 
+ */
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_c.running_training_loss); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1002, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (__Pyx_PyObject_SetAttrStr(__pyx_v_model, __pyx_n_s_running_training_loss, __pyx_t_1) < 0) __PYX_ERR(0, 1002, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "models/fieldembed_core.pyx":1003
+ * 
+ *     model.running_training_loss = c.running_training_loss
+ *     return effective_words             # <<<<<<<<<<<<<<
+ * 
+ * def init():
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = __Pyx_PyInt_From_int(__pyx_v_effective_words); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1003, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* "models/fieldembed_core.pyx":873
+ *     return next_random
+ * 
+ * def train_batch_fieldembed_negsamp(             # <<<<<<<<<<<<<<
+ *     model,
+ *     # make sure the length of indexes are less than MAX_SENTENCE_LEN
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_13);
+  __Pyx_XDECREF(__pyx_t_19);
+  __Pyx_XDECREF(__pyx_t_20);
+  __Pyx_XDECREF(__pyx_t_21);
+  __Pyx_AddTraceback("models.fieldembed_core.train_batch_fieldembed_negsamp", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XDECREF(__pyx_v_vlookup);
+  __Pyx_XDECREF(__pyx_v_item);
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "models/fieldembed_core.pyx":1005
+ *     return effective_words
  * 
  * def init():             # <<<<<<<<<<<<<<
  *     """Precompute function `sigmoid(x) = 1 / (1 + exp(-x))`, for x values discretized into table EXP_TABLE.
@@ -5395,21 +9686,21 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_train_batch_fieldembed_0X1_n
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_6models_15fieldembed_core_3init(PyObject *__pyx_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static char __pyx_doc_6models_15fieldembed_core_2init[] = "init()\nPrecompute function `sigmoid(x) = 1 / (1 + exp(-x))`, for x values discretized into table EXP_TABLE.\n     Also calculate log(sigmoid(x)) into LOG_TABLE.\n\n    Returns\n    -------\n    {0, 1, 2}\n        Enumeration to signify underlying data type returned by the BLAS dot product calculation.\n        0 signifies double, 1 signifies double, and 2 signifies that custom cython loops were used\n        instead of BLAS.\n\n    ";
-static PyMethodDef __pyx_mdef_6models_15fieldembed_core_3init = {"init", (PyCFunction)__pyx_pw_6models_15fieldembed_core_3init, METH_NOARGS, __pyx_doc_6models_15fieldembed_core_2init};
-static PyObject *__pyx_pw_6models_15fieldembed_core_3init(PyObject *__pyx_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_6models_15fieldembed_core_5init(PyObject *__pyx_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static char __pyx_doc_6models_15fieldembed_core_4init[] = "init()\nPrecompute function `sigmoid(x) = 1 / (1 + exp(-x))`, for x values discretized into table EXP_TABLE.\n     Also calculate log(sigmoid(x)) into LOG_TABLE.\n\n    Returns\n    -------\n    {0, 1, 2}\n        Enumeration to signify underlying data type returned by the BLAS dot product calculation.\n        0 signifies double, 1 signifies double, and 2 signifies that custom cython loops were used\n        instead of BLAS.\n\n    ";
+static PyMethodDef __pyx_mdef_6models_15fieldembed_core_5init = {"init", (PyCFunction)__pyx_pw_6models_15fieldembed_core_5init, METH_NOARGS, __pyx_doc_6models_15fieldembed_core_4init};
+static PyObject *__pyx_pw_6models_15fieldembed_core_5init(PyObject *__pyx_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("init (wrapper)", 0);
-  __pyx_r = __pyx_pf_6models_15fieldembed_core_2init(__pyx_self);
+  __pyx_r = __pyx_pf_6models_15fieldembed_core_4init(__pyx_self);
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_6models_15fieldembed_core_2init(CYTHON_UNUSED PyObject *__pyx_self) {
+static PyObject *__pyx_pf_6models_15fieldembed_core_4init(CYTHON_UNUSED PyObject *__pyx_self) {
   int __pyx_v_i;
   float *__pyx_v_x;
   float *__pyx_v_y;
@@ -5425,7 +9716,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_2init(CYTHON_UNUSED PyObject
   int __pyx_t_4;
   __Pyx_RefNannySetupContext("init", 0);
 
-  /* "models/fieldembed_core.pyx":500
+  /* "models/fieldembed_core.pyx":1021
  * 
  *     cdef int i
  *     cdef float *x = [<float>10.0]             # <<<<<<<<<<<<<<
@@ -5435,7 +9726,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_2init(CYTHON_UNUSED PyObject
   __pyx_t_1[0] = ((float)10.0);
   __pyx_v_x = __pyx_t_1;
 
-  /* "models/fieldembed_core.pyx":501
+  /* "models/fieldembed_core.pyx":1022
  *     cdef int i
  *     cdef float *x = [<float>10.0]
  *     cdef float *y = [<float>0.01]             # <<<<<<<<<<<<<<
@@ -5445,7 +9736,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_2init(CYTHON_UNUSED PyObject
   __pyx_t_2[0] = ((float)0.01);
   __pyx_v_y = __pyx_t_2;
 
-  /* "models/fieldembed_core.pyx":502
+  /* "models/fieldembed_core.pyx":1023
  *     cdef float *x = [<float>10.0]
  *     cdef float *y = [<float>0.01]
  *     cdef float expected = <float>0.1             # <<<<<<<<<<<<<<
@@ -5454,7 +9745,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_2init(CYTHON_UNUSED PyObject
  */
   __pyx_v_expected = ((float)0.1);
 
-  /* "models/fieldembed_core.pyx":503
+  /* "models/fieldembed_core.pyx":1024
  *     cdef float *y = [<float>0.01]
  *     cdef float expected = <float>0.1
  *     cdef int size = 1             # <<<<<<<<<<<<<<
@@ -5463,7 +9754,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_2init(CYTHON_UNUSED PyObject
  */
   __pyx_v_size = 1;
 
-  /* "models/fieldembed_core.pyx":508
+  /* "models/fieldembed_core.pyx":1029
  * 
  *     # build the sigmoid table
  *     for i in range(EXP_TABLE_SIZE):             # <<<<<<<<<<<<<<
@@ -5473,7 +9764,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_2init(CYTHON_UNUSED PyObject
   for (__pyx_t_3 = 0; __pyx_t_3 < 0x3E8; __pyx_t_3+=1) {
     __pyx_v_i = __pyx_t_3;
 
-    /* "models/fieldembed_core.pyx":509
+    /* "models/fieldembed_core.pyx":1030
  *     # build the sigmoid table
  *     for i in range(EXP_TABLE_SIZE):
  *         EXP_TABLE[i] = <REAL_t>exp((i / <REAL_t>EXP_TABLE_SIZE * 2 - 1) * MAX_EXP)             # <<<<<<<<<<<<<<
@@ -5482,7 +9773,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_2init(CYTHON_UNUSED PyObject
  */
     (__pyx_v_6models_15fieldembed_core_EXP_TABLE[__pyx_v_i]) = ((__pyx_t_6models_15fieldembed_core_REAL_t)exp(((((__pyx_v_i / ((__pyx_t_6models_15fieldembed_core_REAL_t)0x3E8)) * 2.0) - 1.0) * 6.0)));
 
-    /* "models/fieldembed_core.pyx":510
+    /* "models/fieldembed_core.pyx":1031
  *     for i in range(EXP_TABLE_SIZE):
  *         EXP_TABLE[i] = <REAL_t>exp((i / <REAL_t>EXP_TABLE_SIZE * 2 - 1) * MAX_EXP)
  *         EXP_TABLE[i] = <REAL_t>(EXP_TABLE[i] / (EXP_TABLE[i] + 1))             # <<<<<<<<<<<<<<
@@ -5491,7 +9782,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_2init(CYTHON_UNUSED PyObject
  */
     (__pyx_v_6models_15fieldembed_core_EXP_TABLE[__pyx_v_i]) = ((__pyx_t_6models_15fieldembed_core_REAL_t)((__pyx_v_6models_15fieldembed_core_EXP_TABLE[__pyx_v_i]) / ((__pyx_v_6models_15fieldembed_core_EXP_TABLE[__pyx_v_i]) + 1.0)));
 
-    /* "models/fieldembed_core.pyx":511
+    /* "models/fieldembed_core.pyx":1032
  *         EXP_TABLE[i] = <REAL_t>exp((i / <REAL_t>EXP_TABLE_SIZE * 2 - 1) * MAX_EXP)
  *         EXP_TABLE[i] = <REAL_t>(EXP_TABLE[i] / (EXP_TABLE[i] + 1))
  *         LOG_TABLE[i] = <REAL_t>log( EXP_TABLE[i] )             # <<<<<<<<<<<<<<
@@ -5501,7 +9792,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_2init(CYTHON_UNUSED PyObject
     (__pyx_v_6models_15fieldembed_core_LOG_TABLE[__pyx_v_i]) = ((__pyx_t_6models_15fieldembed_core_REAL_t)log((__pyx_v_6models_15fieldembed_core_EXP_TABLE[__pyx_v_i])));
   }
 
-  /* "models/fieldembed_core.pyx":514
+  /* "models/fieldembed_core.pyx":1035
  * 
  *     # check whether sdot returns double or float
  *     d_res = dsdot(&size, x, &ONE, y, &ONE)             # <<<<<<<<<<<<<<
@@ -5510,7 +9801,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_2init(CYTHON_UNUSED PyObject
  */
   __pyx_v_d_res = __pyx_v_6models_15fieldembed_core_dsdot((&__pyx_v_size), __pyx_v_x, (&__pyx_v_6models_15fieldembed_core_ONE), __pyx_v_y, (&__pyx_v_6models_15fieldembed_core_ONE));
 
-  /* "models/fieldembed_core.pyx":515
+  /* "models/fieldembed_core.pyx":1036
  *     # check whether sdot returns double or float
  *     d_res = dsdot(&size, x, &ONE, y, &ONE)
  *     p_res = <float *>&d_res             # <<<<<<<<<<<<<<
@@ -5519,7 +9810,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_2init(CYTHON_UNUSED PyObject
  */
   __pyx_v_p_res = ((float *)(&__pyx_v_d_res));
 
-  /* "models/fieldembed_core.pyx":516
+  /* "models/fieldembed_core.pyx":1037
  *     d_res = dsdot(&size, x, &ONE, y, &ONE)
  *     p_res = <float *>&d_res
  *     if abs(d_res - expected) < 0.0001:             # <<<<<<<<<<<<<<
@@ -5529,7 +9820,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_2init(CYTHON_UNUSED PyObject
   __pyx_t_4 = ((fabs((__pyx_v_d_res - __pyx_v_expected)) < 0.0001) != 0);
   if (__pyx_t_4) {
 
-    /* "models/fieldembed_core.pyx":517
+    /* "models/fieldembed_core.pyx":1038
  *     p_res = <float *>&d_res
  *     if abs(d_res - expected) < 0.0001:
  *         our_dot = our_dot_double             # <<<<<<<<<<<<<<
@@ -5538,7 +9829,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_2init(CYTHON_UNUSED PyObject
  */
     __pyx_v_6models_15fieldembed_core_our_dot = __pyx_f_6models_15fieldembed_core_our_dot_double;
 
-    /* "models/fieldembed_core.pyx":518
+    /* "models/fieldembed_core.pyx":1039
  *     if abs(d_res - expected) < 0.0001:
  *         our_dot = our_dot_double
  *         our_saxpy = saxpy             # <<<<<<<<<<<<<<
@@ -5547,7 +9838,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_2init(CYTHON_UNUSED PyObject
  */
     __pyx_v_6models_15fieldembed_core_our_saxpy = __pyx_v_6models_15fieldembed_core_saxpy;
 
-    /* "models/fieldembed_core.pyx":520
+    /* "models/fieldembed_core.pyx":1041
  *         our_saxpy = saxpy
  *         # our_saxpy = our_saxpy_noblas
  *         return 0  # double             # <<<<<<<<<<<<<<
@@ -5559,7 +9850,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_2init(CYTHON_UNUSED PyObject
     __pyx_r = __pyx_int_0;
     goto __pyx_L0;
 
-    /* "models/fieldembed_core.pyx":516
+    /* "models/fieldembed_core.pyx":1037
  *     d_res = dsdot(&size, x, &ONE, y, &ONE)
  *     p_res = <float *>&d_res
  *     if abs(d_res - expected) < 0.0001:             # <<<<<<<<<<<<<<
@@ -5568,7 +9859,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_2init(CYTHON_UNUSED PyObject
  */
   }
 
-  /* "models/fieldembed_core.pyx":521
+  /* "models/fieldembed_core.pyx":1042
  *         # our_saxpy = our_saxpy_noblas
  *         return 0  # double
  *     elif abs(p_res[0] - expected) < 0.0001:             # <<<<<<<<<<<<<<
@@ -5578,7 +9869,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_2init(CYTHON_UNUSED PyObject
   __pyx_t_4 = ((fabsf(((__pyx_v_p_res[0]) - __pyx_v_expected)) < 0.0001) != 0);
   if (__pyx_t_4) {
 
-    /* "models/fieldembed_core.pyx":522
+    /* "models/fieldembed_core.pyx":1043
  *         return 0  # double
  *     elif abs(p_res[0] - expected) < 0.0001:
  *         our_dot = our_dot_float             # <<<<<<<<<<<<<<
@@ -5587,7 +9878,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_2init(CYTHON_UNUSED PyObject
  */
     __pyx_v_6models_15fieldembed_core_our_dot = __pyx_f_6models_15fieldembed_core_our_dot_float;
 
-    /* "models/fieldembed_core.pyx":523
+    /* "models/fieldembed_core.pyx":1044
  *     elif abs(p_res[0] - expected) < 0.0001:
  *         our_dot = our_dot_float
  *         our_saxpy = saxpy             # <<<<<<<<<<<<<<
@@ -5596,7 +9887,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_2init(CYTHON_UNUSED PyObject
  */
     __pyx_v_6models_15fieldembed_core_our_saxpy = __pyx_v_6models_15fieldembed_core_saxpy;
 
-    /* "models/fieldembed_core.pyx":525
+    /* "models/fieldembed_core.pyx":1046
  *         our_saxpy = saxpy
  *         # our_saxpy = our_saxpy_noblas
  *         return 1  # float             # <<<<<<<<<<<<<<
@@ -5608,7 +9899,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_2init(CYTHON_UNUSED PyObject
     __pyx_r = __pyx_int_1;
     goto __pyx_L0;
 
-    /* "models/fieldembed_core.pyx":521
+    /* "models/fieldembed_core.pyx":1042
  *         # our_saxpy = our_saxpy_noblas
  *         return 0  # double
  *     elif abs(p_res[0] - expected) < 0.0001:             # <<<<<<<<<<<<<<
@@ -5617,7 +9908,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_2init(CYTHON_UNUSED PyObject
  */
   }
 
-  /* "models/fieldembed_core.pyx":529
+  /* "models/fieldembed_core.pyx":1050
  *         # neither => use cython loops, no BLAS
  *         # actually, the BLAS is so messed up we'll probably have segfaulted above and never even reach here
  *         our_dot = our_dot_noblas             # <<<<<<<<<<<<<<
@@ -5627,7 +9918,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_2init(CYTHON_UNUSED PyObject
   /*else*/ {
     __pyx_v_6models_15fieldembed_core_our_dot = __pyx_f_6models_15fieldembed_core_our_dot_noblas;
 
-    /* "models/fieldembed_core.pyx":530
+    /* "models/fieldembed_core.pyx":1051
  *         # actually, the BLAS is so messed up we'll probably have segfaulted above and never even reach here
  *         our_dot = our_dot_noblas
  *         our_saxpy = our_saxpy_noblas             # <<<<<<<<<<<<<<
@@ -5636,7 +9927,7 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_2init(CYTHON_UNUSED PyObject
  */
     __pyx_v_6models_15fieldembed_core_our_saxpy = __pyx_f_6models_15fieldembed_core_our_saxpy_noblas;
 
-    /* "models/fieldembed_core.pyx":531
+    /* "models/fieldembed_core.pyx":1052
  *         our_dot = our_dot_noblas
  *         our_saxpy = our_saxpy_noblas
  *         return 2             # <<<<<<<<<<<<<<
@@ -5649,8 +9940,8 @@ static PyObject *__pyx_pf_6models_15fieldembed_core_2init(CYTHON_UNUSED PyObject
     goto __pyx_L0;
   }
 
-  /* "models/fieldembed_core.pyx":484
- * ##############################################
+  /* "models/fieldembed_core.pyx":1005
+ *     return effective_words
  * 
  * def init():             # <<<<<<<<<<<<<<
  *     """Precompute function `sigmoid(x) = 1 / (1 + exp(-x))`, for x values discretized into table EXP_TABLE.
@@ -5780,7 +10071,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  * 
  *             if ((flags & pybuf.PyBUF_F_CONTIGUOUS == pybuf.PyBUF_F_CONTIGUOUS)
  */
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__3, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 229, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__6, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 229, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -5836,7 +10127,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  * 
  *             info.buf = PyArray_DATA(self)
  */
-    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__4, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 233, __pyx_L1_error)
+    __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__7, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 233, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_Raise(__pyx_t_3, 0, 0, 0);
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -6093,7 +10384,7 @@ static int __pyx_pf_5numpy_7ndarray___getbuffer__(PyArrayObject *__pyx_v_self, P
  *                 if   t == NPY_BYTE:        f = "b"
  *                 elif t == NPY_UBYTE:       f = "B"
  */
-      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__5, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 263, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__8, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 263, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_Raise(__pyx_t_3, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -6973,7 +11264,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
  * 
  *         if ((child.byteorder == c'>' and little_endian) or
  */
-      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_RuntimeError, __pyx_tuple__6, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 810, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_RuntimeError, __pyx_tuple__9, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 810, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_Raise(__pyx_t_3, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -7041,7 +11332,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
  *             # One could encode it in the format string and have Cython
  *             # complain instead, BUT: < and > in format strings also imply
  */
-      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__7, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 814, __pyx_L1_error)
+      __pyx_t_3 = __Pyx_PyObject_Call(__pyx_builtin_ValueError, __pyx_tuple__10, NULL); if (unlikely(!__pyx_t_3)) __PYX_ERR(1, 814, __pyx_L1_error)
       __Pyx_GOTREF(__pyx_t_3);
       __Pyx_Raise(__pyx_t_3, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
@@ -7150,7 +11441,7 @@ static CYTHON_INLINE char *__pyx_f_5numpy__util_dtypestring(PyArray_Descr *__pyx
  * 
  *             # Until ticket #99 is fixed, use integers to avoid warnings
  */
-        __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_RuntimeError, __pyx_tuple__8, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 834, __pyx_L1_error)
+        __pyx_t_4 = __Pyx_PyObject_Call(__pyx_builtin_RuntimeError, __pyx_tuple__11, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 834, __pyx_L1_error)
         __Pyx_GOTREF(__pyx_t_4);
         __Pyx_Raise(__pyx_t_4, 0, 0, 0);
         __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
@@ -7824,7 +12115,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_array(void) {
  * 
  * cdef inline int import_umath() except -1:
  */
-      __pyx_t_8 = __Pyx_PyObject_Call(__pyx_builtin_ImportError, __pyx_tuple__9, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 1000, __pyx_L5_except_error)
+      __pyx_t_8 = __Pyx_PyObject_Call(__pyx_builtin_ImportError, __pyx_tuple__12, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 1000, __pyx_L5_except_error)
       __Pyx_GOTREF(__pyx_t_8);
       __Pyx_Raise(__pyx_t_8, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
@@ -7953,7 +12244,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_umath(void) {
  * 
  * cdef inline int import_ufunc() except -1:
  */
-      __pyx_t_8 = __Pyx_PyObject_Call(__pyx_builtin_ImportError, __pyx_tuple__10, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 1006, __pyx_L5_except_error)
+      __pyx_t_8 = __Pyx_PyObject_Call(__pyx_builtin_ImportError, __pyx_tuple__13, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 1006, __pyx_L5_except_error)
       __Pyx_GOTREF(__pyx_t_8);
       __Pyx_Raise(__pyx_t_8, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
@@ -8079,7 +12370,7 @@ static CYTHON_INLINE int __pyx_f_5numpy_import_ufunc(void) {
  *     except Exception:
  *         raise ImportError("numpy.core.umath failed to import")             # <<<<<<<<<<<<<<
  */
-      __pyx_t_8 = __Pyx_PyObject_Call(__pyx_builtin_ImportError, __pyx_tuple__11, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 1012, __pyx_L5_except_error)
+      __pyx_t_8 = __Pyx_PyObject_Call(__pyx_builtin_ImportError, __pyx_tuple__14, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 1012, __pyx_L5_except_error)
       __Pyx_GOTREF(__pyx_t_8);
       __Pyx_Raise(__pyx_t_8, 0, 0, 0);
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
@@ -8173,7 +12464,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_REAL, __pyx_k_REAL, sizeof(__pyx_k_REAL), 0, 0, 1, 1},
   {&__pyx_n_s_RuntimeError, __pyx_k_RuntimeError, sizeof(__pyx_k_RuntimeError), 0, 0, 1, 1},
   {&__pyx_n_s_ValueError, __pyx_k_ValueError, sizeof(__pyx_k_ValueError), 0, 0, 1, 1},
-  {&__pyx_n_s__12, __pyx_k__12, sizeof(__pyx_k__12), 0, 0, 1, 1},
+  {&__pyx_n_s__15, __pyx_k__15, sizeof(__pyx_k__15), 0, 0, 1, 1},
   {&__pyx_n_s_alpha, __pyx_k_alpha, sizeof(__pyx_k_alpha), 0, 0, 1, 1},
   {&__pyx_n_s_c, __pyx_k_c, sizeof(__pyx_k_c), 0, 0, 1, 1},
   {&__pyx_n_s_cline_in_traceback, __pyx_k_cline_in_traceback, sizeof(__pyx_k_cline_in_traceback), 0, 0, 1, 1},
@@ -8182,15 +12473,20 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_cum_table, __pyx_k_cum_table, sizeof(__pyx_k_cum_table), 0, 0, 1, 1},
   {&__pyx_n_s_d_res, __pyx_k_d_res, sizeof(__pyx_k_d_res), 0, 0, 1, 1},
   {&__pyx_n_s_dsdot, __pyx_k_dsdot, sizeof(__pyx_k_dsdot), 0, 0, 1, 1},
+  {&__pyx_n_s_dtype, __pyx_k_dtype, sizeof(__pyx_k_dtype), 0, 0, 1, 1},
   {&__pyx_n_s_effective_sentences, __pyx_k_effective_sentences, sizeof(__pyx_k_effective_sentences), 0, 0, 1, 1},
   {&__pyx_n_s_effective_words, __pyx_k_effective_words, sizeof(__pyx_k_effective_words), 0, 0, 1, 1},
   {&__pyx_n_s_enumerate, __pyx_k_enumerate, sizeof(__pyx_k_enumerate), 0, 0, 1, 1},
   {&__pyx_n_s_expected, __pyx_k_expected, sizeof(__pyx_k_expected), 0, 0, 1, 1},
   {&__pyx_n_s_fblas, __pyx_k_fblas, sizeof(__pyx_k_fblas), 0, 0, 1, 1},
   {&__pyx_n_s_field_head, __pyx_k_field_head, sizeof(__pyx_k_field_head), 0, 0, 1, 1},
+  {&__pyx_n_s_field_hyper, __pyx_k_field_hyper, sizeof(__pyx_k_field_hyper), 0, 0, 1, 1},
   {&__pyx_n_s_field_sub, __pyx_k_field_sub, sizeof(__pyx_k_field_sub), 0, 0, 1, 1},
   {&__pyx_kp_s_fieldembed_models_fieldembed_cor, __pyx_k_fieldembed_models_fieldembed_cor, sizeof(__pyx_k_fieldembed_models_fieldembed_cor), 0, 0, 1, 0},
   {&__pyx_n_s_float32, __pyx_k_float32, sizeof(__pyx_k_float32), 0, 0, 1, 1},
+  {&__pyx_n_s_grad_mem, __pyx_k_grad_mem, sizeof(__pyx_k_grad_mem), 0, 0, 1, 1},
+  {&__pyx_n_s_hyper_indexes, __pyx_k_hyper_indexes, sizeof(__pyx_k_hyper_indexes), 0, 0, 1, 1},
+  {&__pyx_n_s_hyper_vocidx, __pyx_k_hyper_vocidx, sizeof(__pyx_k_hyper_vocidx), 0, 0, 1, 1},
   {&__pyx_n_s_i, __pyx_k_i, sizeof(__pyx_k_i), 0, 0, 1, 1},
   {&__pyx_n_s_idx_end, __pyx_k_idx_end, sizeof(__pyx_k_idx_end), 0, 0, 1, 1},
   {&__pyx_n_s_idx_start, __pyx_k_idx_start, sizeof(__pyx_k_idx_start), 0, 0, 1, 1},
@@ -8200,6 +12496,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_item, __pyx_k_item, sizeof(__pyx_k_item), 0, 0, 1, 1},
   {&__pyx_n_s_j, __pyx_k_j, sizeof(__pyx_k_j), 0, 0, 1, 1},
   {&__pyx_n_s_k, __pyx_k_k, sizeof(__pyx_k_k), 0, 0, 1, 1},
+  {&__pyx_n_s_loc_idx, __pyx_k_loc_idx, sizeof(__pyx_k_loc_idx), 0, 0, 1, 1},
   {&__pyx_n_s_main, __pyx_k_main, sizeof(__pyx_k_main), 0, 0, 1, 1},
   {&__pyx_n_s_model, __pyx_k_model, sizeof(__pyx_k_model), 0, 0, 1, 1},
   {&__pyx_n_s_models_fieldembed_core, __pyx_k_models_fieldembed_core, sizeof(__pyx_k_models_fieldembed_core), 0, 0, 1, 1},
@@ -8207,6 +12504,7 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_u_ndarray_is_not_Fortran_contiguou, __pyx_k_ndarray_is_not_Fortran_contiguou, sizeof(__pyx_k_ndarray_is_not_Fortran_contiguou), 0, 1, 0, 0},
   {&__pyx_n_s_negative, __pyx_k_negative, sizeof(__pyx_k_negative), 0, 0, 1, 1},
   {&__pyx_n_s_neu1, __pyx_k_neu1, sizeof(__pyx_k_neu1), 0, 0, 1, 1},
+  {&__pyx_n_s_neu_m, __pyx_k_neu_m, sizeof(__pyx_k_neu_m), 0, 0, 1, 1},
   {&__pyx_n_s_np, __pyx_k_np, sizeof(__pyx_k_np), 0, 0, 1, 1},
   {&__pyx_n_s_numpy, __pyx_k_numpy, sizeof(__pyx_k_numpy), 0, 0, 1, 1},
   {&__pyx_kp_s_numpy_core_multiarray_failed_to, __pyx_k_numpy_core_multiarray_failed_to, sizeof(__pyx_k_numpy_core_multiarray_failed_to), 0, 0, 1, 0},
@@ -8235,9 +12533,13 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_subsampling, __pyx_k_subsampling, sizeof(__pyx_k_subsampling), 0, 0, 1, 1},
   {&__pyx_n_s_test, __pyx_k_test, sizeof(__pyx_k_test), 0, 0, 1, 1},
   {&__pyx_n_s_train_batch_fieldembed_0X1_neat, __pyx_k_train_batch_fieldembed_0X1_neat, sizeof(__pyx_k_train_batch_fieldembed_0X1_neat), 0, 0, 1, 1},
+  {&__pyx_n_s_train_batch_fieldembed_negsamp, __pyx_k_train_batch_fieldembed_negsamp, sizeof(__pyx_k_train_batch_fieldembed_negsamp), 0, 0, 1, 1},
   {&__pyx_n_s_trainables, __pyx_k_trainables, sizeof(__pyx_k_trainables), 0, 0, 1, 1},
+  {&__pyx_n_s_uin32_t, __pyx_k_uin32_t, sizeof(__pyx_k_uin32_t), 0, 0, 1, 1},
   {&__pyx_kp_u_unknown_dtype_code_in_numpy_pxd, __pyx_k_unknown_dtype_code_in_numpy_pxd, sizeof(__pyx_k_unknown_dtype_code_in_numpy_pxd), 0, 1, 0, 0},
   {&__pyx_n_s_use_head, __pyx_k_use_head, sizeof(__pyx_k_use_head), 0, 0, 1, 1},
+  {&__pyx_n_s_use_hyper, __pyx_k_use_hyper, sizeof(__pyx_k_use_hyper), 0, 0, 1, 1},
+  {&__pyx_n_s_use_merger, __pyx_k_use_merger, sizeof(__pyx_k_use_merger), 0, 0, 1, 1},
   {&__pyx_n_s_use_sub, __pyx_k_use_sub, sizeof(__pyx_k_use_sub), 0, 0, 1, 1},
   {&__pyx_n_s_vector_size, __pyx_k_vector_size, sizeof(__pyx_k_vector_size), 0, 0, 1, 1},
   {&__pyx_n_s_vectors, __pyx_k_vectors, sizeof(__pyx_k_vectors), 0, 0, 1, 1},
@@ -8248,17 +12550,19 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_window, __pyx_k_window, sizeof(__pyx_k_window), 0, 0, 1, 1},
   {&__pyx_n_s_word_vocidx, __pyx_k_word_vocidx, sizeof(__pyx_k_word_vocidx), 0, 0, 1, 1},
   {&__pyx_n_s_work, __pyx_k_work, sizeof(__pyx_k_work), 0, 0, 1, 1},
+  {&__pyx_n_s_work_m, __pyx_k_work_m, sizeof(__pyx_k_work_m), 0, 0, 1, 1},
   {&__pyx_n_s_workers, __pyx_k_workers, sizeof(__pyx_k_workers), 0, 0, 1, 1},
   {&__pyx_n_s_wv, __pyx_k_wv, sizeof(__pyx_k_wv), 0, 0, 1, 1},
   {&__pyx_n_s_wv_neg, __pyx_k_wv_neg, sizeof(__pyx_k_wv_neg), 0, 0, 1, 1},
   {&__pyx_n_s_x, __pyx_k_x, sizeof(__pyx_k_x), 0, 0, 1, 1},
   {&__pyx_n_s_y, __pyx_k_y, sizeof(__pyx_k_y), 0, 0, 1, 1},
+  {&__pyx_n_s_zeros, __pyx_k_zeros, sizeof(__pyx_k_zeros), 0, 0, 1, 1},
   {0, 0, 0, 0, 0, 0, 0}
 };
 static int __Pyx_InitCachedBuiltins(void) {
-  __pyx_builtin_ImportError = __Pyx_GetBuiltinName(__pyx_n_s_ImportError); if (!__pyx_builtin_ImportError) __PYX_ERR(0, 22, __pyx_L1_error)
-  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 219, __pyx_L1_error)
-  __pyx_builtin_enumerate = __Pyx_GetBuiltinName(__pyx_n_s_enumerate); if (!__pyx_builtin_enumerate) __PYX_ERR(0, 421, __pyx_L1_error)
+  __pyx_builtin_ImportError = __Pyx_GetBuiltinName(__pyx_n_s_ImportError); if (!__pyx_builtin_ImportError) __PYX_ERR(0, 21, __pyx_L1_error)
+  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 205, __pyx_L1_error)
+  __pyx_builtin_enumerate = __Pyx_GetBuiltinName(__pyx_n_s_enumerate); if (!__pyx_builtin_enumerate) __PYX_ERR(0, 407, __pyx_L1_error)
   __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) __PYX_ERR(1, 229, __pyx_L1_error)
   __pyx_builtin_RuntimeError = __Pyx_GetBuiltinName(__pyx_n_s_RuntimeError); if (!__pyx_builtin_RuntimeError) __PYX_ERR(1, 810, __pyx_L1_error)
   return 0;
@@ -8270,19 +12574,44 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-  /* "models/fieldembed_core.pyx":153
+  /* "models/fieldembed_core.pyx":140
  *         c[0].cum_table_len = len(model.vocabulary.cum_table)
  *     if c[0].negative or c[0].sample:
  *         c[0].next_random = (2**24) * model.random.randint(0, 2**24) + model.random.randint(0, 2**24)             # <<<<<<<<<<<<<<
  * 
  *     # convert Python structures to primitive types, so we can release the GIL
  */
-  __pyx_tuple_ = PyTuple_Pack(2, __pyx_int_0, __pyx_int_16777216); if (unlikely(!__pyx_tuple_)) __PYX_ERR(0, 153, __pyx_L1_error)
+  __pyx_tuple_ = PyTuple_Pack(2, __pyx_int_0, __pyx_int_16777216); if (unlikely(!__pyx_tuple_)) __PYX_ERR(0, 140, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple_);
   __Pyx_GIVEREF(__pyx_tuple_);
-  __pyx_tuple__2 = PyTuple_Pack(2, __pyx_int_0, __pyx_int_16777216); if (unlikely(!__pyx_tuple__2)) __PYX_ERR(0, 153, __pyx_L1_error)
+  __pyx_tuple__2 = PyTuple_Pack(2, __pyx_int_0, __pyx_int_16777216); if (unlikely(!__pyx_tuple__2)) __PYX_ERR(0, 140, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__2);
   __Pyx_GIVEREF(__pyx_tuple__2);
+
+  /* "models/fieldembed_core.pyx":508
+ *             c[0].syn0_map[fld_idx] = <REAL_t *>(np.PyArray_DATA(model.field_hyper[i][0].vectors))
+ *             # is there any other methods? is this right?
+ *             c[0].hyper_indexes[i]  = <np.uint32_t *>(np.PyArray_DATA(np.zeros(MAX_SENTENCE_LEN, dtype = np.uin32_t)))             # <<<<<<<<<<<<<<
+ * 
+ *     c[0].grad_mem  = <REAL_t *>np.PyArray_DATA(_grad_mem)
+ */
+  __pyx_tuple__3 = PyTuple_Pack(1, __pyx_int_10000); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(0, 508, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__3);
+  __Pyx_GIVEREF(__pyx_tuple__3);
+
+  /* "models/fieldembed_core.pyx":531
+ *         c[0].cum_table_len = len(model.vocabulary.cum_table)
+ *     if c[0].negative or c[0].sample:
+ *         c[0].next_random = (2**24) * model.random.randint(0, 2**24) + model.random.randint(0, 2**24)             # <<<<<<<<<<<<<<
+ *     ####################################################################### use proj and grad vectors
+ * 
+ */
+  __pyx_tuple__4 = PyTuple_Pack(2, __pyx_int_0, __pyx_int_16777216); if (unlikely(!__pyx_tuple__4)) __PYX_ERR(0, 531, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__4);
+  __Pyx_GIVEREF(__pyx_tuple__4);
+  __pyx_tuple__5 = PyTuple_Pack(2, __pyx_int_0, __pyx_int_16777216); if (unlikely(!__pyx_tuple__5)) __PYX_ERR(0, 531, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__5);
+  __Pyx_GIVEREF(__pyx_tuple__5);
 
   /* "../../Environments/anaconda3/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":229
  *             if ((flags & pybuf.PyBUF_C_CONTIGUOUS == pybuf.PyBUF_C_CONTIGUOUS)
@@ -8291,9 +12620,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  *             if ((flags & pybuf.PyBUF_F_CONTIGUOUS == pybuf.PyBUF_F_CONTIGUOUS)
  */
-  __pyx_tuple__3 = PyTuple_Pack(1, __pyx_kp_u_ndarray_is_not_C_contiguous); if (unlikely(!__pyx_tuple__3)) __PYX_ERR(1, 229, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__3);
-  __Pyx_GIVEREF(__pyx_tuple__3);
+  __pyx_tuple__6 = PyTuple_Pack(1, __pyx_kp_u_ndarray_is_not_C_contiguous); if (unlikely(!__pyx_tuple__6)) __PYX_ERR(1, 229, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__6);
+  __Pyx_GIVEREF(__pyx_tuple__6);
 
   /* "../../Environments/anaconda3/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":233
  *             if ((flags & pybuf.PyBUF_F_CONTIGUOUS == pybuf.PyBUF_F_CONTIGUOUS)
@@ -8302,9 +12631,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  *             info.buf = PyArray_DATA(self)
  */
-  __pyx_tuple__4 = PyTuple_Pack(1, __pyx_kp_u_ndarray_is_not_Fortran_contiguou); if (unlikely(!__pyx_tuple__4)) __PYX_ERR(1, 233, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__4);
-  __Pyx_GIVEREF(__pyx_tuple__4);
+  __pyx_tuple__7 = PyTuple_Pack(1, __pyx_kp_u_ndarray_is_not_Fortran_contiguou); if (unlikely(!__pyx_tuple__7)) __PYX_ERR(1, 233, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__7);
+  __Pyx_GIVEREF(__pyx_tuple__7);
 
   /* "../../Environments/anaconda3/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":263
  *                 if ((descr.byteorder == c'>' and little_endian) or
@@ -8313,9 +12642,9 @@ static int __Pyx_InitCachedConstants(void) {
  *                 if   t == NPY_BYTE:        f = "b"
  *                 elif t == NPY_UBYTE:       f = "B"
  */
-  __pyx_tuple__5 = PyTuple_Pack(1, __pyx_kp_u_Non_native_byte_order_not_suppor); if (unlikely(!__pyx_tuple__5)) __PYX_ERR(1, 263, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__5);
-  __Pyx_GIVEREF(__pyx_tuple__5);
+  __pyx_tuple__8 = PyTuple_Pack(1, __pyx_kp_u_Non_native_byte_order_not_suppor); if (unlikely(!__pyx_tuple__8)) __PYX_ERR(1, 263, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__8);
+  __Pyx_GIVEREF(__pyx_tuple__8);
 
   /* "../../Environments/anaconda3/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":810
  * 
@@ -8324,9 +12653,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  *         if ((child.byteorder == c'>' and little_endian) or
  */
-  __pyx_tuple__6 = PyTuple_Pack(1, __pyx_kp_u_Format_string_allocated_too_shor); if (unlikely(!__pyx_tuple__6)) __PYX_ERR(1, 810, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__6);
-  __Pyx_GIVEREF(__pyx_tuple__6);
+  __pyx_tuple__9 = PyTuple_Pack(1, __pyx_kp_u_Format_string_allocated_too_shor); if (unlikely(!__pyx_tuple__9)) __PYX_ERR(1, 810, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__9);
+  __Pyx_GIVEREF(__pyx_tuple__9);
 
   /* "../../Environments/anaconda3/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":814
  *         if ((child.byteorder == c'>' and little_endian) or
@@ -8335,9 +12664,9 @@ static int __Pyx_InitCachedConstants(void) {
  *             # One could encode it in the format string and have Cython
  *             # complain instead, BUT: < and > in format strings also imply
  */
-  __pyx_tuple__7 = PyTuple_Pack(1, __pyx_kp_u_Non_native_byte_order_not_suppor); if (unlikely(!__pyx_tuple__7)) __PYX_ERR(1, 814, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__7);
-  __Pyx_GIVEREF(__pyx_tuple__7);
+  __pyx_tuple__10 = PyTuple_Pack(1, __pyx_kp_u_Non_native_byte_order_not_suppor); if (unlikely(!__pyx_tuple__10)) __PYX_ERR(1, 814, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__10);
+  __Pyx_GIVEREF(__pyx_tuple__10);
 
   /* "../../Environments/anaconda3/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":834
  *             t = child.type_num
@@ -8346,9 +12675,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  *             # Until ticket #99 is fixed, use integers to avoid warnings
  */
-  __pyx_tuple__8 = PyTuple_Pack(1, __pyx_kp_u_Format_string_allocated_too_shor_2); if (unlikely(!__pyx_tuple__8)) __PYX_ERR(1, 834, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__8);
-  __Pyx_GIVEREF(__pyx_tuple__8);
+  __pyx_tuple__11 = PyTuple_Pack(1, __pyx_kp_u_Format_string_allocated_too_shor_2); if (unlikely(!__pyx_tuple__11)) __PYX_ERR(1, 834, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__11);
+  __Pyx_GIVEREF(__pyx_tuple__11);
 
   /* "../../Environments/anaconda3/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":1000
  *         _import_array()
@@ -8357,9 +12686,9 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  * cdef inline int import_umath() except -1:
  */
-  __pyx_tuple__9 = PyTuple_Pack(1, __pyx_kp_s_numpy_core_multiarray_failed_to); if (unlikely(!__pyx_tuple__9)) __PYX_ERR(1, 1000, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__9);
-  __Pyx_GIVEREF(__pyx_tuple__9);
+  __pyx_tuple__12 = PyTuple_Pack(1, __pyx_kp_s_numpy_core_multiarray_failed_to); if (unlikely(!__pyx_tuple__12)) __PYX_ERR(1, 1000, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__12);
+  __Pyx_GIVEREF(__pyx_tuple__12);
 
   /* "../../Environments/anaconda3/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":1006
  *         _import_umath()
@@ -8368,42 +12697,54 @@ static int __Pyx_InitCachedConstants(void) {
  * 
  * cdef inline int import_ufunc() except -1:
  */
-  __pyx_tuple__10 = PyTuple_Pack(1, __pyx_kp_s_numpy_core_umath_failed_to_impor); if (unlikely(!__pyx_tuple__10)) __PYX_ERR(1, 1006, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__10);
-  __Pyx_GIVEREF(__pyx_tuple__10);
+  __pyx_tuple__13 = PyTuple_Pack(1, __pyx_kp_s_numpy_core_umath_failed_to_impor); if (unlikely(!__pyx_tuple__13)) __PYX_ERR(1, 1006, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__13);
+  __Pyx_GIVEREF(__pyx_tuple__13);
 
   /* "../../Environments/anaconda3/lib/python3.7/site-packages/Cython/Includes/numpy/__init__.pxd":1012
  *         _import_umath()
  *     except Exception:
  *         raise ImportError("numpy.core.umath failed to import")             # <<<<<<<<<<<<<<
  */
-  __pyx_tuple__11 = PyTuple_Pack(1, __pyx_kp_s_numpy_core_umath_failed_to_impor); if (unlikely(!__pyx_tuple__11)) __PYX_ERR(1, 1012, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__11);
-  __Pyx_GIVEREF(__pyx_tuple__11);
+  __pyx_tuple__14 = PyTuple_Pack(1, __pyx_kp_s_numpy_core_umath_failed_to_impor); if (unlikely(!__pyx_tuple__14)) __PYX_ERR(1, 1012, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__14);
+  __Pyx_GIVEREF(__pyx_tuple__14);
 
-  /* "models/fieldembed_core.pyx":378
+  /* "models/fieldembed_core.pyx":364
  *     return next_random
  * 
  * def train_batch_fieldembed_0X1_neat(model, indexes, sentence_idx, alpha, _work, _neu1, compute_loss, subsampling = 1):             # <<<<<<<<<<<<<<
  * 
  *     cdef Word2VecConfig c
  */
-  __pyx_tuple__13 = PyTuple_Pack(20, __pyx_n_s_model, __pyx_n_s_indexes, __pyx_n_s_sentence_idx, __pyx_n_s_alpha, __pyx_n_s_work, __pyx_n_s_neu1, __pyx_n_s_compute_loss, __pyx_n_s_subsampling, __pyx_n_s_c, __pyx_n_s_i, __pyx_n_s_j, __pyx_n_s_k, __pyx_n_s_effective_words, __pyx_n_s_effective_sentences, __pyx_n_s_sent_idx, __pyx_n_s_idx_start, __pyx_n_s_idx_end, __pyx_n_s_word_vocidx, __pyx_n_s_vlookup, __pyx_n_s_item); if (unlikely(!__pyx_tuple__13)) __PYX_ERR(0, 378, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__13);
-  __Pyx_GIVEREF(__pyx_tuple__13);
-  __pyx_codeobj__14 = (PyObject*)__Pyx_PyCode_New(8, 0, 20, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__13, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_fieldembed_models_fieldembed_cor, __pyx_n_s_train_batch_fieldembed_0X1_neat, 378, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__14)) __PYX_ERR(0, 378, __pyx_L1_error)
+  __pyx_tuple__16 = PyTuple_Pack(20, __pyx_n_s_model, __pyx_n_s_indexes, __pyx_n_s_sentence_idx, __pyx_n_s_alpha, __pyx_n_s_work, __pyx_n_s_neu1, __pyx_n_s_compute_loss, __pyx_n_s_subsampling, __pyx_n_s_c, __pyx_n_s_i, __pyx_n_s_j, __pyx_n_s_k, __pyx_n_s_effective_words, __pyx_n_s_effective_sentences, __pyx_n_s_sent_idx, __pyx_n_s_idx_start, __pyx_n_s_idx_end, __pyx_n_s_word_vocidx, __pyx_n_s_vlookup, __pyx_n_s_item); if (unlikely(!__pyx_tuple__16)) __PYX_ERR(0, 364, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__16);
+  __Pyx_GIVEREF(__pyx_tuple__16);
+  __pyx_codeobj__17 = (PyObject*)__Pyx_PyCode_New(8, 0, 20, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__16, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_fieldembed_models_fieldembed_cor, __pyx_n_s_train_batch_fieldembed_0X1_neat, 364, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__17)) __PYX_ERR(0, 364, __pyx_L1_error)
 
-  /* "models/fieldembed_core.pyx":484
- * ##############################################
+  /* "models/fieldembed_core.pyx":873
+ *     return next_random
+ * 
+ * def train_batch_fieldembed_negsamp(             # <<<<<<<<<<<<<<
+ *     model,
+ *     # make sure the length of indexes are less than MAX_SENTENCE_LEN
+ */
+  __pyx_tuple__18 = PyTuple_Pack(26, __pyx_n_s_model, __pyx_n_s_indexes, __pyx_n_s_hyper_indexes, __pyx_n_s_sentence_idx, __pyx_n_s_alpha, __pyx_n_s_work, __pyx_n_s_neu1, __pyx_n_s_work_m, __pyx_n_s_neu_m, __pyx_n_s_grad_mem, __pyx_n_s_compute_loss, __pyx_n_s_subsampling, __pyx_n_s_c, __pyx_n_s_i, __pyx_n_s_j, __pyx_n_s_k, __pyx_n_s_effective_words, __pyx_n_s_effective_sentences, __pyx_n_s_sent_idx, __pyx_n_s_idx_start, __pyx_n_s_idx_end, __pyx_n_s_word_vocidx, __pyx_n_s_hyper_vocidx, __pyx_n_s_loc_idx, __pyx_n_s_vlookup, __pyx_n_s_item); if (unlikely(!__pyx_tuple__18)) __PYX_ERR(0, 873, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__18);
+  __Pyx_GIVEREF(__pyx_tuple__18);
+  __pyx_codeobj__19 = (PyObject*)__Pyx_PyCode_New(12, 0, 26, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__18, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_fieldembed_models_fieldembed_cor, __pyx_n_s_train_batch_fieldembed_negsamp, 873, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__19)) __PYX_ERR(0, 873, __pyx_L1_error)
+
+  /* "models/fieldembed_core.pyx":1005
+ *     return effective_words
  * 
  * def init():             # <<<<<<<<<<<<<<
  *     """Precompute function `sigmoid(x) = 1 / (1 + exp(-x))`, for x values discretized into table EXP_TABLE.
  *      Also calculate log(sigmoid(x)) into LOG_TABLE.
  */
-  __pyx_tuple__15 = PyTuple_Pack(7, __pyx_n_s_i, __pyx_n_s_x, __pyx_n_s_y, __pyx_n_s_expected, __pyx_n_s_size, __pyx_n_s_d_res, __pyx_n_s_p_res); if (unlikely(!__pyx_tuple__15)) __PYX_ERR(0, 484, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_tuple__15);
-  __Pyx_GIVEREF(__pyx_tuple__15);
-  __pyx_codeobj__16 = (PyObject*)__Pyx_PyCode_New(0, 0, 7, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__15, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_fieldembed_models_fieldembed_cor, __pyx_n_s_init, 484, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__16)) __PYX_ERR(0, 484, __pyx_L1_error)
+  __pyx_tuple__20 = PyTuple_Pack(7, __pyx_n_s_i, __pyx_n_s_x, __pyx_n_s_y, __pyx_n_s_expected, __pyx_n_s_size, __pyx_n_s_d_res, __pyx_n_s_p_res); if (unlikely(!__pyx_tuple__20)) __PYX_ERR(0, 1005, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_tuple__20);
+  __Pyx_GIVEREF(__pyx_tuple__20);
+  __pyx_codeobj__21 = (PyObject*)__Pyx_PyCode_New(0, 0, 7, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__20, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_fieldembed_models_fieldembed_cor, __pyx_n_s_init, 1005, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__21)) __PYX_ERR(0, 1005, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -8471,6 +12812,8 @@ static int __Pyx_modinit_function_export_code(void) {
   if (__Pyx_ExportFunction("random_int32", (void (*)(void))__pyx_f_6models_15fieldembed_core_random_int32, "unsigned PY_LONG_LONG (unsigned PY_LONG_LONG *)") < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   if (__Pyx_ExportFunction("init_w2v_config_0X1_neat", (void (*)(void))__pyx_f_6models_15fieldembed_core_init_w2v_config_0X1_neat, "PyObject *(struct __pyx_t_6models_15fieldembed_core_Word2VecConfig *, PyObject *, PyObject *, PyObject *, PyObject *, PyObject *)") < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   if (__Pyx_ExportFunction("fieldembed_token_neg_0X1_neat", (void (*)(void))__pyx_f_6models_15fieldembed_core_fieldembed_token_neg_0X1_neat, "unsigned PY_LONG_LONG (__pyx_t_6models_15fieldembed_core_REAL_t const , int const , int const , __pyx_t_5numpy_uint32_t *, unsigned PY_LONG_LONG, __pyx_t_5numpy_uint32_t const *, int, int, int, int, int, int, std::map<int,__pyx_t_6models_15fieldembed_core_REAL_t *> , std::map<int,__pyx_t_5numpy_uint32_t *> , std::map<int,__pyx_t_5numpy_uint32_t *> , std::map<int,__pyx_t_6models_15fieldembed_core_REAL_t *> , std::map<int,int> , __pyx_t_6models_15fieldembed_core_REAL_t *, __pyx_t_6models_15fieldembed_core_REAL_t *, __pyx_t_6models_15fieldembed_core_REAL_t *, __pyx_t_6models_15fieldembed_core_REAL_t *, int, unsigned PY_LONG_LONG, int const , __pyx_t_6models_15fieldembed_core_REAL_t *)") < 0) __PYX_ERR(0, 1, __pyx_L1_error)
+  if (__Pyx_ExportFunction("init_w2v_config", (void (*)(void))__pyx_f_6models_15fieldembed_core_init_w2v_config, "PyObject *(struct __pyx_t_6models_15fieldembed_core_Word2VecConfig *, PyObject *, PyObject *, PyObject *, PyObject *, PyObject *, PyObject *, PyObject *, PyObject *)") < 0) __PYX_ERR(0, 1, __pyx_L1_error)
+  if (__Pyx_ExportFunction("fieldembed_negsamp", (void (*)(void))__pyx_f_6models_15fieldembed_core_fieldembed_negsamp, "unsigned PY_LONG_LONG (__pyx_t_6models_15fieldembed_core_REAL_t const , int const , int const , __pyx_t_5numpy_uint32_t *, unsigned PY_LONG_LONG, __pyx_t_5numpy_uint32_t const *, std::map<int,__pyx_t_5numpy_uint32_t *> , int, int, int, int, int, int, int, std::map<int,__pyx_t_6models_15fieldembed_core_REAL_t *> , std::map<int,__pyx_t_5numpy_uint32_t *> , std::map<int,__pyx_t_5numpy_uint32_t *> , std::map<int,__pyx_t_6models_15fieldembed_core_REAL_t *> , __pyx_t_6models_15fieldembed_core_REAL_t *, __pyx_t_6models_15fieldembed_core_REAL_t *, __pyx_t_6models_15fieldembed_core_REAL_t *, __pyx_t_6models_15fieldembed_core_REAL_t *, __pyx_t_6models_15fieldembed_core_REAL_t *, __pyx_t_6models_15fieldembed_core_REAL_t *, __pyx_t_6models_15fieldembed_core_REAL_t *, int, unsigned PY_LONG_LONG, int const , __pyx_t_6models_15fieldembed_core_REAL_t *)") < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   __Pyx_RefNannyFinishContext();
   return 0;
   __pyx_L1_error:;
@@ -8706,19 +13049,19 @@ if (!__Pyx_RefNanny) {
   if (__Pyx_patch_abc() < 0) __PYX_ERR(0, 1, __pyx_L1_error)
   #endif
 
-  /* "models/fieldembed_core.pyx":10
+  /* "models/fieldembed_core.pyx":9
  * 
  * import cython
  * import numpy as np             # <<<<<<<<<<<<<<
  * 
  * cimport numpy as np
  */
-  __pyx_t_1 = __Pyx_Import(__pyx_n_s_numpy, 0, -1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 10, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_Import(__pyx_n_s_numpy, 0, -1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 9, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_np, __pyx_t_1) < 0) __PYX_ERR(0, 10, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_np, __pyx_t_1) < 0) __PYX_ERR(0, 9, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "models/fieldembed_core.pyx":20
+  /* "models/fieldembed_core.pyx":19
  * 
  * # scipy <= 0.15
  * try:             # <<<<<<<<<<<<<<
@@ -8734,28 +13077,28 @@ if (!__Pyx_RefNanny) {
     __Pyx_XGOTREF(__pyx_t_4);
     /*try:*/ {
 
-      /* "models/fieldembed_core.pyx":21
+      /* "models/fieldembed_core.pyx":20
  * # scipy <= 0.15
  * try:
  *     from scipy.linalg.blas import fblas             # <<<<<<<<<<<<<<
  * except ImportError:
  *     # in scipy > 0.15, fblas function has been removed
  */
-      __pyx_t_1 = PyList_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 21, __pyx_L2_error)
+      __pyx_t_1 = PyList_New(1); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 20, __pyx_L2_error)
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_INCREF(__pyx_n_s_fblas);
       __Pyx_GIVEREF(__pyx_n_s_fblas);
       PyList_SET_ITEM(__pyx_t_1, 0, __pyx_n_s_fblas);
-      __pyx_t_5 = __Pyx_Import(__pyx_n_s_scipy_linalg_blas, __pyx_t_1, -1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 21, __pyx_L2_error)
+      __pyx_t_5 = __Pyx_Import(__pyx_n_s_scipy_linalg_blas, __pyx_t_1, -1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 20, __pyx_L2_error)
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-      __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_5, __pyx_n_s_fblas); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 21, __pyx_L2_error)
+      __pyx_t_1 = __Pyx_ImportFrom(__pyx_t_5, __pyx_n_s_fblas); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 20, __pyx_L2_error)
       __Pyx_GOTREF(__pyx_t_1);
-      if (PyDict_SetItem(__pyx_d, __pyx_n_s_fblas, __pyx_t_1) < 0) __PYX_ERR(0, 21, __pyx_L2_error)
+      if (PyDict_SetItem(__pyx_d, __pyx_n_s_fblas, __pyx_t_1) < 0) __PYX_ERR(0, 20, __pyx_L2_error)
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-      /* "models/fieldembed_core.pyx":20
+      /* "models/fieldembed_core.pyx":19
  * 
  * # scipy <= 0.15
  * try:             # <<<<<<<<<<<<<<
@@ -8771,7 +13114,7 @@ if (!__Pyx_RefNanny) {
     __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
     __Pyx_XDECREF(__pyx_t_5); __pyx_t_5 = 0;
 
-    /* "models/fieldembed_core.pyx":22
+    /* "models/fieldembed_core.pyx":21
  * try:
  *     from scipy.linalg.blas import fblas
  * except ImportError:             # <<<<<<<<<<<<<<
@@ -8781,27 +13124,27 @@ if (!__Pyx_RefNanny) {
     __pyx_t_6 = __Pyx_PyErr_ExceptionMatches(__pyx_builtin_ImportError);
     if (__pyx_t_6) {
       __Pyx_AddTraceback("models.fieldembed_core", __pyx_clineno, __pyx_lineno, __pyx_filename);
-      if (__Pyx_GetException(&__pyx_t_5, &__pyx_t_1, &__pyx_t_7) < 0) __PYX_ERR(0, 22, __pyx_L4_except_error)
+      if (__Pyx_GetException(&__pyx_t_5, &__pyx_t_1, &__pyx_t_7) < 0) __PYX_ERR(0, 21, __pyx_L4_except_error)
       __Pyx_GOTREF(__pyx_t_5);
       __Pyx_GOTREF(__pyx_t_1);
       __Pyx_GOTREF(__pyx_t_7);
 
-      /* "models/fieldembed_core.pyx":24
+      /* "models/fieldembed_core.pyx":23
  * except ImportError:
  *     # in scipy > 0.15, fblas function has been removed
  *     import scipy.linalg.blas as fblas             # <<<<<<<<<<<<<<
  * 
  * REAL = np.float32
  */
-      __pyx_t_8 = PyList_New(1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 24, __pyx_L4_except_error)
+      __pyx_t_8 = PyList_New(1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 23, __pyx_L4_except_error)
       __Pyx_GOTREF(__pyx_t_8);
-      __Pyx_INCREF(__pyx_n_s__12);
-      __Pyx_GIVEREF(__pyx_n_s__12);
-      PyList_SET_ITEM(__pyx_t_8, 0, __pyx_n_s__12);
-      __pyx_t_9 = __Pyx_Import(__pyx_n_s_scipy_linalg_blas, __pyx_t_8, -1); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 24, __pyx_L4_except_error)
+      __Pyx_INCREF(__pyx_n_s__15);
+      __Pyx_GIVEREF(__pyx_n_s__15);
+      PyList_SET_ITEM(__pyx_t_8, 0, __pyx_n_s__15);
+      __pyx_t_9 = __Pyx_Import(__pyx_n_s_scipy_linalg_blas, __pyx_t_8, -1); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 23, __pyx_L4_except_error)
       __Pyx_GOTREF(__pyx_t_9);
       __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-      if (PyDict_SetItem(__pyx_d, __pyx_n_s_fblas, __pyx_t_9) < 0) __PYX_ERR(0, 24, __pyx_L4_except_error)
+      if (PyDict_SetItem(__pyx_d, __pyx_n_s_fblas, __pyx_t_9) < 0) __PYX_ERR(0, 23, __pyx_L4_except_error)
       __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
       __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
@@ -8811,7 +13154,7 @@ if (!__Pyx_RefNanny) {
     goto __pyx_L4_except_error;
     __pyx_L4_except_error:;
 
-    /* "models/fieldembed_core.pyx":20
+    /* "models/fieldembed_core.pyx":19
  * 
  * # scipy <= 0.15
  * try:             # <<<<<<<<<<<<<<
@@ -8831,63 +13174,81 @@ if (!__Pyx_RefNanny) {
     __pyx_L7_try_end:;
   }
 
-  /* "models/fieldembed_core.pyx":26
+  /* "models/fieldembed_core.pyx":25
  *     import scipy.linalg.blas as fblas
  * 
  * REAL = np.float32             # <<<<<<<<<<<<<<
  * 
  * DEF MAX_SENTENCE_LEN = 10000
  */
-  __pyx_t_7 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 26, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 25, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_float32); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 26, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_float32); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 25, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_REAL, __pyx_t_1) < 0) __PYX_ERR(0, 26, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_REAL, __pyx_t_1) < 0) __PYX_ERR(0, 25, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "models/fieldembed_core.pyx":30
+  /* "models/fieldembed_core.pyx":29
  * DEF MAX_SENTENCE_LEN = 10000
  * 
  * cdef scopy_ptr scopy=<scopy_ptr>PyCObject_AsVoidPtr(fblas.scopy._cpointer)  # y = x             # <<<<<<<<<<<<<<
  * cdef saxpy_ptr saxpy=<saxpy_ptr>PyCObject_AsVoidPtr(fblas.saxpy._cpointer)  # y += alpha * x
- * cdef sdot_ptr  sdot =<sdot_ptr> PyCObject_AsVoidPtr(fblas.sdot._cpointer)  # float = dot(x, y)
+ * cdef sdot_ptr  sdot =<sdot_ptr> PyCObject_AsVoidPtr(fblas.sdot._cpointer)   # float = dot(x, y)
  */
-  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_fblas); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 30, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_fblas); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 29, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_scopy); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 30, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_scopy); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 29, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_cpointer); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 30, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_cpointer); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 29, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   __pyx_v_6models_15fieldembed_core_scopy = ((__pyx_t_6models_15fieldembed_core_scopy_ptr)PyCObject_AsVoidPtr(__pyx_t_1));
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "models/fieldembed_core.pyx":31
+  /* "models/fieldembed_core.pyx":30
  * 
  * cdef scopy_ptr scopy=<scopy_ptr>PyCObject_AsVoidPtr(fblas.scopy._cpointer)  # y = x
  * cdef saxpy_ptr saxpy=<saxpy_ptr>PyCObject_AsVoidPtr(fblas.saxpy._cpointer)  # y += alpha * x             # <<<<<<<<<<<<<<
- * cdef sdot_ptr  sdot =<sdot_ptr> PyCObject_AsVoidPtr(fblas.sdot._cpointer)  # float = dot(x, y)
- * cdef dsdot_ptr dsdot=<dsdot_ptr>PyCObject_AsVoidPtr(fblas.sdot._cpointer)  # double = dot(x, y)
+ * cdef sdot_ptr  sdot =<sdot_ptr> PyCObject_AsVoidPtr(fblas.sdot._cpointer)   # float = dot(x, y)
+ * cdef dsdot_ptr dsdot=<dsdot_ptr>PyCObject_AsVoidPtr(fblas.sdot._cpointer)   # double = dot(x, y)
  */
-  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_fblas); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 31, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_fblas); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 30, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_saxpy); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 31, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_saxpy); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 30, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_cpointer); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 31, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_cpointer); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 30, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   __pyx_v_6models_15fieldembed_core_saxpy = ((__pyx_t_6models_15fieldembed_core_saxpy_ptr)PyCObject_AsVoidPtr(__pyx_t_1));
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "models/fieldembed_core.pyx":32
+  /* "models/fieldembed_core.pyx":31
  * cdef scopy_ptr scopy=<scopy_ptr>PyCObject_AsVoidPtr(fblas.scopy._cpointer)  # y = x
  * cdef saxpy_ptr saxpy=<saxpy_ptr>PyCObject_AsVoidPtr(fblas.saxpy._cpointer)  # y += alpha * x
- * cdef sdot_ptr  sdot =<sdot_ptr> PyCObject_AsVoidPtr(fblas.sdot._cpointer)  # float = dot(x, y)             # <<<<<<<<<<<<<<
- * cdef dsdot_ptr dsdot=<dsdot_ptr>PyCObject_AsVoidPtr(fblas.sdot._cpointer)  # double = dot(x, y)
+ * cdef sdot_ptr  sdot =<sdot_ptr> PyCObject_AsVoidPtr(fblas.sdot._cpointer)   # float = dot(x, y)             # <<<<<<<<<<<<<<
+ * cdef dsdot_ptr dsdot=<dsdot_ptr>PyCObject_AsVoidPtr(fblas.sdot._cpointer)   # double = dot(x, y)
  * cdef snrm2_ptr snrm2=<snrm2_ptr>PyCObject_AsVoidPtr(fblas.snrm2._cpointer)  # sqrt(x^2)
+ */
+  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_fblas); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 31, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_sdot); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 31, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_7);
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_cpointer); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 31, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  __pyx_v_6models_15fieldembed_core_sdot = ((__pyx_t_6models_15fieldembed_core_sdot_ptr)PyCObject_AsVoidPtr(__pyx_t_1));
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "models/fieldembed_core.pyx":32
+ * cdef saxpy_ptr saxpy=<saxpy_ptr>PyCObject_AsVoidPtr(fblas.saxpy._cpointer)  # y += alpha * x
+ * cdef sdot_ptr  sdot =<sdot_ptr> PyCObject_AsVoidPtr(fblas.sdot._cpointer)   # float = dot(x, y)
+ * cdef dsdot_ptr dsdot=<dsdot_ptr>PyCObject_AsVoidPtr(fblas.sdot._cpointer)   # double = dot(x, y)             # <<<<<<<<<<<<<<
+ * cdef snrm2_ptr snrm2=<snrm2_ptr>PyCObject_AsVoidPtr(fblas.snrm2._cpointer)  # sqrt(x^2)
+ * cdef sscal_ptr sscal=<sscal_ptr>PyCObject_AsVoidPtr(fblas.sscal._cpointer)  # x = alpha * x
  */
   __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_fblas); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 32, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
@@ -8897,64 +13258,46 @@ if (!__Pyx_RefNanny) {
   __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_cpointer); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 32, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __pyx_v_6models_15fieldembed_core_sdot = ((__pyx_t_6models_15fieldembed_core_sdot_ptr)PyCObject_AsVoidPtr(__pyx_t_1));
+  __pyx_v_6models_15fieldembed_core_dsdot = ((__pyx_t_6models_15fieldembed_core_dsdot_ptr)PyCObject_AsVoidPtr(__pyx_t_1));
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "models/fieldembed_core.pyx":33
- * cdef saxpy_ptr saxpy=<saxpy_ptr>PyCObject_AsVoidPtr(fblas.saxpy._cpointer)  # y += alpha * x
- * cdef sdot_ptr  sdot =<sdot_ptr> PyCObject_AsVoidPtr(fblas.sdot._cpointer)  # float = dot(x, y)
- * cdef dsdot_ptr dsdot=<dsdot_ptr>PyCObject_AsVoidPtr(fblas.sdot._cpointer)  # double = dot(x, y)             # <<<<<<<<<<<<<<
- * cdef snrm2_ptr snrm2=<snrm2_ptr>PyCObject_AsVoidPtr(fblas.snrm2._cpointer)  # sqrt(x^2)
- * cdef sscal_ptr sscal=<sscal_ptr>PyCObject_AsVoidPtr(fblas.sscal._cpointer) # x = alpha * x
+ * cdef sdot_ptr  sdot =<sdot_ptr> PyCObject_AsVoidPtr(fblas.sdot._cpointer)   # float = dot(x, y)
+ * cdef dsdot_ptr dsdot=<dsdot_ptr>PyCObject_AsVoidPtr(fblas.sdot._cpointer)   # double = dot(x, y)
+ * cdef snrm2_ptr snrm2=<snrm2_ptr>PyCObject_AsVoidPtr(fblas.snrm2._cpointer)  # sqrt(x^2)             # <<<<<<<<<<<<<<
+ * cdef sscal_ptr sscal=<sscal_ptr>PyCObject_AsVoidPtr(fblas.sscal._cpointer)  # x = alpha * x
+ * 
  */
   __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_fblas); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 33, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_sdot); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 33, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_snrm2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 33, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_cpointer); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 33, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __pyx_v_6models_15fieldembed_core_dsdot = ((__pyx_t_6models_15fieldembed_core_dsdot_ptr)PyCObject_AsVoidPtr(__pyx_t_1));
+  __pyx_v_6models_15fieldembed_core_snrm2 = ((__pyx_t_6models_15fieldembed_core_snrm2_ptr)PyCObject_AsVoidPtr(__pyx_t_1));
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "models/fieldembed_core.pyx":34
- * cdef sdot_ptr  sdot =<sdot_ptr> PyCObject_AsVoidPtr(fblas.sdot._cpointer)  # float = dot(x, y)
- * cdef dsdot_ptr dsdot=<dsdot_ptr>PyCObject_AsVoidPtr(fblas.sdot._cpointer)  # double = dot(x, y)
- * cdef snrm2_ptr snrm2=<snrm2_ptr>PyCObject_AsVoidPtr(fblas.snrm2._cpointer)  # sqrt(x^2)             # <<<<<<<<<<<<<<
- * cdef sscal_ptr sscal=<sscal_ptr>PyCObject_AsVoidPtr(fblas.sscal._cpointer) # x = alpha * x
+ * cdef dsdot_ptr dsdot=<dsdot_ptr>PyCObject_AsVoidPtr(fblas.sdot._cpointer)   # double = dot(x, y)
+ * cdef snrm2_ptr snrm2=<snrm2_ptr>PyCObject_AsVoidPtr(fblas.snrm2._cpointer)  # sqrt(x^2)
+ * cdef sscal_ptr sscal=<sscal_ptr>PyCObject_AsVoidPtr(fblas.sscal._cpointer)  # x = alpha * x             # <<<<<<<<<<<<<<
  * 
+ * DEF EXP_TABLE_SIZE = 1000
  */
   __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_fblas); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 34, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_snrm2); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 34, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_sscal); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 34, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_cpointer); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 34, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
-  __pyx_v_6models_15fieldembed_core_snrm2 = ((__pyx_t_6models_15fieldembed_core_snrm2_ptr)PyCObject_AsVoidPtr(__pyx_t_1));
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-
-  /* "models/fieldembed_core.pyx":35
- * cdef dsdot_ptr dsdot=<dsdot_ptr>PyCObject_AsVoidPtr(fblas.sdot._cpointer)  # double = dot(x, y)
- * cdef snrm2_ptr snrm2=<snrm2_ptr>PyCObject_AsVoidPtr(fblas.snrm2._cpointer)  # sqrt(x^2)
- * cdef sscal_ptr sscal=<sscal_ptr>PyCObject_AsVoidPtr(fblas.sscal._cpointer) # x = alpha * x             # <<<<<<<<<<<<<<
- * 
- * DEF EXP_TABLE_SIZE = 1000
- */
-  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_fblas); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 35, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_sscal); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 35, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_7);
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_t_1 = __Pyx_PyObject_GetAttrStr(__pyx_t_7, __pyx_n_s_cpointer); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 35, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
   __pyx_v_6models_15fieldembed_core_sscal = ((__pyx_t_6models_15fieldembed_core_sscal_ptr)PyCObject_AsVoidPtr(__pyx_t_1));
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "models/fieldembed_core.pyx":43
+  /* "models/fieldembed_core.pyx":42
  * cdef REAL_t[EXP_TABLE_SIZE] LOG_TABLE
  * 
  * cdef int ONE = 1             # <<<<<<<<<<<<<<
@@ -8963,7 +13306,7 @@ if (!__Pyx_RefNanny) {
  */
   __pyx_v_6models_15fieldembed_core_ONE = 1;
 
-  /* "models/fieldembed_core.pyx":44
+  /* "models/fieldembed_core.pyx":43
  * 
  * cdef int ONE = 1
  * cdef REAL_t ONEF = <REAL_t>1.0             # <<<<<<<<<<<<<<
@@ -8972,7 +13315,7 @@ if (!__Pyx_RefNanny) {
  */
   __pyx_v_6models_15fieldembed_core_ONEF = ((__pyx_t_6models_15fieldembed_core_REAL_t)1.0);
 
-  /* "models/fieldembed_core.pyx":91
+  /* "models/fieldembed_core.pyx":88
  * 
  * 
  * cdef int SUBSAMPLING = 1             # <<<<<<<<<<<<<<
@@ -8981,50 +13324,62 @@ if (!__Pyx_RefNanny) {
  */
   __pyx_v_6models_15fieldembed_core_SUBSAMPLING = 1;
 
-  /* "models/fieldembed_core.pyx":378
+  /* "models/fieldembed_core.pyx":364
  *     return next_random
  * 
  * def train_batch_fieldembed_0X1_neat(model, indexes, sentence_idx, alpha, _work, _neu1, compute_loss, subsampling = 1):             # <<<<<<<<<<<<<<
  * 
  *     cdef Word2VecConfig c
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_6models_15fieldembed_core_1train_batch_fieldembed_0X1_neat, NULL, __pyx_n_s_models_fieldembed_core); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 378, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_6models_15fieldembed_core_1train_batch_fieldembed_0X1_neat, NULL, __pyx_n_s_models_fieldembed_core); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 364, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_train_batch_fieldembed_0X1_neat, __pyx_t_1) < 0) __PYX_ERR(0, 378, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_train_batch_fieldembed_0X1_neat, __pyx_t_1) < 0) __PYX_ERR(0, 364, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "models/fieldembed_core.pyx":484
- * ##############################################
+  /* "models/fieldembed_core.pyx":873
+ *     return next_random
+ * 
+ * def train_batch_fieldembed_negsamp(             # <<<<<<<<<<<<<<
+ *     model,
+ *     # make sure the length of indexes are less than MAX_SENTENCE_LEN
+ */
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_6models_15fieldembed_core_3train_batch_fieldembed_negsamp, NULL, __pyx_n_s_models_fieldembed_core); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 873, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_train_batch_fieldembed_negsamp, __pyx_t_1) < 0) __PYX_ERR(0, 873, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "models/fieldembed_core.pyx":1005
+ *     return effective_words
  * 
  * def init():             # <<<<<<<<<<<<<<
  *     """Precompute function `sigmoid(x) = 1 / (1 + exp(-x))`, for x values discretized into table EXP_TABLE.
  *      Also calculate log(sigmoid(x)) into LOG_TABLE.
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_6models_15fieldembed_core_3init, NULL, __pyx_n_s_models_fieldembed_core); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 484, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_6models_15fieldembed_core_5init, NULL, __pyx_n_s_models_fieldembed_core); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1005, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_init, __pyx_t_1) < 0) __PYX_ERR(0, 484, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_init, __pyx_t_1) < 0) __PYX_ERR(0, 1005, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "models/fieldembed_core.pyx":533
+  /* "models/fieldembed_core.pyx":1054
  *         return 2
  * 
  * FAST_VERSION = init()  # initialize the module             # <<<<<<<<<<<<<<
  * MAX_WORDS_IN_BATCH = MAX_SENTENCE_LEN
  */
-  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_init); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 533, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_init); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 1054, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_7 = __Pyx_PyObject_CallNoArg(__pyx_t_1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 533, __pyx_L1_error)
+  __pyx_t_7 = __Pyx_PyObject_CallNoArg(__pyx_t_1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 1054, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_FAST_VERSION, __pyx_t_7) < 0) __PYX_ERR(0, 533, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_FAST_VERSION, __pyx_t_7) < 0) __PYX_ERR(0, 1054, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
 
-  /* "models/fieldembed_core.pyx":534
+  /* "models/fieldembed_core.pyx":1055
  * 
  * FAST_VERSION = init()  # initialize the module
  * MAX_WORDS_IN_BATCH = MAX_SENTENCE_LEN             # <<<<<<<<<<<<<<
  */
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_MAX_WORDS_IN_BATCH, __pyx_int_10000) < 0) __PYX_ERR(0, 534, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_MAX_WORDS_IN_BATCH, __pyx_int_10000) < 0) __PYX_ERR(0, 1055, __pyx_L1_error)
 
   /* "models/fieldembed_core.pyx":1
  * #!/usr/bin/env cython             # <<<<<<<<<<<<<<
@@ -9634,8 +13989,35 @@ static CYTHON_INLINE int __Pyx_PyObject_SetAttrStr(PyObject* obj, PyObject* attr
 }
 #endif
 
+/* GetModuleGlobalName */
+static CYTHON_INLINE PyObject *__Pyx_GetModuleGlobalName(PyObject *name) {
+    PyObject *result;
+#if !CYTHON_AVOID_BORROWED_REFS
+#if CYTHON_COMPILING_IN_CPYTHON && PY_VERSION_HEX >= 0x030500A1
+    result = _PyDict_GetItem_KnownHash(__pyx_d, name, ((PyASCIIObject *) name)->hash);
+    if (likely(result)) {
+        Py_INCREF(result);
+    } else if (unlikely(PyErr_Occurred())) {
+        result = NULL;
+    } else {
+#else
+    result = PyDict_GetItem(__pyx_d, name);
+    if (likely(result)) {
+        Py_INCREF(result);
+    } else {
+#endif
+#else
+    result = PyObject_GetItem(__pyx_d, name);
+    if (!result) {
+        PyErr_Clear();
+#endif
+        result = __Pyx_GetBuiltinName(name);
+    }
+    return result;
+}
+
 /* PyErrFetchRestore */
-#if CYTHON_FAST_THREAD_STATE
+    #if CYTHON_FAST_THREAD_STATE
 static CYTHON_INLINE void __Pyx_ErrRestoreInState(PyThreadState *tstate, PyObject *type, PyObject *value, PyObject *tb) {
     PyObject *tmp_type, *tmp_value, *tmp_tb;
     tmp_type = tstate->curexc_type;
@@ -9659,7 +14041,7 @@ static CYTHON_INLINE void __Pyx_ErrFetchInState(PyThreadState *tstate, PyObject 
 #endif
 
 /* RaiseException */
-#if PY_MAJOR_VERSION < 3
+    #if PY_MAJOR_VERSION < 3
 static void __Pyx_Raise(PyObject *type, PyObject *value, PyObject *tb,
                         CYTHON_UNUSED PyObject *cause) {
     __Pyx_PyThreadState_declare
@@ -9818,7 +14200,7 @@ bad:
 #endif
 
 /* PyObjectCallMethO */
-#if CYTHON_COMPILING_IN_CPYTHON
+    #if CYTHON_COMPILING_IN_CPYTHON
 static CYTHON_INLINE PyObject* __Pyx_PyObject_CallMethO(PyObject *func, PyObject *arg) {
     PyObject *self, *result;
     PyCFunction cfunc;
@@ -9838,7 +14220,7 @@ static CYTHON_INLINE PyObject* __Pyx_PyObject_CallMethO(PyObject *func, PyObject
 #endif
 
 /* PyObjectCallOneArg */
-#if CYTHON_COMPILING_IN_CPYTHON
+    #if CYTHON_COMPILING_IN_CPYTHON
 static PyObject* __Pyx__PyObject_CallOneArg(PyObject *func, PyObject *arg) {
     PyObject *result;
     PyObject *args = PyTuple_New(1);
@@ -9878,7 +14260,7 @@ static CYTHON_INLINE PyObject* __Pyx_PyObject_CallOneArg(PyObject *func, PyObjec
 #endif
 
 /* DictGetItem */
-#if PY_MAJOR_VERSION >= 3 && !CYTHON_COMPILING_IN_PYPY
+    #if PY_MAJOR_VERSION >= 3 && !CYTHON_COMPILING_IN_PYPY
 static PyObject *__Pyx_PyDict_GetItem(PyObject *d, PyObject* key) {
     PyObject *value;
     value = PyDict_GetItemWithError(d, key);
@@ -9897,25 +14279,25 @@ static PyObject *__Pyx_PyDict_GetItem(PyObject *d, PyObject* key) {
 #endif
 
 /* RaiseTooManyValuesToUnpack */
-static CYTHON_INLINE void __Pyx_RaiseTooManyValuesError(Py_ssize_t expected) {
+    static CYTHON_INLINE void __Pyx_RaiseTooManyValuesError(Py_ssize_t expected) {
     PyErr_Format(PyExc_ValueError,
                  "too many values to unpack (expected %" CYTHON_FORMAT_SSIZE_T "d)", expected);
 }
 
 /* RaiseNeedMoreValuesToUnpack */
-static CYTHON_INLINE void __Pyx_RaiseNeedMoreValuesError(Py_ssize_t index) {
+    static CYTHON_INLINE void __Pyx_RaiseNeedMoreValuesError(Py_ssize_t index) {
     PyErr_Format(PyExc_ValueError,
                  "need more than %" CYTHON_FORMAT_SSIZE_T "d value%.1s to unpack",
                  index, (index == 1) ? "" : "s");
 }
 
 /* RaiseNoneIterError */
-static CYTHON_INLINE void __Pyx_RaiseNoneNotIterableError(void) {
+    static CYTHON_INLINE void __Pyx_RaiseNoneNotIterableError(void) {
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not iterable");
 }
 
 /* SaveResetException */
-#if CYTHON_FAST_THREAD_STATE
+    #if CYTHON_FAST_THREAD_STATE
 static CYTHON_INLINE void __Pyx__ExceptionSave(PyThreadState *tstate, PyObject **type, PyObject **value, PyObject **tb) {
     #if PY_VERSION_HEX >= 0x030700A3
     *type = tstate->exc_state.exc_type;
@@ -9954,7 +14336,7 @@ static CYTHON_INLINE void __Pyx__ExceptionReset(PyThreadState *tstate, PyObject 
 #endif
 
 /* PyErrExceptionMatches */
-#if CYTHON_FAST_THREAD_STATE
+    #if CYTHON_FAST_THREAD_STATE
 static int __Pyx_PyErr_ExceptionMatchesTuple(PyObject *exc_type, PyObject *tuple) {
     Py_ssize_t i, n;
     n = PyTuple_GET_SIZE(tuple);
@@ -9979,7 +14361,7 @@ static CYTHON_INLINE int __Pyx_PyErr_ExceptionMatchesInState(PyThreadState* tsta
 #endif
 
 /* GetException */
-#if CYTHON_FAST_THREAD_STATE
+    #if CYTHON_FAST_THREAD_STATE
 static int __Pyx__GetException(PyThreadState *tstate, PyObject **type, PyObject **value, PyObject **tb) {
 #else
 static int __Pyx_GetException(PyObject **type, PyObject **value, PyObject **tb) {
@@ -10049,7 +14431,7 @@ bad:
 }
 
 /* Import */
-  static PyObject *__Pyx_Import(PyObject *name, PyObject *from_list, int level) {
+      static PyObject *__Pyx_Import(PyObject *name, PyObject *from_list, int level) {
     PyObject *empty_list = 0;
     PyObject *module = 0;
     PyObject *global_dict = 0;
@@ -10114,7 +14496,7 @@ bad:
 }
 
 /* ImportFrom */
-  static PyObject* __Pyx_ImportFrom(PyObject* module, PyObject* name) {
+      static PyObject* __Pyx_ImportFrom(PyObject* module, PyObject* name) {
     PyObject* value = __Pyx_PyObject_GetAttrStr(module, name);
     if (unlikely(!value) && PyErr_ExceptionMatches(PyExc_AttributeError)) {
         PyErr_Format(PyExc_ImportError,
@@ -10125,33 +14507,6 @@ bad:
         #endif
     }
     return value;
-}
-
-/* GetModuleGlobalName */
-  static CYTHON_INLINE PyObject *__Pyx_GetModuleGlobalName(PyObject *name) {
-    PyObject *result;
-#if !CYTHON_AVOID_BORROWED_REFS
-#if CYTHON_COMPILING_IN_CPYTHON && PY_VERSION_HEX >= 0x030500A1
-    result = _PyDict_GetItem_KnownHash(__pyx_d, name, ((PyASCIIObject *) name)->hash);
-    if (likely(result)) {
-        Py_INCREF(result);
-    } else if (unlikely(PyErr_Occurred())) {
-        result = NULL;
-    } else {
-#else
-    result = PyDict_GetItem(__pyx_d, name);
-    if (likely(result)) {
-        Py_INCREF(result);
-    } else {
-#endif
-#else
-    result = PyObject_GetItem(__pyx_d, name);
-    if (!result) {
-        PyErr_Clear();
-#endif
-        result = __Pyx_GetBuiltinName(name);
-    }
-    return result;
 }
 
 /* PyObjectCallNoArg */

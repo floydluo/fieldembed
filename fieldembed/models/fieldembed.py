@@ -28,27 +28,21 @@ from ..utils import deprecated
 from ..utils import keep_vocab_item, call_on_class_only
 from .keyedvectors import Vocab, Word2VecKeyedVectors
 from .fieldembed_core import train_batch_fieldembed_0X1_neat
+from .fieldembed_core import train_batch_fieldembed_negsamp
 
 logger = logging.getLogger(__name__)
 
-Field_Info = {
-    #field: [head-subfield, subfield, subfield]
-    'token':['token', 'char', 'subcomp', 'stroke', 'pinyin'],
-    'pos'  :['pos'],
-    'ner'  :['ner'],
-}
+MAX_WORDS_IN_BATCH = 10000
 
-Field_Idx = {
-    #field: [head-subfield, subfield, subfield]
-    'token':0,
-    'pos'  :1,
-    'ner'  :2,
+FIELD_INFO = {
+    'sub':  ['char', 'subcomp', 'stroke', 'pinyin'],
+    'head': ['token'],
+    'hyper':['pos', 'ner']
 }
-
 
 class FieldEmbedding(utils.SaveLoad):
 
-    def __init__(self, nlptext = None, Field_Settings = {}, mode = 'sg_nlptext', sg=0, use_merger = 0, 
+    def __init__(self, nlptext = None, Field_Settings = {},  train = True, mode = 'sg_nlptext', sg=0, use_merger = 0, 
         neg_init = 0, standard_grad = 1, size=100, alpha=0.025, window=5, sample=1e-3, seed=1, workers=3, 
         min_alpha=0.0001,negative=5, ns_exponent=0.75, cbow_mean=1, hashfxn=hash, iter=5,
         batch_words=MAX_WORDS_IN_BATCH, compute_loss=False, callbacks=()):
@@ -70,12 +64,14 @@ class FieldEmbedding(utils.SaveLoad):
         self.trainables = FieldEmbedTrainables(seed=seed, vector_size=size, hashfxn=hashfxn)
 
         self.weights = {}
-        self.field_info = {}
-        self.field_idx  = {}
-
-        self.field_sub  = []
         self.field_head = []
+        self.field_sub  = []
         self.field_hyper= []
+        self.use_head = 0
+        self.use_sub  = 0
+        self.use_hyper= 0
+
+        vector_size = size
         
         if vector_size % 4 != 0:
             logger.warning("consider setting layer size to a multiple of 4 for greater performance")
@@ -84,8 +80,6 @@ class FieldEmbedding(utils.SaveLoad):
         self.random = random.RandomState(seed) # random = seed
         
         self.sg = int(sg)
-
-        # self.hs = int(hs) # should be removed
         self.negative = int(negative)
 
         self.ns_exponent = ns_exponent
@@ -103,7 +97,7 @@ class FieldEmbedding(utils.SaveLoad):
 
         self.vector_size = int(vector_size)
         self.workers = int(workers)
-        self.epochs = epochs
+        self.epochs = iter
         self.train_count = 0
         self.total_train_time = 0
         self.batch_words = batch_words
@@ -112,15 +106,19 @@ class FieldEmbedding(utils.SaveLoad):
 
         self.build_vocab(nlptext = nlptext)
         
-        print('\n\n======== Training Start ....'); s = datetime.now()
-        self.train(nlptext = nlptext, total_examples=self.corpus_count,
-            total_words=self.corpus_total_words, epochs=self.epochs, 
-            start_alpha=self.alpha, end_alpha=self.min_alpha, compute_loss=compute_loss)
-        print('======== Training End ......'); e = datetime.now()
-        print('======== Total Time: ', e - s)
+        print('finish build vocab')
+        if train:
+            print('\n\n======== Training Start ....'); s = datetime.now()
+            self.train(nlptext = nlptext, total_examples=self.corpus_count,
+                total_words=self.corpus_total_words, epochs=self.epochs, 
+                start_alpha=self.alpha, end_alpha=self.min_alpha, compute_loss=compute_loss)
+            print('======== Training End ......'); e = datetime.now()
+            print('======== Total Time: ', e - s)
 
     ################################################################################################################################################### build_vocab
     def build_vocab(self, nlptext = None, **kwargs):
+        print('-------> Prepare Field Info....')
+        self.prepare_field_info(nlptext)
         # scan_vocab and prepare_vocab
         # build .wv.vocab + .wv.index2word + .wv.cum_table
         update = False
@@ -132,11 +130,6 @@ class FieldEmbedding(utils.SaveLoad):
                                                                     self.negative, update = update, **kwargs) 
         self.corpus_count = corpus_count
         self.corpus_total_words = total_words
-
-        print('-------> Prepare Field Info....')
-
-        self.prepare_field_info(nlptext)
-        
         # self.create_field_embedding(size = self.size, )
         report_values['memory'] = self.estimate_memory(vocab_size=report_values['num_retained_words'])
 
@@ -149,109 +142,47 @@ class FieldEmbedding(utils.SaveLoad):
     def prepare_field_info(self, nlptext):
 
         if len(self.Field_Settings) == 0:
-            # CASE 1: no Field_Settings are provided!
-            # Only use token itself.
-            self.field_idx ['token']  = len(self.field_idx)
-            self.field_info['token'] = ['token']
-            self.field_head.append([])
-            self.field_head[self.field_idx['token']] = [1, self.wv] # CB-010 / SG-010
-            self.field_sub.append([])
-            self.field_sub [self.field_idx['token']]  = []
-            self.use_head = 1
-            self.use_sub  = 0
-            self.proj_num = self.use_head +  self.use_sub
+            # case 1: no Field_Settings are provided, and only use token itself
+            self.field_head.append([self.wv])
             self.weights['token'] = self.wv 
 
         else:
             for channel, f_setting in self.Field_Settings.items():
-                # Field_Settings is nlptext's Channel_Settings
-                if channel in Field_Info:
-
-                    hyper_field = channel
-                    LGU, DGU  = nlptext.getGrainUnique(hyper_field, tagScheme = 'BIOES') # A LESSION 
-
-                    wv = self.create_field_embedding(self.vector_size, hyper_field, LGU, DGU)
-                    self.weights[hyper_field] = wv
-                    
-                    if hyper_field in self.field_info:
-                        self.field_info[channel].append(channel)
-                    else:
-                        self.field_info[channel] = [channel]
-
-                    if hyper_field not in self.field_idx:
-                        self.field_idx[hyper_field]  = len(self.field_idx)
-
-                    if self.field_idx[hyper_field] == len(self.field_head):
-                        self.field_head.append([1, wv])
-                    elif self.field_idx[hyper_field] < len(self.field_head):
-                        self.field_head[self.field_idx[hyper_field]] = [1, wv]
-                    else:
-                        prnt('Error in field ')
-
-                    if self.field_idx[hyper_field] == len(self.field_sub):
-                        self.field_sub.append([])
-                        self.field_sub[self.field_idx[channel]] = []
-
-                else:
-                    # when the channls are the sub fields
+                if channel == 'token':
+                    self.field_head.append([self.wv])
+                    self.weights['token'] = self.wv 
+                elif channel in FIELD_INFO['sub']:
+                    # when the channel is a sub-field
                     data = self.get_subfield_info(nlptext, channel, **f_setting) 
                     GU, LookUp, EndIdx, Leng_Inv, Leng_max, TU, LKP = data
                     LGU, DGU = GU
                     wv = self.create_field_embedding(self.vector_size, channel, LGU, DGU)
-                    self.weights[channel] = wv
                     LTU, DTU = TU
-                    # set different attributes
-                    wv.LookUp  = LookUp
-                    wv.EndIdx  = EndIdx
-                    wv.Leng_Inv= Leng_Inv
-                    wv.Leng_max= Leng_max
                     wv.LTU = LTU
                     wv.DTU = DTU
                     wv.LKP = LKP
-                    
-                    for field, subFields in  Field_Info.items():
-                        if channel in subFields:
-                            ######## deal with the field first
-                            if field not in self.field_idx:
-                                self.field_idx[field]  = len(self.field_idx)
-                            
-                            if self.field_idx[field] == len(self.field_head):
-                                self.field_head.append([0, None])
-                            ######## deal with the field first
+                    self.field_sub.append([wv, LookUp, EndIdx, Leng_Inv])
+                    self.weights[channel] = wv
 
-                            if self.field_idx[field] == len(self.field_sub):
-                                self.field_sub.append([])
-                                self.field_sub[self.field_idx[field]] = [ [wv, LookUp, EndIdx, Leng_Inv, Leng_max] ]
-
-                            elif self.field_idx[field] < len(self.field_sub):
-                                self.field_sub[self.field_idx[field]].append([wv, LookUp, EndIdx, Leng_Inv, Leng_max])
-                            else:
-                                prnt('Error in subfield ')
-
-                            if field in self.field_info:
-                                self.field_info[field].append(channel)
-                            else:
-                                self.field_info[field] = [channel]
-                            break
+                elif channel in FIELD_INFO['hyper']:
+                    LGU, DGU  = nlptext.getGrainUnique(channel, tagScheme = 'BIOES') 
+                    wv = self.create_field_embedding(self.vector_size, channel, LGU, DGU)
+                    self.field_hyper.append([wv])
+                    self.weights[channel] = wv
             
-            self.use_head = sum([i[0] for i in self.field_head])
-            self.use_sub  = sum([len(i) for i in self.field_sub])
-            self.proj_num = self.use_head + self.use_sub
-        
-        pprint(self.field_idx)
-        pprint(self.field_info)
-        pprint(self.field_head)
-        pprint(self.field_sub)
-        for i, wv in self.weights.items():
-            print(i, wv.vectors.shape)
-        print('use_head:', self.use_head, 'use_sub:', self.use_sub)
+        self.use_head = len(self.field_head)
+        self.use_sub  = len(self.field_sub)
+        self.use_hyper= len(self.field_hyper)
+        self.proj_num = len(self.weights)
+        print('use_head:', self.use_head, 'use_sub:', self.use_sub, 'use_hyper:', self.use_hyper)
 
     def get_subfield_info(self, nlptext, field = 'char', Max_Ngram = 1, end_grain = False):
         GU = nlptext.getGrainUnique(field, Max_Ngram=Max_Ngram, end_grain=end_grain)
         LKP, TU = nlptext.getLookUp(field, Max_Ngram=Max_Ngram, end_grain=end_grain)
         charLeng = np.array([len(i) for i in LKP], dtype = np.uint32)
         charLeng_max = np.max(charLeng)
-        charEndIdx = np.cumsum(charLeng, dtype = np.uint32) # LESSION: ignoring the np.uint32 wastes me a lot of time
+        # LESSION: ignoring the np.uint32 wastes me a lot of time
+        charEndIdx = np.cumsum(charLeng, dtype = np.uint32) 
         charLookUp = np.array(list(itertools.chain.from_iterable(LKP)), dtype = np.uint32)
         charLeng_inv = 1 / charLeng
         charLeng_inv = charLeng_inv.astype(REAL)
@@ -279,10 +210,8 @@ class FieldEmbedding(utils.SaveLoad):
     def estimate_memory(self, vocab_size=None, report=None):
         vocab_size = vocab_size or len(self.wv.vocab)
         report = report or {}
-        report['vocab'] = vocab_size * (700 if self.hs else 500)
+        report['vocab'] = vocab_size * 500 
         report['vectors'] = vocab_size * self.vector_size * dtype(REAL).itemsize
-        # if self.hs:
-        #     report['syn1'] = vocab_size * self.trainables.layer1_size * dtype(REAL).itemsize
         if self.negative:
             report['syn1neg'] = vocab_size * self.trainables.layer1_size * dtype(REAL).itemsize
         report['total'] = sum(report.values())
@@ -382,9 +311,9 @@ class FieldEmbedding(utils.SaveLoad):
             raise ValueError("You must specify an explict epochs count. The usual value is epochs=model.epochs.")
         logger.info(
             "training model with %i workers on %i vocabulary and %i features, "
-            "using sg=%s hs=%s sample=%s negative=%s window=%s",
+            "using sg=%s sample=%s negative=%s window=%s",
             self.workers, len(self.wv.vocab), self.trainables.layer1_size, self.sg,
-            self.hs, self.vocabulary.sample, self.negative, self.window
+            self.vocabulary.sample, self.negative, self.window
         )
 
     ####################################################################################### 
@@ -394,7 +323,8 @@ class FieldEmbedding(utils.SaveLoad):
         tokens_vocidx    = nlptext.TOKEN['ORIGTokenIndex']
         print(len(tokens_vocidx))
         total_examples  =  len(sentences_endidx)
-        total_words     =  len(tokens_vocidx)           
+        total_words     =  len(tokens_vocidx)     
+        hyper_vocidx = []      
 
 
         print('Start getting batch infos')
@@ -420,7 +350,7 @@ class FieldEmbedding(utils.SaveLoad):
         logger.info('\n the total_examples is:' + str(total_examples) + '   , the total words is:' + str(total_words) + '\n')
         workers.append(threading.Thread(
             target=self._job_producer_nlptext,
-            args=(sentences_endidx, total_examples, tokens_vocidx, pos_vocidx, total_words, batch_end_st_idx_list, job_no, job_queue,), # data_iterable is sentences
+            args=(sentences_endidx, total_examples, tokens_vocidx, hyper_vocidx, total_words, batch_end_st_idx_list, job_no, job_queue,), # data_iterable is sentences
             kwargs={'cur_epoch': cur_epoch,}))
 
         for thread in workers:
@@ -433,7 +363,7 @@ class FieldEmbedding(utils.SaveLoad):
 
         return trained_word_count, raw_word_count, job_tally
 
-    def _job_producer_nlptext(self, sentences_endidx, total_examples, tokens_vocidx, pos_vocidx, 
+    def _job_producer_nlptext(self, sentences_endidx, total_examples, tokens_vocidx, hyper_vocidx, 
         total_words, batch_end_st_idx_list, job_no, job_queue, cur_epoch=0):
         #---------------------------------------------------# 
 
@@ -454,12 +384,14 @@ class FieldEmbedding(utils.SaveLoad):
             token_start = sentences_endidx[start-1] if start > 0 else 0
             token_end   = sentences_endidx[end  -1]
 
-            token_indexes  = tokens_vocidx[token_start:token_end] # dtype = np.uint32
-            if self.use_pos:
-                pos_indexes = pos_vocidx[token_start:token_end]
-                indexes = [token_indexes, pos_indexes]
+            indexes  = tokens_vocidx[token_start:token_end] # dtype = np.uint32
+            if self.use_hyper:
+                hyper_indexes = [] 
+                for i in range(self.use_hyper):
+                    hyper_indexes.append(hyper_vocidx[i][token_start:token_end])
+                # indexes = [token_indexes, hyper_indexes]
             else:
-                indexes = token_indexes
+                hyper_indexes = []
             # sentence_idx= np.array([i-token_start for i in sentences_endidx[start: end]], dtype = np.uint32)
             sentence_idx= [i-token_start for i in sentences_endidx[start: end]]
             # print('The start and end sent loc_id:', start, end)
@@ -469,7 +401,7 @@ class FieldEmbedding(utils.SaveLoad):
             # TODO
             # print_sentence()
             # print(len(indexes))
-            job_queue.put((indexes,  sentence_idx, next_job_params))
+            job_queue.put((indexes, hyper_indexes, sentence_idx, next_job_params))
 
             pushed_examples += len(sentence_idx)
             epoch_progress = 1.0 * pushed_examples / total_examples
@@ -501,22 +433,22 @@ class FieldEmbedding(utils.SaveLoad):
         return next_alpha
 
     def _worker_loop_nlptext(self, job_queue, progress_queue, proj_num = 1):
-        thread_private_mem = self._get_thread_working_mem(proj_num = proj_num) 
-        merger_private_mem = self._get_thread_working_mem_for_meager()
+        inits = self._get_thread_working_mem(proj_num = proj_num) 
+        merger_mem = self._get_thread_working_mem_for_meager()
+        grad_mem = self._get_thread_grad_mem(proj_num = proj_num)
+
         jobs_processed = 0
         while True:
             job = job_queue.get()
             if job is None:
                 progress_queue.put(None)
                 break  # no more jobs => quit this worker
-            indexes, sentence_idx,  job_parameters = job 
+            indexes, hyper_indexes, sentence_idx, alpha = job 
 
             for callback in self.callbacks:
                 callback.on_batch_begin(self)
 
-            tally, raw_tally = self._do_train_job_nlptext(indexes, sentence_idx, job_parameters, 
-                                                          thread_private_mem, 
-                                                          merger_private_mem = merger_private_mem)
+            tally, raw_tally = self._do_train_job_nlptext(indexes, hyper_indexes, sentence_idx, alpha, inits, merger_mem, grad_mem)
             for callback in self.callbacks:
                 callback.on_batch_end(self)
 
@@ -525,18 +457,27 @@ class FieldEmbedding(utils.SaveLoad):
         logger.debug("o----> Worker exiting, processed %i jobs", jobs_processed)
 
     def _get_thread_working_mem(self, proj_num = 1):
-        return [matutils.zeros_aligned(self.trainables.layer1_size * proj_num, dtype=REAL) for i in range(2)]
+        return [matutils.zeros_aligned(self.vector_size * proj_num, dtype=REAL) for i in range(2)]
 
     def _get_thread_working_mem_for_meager(self):
-        work_m = matutils.zeros_aligned(self.trainables.layer1_size, dtype=REAL) 
-        neu_m  = matutils.zeros_aligned(self.trainables.layer1_size, dtype=REAL) 
+        work_m = matutils.zeros_aligned(self.vector_size, dtype=REAL) 
+        neu_m  = matutils.zeros_aligned(self.vector_size, dtype=REAL) 
         return work_m, neu_m
 
-    def _do_train_job_nlptext(self, indexes, sentence_idx, alpha, inits, merger_private_mem = None):
+    def _get_thread_grad_mem(self, proj_num = 1):
+        return matutils.zeros_aligned(self.proj_num, dtype=REAL) 
+
+    def _do_train_job_nlptext(self, indexes, hyper_indexes, sentence_idx, alpha, inits, merger_mem, grad_mem):
         tally = 0
         if self.mode == 'fieldembed_0X1_neat':
             work, neu1 = inits
             tally += train_batch_fieldembed_0X1_neat(self, indexes, sentence_idx, alpha, work, neu1, self.compute_loss)
+        else:
+            work, neu1 = inits
+            work_m, neu_m = merger_mem
+            grad_mem = grad_mem
+            tally += train_batch_fieldembed_negsamp(self, indexes, hyper_indexes, sentence_idx, alpha, work, neu1, work_m, neu_m, grad_mem, self.compute_loss)
+        return tally, sentence_idx[-1]
 
     ################################################################################################################################################### log
     def _log_epoch_progress(self, progress_queue=None, job_queue=None, cur_epoch=0, total_examples=None,total_words=None, report_delay=10.0, is_corpus_file_mode=None):
@@ -878,31 +819,21 @@ class FieldEmbedTrainables(utils.SaveLoad):
         logger.info("resetting layer weights")
 
         # syn0
-        for field, field_idx in model.field_idx.items():
-            use, wv = model.field_head[field_idx]
-            if use:
-                wv.vectors = empty((len(wv.vocab), wv.vector_size), dtype=REAL)
-                for i in range(len(wv.vocab)): 
-                    wv.vectors[i] = self.seeded_vector(wv.index2word[i] + str(self.seed), self.layer1_size)
-
-            for data in model.field_sub[field_idx]:
-                wv = data[0]
-                wv.vectors = empty((len(wv.vocab), wv.vector_size), dtype=REAL)
-                for i in range(len(wv.vocab)): 
-                    wv.vectors[i] = self.seeded_vector(wv.index2word[i] + str(self.seed), self.layer1_size)
+        for field, wv in model.weights.items():
+            wv.vectors = empty((len(wv.vocab), wv.vector_size), dtype=REAL)
+            for i in range(len(wv.vocab)): 
+                wv.vectors[i] = self.seeded_vector(wv.index2word[i] + str(self.seed), self.layer1_size)
 
         # syn1neg      
         if negative:
             if type(neg_init) == str:
-                print('init neg with random:', neg_init)
+                print('Init syn1neg with random:', neg_init)
                 model.wv_neg.vectors = empty((len(model.wv.vocab), self.layer1_size), dtype=REAL)
                 for i in range(len(wv.vocab)): 
                     # construct deterministic seed from word AND seed argument
-                    model.wv_neg.vectors[i] = self.seeded_vector(model.wv_neg.index2word[i] + neg_int + str(self.seed), 
-                                                                 self.layer1_size)
+                    model.wv_neg.vectors[i] = self.seeded_vector(model.wv_neg.index2word[i] + neg_int + str(self.seed), self.layer1_size)
             else:    
-                # we tend to init neg with zero vectors
-                print('init neg with 0')
+                print('Init syn1neg with zeros')
                 model.wv_neg.vectors = zeros((len(model.wv.vocab), self.layer1_size), dtype=REAL)
             
             self.syn1neg = model.wv_neg.vectors
