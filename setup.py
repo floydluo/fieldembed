@@ -4,6 +4,7 @@ import sys
 import warnings
 from setuptools import setup, find_packages, Extension
 from setuptools.command.build_ext import build_ext
+from distutils.sysconfig import customize_compiler
 
 
 class custom_build_ext(build_ext):
@@ -14,7 +15,7 @@ class custom_build_ext(build_ext):
     warning_message = """
     ********************************************************************
     WARNING: %s could not
-    be compiled. No C extensions are essential for gensim to run,
+    be compiled. No C extensions are essential for fieldembed to run,
     although they do result in significant speed improvements for some modules.
     %s
     Here are some hints for popular operating systems:
@@ -31,8 +32,6 @@ class custom_build_ext(build_ext):
     ********************************************************************
     """
 
-
-
     def run(self):
         try:
             build_ext.run(self)
@@ -46,7 +45,9 @@ class custom_build_ext(build_ext):
 
     def build_extension(self, ext):
         name = ext.name
+        customize_compiler(self.compiler)
         try:
+            self.compiler.compiler_so.remove("-Wstrict-prototypes") # add this.
             build_ext.build_extension(self, ext)
         except Exception:
             e = sys.exc_info()[1]
@@ -101,13 +102,13 @@ win_testenv = [
 linux_testenv = win_testenv[:]
 
 ext_modules = [
-    Extension('fieldembed.models.word2vec_inner',
-        sources=['./fieldembed/models/word2vec_inner.c'],
-        include_dirs=[model_dir]),
+    # Extension('fieldembed.models.word2vec_inner',
+    #     sources=['./fieldembed/models/word2vec_inner.c'],
+    #     include_dirs=[model_dir]),
 
-    Extension('fieldembed.models.fieldembed_inner',
-        sources=['./fieldembed/models/fieldembed_inner.c'],
-        include_dirs=[model_dir]),
+    # Extension('fieldembed.models.fieldembed_inner',
+    #     sources=['./fieldembed/models/fieldembed_inner.c'],
+    #     include_dirs=[model_dir]),
 
     Extension('fieldembed._matutils',
         sources=['./fieldembed/_matutils.c']),
@@ -125,10 +126,11 @@ if not (os.name == 'nt' and sys.version_info[0] < 3):
 
     ext_modules.append(
         Extension('fieldembed.models.fieldembed_core',
-                  sources=['./fieldembed/models/fieldembed_core.cpp'],
-                  language='c++',
-                  extra_compile_args=extra_args,
-                  extra_link_args=extra_args)
+            sources=['./fieldembed/models/fieldembed_core.cpp'],
+            language='c++',
+            include_dirs=[model_dir],
+            extra_compile_args=extra_args,
+            extra_link_args=extra_args)
     )
 
 
