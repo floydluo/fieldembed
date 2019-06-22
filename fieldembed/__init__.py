@@ -1,3 +1,5 @@
+from .model import FieldEmbedding
+
 #     # for backward compatibility
 #     @deprecated("Method will be removed in 4.0.0, use self.wv.most_similar() instead")
 #     def most_similar(self, positive=None, negative=None, topn=10, restrict_vocab=None, indexer=None):
