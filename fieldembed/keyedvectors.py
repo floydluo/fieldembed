@@ -17,10 +17,10 @@ from six.moves import zip, range
 from scipy import stats
 
 
-from .. import utils, matutils  # utility fnc for pickling, common scipy operations etc
-from ..dictionary import Dictionary
-from ..termsim import TermSimilarityIndex, SparseTermSimilarityMatrix
-from ..utils import deprecated
+from . import utils, matutils  # utility fnc for pickling, common scipy operations etc
+from .dictionary import Dictionary
+from .termsim import TermSimilarityIndex, SparseTermSimilarityMatrix
+from .utils import deprecated
 from .utils_any2vec import _save_word2vec_format, _load_word2vec_format #, ft_ngram_hashes
 
 

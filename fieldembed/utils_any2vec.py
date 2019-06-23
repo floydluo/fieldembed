@@ -7,7 +7,7 @@
 
 import logging
 import numpy as np
-from .. import utils
+from . import utils
 
 from numpy import zeros, dtype, float32 as REAL, ascontiguousarray, fromstring
 

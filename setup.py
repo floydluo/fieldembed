@@ -125,8 +125,8 @@ if not (os.name == 'nt' and sys.version_info[0] < 3):
         extra_args.extend(['-stdlib=libc++', '-std=c++11'])
 
     ext_modules.append(
-        Extension('fieldembed.models.fieldembed_core',
-            sources=['./fieldembed/models/fieldembed_core.cpp'],
+        Extension('fieldembed.fieldembed_core',
+            sources=['./fieldembed/fieldembed_core.cpp'],
             language='c++',
             include_dirs=[model_dir],
             extra_compile_args=extra_args,

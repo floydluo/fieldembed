@@ -23,9 +23,9 @@ from scipy.special import expit
 from six import iteritems, itervalues, string_types
 from six.moves import range
 
-from .. import utils, matutils  
-from ..utils import deprecated
-from ..utils import keep_vocab_item, call_on_class_only
+from . import utils, matutils  
+from .utils import deprecated
+from .utils import keep_vocab_item, call_on_class_only
 from .keyedvectors import Vocab, Word2VecKeyedVectors
 from .fieldembed_core import train_batch_fieldembed_0X1_neat
 from .fieldembed_core import train_batch_fieldembed_negsamp
