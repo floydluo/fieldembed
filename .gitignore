@@ -23,8 +23,8 @@ output/
 embed/
 data/
 models/
-sources/medical*
-sources/fudan
+fieldembed/sources/medical*
+fieldembed/sources/fudan
 *.pyc
 
 *.py[cod]
