@@ -190,17 +190,15 @@ def fudan2embed(contents, labels, wv):
 
 
 
-sim_file1 = 'sources/240.txt'
-sim_file2 = 'sources/297.txt'
-ana_f     = 'sources/analogy.txt'
+sim_file1 = 'fieldembed/sources/240.txt'
+sim_file2 = 'fieldembed/sources/297.txt'
+ana_f     = 'fieldembed/sources/analogy.txt'
 
 
 class Evaluation:
     def __init__(self, wv):
-
         self.wv = wv
-        # self.wv.init_sims()
-
+        self.wv.init_sims()
         self.dict_word = {i: v.index for i, v in wv.vocab.items()}
         self.embeddings = wv.vectors_norm
 
