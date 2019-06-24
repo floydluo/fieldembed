@@ -22,7 +22,7 @@ corpus/fudan
 output/
 embed/
 data/
-models/
+embeddings/
 fieldembed/sources/medical*
 fieldembed/sources/fudan
 *.pyc
