@@ -573,6 +573,19 @@ class FieldEmbedding(utils.SaveLoad):
                 "under 10 jobs per worker: consider setting a smaller `batch_words' for smoother alpha decay"
             )
 
+    ###################################################################################################################################################
+    def evals(self):
+        # TODO: enrich this evaluation
+        for channel, wv in self.weights.items():
+            if channel in FIELD_INFO['hyper']:
+                continue
+            print(channel)
+            print(wv.derivative_wv.lexical_evals())
+        wv = self.wv_neg
+        print('syn1neg')
+        print(wv.lexical_evals())
+        return
+
     ################################################################################################################################################### load and save
     def save(self, *args, **kwargs):
         kwargs['ignore'] = kwargs.get('ignore', ['vectors_norm', 'cum_table'])

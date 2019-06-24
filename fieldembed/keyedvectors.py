@@ -205,6 +205,11 @@ class BaseKeyedVectors(utils.SaveLoad):
         """Rank of the distance of `entity2` from `entity1`, in relation to distances of all entities from `entity1`."""
         return len(self.closer_than(entity1, entity2)) + 1
 
+
+sim_file1 = 'fieldembed/sources/240.txt'
+sim_file2 = 'fieldembed/sources/297.txt'
+ana_f     = 'fieldembed/sources/analogy.txt'
+
 class WordEmbeddingsKeyedVectors(BaseKeyedVectors):
     """Class containing common methods for operations over word vectors."""
     def __init__(self, vector_size, LGU = [], DGU = {}):
@@ -213,7 +218,6 @@ class WordEmbeddingsKeyedVectors(BaseKeyedVectors):
         self.index2word = LGU
         self.LGU = LGU 
         self.DGU = DGU
-
         self.GU     = self.LGU, self.DGU
         self.vector = None
 
@@ -223,29 +227,42 @@ class WordEmbeddingsKeyedVectors(BaseKeyedVectors):
         self.TU = self.LTU, self.DTU
         
         self.LKP     = None 
-        self.LookUp  = None
-        self.EndIdx  = None
-        self.Leng_Inv= None
-        self.Leng_max= None
-        self.merge_vectors = None
+        self._derivative_wv = None
         ####################################################################################
 
-    def set_merge_vectors(self):
-        if hasattr(self, 'DTU'):
-            merge_vectors = zeros((len(self.LTU), self.vector_size), dtype=REAL)
-            # vec = []
+    @property
+    def derivative_wv(self):
+        # if getattr(self, '_derivative_wv', None):
+        if getattr(self, '_derivative_wv', None) is None:
+            return self._derivative_wv
+        elif getattr(self, 'LKP', None) is not None:
+            derivative_wv = WordEmbeddingsKeyedVectors(self.vector_size, LGU = self.LTU, LTU = self.DTU)
+            derivative_vectors = zeros((len(self.LTU), self.vector_size), dtype=REAL)
             for word_vocidx in range(1, len(self.LTU)):
-                # word_vocidx = wv.DTU.get(w, 3)
-                grain_start = self.EndIdx[word_vocidx - 1]
-                grain_end   = self.EndIdx[word_vocidx]
-                grain_vocidx = [i for i in self.LookUp[grain_start:grain_end]]
-                field_word = self.vectors[grain_vocidx].mean(axis=0)
-                merge_vectors[word_vocidx] = field_word
-            self.merge_vectors = merge_vectors
-
+                grain_vocidx = self.LKP[word_vocidx]
+                field_word   = self.vectors[grain_vocidx].mean(axis=0)
+                derivative_vectors[word_vocidx] = field_word
+            derivative_wv.vectors = derivative_vectors
+            self._derivative_wv = derivative_wv
+            return self._derivative_wv
         else:
-            # then it is a head field, token or pos
-            self.merge_vectors = self.vectors
+            return self
+
+    def lexical_evals(self):
+        if getattr(self, 'LKP', None) is not None:
+            raise('This is for token level embeddings')
+        d = {}
+        pearson, spearman, oov_ratio = self.evaluate_word_pairs(sim_file1, restrict_vocab=500000, case_insensitive=False)
+        d['sim240_spearman'] = spearman.correlation
+        pearson, spearman, oov_ratio = self.evaluate_word_pairs(sim_file2, restrict_vocab=500000, case_insensitive=False)
+        d['sim297_spearman'] = spearman.correlation
+        analogies_score, sections = self.evaluate_word_analogies(ana_f, restrict_vocab=500000, case_insensitive=False)
+        
+        for section in sections:
+            correct = len(section['correct'])
+            total = len(section['correct']) + len(section['incorrect'])
+            d['ana_' + section['section'] ] = correct/total
+        return d
 
     @property
     @deprecated("Attribute will be removed in 4.0.0, use self instead")
@@ -260,8 +277,6 @@ class WordEmbeddingsKeyedVectors(BaseKeyedVectors):
     @index2entity.setter
     def index2entity(self, value):
         self.index2word = value
-
-    
 
     def __contains__(self, word):
         return word in self.vocab
@@ -281,7 +296,7 @@ class WordEmbeddingsKeyedVectors(BaseKeyedVectors):
 
         """
         # don't bother storing the cached normalized vectors
-        kwargs['ignore'] = kwargs.get('ignore', ['vectors_norm'])
+        kwargs['ignore'] = kwargs.get('ignore', ['vectors_norm', '_derivative_wv'])
         super(WordEmbeddingsKeyedVectors, self).save(*args, **kwargs)
 
     def word_vec(self, word, use_norm=False):
@@ -1181,6 +1196,14 @@ class Word2VecKeyedVectors(WordEmbeddingsKeyedVectors):
         return _load_word2vec_format(
             cls, fname, fvocab=fvocab, binary=binary, encoding=encoding, unicode_errors=unicode_errors,
             limit=limit, datatype=datatype)
+
+    @classmethod
+    def load_old_wv_format(cls, old_wv):
+        wv = Word2VecKeyedVectors(wv_old.vector_size)
+        wv.index2word = wv_old.index2word
+        wv.vocab      = wv_old.vocab
+        wv.vectors    = wv_old.vectors
+        return wv
 
     def get_keras_embedding(self, train_embeddings=False):
         """Get a Keras 'Embedding' layer with weights set as the Word2Vec model's learned word embeddings.
