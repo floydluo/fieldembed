@@ -9,162 +9,247 @@ from .utils.infrastructure import writeGrainList2File, readPickleFile2GrainUniqu
 from .utils.infrastructure import modify_wordBoundary_with_hyperBoundary, trans_charLabels_to_wordLabels
 from .utils.infrastructure import getTagDict, trans_bioesTag
 
-from .utils.pyramid import CorpusFoldersReader, FolderTextsReaders, segText2Sents, segSent2Tokens, getCITText, getCITSents, getSSET_from_CIT
-
-from .utils.vocab import buildTokens, get_GU_or_LKP
+from .utils.pyramid import CorpusGroupsReader, FolderTextsReaders, segText2Sents, segSent2Tokens
+from .utils.anno import getCITText, getCITSents, getSSET_from_CIT
+from .utils.vocab import buildTokens, get_GU_or_LKP, get_num_freq
 
 from .utils.channel import CONTEXT_IND_CHANNELS, CONTEXT_DEP_CHANNELS, ANNO_CHANNELS, CHANNEL_ABBR
 from .utils.channel import Channel_Dep_Methods, Channel_Dep_TagSets, getChannelName, get_Channel_Settings
 
 
-MaxTextIdx = False # TODO
-MaxTokenUnique = 3500000
+# labels and tags
+# labels: ['Person', 'Location']
+# tags  : ['O', Person-B', 'Person-I', 'Location-B', 'Location-I']
+
+# token, token_idx, token_locidx
+# "New",        10,          123
+# DTU['New'] = 10
+# token(123) = "New", perhaps there is another token_locidx which is also "New".
+
+def utf8len(s):
+    return len(s.encode('utf-8'))
+
 
 class BasicObject(object):
+    # basic path
+    Base_Dir = None
+
+    # 五大老五奉行
     CORPUS = {}
-    FOLDER = {}
+    GROUP  = {}
     TEXT   = {}
     SENT   = {}
     TOKEN  = {}
+
+    # token and hyper fields
+    TokenVocab = None
+    VOCAB = {}
+    # deal with transfer hyper fields tokens
+    TRANS = {}
+    # deal with the sub field information
     LOOKUP = {}
-    GRAIN_UNI = {}
-    TokenNum_Dir = None
-    TokenUnique  = None
+    FREQ   = {}
+
+    CTX_DEP_TMP = {}
+
+    # other items
     specialTokens = specialTokens
     CONTEXT_IND_CHANNELS = CONTEXT_IND_CHANNELS
     CONTEXT_DEP_CHANNELS = CONTEXT_DEP_CHANNELS
     ANNO_CHANNELS        = ANNO_CHANNELS
     CHANNEL_ABBR         = CHANNEL_ABBR
-    BIOES_Trans = {}
-    CTX_DEP_TMP = {}
-    BATCH_INFO = {}
 
     @classmethod
-    def INIT(cls, CORPUSPath, corpusFileIden, textType,Text2SentMethod, Sent2TokenMethod, TOKENLevel, anno, annoKW,  MaxTextIdx = MaxTextIdx, MaxTokenUnique = MaxTokenUnique):
-        assert anno == False or '.' in anno or anno == 'embed'
-        ########################################################
-        useSep = Sent2TokenMethod.split('-')[-1] if '-' in Sent2TokenMethod else False
-        Channel_Dep_GrainUnqiue = {}
-        if TOKENLevel == 'char':
-            # Thing 1
-            Sent2TokenMethod = 'iter'
-            # Thing 2
-            for ch, tagSet in Channel_Dep_TagSets.items():
-                LGU = getTagDict(tagSet, tagScheme = 'BIOES')
-                DGU = dict(zip(LGU, range(len(LGU))))
-                Channel_Dep_GrainUnqiue[ch] = (LGU, DGU)
-        ########################################################
+    def INIT(cls, CORPUSPath, 
+             Corpus2GroupMethod, 
+             Group2TextMethod, 
+             Text2SentMethod, 
+             Sent2TokenMethod, TOKENLevel, min_token_freq = 1,
+             use_hyper = [], Channel_Dep_Methods = Channel_Dep_Methods, Channel_Dep_TagSets = Channel_Dep_TagSets, 
+             anno = False, anno_keywords = {}):
+        
+        Channel_Dep_Methods = {i:k for i,k in Channel_Dep_Methods.items() if i in use_hyper} 
+        Channel_Dep_TagSets = {i:k for i,k in Channel_Dep_TagSets.items() if i in use_hyper} 
+        
+        ################################################################################################################
+        corpus_name = CORPUSPath.split('/')[-2]
+        Data_Dir = os.path.join('data', corpus_name, TOKENLevel)
+        File_Dir = os.path.join(Data_Dir, 'Pyramid', '_file')
+        cls.Data_Dir = Data_Dir
+        if not os.path.exists(File_Dir):
+            os.makedirs(File_Dir)
 
-        ########################################################
-        ################   Things to Save   ####################
-        ########################################################
-        CORPUS = {}
-        CORPUS['CORPUSPath'] = CORPUSPath
-        CORPUS['corpusFileIden'] = corpusFileIden # None if Dir else
-        CORPUS['CORPUSType']     = 'File' if corpusFileIden else 'Dir'
-        CORPUS['textType'] = textType
-        CORPUS['EndIDXFolders'] = []
 
-        FOLDER = {}
-        FOLDER['folderPaths'] = [] 
-        FOLDER['EndIDXTexts'] = []
-                
-        TEXT = {}
-        TEXT['EndIDXSents'] = []
-        TEXT['Text2SentMethod'] = Text2SentMethod
-        if textType == 'file':
-            TEXT['ORIGFileName'] = []
-        # if anno:
-        if '.' in str(anno):
-            TEXT['ANNOFileName'] = []
+        cls.Channel_Hyper_Path = {}
+        cls.Channel_Hyper_Path['token'] = os.path.join(File_Dir, 'token.txt')
+        if os.path.isfile(cls.Channel_Hyper_Path['token']):
+            os.remove(cls.Channel_Hyper_Path['token'])
+
+        ################################################################################################################
+        # for hyper field
+        Path_Key = os.path.join(Data_Dir, 'Vocab')
+        cls.VOCAB = {}
+        cls.VOCAB[Path_Key] = {}
+        for ch, tagSet in Channel_Dep_TagSets.items():
+            LGU = getTagDict(tagSet, tagScheme = 'BIOES')
+            DGU = dict(zip(LGU, range(len(LGU))))
+            channel_name = ch + '-bioes'
+            cls.VOCAB[Path_Key][channel_name] = (LGU, DGU)
+            cls.Channel_Hyper_Path[ch] =  os.path.join(File_Dir, channel_name + '.txt')
+            if os.path.isfile(cls.Channel_Hyper_Path[ch]):
+                os.remove(cls.Channel_Hyper_Path[ch])
+
+        # to enrich annoE vocab inside it.
+        if anno: 
+            cls.VOCAB[Path_Key]['annoE-bioes'] = (['O'], {'O': 0}); anno_labels = []
+            cls.Channel_Hyper_Path['annoE'] =  os.path.join(File_Dir, 'annoE-bioes' + '.txt')
+            if os.path.isfile(cls.Channel_Hyper_Path['annoE']):
+                os.remove(cls.Channel_Hyper_Path['annoE'])
+
+        ################################################################################################################
+        # for annotation
+        # assert anno == False or '.' in anno or anno == 'embed'
+    
+        ################################################################################################################
+        # init 五大老五奉行
+        # corpus information
+        CORPUS = {}; CORPUS['CORPUSPath'] = CORPUSPath; CORPUS['Data_Dir'] = Data_Dir; CORPUS['EndIDXGroups'] = []
+        
+        # group information
+        GROUP = {}; GROUP['Corpus2GroupMethod'] = Corpus2GroupMethod 
+        GROUP['GroupType']   = 'File' if Corpus2GroupMethod != 'Dir' else 'Dir'; GROUP['group_names'] = []; GROUP['EndIDXTexts'] = []
+        
+        # text information
+        TEXT = {}; TEXT['Group2TextMethod'] = Group2TextMethod; TEXT['EndIDXSents'] = []
+        if Group2TextMethod == 'file': TEXT['ORIGFileName'] = []
+        if 'ANNOIden' in anno_keywords: TEXT['ANNOFileName'] = []
             
-        SENT = {}
-        SENT['EndIDXTokens'] = []
-        SENT['Sent2TokenMethod'] = Sent2TokenMethod
+        # sentence information
+        SENT = {}; SENT['Text2SentMethod'] = Text2SentMethod; SENT['EndIDXTokens'] = []
+        # even more file information will be included here. TODO change this to numpy
+        for ch, path in cls.Channel_Hyper_Path.items(): SENT[path] = []
+        
+        # token information
+        TOKEN = {}; TOKEN['Sent2TokenMethod'] = Sent2TokenMethod
+        TOKEN['TOKENLevel'] = TOKENLevel; TOKEN['Channel_Hyper_Path'] = cls.Channel_Hyper_Path
 
-        TOKEN = {}
-        TOKEN['TOKENLevel'] = TOKENLevel
-        TOKEN['ORIGToken'] = []
-        ORIGToken = []
-        if anno:
-            TOKEN['ANNOToken'] = []
-            ANNOToken = []
 
-        TOKEN_DEP = {}
-        for ch, method in Channel_Dep_TagSets.items():
-            TOKEN[ch+'TokenIndex'] = []
-            TOKEN_DEP[ch+'TokenIndex'] = []
+        # consider how to deal with the annotation information
+        ANNO = {}; ANNO['anno'] = anno; ANNO['anno_keywords'] = anno_keywords
 
-        ANNO = {}
-        ANNO['anno'] = anno
-        ANNO['annoKW'] = annoKW
-        ########################################################
+        ################################################################################################################
+        CorpusGroups, GroupType = CorpusGroupsReader(CORPUSPath, iden = Corpus2GroupMethod)
+        # print()
+        assert GROUP['GroupType'] == GroupType
+        pprint(GroupType)
 
-        #######################################################################################CORPUS
-        CorpusFolders, CORPUSType = CorpusFoldersReader(CORPUSPath, iden = corpusFileIden)
-        assert CORPUS['CORPUSType'] == CORPUSType
-        pprint(CORPUSType)
+        oldDTU = {}# change this to default dict with int
+        oldLTU = []
+        oldidx2freq = []
+        token_num_in_corpus = 0
 
-        for folderIdx, folderPath in enumerate(CorpusFolders):
-            ####################################################################FOLDER
-            print(folderPath)
-            fileNames = CorpusFolders[folderPath]
-            FolderTexts = FolderTextsReaders[textType](folderPath, fileNames, anno, **annoKW)
-            
+        for group_idx, group_name in enumerate(CorpusGroups):
+            # the following block deals with each group in a corpus
+            print(group_name)
+            text_names = CorpusGroups[group_name]
+            GroupTexts = FolderTextsReaders[Group2TextMethod](group_name, text_names, anno, **anno_keywords)
             textIdx = 0
-            for strText_SSET_O_A in FolderTexts:
-
-                ################################################################TEXT
+            for strText_SSET_O_A in GroupTexts:
+                # the following block deals with each text in a group
                 strText, SSETText, origTextName, annoTextName = strText_SSET_O_A
-                strSents = segText2Sents(strText, method = Text2SentMethod, useSep = useSep) # fixed
+                strSents = segText2Sents(strText, method = Text2SentMethod) 
+
+                # skip the sents that are empty and the sents which doesn't have annotations.
+                if len(strSents) == 0 or (anno and len(SSETText) == 0): continue
+                    
+                # the following to blocks deal with multiple hyperfields (include token and annoE) for each strSent in strSents
+                # the main input are strText and strSents, (especially strSents)
                 
-                if len(strSents) == 0 or (anno and len(SSETText) == 0):
-                    # print('Empty Anno strText Or Small Text:', strText)
-                    continue
-
+                # block 1: for token and other hyper fields.
                 for strSent in strSents:
-                    strTokens = segSent2Tokens(strSent, method = Sent2TokenMethod)
-                    ORIGToken.extend(strTokens)
+                    # the following block deals with each strSent in a text.
+                    # if strTags is not None, strTokens and strTags share the same length, 
+                    # and this should be assert inside segSent2Tokens
+                    # strTokens = segSent2Tokens(strSent, method = Sent2TokenMethod)
+                    strTokens, hyper_info = segSent2Tokens(strSent, Sent2TokenMethod, TOKENLevel, Channel_Dep_Methods)
+                    # deal with tokens
+                    for token in strTokens:
+                        # the following block deals with each token in a text.
+                        if token in oldDTU:
+                            # deal with old words
+                            token_idx = oldDTU[token]
+                            oldidx2freq[token_idx] += 1
+                        else:
+                            # deal with new words
+                            token_idx  = len(oldDTU)
+                            oldDTU[token] = token_idx
+                            oldidx2freq.append(1)
+                            oldLTU.append(token)
+                        token_num_in_corpus = token_num_in_corpus + 1
 
-                    ###############################################
-                    ############# For Certain Channels ############
-                    ###############################################
-                    if TOKENLevel == 'char' and not useSep:
-                        for ch, method in Channel_Dep_Methods.items():
-                            ch_grain_sent = method(strSent, tokenLevel = TOKENLevel, useStartEnd = False, tagScheme = 'BIOES')
-                            ch_grain_sent = [i[0] for i in ch_grain_sent]
-                            ch_grain_sent = [Channel_Dep_GrainUnqiue[ch][1].get(i, UNK_ID) for i in ch_grain_sent]
-                            TOKEN_DEP[ch + 'TokenIndex'].extend(ch_grain_sent)
-                            assert len(ch_grain_sent) == len(strTokens)
-                    ###############################################
-                    ###############################################
+                    with open(cls.Channel_Hyper_Path['token'], 'a') as f:
+                        line_sentence = ' '.join(strTokens) + '\n'
+                        f.write(line_sentence)
+                        bytelenSent = utf8len(line_sentence)
+                    try:
+                        SENT[cls.Channel_Hyper_Path['token']].append(SENT[cls.Channel_Hyper_Path['token']][-1] + bytelenSent)
+                    except:
+                        SENT[cls.Channel_Hyper_Path['token']].append(bytelenSent)
+
+                    # if use word level, make the sure that the return grains are the same.
+                    # this is for generating the hyper field information.
+                    # before using the hyper field information, we must know their labels before.
+                    for ch, ch_grain_sent in hyper_info.items():
+                        ch_grain_sent = [str(cls.VOCAB[Path_Key][channel_name][1].get(i)) for i in ch_grain_sent]
+                        assert len(ch_grain_sent) == len(strTokens)
+                        # or you can create a file, which is LineSentence type file. each line is a sentence.
+                        with open(cls.Channel_Hyper_Path[ch], 'a') as f:
+                            line_sentence = ' '.join(ch_grain_sent) + '\n'
+                            f.write(line_sentence)
+                            bytelenSent = utf8len(line_sentence)
+                        try:
+                            SENT[cls.Channel_Hyper_Path[ch]].append(SENT[cls.Channel_Hyper_Path[ch]][-1] + bytelenSent)
+                        except:
+                            SENT[cls.Channel_Hyper_Path[ch]].append(bytelenSent)
+
+                    # adding the sentence length, i.e., the token number in this sentence.
                     lenSent = len(strTokens)
                     try:
                         SENT['EndIDXTokens'].append(SENT['EndIDXTokens'][-1] + lenSent)
                     except:
                         SENT['EndIDXTokens'].append(lenSent)
 
-                if anno and TOKENLevel == 'char': # TODO
-                    #########################################################Anno
-                    if SSETText == []:
-                        print('\nThe SSET of this Text is Empty!!!', '\n', strText, '\n')
-                            
-                    ############### PART One: Get CITText ###########
-                    # will check strText and SSET inside getCITText
-                    CITText  = getCITText(strText, SSETText) 
-                    #################################################          
-                        
-                    ############### PART TWO: Get CITSents ##########
-                    CITSents = getCITSents(strSents, CITText)
-                    #################################################          
-                  
-                    ############### PART THREE: Get TOKEN['ANNOToken'] ###########
+                # block1: for annotation.
+                if anno: 
+                    if SSETText == []: print('\nThe SSET of this Text is Empty!!!', '\n', strText, '\n')
+
+                    new_labels = set([sset[-1] for sset in SSETText])
+                    for label in new_labels:
+                        if label not in anno_labels:
+                            anno_labels.append(label)
+                            for suffix in ['-B', '-I', '-E', '-S']:
+                                cls.VOCAB[Path_Key]['annoE-bioes'][1][label + suffix] = len(cls.VOCAB[Path_Key]['annoE-bioes'][1])
+                                cls.VOCAB[Path_Key]['annoE-bioes'][0].append(label + suffix)
+
+                    # it will check strText and SSET inside getCITText
+                    CITText  = getCITText(strText, SSETText, TOKENLevel) 
+                    # get CITSents
+                    CITSents = getCITSents(strSents, CITText, TOKENLevel)
+                    
                     for sentIdx, CITSent in enumerate(CITSents):
-                        ANNOToken.extend([CITToken[2] for CITToken in CITSent])
+                        anno_tags = [CITToken[2] for CITToken in CITSent]
+                        anno_tags = [str(cls.VOCAB[Path_Key]['annoE-bioes'][1][i]) for i in anno_tags]
+                        with open(cls.Channel_Hyper_Path['annoE'], 'a') as f:
+                            line_sentence = ' '.join(anno_tags) + '\n'
+                            f.write(line_sentence)
+                            bytelenSent = utf8len(line_sentence)
+                        try:
+                            SENT[cls.Channel_Hyper_Path['annoE']].append(SENT[cls.Channel_Hyper_Path['annoE']][-1] + bytelenSent)
+                        except:
+                            SENT[cls.Channel_Hyper_Path['annoE']].append(bytelenSent)
                     if annoTextName:
                         TEXT['ANNOFileName'].append(annoTextName)
-                    #########################################################Anno
-
+                    
                 lenText = len(strSents)
                 try:
                     TEXT['EndIDXSents'].append(TEXT['EndIDXSents'][-1] + lenText)
@@ -173,153 +258,100 @@ class BasicObject(object):
                     
                 if origTextName:
                     TEXT['ORIGFileName'].append(origTextName)
-                ################################################################TEXT
                 
-
-                ################## Log: textIdx in a Folder ################## log
-                if MaxTextIdx:
-                    if textIdx == MaxTextIdx:
-                        break
                 textIdx = textIdx + 1
-                if not textIdx % 100000:
+                if textIdx % 100000 == 0:
                     print(textIdx, '--', len(strSents), len(strText), datetime.now())
-                if textIdx % 1000000 == 0:
-                    if TOKENLevel == 'char':
-                        TOKEN['ORIGToken'].append(np.array(ORIGToken)); ORIGToken = []
-                        if anno:
-                            TOKEN['ANNOToken'].append(np.array(ANNOToken)); ANNOToken = []
-                        if TOKENLevel == 'char' and not useSep:
-                            for ch, method in Channel_Dep_Methods.items():
-                                TOKEN[ch + 'TokenIndex'].append(np.array(TOKEN_DEP[ch + 'TokenIndex']))
-                                TOKEN_DEP[ch + 'TokenIndex'] = []
-                    else:
-                        TOKEN['ORIGToken'].append(ORIGToken); ORIGToken = []
-                ############################################################### log
 
             # Back to Folder
-            # lenFolder = textIdx + 1
-            lenFolder = textIdx
-            FOLDER['folderPaths'].append(folderPath)
+            lenGroup = textIdx
+            GROUP['group_names'].append(group_name)
             try:
-                FOLDER['EndIDXTexts'].append(FOLDER['EndIDXTexts'][-1] + lenFolder)
+                GROUP['EndIDXTexts'].append(GROUP['EndIDXTexts'][-1] + lenGroup)
             except:
-                FOLDER['EndIDXTexts'].append(lenFolder)
-            ####################################################################FOLDER
+                GROUP['EndIDXTexts'].append(lenGroup)
         
-    
-        lenCorpus = folderIdx + 1 # folderIdx might be referenced before assignment
-        CORPUS['EndIDXFolders'] = [lenCorpus]
-        #######################################################################################CORPUS
+        # if there is an error, folderIdx will be referenced before assignment
+        lenCorpus = group_idx + 1 
+        CORPUS['EndIDXGroups'] = [lenCorpus]
 
+        ####################################################################################### 
+        # print('reorder the frequency ...')
+        del oldDTU
 
-        ########################################################
-        if TOKENLevel == 'char':
-            TOKEN['ORIGToken'].append(np.array(ORIGToken)); del ORIGToken
-            TOKEN['ORIGToken'] = np.concatenate(TOKEN['ORIGToken'])
-            if anno and TOKENLevel == 'char': 
-                TOKEN['ANNOToken'].append(np.array(ANNOToken)); del ANNOToken 
-                TOKEN['ANNOToken'] = np.concatenate(TOKEN['ANNOToken'])
-
-            if TOKENLevel == 'char' and not useSep:
-                for ch, method in Channel_Dep_Methods.items():
-                    TOKEN[ch + 'TokenIndex'].append(np.array(TOKEN_DEP[ch + 'TokenIndex'])); del TOKEN_DEP[ch + 'TokenIndex'] 
-                    TOKEN[ch + 'TokenIndex'] = np.concatenate(TOKEN[ch + 'TokenIndex'])
-        else:
-            TOKEN['ORIGToken'].append(ORIGToken); del ORIGToken
-            TOKEN['ORIGToken'] = sum(TOKEN['ORIGToken'], [])
-            # TODO
-        ########################################################
-
-
-        ########################################################
-        print('Total Num of All    Tokens', len(TOKEN['ORIGToken']))
-        # TOKEN['ORIGToken'] = list(TOKEN['ORIGToken'])
-        # print(datetime.now())
-        TOKEN['ORIGTokenIndex'], LTU, DTU, DTU_freq =  buildTokens(TOKEN['ORIGToken'], MaxTokenUnique)
-        # print(datetime.now())
-        del TOKEN['ORIGToken']
+        idx2freq = np.sort(oldidx2freq)[::-1]
+        newidx2oldidx = np.argsort(oldidx2freq)[::-1]
+        del oldidx2freq
         
+        # oldidx2newidx = np.zeros(len(newidx2oldidx), dtype= int)
+        # for new_idx, old_idx in enumerate(newidx2oldidx):
+        #     oldidx2newidx[old_idx] = new_idx
+        # del oldidx2newidx
+
+        LTU = []
+        for new_idx in range(len(oldLTU)):
+            LTU.append(oldLTU[newidx2oldidx[new_idx]])
+        del oldLTU
+        del newidx2oldidx
+
+        DTU = {}
+        for new_idx, token in enumerate(LTU):
+            DTU[token] = new_idx
+        
+        print('Total Num of All    Tokens', token_num_in_corpus)
         print('Total Num of Unique Tokens', len(LTU))
-        corpus_name = CORPUSPath.split('/')[-2]
-        TokenNum_Dir = os.path.join('data', corpus_name, TOKENLevel, 'Token'+str(len(LTU)))
 
-        CORPUS['TokenNum_Dir'] = TokenNum_Dir
-        if not os.path.exists(TokenNum_Dir):
-            os.makedirs(TokenNum_Dir)
+        # load 五大老五奉行, TODO: this can be changed
+        CORPUS['EndIDXGroups'] = np.array(CORPUS['EndIDXGroups'], dtype = np.uint32)
+        CORPUS['length']       = len(CORPUS['EndIDXGroups'])
 
-        # token GrainUnique (TokenUnique)
-        GRAIN_UNI = {}
-        GRAIN_UNI[TokenNum_Dir] = {'token': (LTU, DTU)}
-        # channel_name_path = os.path.join(TokenNum_Dir, 'token.tsv')
-        # writeGrainList2File(channel_name_path, LTU)
-        # print('\t\tWrite to:', channel_name_path)
-        ########################################################
+        GROUP['EndIDXTexts']   = np.array(GROUP['EndIDXTexts'],  dtype = np.uint32)
+        GROUP['length']        = len(GROUP['EndIDXTexts'])
 
-        ########################################################
-        if anno and TOKENLevel == 'char':
-            annoGrainList = list(set(TOKEN['ANNOToken']))
-            channel_name = 'annoE-es'
-            tagSet = list(set([i.split('-')[0] for i in annoGrainList]))
-            LGU = getTagDict(tagSet, tagScheme = 'BIOES')
-            DGU = dict(zip(LGU, range(len(LGU))))
-            GU = (LGU, DGU)
-            GRAIN_UNI[TokenNum_Dir][channel_name] = GU
-            print(LGU)
-            L = []
-            for i in TOKEN['ANNOToken']:
-                split = i.split('-')
-                if split[0] == 'O':
-                    L.append(DGU["O"])
-                else:
-                    L.append(DGU['-'.join([split[0], split[-1]])])
-            TOKEN['ANNOTokenIndex'] = np.array(L, dtype = np.uint32)
-            del TOKEN['ANNOToken']
-        ########################################################
+        TEXT['EndIDXSents']    = np.array(TEXT['EndIDXSents'],   dtype = np.uint32)
+        TEXT['length']         = len(TEXT['EndIDXSents'])
 
-        ########################################################
-        # only BIOES, keep getGrainUnique part.
-        if TOKENLevel == 'char' and not useSep:
-            for ch, GrainUnique in Channel_Dep_GrainUnqiue.items():
-                channel_name = ch + '-es'
-                GRAIN_UNI[TokenNum_Dir][channel_name] = GrainUnique
-        ########################################################
+        SENT['EndIDXTokens']   = np.array(SENT['EndIDXTokens'],  dtype = np.uint32)
+        SENT['length']         = len(SENT['EndIDXTokens'])
+        for ch, path in cls.Channel_Hyper_Path.items():
+            SENT[path] = np.array(SENT[path],  dtype = np.uint32)
 
-        CORPUS['EndIDXFolders'] = np.array(CORPUS['EndIDXFolders'], dtype = np.uint32)
-        CORPUS['length']        = len(CORPUS['EndIDXFolders'])
-
-        FOLDER['EndIDXTexts']   = np.array(FOLDER['EndIDXTexts'], dtype = np.uint32)
-        FOLDER['length']        = len(FOLDER['EndIDXTexts'])
-
-        TEXT['EndIDXSents']     = np.array(TEXT['EndIDXSents'],   dtype = np.uint32)
-        TEXT['length']          = len(TEXT['EndIDXSents'])
-
-        SENT['EndIDXTokens']    = np.array(SENT['EndIDXTokens'],  dtype = np.uint32)
-        SENT['length']          = len(SENT['EndIDXTokens'])
-
-        TOKEN['length']         = len(TOKEN['ORIGTokenIndex'])
+        TOKEN['length']        = token_num_in_corpus
         
         cls.CORPUS = CORPUS
-        cls.FOLDER = FOLDER
+        cls.GROUP  = GROUP
         cls.TEXT   = TEXT
         cls.SENT   = SENT
         cls.TOKEN  = TOKEN
-        cls.TokenUnique = (LTU, DTU)
-        cls.DTU_freq = DTU_freq
-        cls.GRAIN_UNI = GRAIN_UNI
-        cls.TokenNum_Dir = TokenNum_Dir
+        
+        cls.idx2freq  = idx2freq
+        cls.TokenVocab = (LTU, DTU)
+        orig_vocab_length = len(cls.TokenVocab[0])
+        cls.original_vocab_token_num = orig_vocab_length
+        cls.current_vocab_token_num  = orig_vocab_length
         cls.OBJECT_TO_PICKLE()
+
+        max_vocab_token_num = get_num_freq(cls.idx2freq, min_token_freq = min_token_freq)
+        cls.min_token_freq = min_token_freq
+        # cls.max_vocab_token_num = max_vocab_token_num
+        cls._buildGVforToken(max_vocab_token_num, min_token_freq)
+
+        folder = 'F' + str(min_token_freq) 
+        Path_Key = os.path.join(cls.Data_Dir, 'Vocab', folder)
+        if not os.path.exists(Path_Key):
+            os.makedirs(Path_Key)
+
 
     @classmethod
     def OBJECT_TO_PICKLE(cls):
-
-        TokenNum_Dir = cls.TokenNum_Dir
-
-        ##########################################################
-        Pyramid_Dir = os.path.join(TokenNum_Dir, 'Pyramid')
+        Data_Dir = cls.Data_Dir
+        
+        ################################################################################
+        Pyramid_Dir = os.path.join(Data_Dir, 'Pyramid')
         if not os.path.exists(Pyramid_Dir):
             os.makedirs(Pyramid_Dir)
         d = {'CORPUS': cls.CORPUS, 
-             'FOLDER': cls.FOLDER, 
+             'GROUP':  cls.GROUP, 
              'TEXT':   cls.TEXT, 
              'SENT':   cls.SENT, 
              'TOKEN':  cls.TOKEN}
@@ -330,95 +362,368 @@ class BasicObject(object):
                 print(k + '\tit is Dumped into file:', pickle_path)
                 print(k + '\tthe length of it is   :', v['length'])
         print('*'*40, '\n')
-        ##########################################################
 
+        ################################################################################
+        Path_Key = os.path.join(Data_Dir, 'Vocab')
+        if not os.path.exists(Path_Key):
+            os.makedirs(Path_Key)
 
-        ##########################################################
-        GU_Dir = os.path.join(TokenNum_Dir, 'GrainUnique')
-        if not os.path.exists(GU_Dir):
-            os.makedirs(GU_Dir)
-        for k, v in cls.GRAIN_UNI[TokenNum_Dir].items():
-            pickle_path = os.path.join(GU_Dir, k + '.voc')
+        for k, v in cls.VOCAB[Path_Key].items():
+            
+            pickle_path = os.path.join(Path_Key, k + '.voc')
             with open(pickle_path, 'wb') as handle:
                 # v is (LGU, DGU)
                 pickle.dump(v, handle, protocol=4)
                 print(k + '\tis Dumped into file:', pickle_path)
                 print(k + '\tthe length of it is   :', len(v[0]))
-            channel_name_path = os.path.join(GU_Dir, k + '.tsv')
+            
+            channel_name_path = os.path.join(Path_Key, k + '.tsv')
             writeGrainList2File(channel_name_path, v[0])
             print('\t\tWrite to:', channel_name_path)
 
-        pickle_path = os.path.join(GU_Dir, 'token.freq')
+        ################################################################################ 
+        pickle_path = os.path.join(Path_Key, 'token.voc')
         with open(pickle_path, 'wb') as handle:
             # v is (LGU, DGU)
-            pickle.dump(cls.DTU_freq, handle, protocol=4)
-            # print(k + '\tis Dumped into file:', pickle_path)
-            # print(k + '\tthe length of it is   :', len(v[0]))
+            pickle.dump(cls.TokenVocab, handle, protocol=4)
+            print('token   ' + '\tis Dumped into file:', pickle_path)
+            print('token   ' + '\tthe length of it is   :', len(cls.TokenVocab[0]))
+        
+        channel_name_path = os.path.join(Path_Key, 'token.tsv')
+        writeGrainList2File(channel_name_path, cls.TokenVocab[0])
+        print('\t\tWrite to:', channel_name_path)
+
+        pickle_path = os.path.join(Path_Key, 'token.freq')
+        with open(pickle_path, 'wb') as handle:
+            pickle.dump(cls.idx2freq, handle, protocol=4)
         print('*'*40)
-        ##########################################################
+        
+    @classmethod
+    def _load_tokenvocab_from_disk(cls):
+        ################################################################################
+        Path_Key = os.path.join(cls.Data_Dir, 'Vocab')
+        pickle_path = os.path.join(Path_Key, 'token.freq')
+        with open(pickle_path, 'rb') as handle:
+            cls.idx2freq = pickle.load(handle)
+
+        ################################################################################
+        cls.VOCAB[Path_Key] = {} if Path_Key not in cls.VOCAB else cls.VOCAB[Path_Key]
+
+        pickle_path = os.path.join(Path_Key, 'token.voc')
+        with open(pickle_path, 'rb') as handle:
+            cls.TokenVocab = pickle.load(handle)
+
+        orig_vocab_length = len(cls.TokenVocab[0])
+        cls.original_vocab_token_num = orig_vocab_length
+        cls.current_vocab_token_num  = orig_vocab_length
 
     @classmethod
-    def INIT_FROM_PICKLE(cls, Pyramid_Dir, GrainUnique_Dir):
-        # TokenNum_Dir = cls.TokenNum_Dir
-        assert os.path.exists(Pyramid_Dir) and os.path.exists(GrainUnique_Dir)
+    def _buildGVforToken(cls, max_vocab_token_num = None, min_token_freq = 1):
+        # both two inputs are valid
+        if min_token_freq == cls.min_token_freq:
+            return cls.TokenVocab 
 
-        ##########################################################
-        # Pyramid_Dir = Path2Pyramid
-        # layer_names = [i.replace('.p', '') for i in os.listdir(Pyramid_Dir) if '.p' in i]
-        layer_names = ['CORPUS', 'FOLDER','TEXT', 'SENT','TOKEN' ]
+        if min_token_freq < cls.min_token_freq:
+            # reset all token vocab from disk
+            cls._load_tokenvocab_from_disk()
+
+        cls.idx2freq = cls.idx2freq[:max_vocab_token_num]
+        LTU, DTU = cls.TokenVocab
+        LTU = LTU[:max_vocab_token_num]
+        DTU = {}
+        for newidx in range(max_vocab_token_num):
+            DTU[LTU[newidx]] = newidx
+        cls.TokenVocab = LTU, DTU
+        # print(max_vocab_token_num, min_token_freq)
+        cls.current_vocab_token_num = max_vocab_token_num
+        cls.min_token_freq = min_token_freq
+        return cls.TokenVocab 
+
+    @classmethod
+    def INIT_FROM_PICKLE(cls, Data_Dir, min_token_freq = 1):
+        assert os.path.exists(Data_Dir) 
+        cls.Data_Dir = Data_Dir
+        ################################################################################
+        layer_names = ['CORPUS', 'GROUP','TEXT', 'SENT','TOKEN' ]
         for layer_name in layer_names:
-            pickle_path = os.path.join(Pyramid_Dir, layer_name + '.p')
+            pickle_path = os.path.join(Data_Dir, 'Pyramid', layer_name + '.p')
             with open(pickle_path, 'rb') as handle:
                 v = pickle.load(handle)
                 setattr(cls, layer_name,  v)
                 print(layer_name + '\tread from pickle file :', pickle_path)
                 print(layer_name + '\tthe length of it is   :', v['length'])
         print('*'*40, '\n')
-        ##########################################################
 
-        # print(cls.CORPUS)
-        cls.TokenNum_Dir = cls.CORPUS['TokenNum_Dir'].replace('channel', 'data')
-        cls.GRAIN_UNI[cls.TokenNum_Dir] = {}
+        cls.Channel_Hyper_Path = cls.TOKEN['Channel_Hyper_Path']
+        # idx2freq and TokenVocab
+        cls._load_tokenvocab_from_disk()
+        max_vocab_token_num = get_num_freq(cls.idx2freq, min_token_freq = min_token_freq)
+        cls._buildGVforToken(max_vocab_token_num, min_token_freq)
 
-        ##########################################################
-        # GrainUnique_Dir = Path2LGUnique
-        # channel_names = [i.replace('.p', '') for i in os.listdir(LGU_Dir) if '.p' in i]
-        channel_names = ['token'] # only put token in the LGUT
-        # Don't need to read all of them.
-        for channel_name in channel_names:
-            pickle_path = os.path.join(GrainUnique_Dir, channel_name + '.voc')
-            with open(pickle_path, 'rb') as handle:
-                v = pickle.load(handle)
-                cls.GRAIN_UNI[cls.TokenNum_Dir][channel_name] = v
-                print(channel_name + '\tread from pickle file :', pickle_path)
-                print(channel_name + '\tthe length of it is   :', len(v[0]))
-        print('*'*40, '\n')
-        ##########################################################
-        # cls.TEXT['Text2SentMethod'] = 're'
-        cls.TokenUnique = cls.GRAIN_UNI[cls.TokenNum_Dir]['token'] # (LTU & DTU) 
-
-
-        pickle_path = os.path.join(GrainUnique_Dir, 'token.freq')
-        with open(pickle_path, 'rb') as handle:
-            v = pickle.load(handle)
-            cls.DTU_freq = v
-
-        ##########################################################
-        GUDict = cls.GRAIN_UNI[cls.TokenNum_Dir]
-        for ch_name, LGU_DGU in GUDict.items():
-            channel_name_path = os.path.join(cls.TokenNum_Dir, ch_name+'.tsv')
-            if not os.path.isfile(channel_name_path):
-                writeGrainList2File(channel_name_path, LGU_DGU[0])
-        # print('*'*40, '\n')
-        ##########################################################
+        folder = 'F' + str(min_token_freq) 
+        Path_Key = os.path.join(cls.Data_Dir, 'Vocab', folder)
+        if not os.path.exists(Path_Key):
+            os.makedirs(Path_Key)
 
     @classmethod
-    def BUILD_GRAIN_UNI_AND_LOOKUP(cls, CHANNEL_SETTINGS_TEMPLATE = None):
+    def _getGVfromVocab(cls, Path_Key, channel_name):
+        return cls.VOCAB[Path_Key][channel_name]
+
+    @classmethod
+    def _getGVfromDisk(cls, Path_Key, channel_name):
+        cls.VOCAB[Path_Key] = cls.VOCAB[Path_Key] if Path_Key in cls.VOCAB else {}
+        channel_name_pickle = os.path.join(Path_Key, channel_name + '.voc')
+        GrainVocab = readPickleFile2GrainUnique(channel_name_pickle)
+        cls.VOCAB[Data_Dir][channel_name] = GrainVocab
+        return GrainVocab 
+
+    @classmethod
+    def _buildGVforHyper(cls, Path_Key, channel, channel_name):
+        # build GV for hyper field
+        print('\t\tBuild GrainUnique for channel:', channel_name)
+        ############################################# Generate New LGU for CTX_Dep
+        channel, Min_Ngram, Max_Ngram, end_grain, min_grain_freq, tagScheme = getChannelName(channel, channel_name = channel_name, style = 'extract')
+        print(channel, Max_Ngram, end_grain, tagScheme)
+        
+        ch = 'annoE' if 'annoR' == channel else channel
+        BIOES_GU = cls.getGrainVocab(ch, tagScheme = 'BIOES') # cautions: must get the corresponding base GU.
+        BIOES_GU_neat = BIOES_GU[0]
+
+        LGU_neat = list(set([trans_bioesTag(channel, i, tagScheme) for i in BIOES_GU_neat]))
+        LGU_neat.sort()
+
+        LGU = LGU_neat
+        DGU = dict(zip(LGU, range(len(LGU))))
+
+        ############################################# New LGU
+        GrainVocab = (LGU, DGU)
+
+        cls.VOCAB[Path_Key] = cls.VOCAB[Path_Key] if Path_Key in cls.VOCAB else {}
+        cls.VOCAB[Path_Key][channel_name] = GrainVocab
+        
+        # how about this one?
+        
+        channel_name_pickle = os.path.join(Path_Key, channel_name + '.voc')
+        with open(channel_name_pickle, 'wb') as handle:
+            pickle.dump(GrainVocab, handle)
+        print('\t\tWrite to:', channel_name_pickle)
+
+        channel_name_path = os.path.join(Path_Key, channel_name + '.tsv')
+        writeGrainList2File(channel_name_path, GrainVocab[0])
+        print('\t\tWrite to:', channel_name_path)
+        return GrainVocab
+
+    @classmethod
+    def _buildGVforSub(cls, Path_Key, channel, channel_name, min_token_freq = 1):
+
+        print('\t\tBuild Grain Uniqe and LookUp Table for channel:', channel_name)
+
+        channel, Min_Ngram, Max_Ngram, end_grain, min_grain_freq, tagScheme = getChannelName(channel, channel_name = channel_name, style = 'extract')
+        
+        # build GV and LKP
+        GrainVocab, LKP, grainidx2freq = get_GU_or_LKP(cls.TokenVocab, cls.idx2freq, channel, Min_Ngram , Max_Ngram , end_grain , min_grain_freq )
+        
+        # save to VOCAB
+        cls.VOCAB[Path_Key] = cls.VOCAB[Path_Key] if Path_Key in cls.VOCAB else {}
+        cls.VOCAB[Path_Key][channel_name] = GrainVocab
+
+        # save GV to disk
+        channel_name_pickle = os.path.join(Path_Key, channel_name + '.voc')
+        with open(channel_name_pickle, 'wb') as handle:
+            pickle.dump(GrainVocab, handle)
+        print('\t\tWrite to:', channel_name_pickle)
+        
+        channel_name_path = os.path.join(Path_Key, channel_name + '.tsv')
+        writeGrainList2File(channel_name_path, GrainVocab[0])
+        print('\t\tWrite to:', channel_name_path)
+
+        # save LKP to LOOKUP
+        cls.LOOKUP[Path_Key] = cls.LOOKUP[Path_Key] if Path_Key in cls.LOOKUP else {}
+        cls.LOOKUP[Path_Key][channel_name] = LKP
+        # save LKP to disk
+        pickle_path = os.path.join(Path_Key,  channel_name + '.lkp')
+        with open(pickle_path, 'wb') as handle:
+            pickle.dump(LKP, handle)
+        # assert len(LookUp) == len(cls.TokenVocab[0])
+        print('\t\tWrite to:', pickle_path)
+
+        # save LKP to LOOKUP
+        cls.FREQ[Path_Key] = cls.FREQ[Path_Key] if Path_Key in cls.FREQ else {}
+        cls.FREQ[Path_Key][channel_name] = grainidx2freq
+        # save LKP to disk
+        pickle_path = os.path.join(Path_Key,  channel_name + '.freq')
+        with open(pickle_path, 'wb') as handle:
+            pickle.dump(grainidx2freq, handle)
+        print('\t\tWrite to:', pickle_path)
+       
+        return GrainVocab
+
+    @classmethod
+    def getGrainVocab(cls, channel, Min_Ngram = 1, Max_Ngram = 1, end_grain = False, tagScheme = 'BIO', min_grain_freq = 1, channel_name = None,
+                      min_token_freq = None, Data_Dir = None,  **kwargs):
+
+        # for token, only return itself token vocab
+        if channel == 'token':
+            if min_token_freq == cls.min_token_freq or not min_token_freq:
+                return cls.TokenVocab
+            else:
+                raise('Error in getting token vocab, only one method is implemented now.')
+
+        # find the Data_Dir
+        Data_Dir = cls.Data_Dir if not Data_Dir else Data_Dir
+
+        # build the path key and the channel name
+        if not channel_name:
+            channel_name = getChannelName(channel, Min_Ngram = Min_Ngram, Max_Ngram = Max_Ngram, end_grain = end_grain, 
+                                          min_grain_freq = min_grain_freq, tagScheme = tagScheme)
+        else:
+            channel, Min_Ngram, Max_Ngram, end_grain, min_grain_freq, tagScheme = getChannelName(channel = channel, channel_name = channel_name, style = 'extract')
+
+        # build the Path_Key
+        if channel not in cls.CONTEXT_IND_CHANNELS:
+            Path_Key = os.path.join(Data_Dir, 'Vocab')
+        else:
+            min_token_freq = cls.min_token_freq if not min_token_freq else min_token_freq
+            # it cannot makes a folder
+            folder = 'F' + str(min_token_freq) 
+            Path_Key = os.path.join(Data_Dir, 'Vocab', folder)
+
+        # try to return the GV
+        try:
+            # generall, we hope this can give us results.
+            return cls._getGVfromVocab(Path_Key, channel_name)
+        except:
+            try:
+                return cls._getGVfromDisk(Path_Key, channel_name)
+            except:
+                # if it is the cls.Data_Dir, we can build GV; else we cannot.
+                if cls.Data_Dir == Data_Dir:
+                    # to check whether the channel is hyper or sub
+                    if channel not in cls.CONTEXT_IND_CHANNELS:
+                        # also include token
+                        return cls._buildGVforHyper(Path_Key, channel, channel_name)
+                    else:
+                        # TODO incorporate max grain num and min grain freq into channel_name in the future
+                        return cls._buildGVforSub(Path_Key, channel, channel_name, min_token_freq = min_token_freq)
+                else:
+                    channel_name_pickle = os.path.join(Path_Key, channel_name + '.voc')
+                    print('In', Data_Dir, 'there is no GrainUnqiue for:', channel_name)
+                    print('Error in:', channel_name_pickle)
+
+    @classmethod
+    def getLookUp(cls, channel = None, Min_Ngram = 1, Max_Ngram = 1, end_grain = False, min_grain_freq = 1, channel_name = None,
+                  Data_Dir = None,  min_token_freq = None, **kwargs):
+
+        # find the Data_Dir
+        Data_Dir = cls.Data_Dir if not Data_Dir else Data_Dir
+
+        if not channel_name:
+            channel_name = getChannelName(channel, Min_Ngram = Min_Ngram, Max_Ngram = Max_Ngram, end_grain = end_grain, 
+                                          min_grain_freq = min_grain_freq, tagScheme = tagScheme)
+        else:
+            channel, Min_Ngram, Max_Ngram, end_grain, min_grain_freq, tagScheme = getChannelName(channel = channel, channel_name = channel_name, style = 'extract')
+
+        # build the Path_Key
+        min_token_freq = cls.min_token_freq if not min_token_freq else min_token_freq
+        # it cannot makes a folder
+        folder = 'F' + str(min_token_freq) 
+        Path_Key = os.path.join(Data_Dir, 'Vocab', folder)
+
+        try:
+            # generall, we hope this can give us results.
+            LKP = cls.LOOKUP[Path_Key][channel_name]
+            TV = cls.getGrainVocab(channel = 'token', Data_Dir = Data_Dir)
+            return LKP, TV
+        except:
+            try:
+                path = os.path.join(Path_Key, channel_name + '.lkp')
+                # assert os.path.isfile(path)
+                with open(path, 'rb') as handle:
+                    LKP = pickle.load(handle)
+                
+                cls.LOOKUP[Path_Key] = cls.LOOKUP[Path_Key] if Path_Key in cls.LOOKUP else {}
+                cls.LOOKUP[Path_Key][channel_name] = LKP
+
+                # read from other pyramid is still no valid
+                TV = cls.getGrainVocab(channel = 'token', Data_Dir = Data_Dir)
+                print('Get LookUp Table for Channel:', channel_name)
+                return LKP, TV
+            except:
+                print('\tIn', Path_Key, 'there is no LookUp Table for:', channel_name)
+                print('\tError in:', path)
+                return None
+
+    @classmethod
+    def getFreq(cls, channel = None, Min_Ngram = 1, Max_Ngram = 1, end_grain = False, channel_name = None,
+                  Data_Dir = None, min_grain_freq = 1, min_token_freq = None, **kwargs):
+
+        # find the Data_Dir
+        Data_Dir = cls.Data_Dir if not Data_Dir else Data_Dir
+        
+        if not channel_name:
+            channel_name = getChannelName(channel, Min_Ngram = Min_Ngram, Max_Ngram = Max_Ngram, end_grain = end_grain, 
+                                          min_grain_freq = min_grain_freq, tagScheme = tagScheme)
+        else:
+            channel, Min_Ngram, Max_Ngram, end_grain, min_grain_freq, tagScheme = getChannelName(channel = channel, channel_name = channel_name, style = 'extract')
+
+        # build the Path_Key
+        min_token_freq = cls.min_token_freq if not min_token_freq else min_token_freq
+        # it cannot makes a folder
+        folder = 'F' + str(min_token_freq) 
+        Path_Key = os.path.join(Data_Dir, 'Vocab', folder)
+
+        try:
+            # generall, we hope this can give us results.
+            Freq = cls.FREQ[Path_Key][channel_name]
+            return Freq
+        except:
+            try:
+                path = os.path.join(Path_Key, channel_name + '.freq')
+                # assert os.path.isfile(path)
+                with open(path, 'rb') as handle:
+                    Freq = pickle.load(handle)
+                
+                cls.FREQ[Path_Key] = cls.FREQ[Path_Key] if Path_Key in cls.FREQ else {}
+                cls.FREQ[Path_Key][channel_name] = Freq
+                # read from other pyramid is still no valid
+                return Freq
+            except:
+                print('\tIn', Path_Key, 'there is no LookUp Table for:', channel_name)
+                print('\tError in:', path)
+                return None
+
+
+    @classmethod
+    def getTrans(cls, channel, tagScheme, Data_Dir = None, GU = None):
+        # get Information for TRANS
+        channel_name = getChannelName(channel, tagScheme = tagScheme)
+        Data_Dir = cls.Data_Dir if not Data_Dir else Data_Dir
+        
+        if not GU: 
+            Path_Key = Data_Dir
+            GU = cls.getGrainVocab(channel, tagScheme = tagScheme)
+        else:
+            Path_Key = Data_Dir + '-tmp'
+
+        try:
+            return cls.TRANS[Path_Key][channel_name] # be caution, this may occur an issue
+        except:
+            ch = 'annoE' if 'anno' in  channel else channel
+            BIOES_GU = cls.getGrainVocab(ch, tagScheme = "BIOES")
+            new_GU   = GU
+            BIOES_LGU= BIOES_GU[0]
+            new_DGU  = new_GU[1]
+            cls.TRANS[Path_Key] = {} if Path_Key not in cls.TRANS else cls.TRANS[Path_Key]
+            cls.TRANS[Path_Key][channel_name] = {str(idx): new_DGU[ trans_bioesTag(channel, bioesTag, tagScheme)] 
+                                                 for idx, bioesTag in enumerate(BIOES_LGU)}
+            return cls.TRANS[Path_Key][channel_name] 
+
+    @classmethod
+    def BUILD_GV_LKP(cls, CHANNEL_SETTINGS_TEMPLATE = None):
 
         cls.CHANNEL_SETTINGS, cls.channels_folderName = get_Channel_Settings(CHANNEL_SETTINGS_TEMPLATE)
 
         for channel in cls.CHANNEL_SETTINGS:
-
             print('Deal with the Channel:', channel)
             channel_setting = cls.CHANNEL_SETTINGS[channel]
             Max_Ngram    = channel_setting.get('Max_Ngram', 1)
@@ -426,316 +731,8 @@ class BasicObject(object):
             tagScheme    = channel_setting.get('tagScheme', 'BIO')
             print('Current Channel is       ', '\t', channel)
             print('Current Channel Max_Ngram', '\t', Max_Ngram)
-            cls.getGrainUnique(channel, Max_Ngram, end_grain = end_grain, tagScheme = tagScheme)
-            # cls.getLookUp(channel, Max_Ngram, end_grain = end_grain)
-
-    @classmethod
-    def getGrainUnique(cls, channel, Max_Ngram=1, end_grain = False, tagScheme = 'BIO', TokenNum_Dir = None, channel_name = None, **kwargs):
-        '''
-            At most time,
-            getGrainUnique doesn't build LGU, it only finds and returns the LGU
-            When it cannot find the LGU,
-            It will build LGU (and LookUp Table if possible)
-            It will save the LGU to the pickle file
-            It will save the LookUp to the pickle file.
-        '''
-        if not channel_name:
-            channel_name = getChannelName(channel, Max_Ngram = Max_Ngram, end_grain = end_grain, tagScheme = tagScheme)
-        
-        if TokenNum_Dir:
-            ################################################################## Read From Other TokenNum_Dir
-            # channel_name_path = os.path.join(TokenNum_Dir, channel_name + '.p')
-            # assert os.path.exists(TokenNum_Dir)
-            assert cls.TokenNum_Dir != TokenNum_Dir # TODO: this is very weird here
-            try:
-                ############################################# ReadFrom LGUDict
-                return cls.GRAIN_UNI[TokenNum_Dir][channel_name]        # (LGU, DGU)
-                ############################################# ReadFrom LGUDict
-            except:
-                cls.GRAIN_UNI[TokenNum_Dir] = cls.GRAIN_UNI[TokenNum_Dir] if TokenNum_Dir in cls.GRAIN_UNI else {}
-                channel_name_pickle = os.path.join(TokenNum_Dir, 'GrainUnique', channel_name + '.voc')
-                try:
-                    ############################################# ReadFrom TSV or Pickle
-                    GrainUnique = readPickleFile2GrainUnique(channel_name_pickle)
-                    cls.GRAIN_UNI[TokenNum_Dir][channel_name] = GrainUnique
-                    return GrainUnique # (LGU, DGU)
-                    ############################################# ReadFrom TSV or Pickle
-                except:
-                    print('In', TokenNum_Dir, 'there is no GrainUnqiue for:', channel_name)
-                    print('Error in:', channel_name_pickle)
-                ################################################################## Read From Other TokenNum_Dir
-
-        else:
-            ################################################################## Read From Current TokenNum_Dir
-            TokenNum_Dir = cls.TokenNum_Dir
-            try:
-                ############################################# ReadFrom LGUDict
-                return cls.GRAIN_UNI[TokenNum_Dir][channel_name]
-                ############################################# ReadFrom LGUDict
-            
-            except:
-                # if channel_name in cls.GRAIN_UNI[TokenNum_Dir]:
-                channel_name_pickle = os.path.join(TokenNum_Dir, 'GrainUnique', channel_name + '.voc')
-                channel_name_path = os.path.join(cls.TokenNum_Dir, 'GrainUnique', channel_name + '.tsv')
-                if os.path.isfile(channel_name_pickle):
-                    ############################################# ReadFrom TSV or Pickle
-                    GrainUnique = readPickleFile2GrainUnique(channel_name_pickle)
-                    cls.GRAIN_UNI[TokenNum_Dir][channel_name] = GrainUnique
-                    return GrainUnique
-                    ############################################# ReadFrom TSV or Pickle
-                else:
-                    ############################################# Generate New LGU
-                    # If not, generate the GrainUnqiue in the Raw Way.
-                    if channel in cls.CONTEXT_IND_CHANNELS:
-                        print('\t\tBuild Grain Uniqe and LookUp Table for channel:', channel_name)
-                        ############################################# Generate New LGU and LT for CTX_IND
-
-                        channel, Max_Ngram, end_grain, tagScheme = getChannelName(channel, channel_name = channel_name, style = 'extract')
-                        GrainUnique, LookUp  = get_GU_or_LKP(cls.TokenUnique, channel=channel, Max_Ngram = Max_Ngram, end_grain = end_grain)
-                        ############################################# New LGU
-                        # GrainUnique = List(GrainUnique)
-                        cls.GRAIN_UNI[TokenNum_Dir][channel_name] = GrainUnique
-
-                        with open(channel_name_pickle, 'wb') as handle:
-                            pickle.dump(GrainUnique, handle)
-                        print('\t\tWrite to:', channel_name_pickle)
-                        
-                        writeGrainList2File(channel_name_path, GrainUnique[0])
-                        print('\t\tWrite to:', channel_name_path)
-                        ############################################# New LGU
-
-                        ############################################# New LT
-                        cls.LOOKUP[TokenNum_Dir] = cls.LOOKUP[TokenNum_Dir] if TokenNum_Dir in cls.LOOKUP else {}
-                        cls.LOOKUP[TokenNum_Dir][channel_name] = LookUp
-
-                        LOOKUP_Dir = os.path.join(TokenNum_Dir, 'GrainUnique')
-                        if not os.path.exists(LOOKUP_Dir):
-                            os.makedirs(LOOKUP_Dir)
-                        pickle_path = os.path.join(LOOKUP_Dir,  channel_name + '.lkp')
-                        with open(pickle_path, 'wb') as handle:
-                            pickle.dump(LookUp, handle)
-                        
-                        assert len(LookUp) == len(cls.TokenUnique[0])
-                        ############################################# New LT
-                        print('\t\tWrite to:', pickle_path)
-                       
-                        return GrainUnique
-                        ############################################# Generate New LGU and LT for CTX_IND
-
-                    elif channel in cls.CONTEXT_DEP_CHANNELS + cls.ANNO_CHANNELS:
-                        print('\t\tBuild GrainUnique for channel:', channel_name)
-                        ############################################# Generate New LGU for CTX_Dep
-                        channel, Max_Ngram, end_grain, tagScheme = getChannelName(channel, channel_name = channel_name, style = 'extract')
-                        print(channel, Max_Ngram, end_grain, tagScheme)
-                        ch = 'annoE' if 'annoR' == channel else channel
-                        BIOES_GU = cls.getGrainUnique(ch, tagScheme = 'BIOES') # cautions: must get the corresponding base GU.
-                        BIOES_GU_neat = BIOES_GU[0][3:]
-
-                        LGU_neat = list(set([trans_bioesTag(channel, i, tagScheme) for i in BIOES_GU_neat]))
-                        LGU_neat.sort()
-                        # print(LGU)
-                        LGU = specialTokens[:-1] + LGU_neat
-                        DGU = dict(zip(LGU, range(len(LGU))))
-                        ############################################# New LGU
-                        # DGU = List(LGU)
-                        GrainUnique = (LGU, DGU)
-
-                        cls.GRAIN_UNI[TokenNum_Dir][channel_name] = GrainUnique
-                        # cls.Build_BIOES_Trans(channel, tagScheme, BIOES_GU, GrainUnique)
-                        # cls,Build_BIOES_Trans(channel, tagScheme, BIOES_GU, new_GU)
-
-                        # pickle_path = os.path.join(LGU_Dir, channel_name + '.voc')
-                        with open(channel_name_pickle, 'wb') as handle:
-                            pickle.dump(GrainUnique, handle)
-                        print('\t\tWrite to:', channel_name_pickle)
-
-                        writeGrainList2File(channel_name_path, GrainUnique[0])
-                        ############################################# New LGU
-                        print('\t\tWrite to:', channel_name_path)
-
-                        return GrainUnique
-                        ############################################# Generate New LGU for CTX_Dep
-                    else:
-                        print('Error in getGrainUnique, cannot get GU for channel:', channel_name)
-                ############################################# Generate New LGU
-
-            ################################################################## Read From Current TokenNum_Dir
-
-    @classmethod
-    def getLookUp(cls, channel = None, Max_Ngram = 1, end_grain = False, tagScheme = 'BIO', TokenNum_Dir = None,  channel_name = None, **kwargs):
-        '''`getLookUp` doesn't build, only finds and returns the LookUp table. It's a fast way to get the Tensors for the CTX_IND channels.'''
-        if not channel_name: 
-            channel_name = getChannelName(channel, Max_Ngram = Max_Ngram, end_grain = end_grain, tagScheme = tagScheme)
-        
-        if TokenNum_Dir:
-            assert cls.TokenNum_Dir != TokenNum_Dir
-            ################################################################## Read From Other TokenNum_Dir
-            try:
-                ############################################# ReadFrom LGUDict
-                channelLookUp = cls.LOOKUP[TokenNum_Dir][channel_name]
-                return channelLookUp, cls.getGrainUnique(channel = 'token', channel_name = 'token', TokenNum_Dir = TokenNum_Dir)
-                ############################################# ReadFrom LGUDict
-            except:
-                LOOKUP_Dir = os.path.join(TokenNum_Dir, 'GrainUnique')
-                cls.LOOKUP[TokenNum_Dir] = cls.LOOKUP[TokenNum_Dir] if TokenNum_Dir in cls.LOOKUP else {}
-                lookup_channel_name_path = os.path.join(LOOKUP_Dir, channel_name + '.lkp')
-                assert os.path.isfile(lookup_channel_name_path)
-
-                try:
-                    ############################################# ReadFrom TSV or Pickle
-                    with open(lookup_channel_name_path, 'rb') as handle:
-                        channelLookUp = pickle.load(handle)
-                    cls.LOOKUP[TokenNum_Dir][channel_name] = channelLookUp
-                    return channelLookUp, cls.getGrainUnique(channel = 'token', channel_name = 'token', TokenNum_Dir = TokenNum_Dir)
-                    ############################################# ReadFrom TSV or Pickle
-                except:
-                    print('\tIn', TokenNum_Dir, 'there is no LookUp Table for:', channel_name)
-                    print('\tError in:', lookup_channel_name_path)
-            ################################################################## Read From Other TokenNum_Dir
-        
-        else:
-            ################################################################## Read From Current TokenNum_Dir
-            try:
-                ############################################# ReadFrom LGUDict
-                channelLookUp = cls.LOOKUP[cls.TokenNum_Dir][channel_name]
-                return channelLookUp, cls.TokenUnique
-                ############################################# ReadFrom LGUDict
-
-            except:
-                print('Get LookUp Table for Channel:', channel_name)
-                TokenNum_Dir = cls.TokenNum_Dir
-                cls.LOOKUP[TokenNum_Dir] = cls.LOOKUP[TokenNum_Dir] if TokenNum_Dir in cls.LOOKUP else {}
-                LOOKUP_Dir = os.path.join(TokenNum_Dir, 'GrainUnique')
-                ############################################# ReadFrom TSV or Pickle
-                lookup_channel_name_path = os.path.join(LOOKUP_Dir,  channel_name + '.lkp')
-                # assert os.path.isfile(lookup_channel_name_path)
-                with open(lookup_channel_name_path, 'rb') as handle:
-                    channelLookUp = pickle.load(handle)
-                cls.LOOKUP[TokenNum_Dir][channel_name] = channelLookUp
-                assert len(channelLookUp) == len(cls.TokenUnique[0])
-                return channelLookUp, cls.TokenUnique
-                ############################################# ReadFrom TSV or Pickle
-            ################################################################## Read From Current TokenNum_Dir
-
-    #################
-    @classmethod
-    def get_BIOES_Trans(cls, channel, tagScheme, TokenNum_Dir = None, GU = None):
-        if GU:
-            TokenNum_Dir = 'tmp'
-            try:
-                return cls.BIOES_Trans[TokenNum_Dir][channel+tagScheme] # be caution, this may occur an issue
-            except:
-                ch = 'annoE' if 'anno' in  channel else channel
-                BIOES_GU = cls.getGrainUnique(ch, tagScheme = "BIOES")
-                new_GU   = GU
-                BIOES_LGU = BIOES_GU[0]
-                new_DGU   = new_GU[1]
-                cls.BIOES_Trans[TokenNum_Dir] = {} if TokenNum_Dir not in cls.BIOES_Trans else cls.BIOES_Trans[TokenNum_Dir]
-                cls.BIOES_Trans[TokenNum_Dir][channel+tagScheme] = {idx: new_DGU[trans_bioesTag(channel, bioesTag, tagScheme )] 
-                                                                    for idx, bioesTag in enumerate(BIOES_LGU)}
-                return cls.BIOES_Trans[TokenNum_Dir][channel+tagScheme] 
-
-
-
-        if TokenNum_Dir:
-            assert TokenNum_Dir != cls.TokenNum_Dir
-            try:
-                return cls.BIOES_Trans[TokenNum_Dir][channel+tagScheme] 
-            except:
-                ch = 'annoE' if 'anno' in  channel else channel
-                BIOES_GU = cls.getGrainUnique(ch, tagScheme = "BIOES")
-                new_GU   = cls.getGrainUnique(channel, tagScheme = tagScheme, TokenNum_Dir = TokenNum_Dir)
-                BIOES_LGU = BIOES_GU[0]
-                new_DGU   = new_GU[1]
-                cls.BIOES_Trans[TokenNum_Dir] = {} if TokenNum_Dir not in cls.BIOES_Trans else cls.BIOES_Trans[TokenNum_Dir]
-                cls.BIOES_Trans[TokenNum_Dir][channel+tagScheme] = {idx: new_DGU[trans_bioesTag(channel, bioesTag, tagScheme )] 
-                                                                    for idx, bioesTag in enumerate(BIOES_LGU)}
-                return cls.BIOES_Trans[TokenNum_Dir][channel+tagScheme] 
-        
-        else:
-            try:
-                return cls.BIOES_Trans[cls.TokenNum_Dir][channel+tagScheme] 
-            except:
-                TokenNum_Dir = cls.TokenNum_Dir
-                ch = 'annoE' if 'anno' in  channel else channel
-                BIOES_GU = cls.getGrainUnique(ch, tagScheme = "BIOES")
-                new_GU   = cls.getGrainUnique(channel, tagScheme = tagScheme)
-                # run it any time before ctx_dep channel GU into GRAIN_UNI
-                BIOES_LGU = BIOES_GU[0]
-                new_DGU   = new_GU[1]
-
-                cls.BIOES_Trans[TokenNum_Dir] = {} if TokenNum_Dir not in cls.BIOES_Trans else cls.BIOES_Trans[TokenNum_Dir]
-                cls.BIOES_Trans[TokenNum_Dir][channel+tagScheme] = {idx: new_DGU[trans_bioesTag(channel, bioesTag, tagScheme )] 
-                                                                    for idx, bioesTag in enumerate(BIOES_LGU)}
-
-                return cls.BIOES_Trans[TokenNum_Dir][channel+tagScheme] 
-
-    @classmethod
-    def Calculate_Infos(cls, batch_words):
-        Pyramid_Dir = os.path.join(cls.TokenNum_Dir, 'Pyramid')
-        pickle_path = os.path.join(Pyramid_Dir,  str(batch_words) + '_Info.p')
-
-        if os.path.isfile(pickle_path):
-            with open(pickle_path, 'rb') as handle:
-                batch_end_st_idx_list, job_no = pickle.load(handle)
-
-            print('Read info from:', pickle_path)
-            return batch_end_st_idx_list, job_no
-
-        else:
-            sentences_endidx = cls.SENT['EndIDXTokens']
-            tokens_vocidx = cls.TOKEN['ORIGTokenIndex']
-            
-            total_words = len(tokens_vocidx)           
-            total_examples  = len(sentences_endidx)
-
-            batch_end_st_idx_list = []
-            job_no = 0 # job_num
-            while True:
-                job_no = job_no + 1
-                batch_token_progress = job_no * batch_words  # 
-
-                if batch_token_progress >= total_words:
-                    # if touch the bottom, go to the end and terminate the loop
-                    batch_end_st_idx_list.append(total_examples)
-                    # # This won't work: print('Current batch token number:', sentences_endidx[total_examples]) 
-                    # print("Last sentence's end tk loc:", sentences_endidx[total_examples-1])
-                    break
-
-                # if not, find the correct end sentence loc_id for this batch
-                batch_end_st_idx = np.argmax(sentences_endidx > batch_token_progress)
-                batch_end_st_idx_list.append(batch_end_st_idx)
-                
-                # print('Current batch token number:', sentences_endidx[batch_end_st_idx])
-                # print("Last sentence's end tk loc:", sentences_endidx[batch_end_st_idx-1])
-            # print(batch_end_st_idx_list, '\n')
-
-            for idx in range(job_no):
-
-                # start and end are batch's start sentence loc_id and end sentence loc_id
-                # as python routines, batch is [start, end), left close right open
-                start = batch_end_st_idx_list[idx-1] if idx > 0 else 0
-                end   = batch_end_st_idx_list[idx]
-
-                # print(start, end)
-                # find the start sentence's start token loc_id, and
-                # find the end sentence's start token loc_id. (as the end sentence is exluded)
-                token_start = sentences_endidx[start-1] if start > 0 else 0
-                token_end   = sentences_endidx[end  -1]
-
-                indexes     = tokens_vocidx[token_start:token_end] # dtype = np.uint32
-                sentence_idx = np.array([i-token_start for i in sentences_endidx[start: end]], dtype = np.uint32)
-                # print('The start and end sent loc_id:', start, end)
-                # print('The token start and end loc idx in each batch:', token_start, token_end)
-                # print(sentence_idx[-1], len(indexes), '\n')
-                
-            # print(end == len(sentences_endidx))
-            # print(token_end == len(tokens_vocidx))
-            with open(pickle_path, 'wb') as handle:
-                pickle.dump([batch_end_st_idx_list, job_no], handle, protocol=4)
-                print('Write info to:', pickle_path)
-            return batch_end_st_idx_list, job_no
-    #################      
+            cls.getGrainVocab(channel, Max_Ngram, end_grain = end_grain, tagScheme = tagScheme)
+    
 
 def convert_Char_2_Word_BasicObject(BasicObject, use_channel = 'pos', MaxTokenUnique = False):
     
@@ -839,7 +836,7 @@ def convert_Char_2_Word_BasicObject(BasicObject, use_channel = 'pos', MaxTokenUn
 
     ########################################################
     if 'ANNOTokenIndex' in BasicObject.TOKEN:
-        channel_name = 'annoE-es'
+        channel_name = 'annoE-bioes'
         GRAIN_UNI[TokenNum_Dir][channel_name] = annoGU
         LGU = annoGU[0]
         channel_name_path = os.path.join(TokenNum_Dir, channel_name+ '.tsv')
@@ -848,7 +845,7 @@ def convert_Char_2_Word_BasicObject(BasicObject, use_channel = 'pos', MaxTokenUn
         # print(LGU)
 
     ########################################################
-    channel_name = 'pos-es'
+    channel_name = 'pos-bioes'
     GRAIN_UNI[TokenNum_Dir][channel_name] = posGU
     LGU = posGU[0]
     channel_name_path = os.path.join(TokenNum_Dir, channel_name+ '.tsv')
@@ -866,5 +863,3 @@ def convert_Char_2_Word_BasicObject(BasicObject, use_channel = 'pos', MaxTokenUn
     BasicObject.OBJECT_TO_PICKLE()
     
     return BasicObject
-
-

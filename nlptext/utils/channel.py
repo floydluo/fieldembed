@@ -3,9 +3,14 @@ import re
 import pickle
 import string
 from jieba import posseg
+import nltk
 
+import pyphen
 from .infrastructure import specialTokens
 
+################## FOR THE CONTEXT-INDEPENDENT CHANNELS ################
+
+##### basic
 def basicGrainChar(char, end_grain = False):
     '''char level only!'''
     punStr = string.punctuation + '＂＃＄％＆＇（）＊＋，－／：；＜＝＞＠［＼］＾＿｀｛｜｝～｟｠｢｣､\u3000、〃〈〉《》「」『』【】〔〕〖〗〘〙〚〛〜〝〞〟〰〾〿–—‘’‛“”„‟…‧﹏﹑﹔·！？｡。'
@@ -30,6 +35,12 @@ def basicGrainChar(char, end_grain = False):
     if end_grain:
         info = info + ['b0']
     return info
+
+def basicGrainToken(token, end_grain = False):
+    info = sum([basicGrainChar(char, end_grain) for char in token], [])
+    return info
+
+#### medical
 
 def medicalGrainChar(word, end_grain = False):
     '''char level only!'''
@@ -74,7 +85,13 @@ def medicalGrainChar(word, end_grain = False):
     if end_grain:
         info = info + ['m0']
     return info
+
+def medicalGrainToken(token, end_grain = False):
+    info = sum([medicalGrainChar(char, end_grain) for char in token], [])
+    return info
     
+
+#### subcomp
 with open('nlptext/sources/CharSubComp.p', 'rb') as handle:
     CharSubCompInfos = pickle.load(handle)
 
@@ -93,10 +110,14 @@ def subcompGrainChar(char, end_grain = False):
         info = info + ['c0']
     return info
 
+def subcompGrainToken(token, end_grain = False):
+    info = sum([subcompGrainChar(char, end_grain) for char in token], [])
+    return info
 
+
+#### stroke
 with open('nlptext/sources/CharStroke.p', 'rb') as handle:
     CharStrokeInfos = pickle.load(handle)
-    
     
 def strokeGrainChar(char, end_grain = False):
     '''char level only!'''
@@ -113,6 +134,11 @@ def strokeGrainChar(char, end_grain = False):
         info = info + ['s0']
     return info
 
+def strokeGrainToken(token, end_grain = False):
+    info = sum([strokeGrainChar(char, end_grain) for char in token], [])
+    return info
+
+#### radical
 with open('nlptext/sources/CharRadical.p', 'rb') as handle:
     CharRadicalInfos = pickle.load(handle)
 
@@ -131,7 +157,11 @@ def radicalGrainChar(char, end_grain = False):
         info = info + ['r0']
     return info
 
+def radicalGrainToken(token, end_grain = False):
+    info = sum([radicalGrainChar(char, end_grain) for char in token], [])
+    return info
 
+#### char
 def charGrainChar(char, end_grain = False):
     '''char level only!'''
     info = [char]
@@ -139,8 +169,11 @@ def charGrainChar(char, end_grain = False):
         info = info + ['ch0']
     return info
 
+def charGrainToken(token, end_grain = False):
+    info = sum([charGrainChar(char, end_grain) for char in token], [])
+    return info
 
-
+#### pinyin
 with open('nlptext/sources/CharPinyin.p', 'rb') as handle:
     CharPinyinInfos = pickle.load(handle)
 
@@ -159,6 +192,31 @@ def pinyinGrainChar(char, end_grain = False):
         info = info + ['y0']
     return info
 
+def pinyinGrainToken(token, end_grain = False):
+    info = sum([pinyinGrainChar(char, end_grain) for char in token], [])
+    return info
+
+
+## syllable
+def syllableGrainToken(token, end_grain = False):
+    # pyphen.LANGUAGES
+    try:
+        dic = pyphen.Pyphen(lang='en')
+        info = dic.inserted(token).split('-')
+    except:
+        info = ['']
+    return info
+
+## phonemes
+with open('nlptext/sources/WordPhoneme.p', 'rb') as handle:
+    WordPhenomeInfo = pickle.load(handle)
+
+def phonemeGrainToken(token, end_grain = False): 
+    try:
+        phonemes = WordPhenomeInfo[token.lower()]
+    except:
+        phonemes = ['']
+    return phonemes
 
 ################## FOR THE CONTEXT-DEPENDENT CHANNELS ################
 posTag = ['a', 'ad', 'ag', 'an', 'b', 'c', 'd', 'df', 'dg', 'e', 'eng', 
@@ -167,29 +225,22 @@ posTag = ['a', 'ad', 'ag', 'an', 'b', 'c', 'd', 'df', 'dg', 'e', 'eng',
           'tg', 'u', 'ud', 'ug', 'uj', 'ul', 
           'uv', 'uz', 'v', 'vd', 'vg', 'vi', 'vn', 'vq', 'x', 'y', 'yg', 'z', 'zg']
 
-def POSGrainSent(sent, tokenLevel = 'word', useStartEnd = False, tagScheme = 'BIOES'):
+def POSGrainSent(sent, tokenLevel = 'word', tagScheme = 'BIOES'):
     '''
+        # tokenLevel = 'word'
+            1: sent = '北京 是 中国 的 首都' # be cautious about this sentence, final segmentation may be different from the input
+            2: sent = '北京是中国的首都'     # this is ok
         Here only for Atom is Char Based
         This method should be enriched
         sent: List of Token(String), with or without Start or End
+        sent: [str]
     '''
-    if useStartEnd:
-        sent = sent[1:-1]
+    sent = sent.split(' ') 
     segs = list(posseg.cut(''.join(sent)))
-    
+    tokens = []
     GrainSent = []
-    
-    if tokenLevel == 'word':
-        for i in range(len(segs)):
-            pair  = segs[i]
-            label = pair.flag
-            GrainSent.append([label])
-            # print(pair.word)
-        if useStartEnd:
-            return [[START]] + GrainSent + [[END]]
-        return GrainSent
-    
-    elif tokenLevel == 'char':
+
+    if tokenLevel == 'char':
         for i in range(len(segs)):
             pair  = segs[i]
             leng  = len(pair.word)
@@ -200,15 +251,45 @@ def POSGrainSent(sent, tokenLevel = 'word', useStartEnd = False, tagScheme = 'BI
                 labels[-1] = label + '-E'
             if 'S' in tagScheme and leng == 1:
                 labels[0] = label + '-S'
-            GrainSent.extend([[i] for i in labels])
-        if useStartEnd:
-            return [[START]] + GrainSent + [[END]]
-        return GrainSent
+            GrainSent.extend(labels)
+            tokens.extend([i for i in pair.word])
+        return GrainSent, tokens
+
+    elif tokenLevel == 'word':
+        for i in range(len(segs)):
+            pair  = segs[i]
+            label = pair.flag
+            GrainSent.append(label+ '-B')
+            tokens.append(pair.word )
+            # print(pair.word)
+        return GrainSent, tokens
+
+
+posEnTag = ['LS', 'TO', 'VBN', "''", 'WP', 'UH', 'VBG', 'JJ', 'VBZ', '--', 
+            'VBP', 'NN', 'DT', 'PRP', ':', 'WP$', 'NNPS', 'PRP$', 'WDT', 
+            '(', ')', '.', ',', '``', '$', 'RB', 'RBR', 'RBS', 'VBD', 'IN', 
+            'FW', 'RP', 'JJR', 'JJS', 'PDT', 'MD', 'VB', 'WRB', 'NNP', 'EX',
+            'NNS', 'SYM', 'CC', 'CD', 'POS']
+
+def POSENGrainSent(sent, tokenLevel = 'word', tagScheme = 'BIOES'):
+    '''
+        Here only for Atom is Char Based
+        This method should be enriched
+        sent: List of Token(String), with or without Start or End
+        sent: [str]
+    '''
+    assert tokenLevel == 'word'
+    tokens = nltk.word_tokenize(sent)
+    # segs = list(posseg.cut(''.join(sent)))
+    GrainSent = [i[-1] +'-B' for i in nltk.pos_tag(tokens)]
+    return GrainSent, tokens
+
+
 ##################################################################
 
 ################################################################################################
 CONTEXT_IND_CHANNELS    = ['basic', 'medical', 'radical', 'token', 'char', 'subcomp', 'stroke', 'pinyin']
-CONTEXT_DEP_CHANNELS    = ['pos']
+CONTEXT_DEP_CHANNELS    = ['pos', 'pos_en']
 ANNO_CHANNELS           = ['annoR', 'annoE']
 
 CONTEXT_IND_CHANNELS_AB = ['b', 'm', 'r',  'T', 'C', 'c', 's', 'y']
@@ -217,30 +298,29 @@ ANNO_CHANNELS_AB        = ['R', 'E']
 
 CHANNEL_ABBR = dict(zip(CONTEXT_IND_CHANNELS + CONTEXT_DEP_CHANNELS+ANNO_CHANNELS , 
                         CONTEXT_IND_CHANNELS_AB+CONTEXT_DEP_CHANNELS_AB + ANNO_CHANNELS_AB ))
-################################################################################################
 
 
-
-################################################################################################
 Channel_Ind_Methods ={
-    'char': charGrainChar, 
-    'basic': basicGrainChar,
-    'medical':medicalGrainChar,
-    'radical':radicalGrainChar,
-    'subcomp':subcompGrainChar,
-    'stroke':strokeGrainChar,
-    'pinyin':pinyinGrainChar,
+    'char': charGrainToken, 
+    'basic': basicGrainToken,
+    'medical':medicalGrainToken,
+    'radical':radicalGrainToken,
+    'subcomp':subcompGrainToken,
+    'stroke':strokeGrainToken,
+    'pinyin':pinyinGrainToken,
+    'syllable': syllableGrainToken,
+    'phoneme': phonemeGrainToken, 
 }
 
-Channel_Dep_Methods = {'pos': POSGrainSent}
-Channel_Dep_TagSets = {'pos': posTag}
+Channel_Dep_Methods = {'pos': POSGrainSent, 
+                       'pos_en': POSENGrainSent}
+Channel_Dep_TagSets = {'pos': posTag, 
+                       'pos_en': posEnTag}
+
+
 ################################################################################################
 
-
 def getGrainNgrams(subword_infos, n):
-    # Here N is the Num for n_gram
-    #     subword_infos: [subcomp1, subcomp2, ...] or [stroke1, stroke2, ...]
-    #                 n: the targeted n gram
     if n == 1:
         return [i for i in subword_infos]
     if n > len(subword_infos):
@@ -251,128 +331,115 @@ def getGrainNgrams(subword_infos, n):
     l = ['-'.join(i) for i in l]
     return l
 
-def grainToken(token, grainCharFunction, Ngram = 1,Max_Ngram = None, end_grain = True):
-    '''
-        token level only!
-        The input token is not in Special Tokens. The input token is a string!
-        TODO: handle the `ngram` problems here. Content-Idenpendent Only
-    '''
-    if token not in specialTokens:
-        infos = sum([grainCharFunction(char, end_grain) for char in token], [])
-        if not Max_Ngram:
-            return getGrainNgrams(infos, Ngram)
-        else:
-            return sum([getGrainNgrams(infos, idx+1) for idx in range(Max_Ngram)], [])
-    else:
-        return getGrainNgrams([token], Ngram) # deal with the special tokens
 
-def getChannelGrain4Token(token, channel, Ngram = 1, Max_Ngram = None,  end_grain = False):
-    '''
-        token level only!
-        The input token is not in Special Tokens
-        The input token is a string!
-        TODO: handle the `ngram` problems here.
-        Content-Idenpendent Only
-    '''
+def grainToken(token, grainTokenFunction, Ngram = None, Min_Ngram = 1, Max_Ngram = 1, end_grain = True):
+    infos =  grainTokenFunction(token, end_grain = end_grain) 
+    if Ngram: Min_Ngram, Max_Ngram = Ngram, Ngram
+    return sum([getGrainNgrams(infos, idx) for idx in range(Min_Ngram, Max_Ngram + 1)], [])
+
+
+def getChannelGrain4Token(token, channel, Ngram = None, Min_Ngram = 1, Max_Ngram = 1,  end_grain = False):
     if channel == 'token':
         return [token]
     elif channel in Channel_Ind_Methods:
-        return grainToken(token, Channel_Ind_Methods[channel], Ngram = Ngram, Max_Ngram = Max_Ngram, end_grain = end_grain)
+        return grainToken(token, Channel_Ind_Methods[channel], Ngram = Ngram, Min_Ngram = Min_Ngram,Max_Ngram = Max_Ngram, end_grain = end_grain)
     else:
         print('The Channel "', channel, '" is not available currently!')
 
-###############################################################################################################
-def grainSent_ctxInd(sent, channel, Ngram = 1, Max_Ngram = None,  end_grain = False):
-    return [getChannelGrain4Token(token, channel, Ngram, Max_Ngram, end_grain) for token in sent]
-    
-def grainSent_ctxDep(sent, channelGrainSent, tokenLevel = 'word', tagScheme = 'BIO', useStartEnd = True):
-    return channelGrainSent(sent, tokenLevel=tokenLevel, tagScheme=tagScheme, useStartEnd = useStartEnd)
 
-def getChannelGrain4Sent(sent, channel, Ngram = 1, Max_Ngram = None, tokenLevel = 'char', tagScheme =  'BIO', useStartEnd = True, end_grain = False):
-    '''
-        token level only! The input token is not in Special Tokens. The input token is a string!
-        TODO: handle the `ngram` problems here. Content-Idenpendent Only
-    '''
-    if channel in Channel_Ind_Methods:
-        return grainSent_ctxInd(sent, channel, Ngram = Ngram, Max_Ngram = Max_Ngram,  end_grain = end_grain)
+def getChannelGrain4Sent(sent, channel, Ngram = None, Min_Ngram = 1, Max_Ngram = 1, tokenLevel = 'char', tagScheme =  'BIO', end_grain = False):
+    if channel == 'token':
+        return [[tk] for tk in sent.split(' ')]
+    elif channel in Channel_Ind_Methods:
+        return [getChannelGrain4Token(token, channel, Ngram, Min_Ngram, Max_Ngram, end_grain) for token in sent.split(' ')]
+        # return grainSent_ctxInd(sent, channel, Ngram = Ngram, Max_Ngram = Max_Ngram,  end_grain = end_grain)
     elif channel in Channel_Dep_Methods:
-        return grainSent_ctxDep(sent, Channel_Dep_Methods[channel], tokenLevel =tokenLevel, tagScheme = tagScheme, useStartEnd = useStartEnd)
+        return [[gr] for gr in Channel_Dep_Methods[channel](sent, tokenLevel = tokenLevel, tagScheme = tagScheme)[0]]
+        # return grainSent_ctxDep(sent, Channel_Dep_Methods[channel], tokenLevel =tokenLevel, tagScheme = tagScheme, useStartEnd = useStartEnd)
     else:
         print('The Channel "', channel, '" is not available currently!')
+
+
 ###############################################################################################################
 
-
-############### PART Channel Name
-def getChannelName(channel, Max_Ngram = 1,  end_grain = False, tagScheme = 'BIO', style = 'normal', channel_name = None, channel_name_abbr = None, **kwargs):
-
+###############################################################################################################
+def getChannelName(channel, Min_Ngram = 1, Max_Ngram = 1,  end_grain = False, tagScheme = 'BIO', min_grain_freq = 1,
+                   style = 'normal', channel_name = None, channel_name_abbr = None, **kwargs):
+    # hyper: channel + '-bio'
+    # sub  : channel + '-n1t5' + 'e' or '' + 'f5'
     if style == 'normal':
-        MN = str(Max_Ngram) if Max_Ngram > 1 else ''
-        e  = 'e'            if end_grain else ''
-        tS = '-' + tagScheme.replace('BIO', '').lower() if tagScheme != 'BIO' else ''
-        return channel + MN + e + tS
+        if channel == 'token':
+            return channel 
+        elif channel in CONTEXT_IND_CHANNELS:
+            MN = '-n' + str(Min_Ngram) + 't' + str(Max_Ngram)
+            e  = 'e' if end_grain else ''
+            f  = '-f' + str(min_grain_freq)
+            return channel + MN + e + f
+        else:
+            tS = '-' + tagScheme.lower() 
+            return channel + tS
 
     elif style == 'abbr':
-        channel = CHANNEL_ABBR[channel] # if abbr else channel
-        MN = str(Max_Ngram) if Max_Ngram > 1 else ''
-        e  = 'e'            if end_grain else ''
-        tS = '-' + tagScheme.replace('BIO', '').lower() if tagScheme != 'BIO' else ''
-        return channel + MN + e + tS
+        channel_abbr = CHANNEL_ABBR[channel] 
+        if channel == 'token':
+            return channel_abbr
+        elif channel in CONTEXT_IND_CHANNELS:
+            MN = '-n' + str(Min_Ngram) + 't' + str(Max_Ngram)
+            e  = 'e' if end_grain else ''
+            f  = '-f' + str(min_grain_freq)
+            return channel_abbr + MN + e + f
+        else:
+            tS = '-' + tagScheme.lower() 
+            return channel_abbr + tS
 
     elif channel_name and style == 'extract':
         assert channel in channel_name
-        MN_e_tS = channel_name[len(channel):]
-        if len(MN_e_tS) == 0:
-            return channel, Max_Ngram, end_grain, tagScheme
-        if MN_e_tS[0] in '23456789':
-            Max_Ngram = int(MN_e_tS[0])
-            e_ts = MN_e_tS[1:]
-            if len(e_ts) == 0:
-                return channel, Max_Ngram, end_grain, tagScheme
-        else:
-            Max_Ngram = 1
-            e_ts = MN_e_tS
+        if channel == 'token':
+            return channel, Min_Ngram, Max_Ngram, end_grain, min_grain_freq, tagScheme
+
+        elif channel in CONTEXT_IND_CHANNELS:
+            channel_name, freq = channel_name.split('-f')
+            min_grain_freq = int(freq)
+            MN_e = channel_name.split('-n')[1]
+            # print(MN_e)
+            if 'e' in MN_e:
+                end_grain = True
+                MN = MN_e[:-1]
+            else:
+                end_grain = False
+                MN = MN_e
+            Min_Ngram, Max_Ngram = [int(i) for i in MN.split('t')]
+            return channel, Min_Ngram, Max_Ngram, end_grain, min_grain_freq, tagScheme
         
-        if e_ts[0] == 'e':
-            end_grain = True
-            ts = e_ts[1:]
         else:
-            end_grain = False
-            ts = e_ts
-        if ts.upper() in ['-ES', '-E', '-S']:
-            tagScheme = 'BIO' + ts.upper()[1:]
-        else:
-            tagScheme = 'BIO'
-        return channel, Max_Ngram, end_grain, tagScheme
+            tagScheme = channel_name.split('-')[-1].upper()
+            return channel, Min_Ngram, Max_Ngram, end_grain, min_grain_freq, tagScheme
         
     elif channel_name_abbr and style == 'extract':
         channel_abbr = CHANNEL_ABBR[channel]
-        MN_e_tS = channel_name_abbr[len(channel_abbr): ]
-        if len(MN_e_tS) == 0:
-            return channel, Max_Ngram, end_grain, tagScheme
-        if MN_e_tS[0] in '23456789':
-            Max_Ngram = int(MN_e_tS[0])
-            e_ts = MN_e_tS[1:]
-            if len(e_ts) == 0:
-                return channel, Max_Ngram, end_grain, tagScheme
-        else:
-            Max_Ngram = 1
-            e_ts = MN_e_tS
-        
-        if e_ts[0] == 'e':
-            end_grain = True
-            ts = e_ts[1:]
-        else:
-            end_grain = False
-            ts = e_ts
-        if ts.upper() in ['-ES', '-E', '-S']:
-            tagScheme = 'BIO' + ts.upper()[1:]
-        else:
-            tagScheme = 'BIO'
-        
-        return channel, Max_Ngram, end_grain, tagScheme
+        assert channel_abbr in channel_name_abbr
+        if channel == 'token':
+            return channel_abbr, Min_Ngram, Max_Ngram, end_grain, min_grain_freq, tagScheme
 
+        elif channel in CONTEXT_IND_CHANNELS:
+            channel_name, freq = channel_name_abbr.split('-f')
+            min_grain_freq = int(freq)
+            MN_e = channel_name.split('-n') [1]
+            if 'e' in MN_e:
+                end_grain = True
+                MN = MN_e[:-1]
+            else:
+                end_grain = False
+                MN = MN_e
+            Min_Ngram, Max_Ngram = [int(i) for i in MN.split('t')]
+            return channel_abbr, Min_Ngram, Max_Ngram, end_grain, min_grain_freq, tagScheme
+        
+        else:
+            tagScheme = channel_name.split('-')[-1].upper()
+            return channel_abbr, Min_Ngram, Max_Ngram, end_grain, min_grain_freq, tagScheme
     else:
         print('Error in getChannelName')
+
 
 def get_Channel_Settings(CHANNEL_SETTINGS_TEMPLATE):
     d = CHANNEL_SETTINGS_TEMPLATE.copy()
