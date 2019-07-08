@@ -895,6 +895,9 @@ def train_batch_fieldembed_negsamp(
     cdef int word_vocidx, hyper_vocidx = 0 
     cdef int loc_idx
 
+
+    cdef int unk_idx = len(model.wv_neg.DTU)
+
     init_w2v_config(&c, model, alpha, compute_loss, _work, _neu1, _work_m, _neu_m, _grad_mem) # this is the difference between sg and cbow
     
     if subsampling:
@@ -910,10 +913,9 @@ def train_batch_fieldembed_negsamp(
             # step2: loop every tokens in this sentence, drop special tokens and use downsampling
             for loc_idx in range(idx_start, idx_end):
                 # loc_idx = i + idx_start
-                word_vocidx = indexes[loc_idx]
-            
+                word_vocidx = DTU.get(indexes[loc_idx], unk_idx)
                 # filter high and low freq tokens, is these necessary?
-                if word_vocidx <= 3:
+                if word_vocidx >= unk_idx:
                     continue
                 if c.sample and vlookup[word_vocidx].sample_int < random_int32(&c.next_random):
                     continue
