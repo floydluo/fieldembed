@@ -69,6 +69,8 @@ cdef struct Word2VecConfig:
     # np.uint32_t hyper_indexes_map
     # for hyper: TODO, this may be not correct
     map[int, np.uint32_t *] hyper_indexes 
+    np.uint32_t reduced_windows[MAX_SENTENCE_LEN]
+
     # use_sub --> use_head --> use_hyper
     map[int, REAL_t * ] syn0_map                     
     map[int, np.uint32_t *] LookUp_map
@@ -83,57 +85,11 @@ cdef struct Word2VecConfig:
     REAL_t *neu_m
     REAL_t *word_locks
 
-    np.uint32_t reduced_windows[MAX_SENTENCE_LEN]
     np.uint32_t *cum_table
 
     REAL_t *syn1neg
     unsigned long long cum_table_len
     unsigned long long next_random
-
-
-###################################################################################################################################
-
-cdef init_w2v_config_0X1_neat(
-    Word2VecConfig *c, 
-    model, 
-    alpha, 
-    compute_loss, 
-    _work, 
-    _neu1)
-
-cdef unsigned long long fieldembed_token_neg_0X1_neat( 
-    const REAL_t alpha, 
-    const int size,
-    const int negative, 
-    np.uint32_t *cum_table, 
-    unsigned long long cum_table_len, 
-
-    const np.uint32_t indexes[MAX_SENTENCE_LEN], 
-    int i, # right word loc_idx
-    int j, # left  word loc_idx start
-    int k, # left  word loc_idx end
-
-    int use_head,                # 
-    int use_sub,                 # 
-    int use_hyper,
-    
-    map[int, REAL_t * ] syn0_map,
-    map[int, np.uint32_t *] LookUp_map,
-    map[int, np.uint32_t *] EndIdx_map,
-    map[int, REAL_t *] LengInv_map,
-    map[int, int] leng_max_map,
-
-    REAL_t *syn1neg, 
-    REAL_t *word_locks,
-
-    REAL_t *neu1,  
-    REAL_t *work,
-    
-    int cbow_mean, 
-    unsigned long long next_random, 
-    const int _compute_loss, 
-    REAL_t *_running_training_loss_param) nogil
-
 
 ###################################################################################################################################
 
