@@ -1,6 +1,5 @@
+
 ############# MY PROJECT ###########
-
-
 # Byte-compiled / optimized / DLL files
 __pycache__/
 
@@ -8,29 +7,23 @@ nlptext/__pycache__/
 
 nlptext/__pycache__/base.cpython-36.pyc
 
-
-#  corpus/
 corpus/LuohuCorpus*/
 corpus/LuohuNER/
 corpus/ccks/
-corpus/WikiTotal/
-corpus/medpos
-corpus/medicalSent*
-corpus/fudan
+corpus/Wiki*/
 
 
 output/
 embed/
+channel/
 data/
-embeddings/
-fieldembed/sources/medical*
-fieldembed/sources/fudan
+
 *.pyc
 
 *.py[cod]
 *$py.class
 
-eval_medical.py
+
 here.npy
 
 .DS_Store
@@ -135,5 +128,4 @@ venv.bak/
 
 # mypy
 .mypy_cache/
-
 
