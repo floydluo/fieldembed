@@ -11,6 +11,8 @@ from contextlib import contextmanager
 import collections
 import logging
 import warnings
+import os
+
 
 try:
     from html.entities import name2codepoint as n2cp
@@ -45,6 +47,11 @@ from six.moves import range
 from smart_open import smart_open
 
 from multiprocessing import cpu_count
+
+
+from nlptext.sentence import Sentence
+from nlptext.text import Text
+
 
 if sys.version_info[0] >= 3:
     unicode = str
@@ -2109,3 +2116,110 @@ def effective_n_jobs(n_jobs):
     elif n_jobs < 0:
         n_jobs = max(cpu_count() + 1 + n_jobs, 1)
     return n_jobs
+
+
+def get_chunk_info(BasicObject, Object, BATCH_MAX_NUM = 10000):
+    
+    if 'sent' in Object.lower():
+        Object = Sentence
+        Objects_Num = BasicObject.SENT['length']
+        name = 'sent'
+        
+    elif 'text' in Object.lower():
+        Object = Text
+        Objects_Num = BasicObject.TEXT['length']
+        name = 'text'
+    else:
+        raise('No Such Object:', Object)
+        
+        
+    Data_Dir = BasicObject.Data_Dir
+
+    path = os.path.join(Data_Dir + 'Info')
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+    info_file_name = os.path.join(path, name + '.p')
+    
+
+    if os.path.isfile(info_file_name):
+        with open(info_file_name, 'rb') as handle:
+            chunkidx_2_endbyteidxs, chunkidx_2_cumlengoftexts = _pickle.load(handle)
+        return chunkidx_2_endbyteidxs, chunkidx_2_cumlengoftexts
+
+    else:
+
+        # channel = 'token' 
+        # chunkidx_2_endbyteidx = [] 
+        
+        chunkidx_2_endbyteidxs = {}
+        for channel in BasicObject.Channel_Hyper_Path:
+            chunkidx_2_endbyteidxs[channel] = []
+            
+        chunkidx_2_cumlengoftexts = []
+        # this can be removed
+        chunkidx_2_length_count = []
+
+
+        current_chunk_lengoftexts = []
+        current_chunk_length_count = 0
+        
+        for objectidx in range(Objects_Num):
+            # the objectidx is the locidx
+            text = Object(objectidx) 
+            text_token_num = text.length
+            length_with_new_text = current_chunk_length_count + text_token_num
+            if  length_with_new_text > BATCH_MAX_NUM:
+                # pay attention to this operation
+                # this text is exclusive to current chunk, so the end of chunk is the start of this text
+                
+                # endbyteidx, _ = text.start_end_position(channel) 
+                # chunkidx_2_endbyteidx.append(endbyteidx)
+                
+                for channel in chunkidx_2_endbyteidxs:
+                    endbyteidx, _ = text.start_end_position(channel) 
+                    chunkidx_2_endbyteidxs[channel].append(endbyteidx)
+                    
+                # also current_chunk_lengoftexts doesn't include the information of this text
+                chunkidx_2_cumlengoftexts.append(np.cumsum(current_chunk_lengoftexts))
+
+                # records the chunk length, this can be removed
+                chunkidx_2_length_count.append(current_chunk_length_count)
+
+                # in the following block, the new text matters.
+                # get the new the current chunk information
+                current_chunk_length_count = text_token_num
+                current_chunk_lengoftexts = [text_token_num]
+
+            else:
+                # update current_chunk_length_count when it is <= 10000
+                current_chunk_length_count = length_with_new_text
+
+                # append the object's length in the current_chunk_lengoftexts
+                current_chunk_lengoftexts.append(text_token_num)
+
+
+        # when the loop is over, we still need the to append 
+        # the last small chunk into the total chunks.
+        # here, the object is the smallest object.
+
+        # notice, that this text is included in the last chuck
+        # _, endbyteidx = text.start_end_position(channel) 
+        # chunkidx_2_endbyteidx.append(endbyteidx)
+        
+        for channel in chunkidx_2_endbyteidxs:
+            _, endbyteidx = text.start_end_position(channel) 
+            chunkidx_2_endbyteidxs[channel].append(endbyteidx)
+                    
+        # save the txtidx2endtokenidx, derived from lengoftexts
+        chunkidx_2_cumlengoftexts.append(np.cumsum(current_chunk_lengoftexts))
+
+        # records the chunk length, this can be removed
+        chunkidx_2_length_count.append(current_chunk_length_count)
+
+        with open(info_file_name, 'wb') as handle:
+             _pickle.dump([chunkidx_2_endbyteidxs, chunkidx_2_cumlengoftexts], handle)
+
+        return chunkidx_2_endbyteidxs, chunkidx_2_cumlengoftexts# , chunkidx_2_length_count
+
+        

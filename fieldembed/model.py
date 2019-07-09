@@ -1,5 +1,5 @@
 from __future__ import division 
-
+import re
 import logging
 import sys
 import os
@@ -23,11 +23,16 @@ from scipy.special import expit
 from six import iteritems, itervalues, string_types
 from six.moves import range
 
+
+from nlptext.utils.pyramid import read_file_chunk_string
+from .utils import get_chunk_info
+
+
 from . import utils, matutils  
 from .utils import deprecated
 from .utils import keep_vocab_item, call_on_class_only
 from .keyedvectors import Vocab, Word2VecKeyedVectors
-from .fieldembed_core import train_batch_fieldembed_0X1_neat
+# from .fieldembed_core import train_batch_fieldembed_0X1_neat
 from .fieldembed_core import train_batch_fieldembed_negsamp
 
 logger = logging.getLogger(__name__)
@@ -86,7 +91,7 @@ class FieldEmbedding(utils.SaveLoad):
         # we can treat them as toolkits instead of data structures.
         # vocabulary will update wv and wv_neg 
         # the relationship between vocabulary and (wv, wv_neg) is very weird.
-        self.vocabulary = FieldEmbedVocab(sample=sample, ns_exponent=ns_exponent)
+        self.vocabulary = FieldEmbedVocab(sample=sample, ns_exponent = ns_exponent)
         # trainables will create matrices as fields embeddings
         self.trainables = FieldEmbedTrainables(seed=seed, vector_size=size, hashfxn=hashfxn)
 
@@ -124,6 +129,7 @@ class FieldEmbedding(utils.SaveLoad):
 
         self.vector_size = int(vector_size)
         self.workers = int(workers)
+        print(self.workers)
         self.epochs = iter
         self.train_count = 0
         self.total_train_time = 0
@@ -132,7 +138,7 @@ class FieldEmbedding(utils.SaveLoad):
         self.callbacks = callbacks
 
         self.build_vocab(nlptext = nlptext)
-        
+        print("model's window size is:", window)
         print('finish build vocab')
         if train:
             print('\n\n======== Training Start ....'); s = datetime.now()
@@ -351,28 +357,29 @@ class FieldEmbedding(utils.SaveLoad):
     def _train_epoch_nlptext(self, nlptext, cur_epoch = 0, total_examples=None, total_words=None,queue_factor=2, report_delay=1.0):
         ########### preprocess
         # sentences_endidx = nlptext.SENT['EndIDXTokens']
-        tokens_vocidx    = nlptext.TOKEN['ORIGTokenIndex']
-        print(len(tokens_vocidx))
-        total_examples  =  len(sentences_endidx)
-        total_words     =  len(tokens_vocidx)     
-        hyper_vocidx = []      
+        # tokens_vocidx    = nlptext.TOKEN['ORIGTokenIndex']
+        # print(len(tokens_vocidx))
+        total_examples  =  nlptext.SENT['length']
+        total_words     =  nlptext.TOKEN['length']
+        # hyper_vocidx = []      
 
 
         print('Start getting batch infos')
-        s = datetime.now(); print(s)
-        batch_end_st_idx_list, job_no = nlptext.Calculate_Infos(self.batch_words)
-        e = datetime.now(); print(e)
-        print('The time of finding batch_end_st_idx_list:', e - s)
-        print('Total job number is:', job_no)
         
         chunkidx_2_endbyteidxs, chunkidx_2_cumlengoftexts = get_chunk_info(nlptext, 'sentence', BATCH_MAX_NUM = self.batch_words)
+        job_no = len(chunkidx_2_cumlengoftexts)
 
+        # print('The time of finding batch_end_st_idx_list:', e - s)
+        print('Total job number is:', job_no)
+        
+        
         # sentences_endidx, tokens_vocidx, batch_end_st_idx_list, job_no, 
         job_queue = Queue(maxsize=queue_factor * self.workers)
         progress_queue = Queue(maxsize=(queue_factor + 1) * self.workers)
 
         # in the future, make the selection here. or make selection here
         # make more worker_loop_nlptext1, 2, 3, 4, 5
+        print('The workers number is:', self.workers)
         workers = [
             threading.Thread(
                 target=self._worker_loop_nlptext,
@@ -382,7 +389,7 @@ class FieldEmbedding(utils.SaveLoad):
         logger.info('\n the total_examples is:' + str(total_examples) + '   , the total words is:' + str(total_words) + '\n')
         workers.append(threading.Thread(
             target=self._job_producer_nlptext,
-            args=(sentences_endidx, total_examples, tokens_vocidx, hyper_vocidx, total_words, batch_end_st_idx_list, job_no, job_queue,), # data_iterable is sentences
+            args=(nlptext, chunkidx_2_endbyteidxs, chunkidx_2_cumlengoftexts, job_no, job_queue, total_examples,  total_words,), # data_iterable is sentences
             kwargs={'cur_epoch': cur_epoch,}))
 
         for thread in workers:
@@ -395,41 +402,44 @@ class FieldEmbedding(utils.SaveLoad):
 
         return trained_word_count, raw_word_count, job_tally
 
-    def _job_producer_nlptext(self, sentences_endidx, total_examples, tokens_vocidx, hyper_vocidx, 
-        total_words, batch_end_st_idx_list, job_no, job_queue, cur_epoch=0):
+    def _job_producer_nlptext(self, nlptext, chunkidx_2_endbyteidxs, chunkidx_2_cumlengoftexts, job_no, job_queue, 
+        total_examples,  total_words, cur_epoch=0):
         #---------------------------------------------------# 
+        
 
         job_batch, batch_size = [], 0
         pushed_words, pushed_examples = 0, 0 # examples refers to sentences
         next_job_params = self._get_job_params(cur_epoch) # current learning rate: cur_alpha
     
-        for idx in range(job_no):
+        for chunk_idx in range(job_no):
 
-            # start and end are batch's start sentence loc_id and end sentence loc_id
-            # as python routines, batch is [start, end), left close right open
-            start = batch_end_st_idx_list[idx-1] if idx > 0 else 0
-            end   = batch_end_st_idx_list[idx]
+            # get chunk_token_str
+            channel = 'token'
+            start_position = 0 if chunk_idx == 0 else chunkidx_2_endbyteidxs[channel][chunk_idx - 1] 
+            end_postion = chunkidx_2_endbyteidxs[channel][chunk_idx] 
+            path = nlptext.Channel_Hyper_Path[channel]
+            chunk_token_str = re.split(' |\n', read_file_chunk_string(path, start_position, end_postion))
 
-            # print(start, end)
-            # find the start sentence's start token loc_id, and
-            # find the end sentence's start token loc_id. (as the end sentence is exluded)
-            token_start = sentences_endidx[start-1] if start > 0 else 0
-            token_end   = sentences_endidx[end  -1]
+            # get chunk_hyper_idx
+            chunk_hyper_idxs = []
+            for channel in chunkidx_2_endbyteidxs:
+                if channel != 'token' and channel in self.Field_Settings:
+                    start_position = 0 if chunk_idx == 0 else chunkidx_2_endbyteidxs[channel][chunk_idx - 1] 
+                    end_postion = chunkidx_2_endbyteidxs[channel][chunk_idx] 
+                    path = nlptext.Channel_Hyper_Path[channel]
+                    grain_idx = re.split(' |\n', read_file_chunk_string(path, start_position, end_postion))
+                    f_settings = self.Field_Settings[channel]
+                    bioes2tag = nlptext.getTrans(channel, f_settings['tagScheme'])
+                    # shall we check its insanity?
+                    bioes_idx =  [bioes2tag[vocidx] for vocidx in grain_idx]
+                    chunk_hyper_idxs.append(bioes_idx)
 
-            indexes  = tokens_vocidx[token_start:token_end] # dtype = np.uint32
-            if self.use_hyper:
-                hyper_indexes = [] 
-                for i in range(self.use_hyper):
-                    hyper_indexes.append(hyper_vocidx[i][token_start:token_end])
-                # indexes = [token_indexes, hyper_indexes]
-            else:
-                hyper_indexes = []
             # sentence_idx= np.array([i-token_start for i in sentences_endidx[start: end]], dtype = np.uint32)
-            sentence_idx= [i-token_start for i in sentences_endidx[start: end]]
+            sentence_idx = np.array(chunkidx_2_cumlengoftexts[chunk_idx], dtype = np.uint32)
 
             # this is important.
             # chunk_token_str, chunk_hyper_strs, sentence_idx, next_job_params
-            job_queue.put((indexes, hyper_indexes, sentence_idx, next_job_params))
+            job_queue.put((chunk_token_str, chunk_hyper_idxs, sentence_idx, next_job_params))
 
             pushed_examples += len(sentence_idx)
             epoch_progress = 1.0 * pushed_examples / total_examples
@@ -461,33 +471,62 @@ class FieldEmbedding(utils.SaveLoad):
         return next_alpha
 
     def _worker_loop_nlptext(self, job_queue, progress_queue, proj_num = 1):
+        # produce memory for projection vectors
         inits = self._get_thread_working_mem(proj_num = proj_num) 
-        merger_mem = self._get_thread_working_mem_for_meager()
+        merger_mem = self._get_thread_working_mem_for_merger()
         grad_mem = self._get_thread_grad_mem(proj_num = proj_num)
 
         jobs_processed = 0
+
+        idx = 0 # log
+
         while True:
             job = job_queue.get()
             if job is None:
                 progress_queue.put(None)
                 break  # no more jobs => quit this worker
-            indexes, hyper_indexes, sentence_idx, alpha = job 
+
+
+            chunk_token_str, chunk_hyper_idxs, sentence_idx, alpha = job 
+
+            # # log
+            # idx = idx + 1 
+            # if idx % 100 == 0:
+            #     print(idx)
+            #     # print(chunk_token_str)
+            #     # print(chunk_hyper_idxs)
+            #     print(alpha)
+
+            #     for sent_idx in range(len(sentence_idx)):
+            #         # step1: get every sentence's idx_start and idx_end
+            #         if sent_idx == 0:
+            #             idx_start = 0
+            #         else:
+            #             idx_start = sentence_idx[sent_idx-1]
+            #         idx_end = sentence_idx[sent_idx]
+            #         # print('orig-sent loc start and end idx')
+            #         # print(idx_start, idx_end)
+            #         print(' '.join(chunk_token_str[idx_start: idx_end]))
+            #         print('\n')
+            #     print('----')
+
+
 
             for callback in self.callbacks:
                 callback.on_batch_begin(self)
 
-            tally, raw_tally = self._do_train_job_nlptext(indexes, hyper_indexes, sentence_idx, alpha, inits, merger_mem, grad_mem)
+            tally, raw_tally, loss = self._do_train_job_nlptext(chunk_token_str, chunk_hyper_idxs, sentence_idx, alpha, inits, merger_mem, grad_mem)
             for callback in self.callbacks:
                 callback.on_batch_end(self)
 
-            progress_queue.put((len(sentence_idx), tally, raw_tally))  # report back progress
+            progress_queue.put((len(sentence_idx), tally, raw_tally, loss))  # report back progress
             jobs_processed += 1
         logger.debug("o----> Worker exiting, processed %i jobs", jobs_processed)
 
     def _get_thread_working_mem(self, proj_num = 1):
         return [matutils.zeros_aligned(self.vector_size * proj_num, dtype=REAL) for i in range(2)]
 
-    def _get_thread_working_mem_for_meager(self):
+    def _get_thread_working_mem_for_merger(self):
         work_m = matutils.zeros_aligned(self.vector_size, dtype=REAL) 
         neu_m  = matutils.zeros_aligned(self.vector_size, dtype=REAL) 
         return work_m, neu_m
@@ -497,15 +536,13 @@ class FieldEmbedding(utils.SaveLoad):
 
     def _do_train_job_nlptext(self, indexes, hyper_indexes, sentence_idx, alpha, inits, merger_mem, grad_mem):
         tally = 0
-        if self.mode == 'fieldembed_0X1_neat':
-            work, neu1 = inits
-            tally += train_batch_fieldembed_0X1_neat(self, indexes, sentence_idx, alpha, work, neu1, self.compute_loss)
-        else:
-            work, neu1 = inits
-            work_m, neu_m = merger_mem
-            grad_mem = grad_mem
-            tally += train_batch_fieldembed_negsamp(self, indexes, hyper_indexes, sentence_idx, alpha, work, neu1, work_m, neu_m, grad_mem, self.compute_loss)
-        return tally, sentence_idx[-1]
+        work, neu1 = inits
+        work_m, neu_m = merger_mem
+        grad_mem = grad_mem
+        tally_increase, loss = train_batch_fieldembed_negsamp(self, indexes, hyper_indexes, sentence_idx, 
+                            alpha, work, neu1, work_m, neu_m, grad_mem, self.compute_loss)
+        tally = tally_increase + tally
+        return tally, sentence_idx[-1], loss
 
     ################################################################################################################################################### log
     def _log_epoch_progress(self, progress_queue=None, job_queue=None, cur_epoch=0, total_examples=None,total_words=None, report_delay=10.0, is_corpus_file_mode=None):
@@ -521,7 +558,7 @@ class FieldEmbedding(utils.SaveLoad):
                 unfinished_worker_count -= 1
                 logger.info("Worker thread finished; awaiting finish of %i more threads", unfinished_worker_count)
                 continue
-            examples, trained_words, raw_words = report
+            examples, trained_words, raw_words, loss = report
             job_tally += 1
 
             # update progress stats
@@ -534,7 +571,7 @@ class FieldEmbedding(utils.SaveLoad):
             if elapsed >= next_report:
                 self._log_progress(
                     job_queue, progress_queue, cur_epoch, example_count, total_examples,
-                    raw_word_count, total_words, trained_word_count, elapsed)
+                    raw_word_count, total_words, trained_word_count, elapsed, loss)
                 next_report = elapsed + report_delay
         # all done; report the final stats
         elapsed = default_timer() - start
@@ -545,26 +582,28 @@ class FieldEmbedding(utils.SaveLoad):
         return trained_word_count, raw_word_count, job_tally
 
     def _log_progress(self, job_queue, progress_queue, cur_epoch, example_count, total_examples,
-        raw_word_count, total_words, trained_word_count, elapsed):
+        raw_word_count, total_words, trained_word_count, elapsed, loss):
         if total_examples:
             # examples-based progress %
             logger.info(
-                "EPOCH %i - PROGRESS: at %.2f%% examples, %.0f words/s, in_qsize %i, out_qsize %i",
+                "EPOCH %i - PROGRESS: at %.2f%% examples, %.0f words/s, in_qsize %i, out_qsize %i, loss %.3f",
                 cur_epoch + 1, 
                 100.0 * example_count / total_examples, 
                 trained_word_count / elapsed,
                 -1 if job_queue is None else utils.qsize(job_queue), 
-                utils.qsize(progress_queue)
+                utils.qsize(progress_queue),
+                loss, 
             )
         else:
             # words-based progress %
             logger.info(
-                "EPOCH %i - PROGRESS: at %.2f%% words, %.0f words/s, in_qsize %i, out_qsize %i",
+                "EPOCH %i - PROGRESS: at %.2f%% words, %.0f words/s, in_qsize %i, out_qsize %i, loss %.3f",
                 cur_epoch + 1, 
                 100.0 * raw_word_count / total_words, 
                 trained_word_count / elapsed,
                 -1 if job_queue is None else utils.qsize(job_queue), 
-                utils.qsize(progress_queue)
+                utils.qsize(progress_queue),
+                loss, 
             )
 
     def _log_epoch_end(self, cur_epoch, example_count, total_examples, raw_word_count, total_words,
@@ -745,9 +784,11 @@ class FieldEmbedVocab(utils.SaveLoad):
             self.sample = sample
             model.wv.index2word = LTU # LTU
             model.wv.vocab = {}       # DTU
-            for word, freq in iteritems(idx2freq):
+            model.wv.LTU = LTU
+            model.wv.DTU = DTU
+            for vocidx, freq in enumerate(idx2freq):
                 # actually, wv.vocab is a combination of token2freq and token2idx
-                model.wv.vocab[word] = Vocab(count=freq, index=DTU[word])
+                model.wv.vocab[LTU[vocidx]] = Vocab(count=freq, index=vocidx)
 
             # original_token_num = nlptext.original_token_num
             original_unique_total = nlptext.original_vocab_token_num
@@ -788,7 +829,7 @@ class FieldEmbedVocab(utils.SaveLoad):
         downsample_total, downsample_unique = 0, 0
         for w in retain_words:
             # v is freq
-            v = idx2freq[w]
+            v = model.wv.vocab[w].count
             word_probability = (sqrt(v / threshold_count) + 1) * (threshold_count / v)
             if word_probability < 1.0:
                 downsample_unique += 1
@@ -803,6 +844,8 @@ class FieldEmbedVocab(utils.SaveLoad):
 
         model.wv_neg.index2word = model.wv.index2word
         model.wv_neg.vocab      = model.wv.vocab
+        model.wv_neg.LTU = LTU
+        model.wv_neg.DTU = DTU
         
         e = datetime.now(); print('\tEnd  : ', e);print('\tTotal Time:', e - s )
 

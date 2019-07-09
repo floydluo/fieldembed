@@ -256,8 +256,8 @@ class WordEmbeddingsKeyedVectors(BaseKeyedVectors):
         d['sim240_spearman'] = spearman.correlation
         pearson, spearman, oov_ratio = self.evaluate_word_pairs(sim_file2, restrict_vocab=500000, case_insensitive=False)
         d['sim297_spearman'] = spearman.correlation
-        analogies_score, sections = self.evaluate_word_analogies(ana_f, restrict_vocab=500000, case_insensitive=False)
         
+        analogies_score, sections = self.evaluate_word_analogies(ana_f, restrict_vocab=500000, case_insensitive=False)
         for section in sections:
             correct = len(section['correct'])
             total = len(section['correct']) + len(section['incorrect'])
