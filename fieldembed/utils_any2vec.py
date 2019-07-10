@@ -120,6 +120,7 @@ def _load_word2vec_format(cls, fname, fvocab=None, binary=False, encoding='utf8'
     logger.info("loading projection weights from %s", fname)
     with utils.smart_open(fname) as fin:
         header = utils.to_unicode(fin.readline(), encoding=encoding)
+        print(header)
         vocab_size, vector_size = (int(x) for x in header.split())  # throws for invalid file format
         if limit:
             vocab_size = min(vocab_size, limit)
@@ -172,6 +173,8 @@ def _load_word2vec_format(cls, fname, fvocab=None, binary=False, encoding='utf8'
                 if len(parts) != vector_size + 1:
                     raise ValueError("invalid vector on line %s (is this really the text format?)" % line_no)
                 word, weights = parts[0], [datatype(x) for x in parts[1:]]
+                # print(word)
+                # print(weights)
                 add_word(word, weights)
     if result.vectors.shape[0] != len(result.vocab):
         logger.info(

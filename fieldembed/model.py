@@ -140,6 +140,9 @@ class FieldEmbedding(utils.SaveLoad):
         self.build_vocab(nlptext = nlptext)
         print("model's window size is:", window)
         print('finish build vocab')
+
+
+
         if train:
             print('\n\n======== Training Start ....'); s = datetime.now()
             self.train(nlptext = nlptext, total_examples=self.corpus_count,
@@ -203,8 +206,11 @@ class FieldEmbedding(utils.SaveLoad):
                     # LGU, DGU  = nlptext.getGrainVocab(channel, tagScheme = 'BIOES') 
                     LGU, DGU  = nlptext.getGrainVocab(channel, **f_setting) 
                     wv = self.create_field_embedding(self.vector_size, channel, LGU, DGU)
+
                     self.field_hyper.append([wv])
                     self.weights[channel] = wv
+                    print(self.weights[channel].LGU)
+                    print(len(self.weights[channel].LGU))
             
         self.use_head = len(self.field_head)
         self.use_sub  = len(self.field_sub)
@@ -238,6 +244,8 @@ class FieldEmbedding(utils.SaveLoad):
         else:
             gw = Word2VecKeyedVectors(size)
             gw.index2word = LGU 
+            gw.LGU = gw.index2word
+            gw.DGU = DGU
             for gr in DGU:
                 gw.vocab[gr] = Vocab(index=DGU[gr])
             self.__setattr__('wv_' + channel, gw)
@@ -419,19 +427,32 @@ class FieldEmbedding(utils.SaveLoad):
             end_postion = chunkidx_2_endbyteidxs[channel][chunk_idx] 
             path = nlptext.Channel_Hyper_Path[channel]
             chunk_token_str = re.split(' |\n', read_file_chunk_string(path, start_position, end_postion))
+            token_num = len(chunk_token_str)
 
             # get chunk_hyper_idx
+            # TODO: this needs update to keep the hyper channel order.
             chunk_hyper_idxs = []
             for channel in chunkidx_2_endbyteidxs:
                 if channel != 'token' and channel in self.Field_Settings:
                     start_position = 0 if chunk_idx == 0 else chunkidx_2_endbyteidxs[channel][chunk_idx - 1] 
                     end_postion = chunkidx_2_endbyteidxs[channel][chunk_idx] 
                     path = nlptext.Channel_Hyper_Path[channel]
-                    grain_idx = re.split(' |\n', read_file_chunk_string(path, start_position, end_postion))
+                    strings = read_file_chunk_string(path, start_position, end_postion)
+                    grain_idx = re.split(' |\n', strings)
+                    assert len(grain_idx) == token_num
                     f_settings = self.Field_Settings[channel]
                     bioes2tag = nlptext.getTrans(channel, f_settings['tagScheme'])
                     # shall we check its insanity?
-                    bioes_idx =  [bioes2tag[vocidx] for vocidx in grain_idx]
+                    bioes_idx = []
+                    for vocidx in grain_idx:
+                        if vocidx in bioes2tag:
+                            tagidx = bioes2tag[vocidx]
+                        else:
+                            # print('Error for bioes', vocidx)
+                            # print(strings)
+                            tagidx = 0
+                        bioes_idx.append(tagidx)
+                    # bioes_idx =  [bioes2tag[vocidx] for vocidx in grain_idx]
                     chunk_hyper_idxs.append(bioes_idx)
 
             # sentence_idx= np.array([i-token_start for i in sentences_endidx[start: end]], dtype = np.uint32)
@@ -509,9 +530,6 @@ class FieldEmbedding(utils.SaveLoad):
             #         print(' '.join(chunk_token_str[idx_start: idx_end]))
             #         print('\n')
             #     print('----')
-
-
-
             for callback in self.callbacks:
                 callback.on_batch_begin(self)
 
@@ -551,7 +569,7 @@ class FieldEmbedding(utils.SaveLoad):
         start, next_report = default_timer() - 0.00001, 1.0
         job_tally = 0
         unfinished_worker_count = self.workers
-
+        last_loss = 0
         while unfinished_worker_count > 0:
             report = progress_queue.get()  # blocks if workers too slow
             if report is None:  # a thread reporting that it finished
@@ -571,8 +589,9 @@ class FieldEmbedding(utils.SaveLoad):
             if elapsed >= next_report:
                 self._log_progress(
                     job_queue, progress_queue, cur_epoch, example_count, total_examples,
-                    raw_word_count, total_words, trained_word_count, elapsed, loss)
+                    raw_word_count, total_words, trained_word_count, elapsed, loss - last_loss)
                 next_report = elapsed + report_delay
+            last_loss = loss
         # all done; report the final stats
         elapsed = default_timer() - start
         self._log_epoch_end(
