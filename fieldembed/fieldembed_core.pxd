@@ -63,31 +63,36 @@ cdef struct Word2VecConfig:
     REAL_t running_training_loss, alpha
     int hs, negative, sample, compute_loss, size, window, cbow_mean, workers, sg
     int use_sub, use_head, use_hyper, use_merger
+    
+    # to segment sentences 
     int sentence_idx[MAX_SENTENCE_LEN + 1]
+    
     # for token (head only)
-    np.uint32_t indexes[MAX_SENTENCE_LEN]            
-    # np.uint32_t hyper_indexes_map
-    # for hyper: TODO, this may be not correct
-    map[int, np.uint32_t *] hyper_indexes 
-    np.uint32_t reduced_windows[MAX_SENTENCE_LEN]
-
-    # use_sub --> use_head --> use_hyper
-    map[int, REAL_t * ] syn0_map                     
+    np.uint32_t indexes[MAX_SENTENCE_LEN]      
+    np.uint32_t reduced_windows[MAX_SENTENCE_LEN]      
+    
+    # embeddings to train: use_sub --> use_head --> use_hyper
+    map[int, REAL_t * ] syn0_map   
+    # embeddings of negative tokens
+    REAL_t *syn1neg
+    
+    # for sub fields only                  
     map[int, np.uint32_t *] LookUp_map
     map[int, np.uint32_t *] EndIdx_map
     map[int, REAL_t *] LengInv_map
-    map[int, int] leng_max_map
 
+    # for hyper fields only
+    # map[int, np.uint32_t *] hyper_indexes # to improve it in the future.
+    np.uint32_t pos_indexes[MAX_SENTENCE_LEN]      
+    
     REAL_t *grad_mem
     REAL_t *work
     REAL_t *neu1
     REAL_t *work_m
     REAL_t *neu_m
     REAL_t *word_locks
-
     np.uint32_t *cum_table
 
-    REAL_t *syn1neg
     unsigned long long cum_table_len
     unsigned long long next_random
 
@@ -113,7 +118,8 @@ cdef unsigned long long fieldembed_negsamp(
     unsigned long long cum_table_len, 
 
     const np.uint32_t indexes[MAX_SENTENCE_LEN],
-    map[int, np.uint32_t *] hyper_indexes, 
+    # map[int, np.uint32_t *] hyper_indexes, 
+    const np.uint32_t pos_indexes[MAX_SENTENCE_LEN],
     int i, # right word loc_idx
     int j, # left  word loc_idx start
     int k, # left  word loc_idx end

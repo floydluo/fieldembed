@@ -104,6 +104,7 @@ cdef init_w2v_config(
     
     ####################################################################### index and configuration
     cdef int i, fld_idx
+
     c[0].sg = model.sg
     c[0].negative = model.negative
     c[0].sample = (model.vocabulary.sample != 0)
@@ -121,10 +122,10 @@ cdef init_w2v_config(
         for i in range(c[0].use_sub):
             fld_idx  = fld_idx + 1
             c[0].syn0_map[fld_idx]= <REAL_t *>(np.PyArray_DATA(model.field_sub[i][0].vectors))
+            
             c[0].LookUp_map[i]    = <np.uint32_t *>(np.PyArray_DATA(model.field_sub[i][1]))
             c[0].EndIdx_map[i]    = <np.uint32_t *>(np.PyArray_DATA(model.field_sub[i][2]))
             c[0].LengInv_map[i]   = <REAL_t *>(np.PyArray_DATA(model.field_sub[i][3])) 
-            # c[0].leng_max_map[fld_idx]= model.field_sub[0][i][4] 
 
     c[0].use_head = model.use_head 
     if c[0].use_head:
@@ -136,9 +137,10 @@ cdef init_w2v_config(
         for i in range(c[0].use_hyper):
             fld_idx  = fld_idx + 1
             # you need to create field_hyper
-            c[0].syn0_map[fld_idx] = <REAL_t *>(np.PyArray_DATA(model.field_hyper[i][0].vectors)) 
-            # is there any other methods? is this right?
-            c[0].hyper_indexes[i]  = <np.uint32_t *>(np.PyArray_DATA(np.zeros(MAX_SENTENCE_LEN, dtype = np.uint32))) 
+            c[0].syn0_map[fld_idx] = <REAL_t *>(np.PyArray_DATA(model.field_hyper[i][0].vectors))
+
+            ## TODO multiple hyper-fields
+            # c[0].hyper_indexes[i]  = <np.uint32_t *>(np.PyArray_DATA(np.zeros(MAX_SENTENCE_LEN, dtype = np.uint32)))  
 
     c[0].grad_mem  = <REAL_t *>np.PyArray_DATA(_grad_mem)
 
@@ -148,7 +150,6 @@ cdef init_w2v_config(
     c[0].use_merger = model.use_merger
     c[0].work_m = <REAL_t *>np.PyArray_DATA(_work_m)
     c[0].neu_m  = <REAL_t *>np.PyArray_DATA(_neu_m)
-
 
     ####################################################################### hyper_parameters
     # there may not be any model.wv, what if there is no model.wv? check it.
@@ -177,7 +178,8 @@ cdef unsigned long long fieldembed_negsamp(
 
     const np.uint32_t indexes[MAX_SENTENCE_LEN],
     # will this work?
-    map[int, np.uint32_t *] hyper_indexes, 
+    # map[int, np.uint32_t *] hyper_indexes, 
+    const np.uint32_t pos_indexes[MAX_SENTENCE_LEN],
     int i, # right word loc_idx
     int j, # left  word loc_idx start
     int k, # left  word loc_idx end
@@ -294,7 +296,8 @@ cdef unsigned long long fieldembed_negsamp(
                 if m == i: 
                     continue
                 else:
-                    our_saxpy(&size, &ONEF, &syn0_map[fld_idx][hyper_indexes[lpid][m] * size], &ONE, &neu1[fld_idx*size], &ONE)
+                    # our_saxpy(&size, &ONEF, &syn0_map[fld_idx][hyper_indexes[lpid][m] * size], &ONE, &neu1[fld_idx*size], &ONE)
+                    our_saxpy(&size, &ONEF, &syn0_map[fld_idx][pos_indexes[m] * size], &ONE, &neu1[fld_idx*size], &ONE)
             sscal(&size, &inv_count, &neu1[fld_idx*size], &ONE)
 
     if use_merger:
@@ -498,9 +501,9 @@ cdef unsigned long long fieldembed_negsamp(
                 if m == i:
                     continue
                 else:
-                    our_saxpy(&size, &ONEF, &work[fld_idx*size], &ONE, &syn0_map[fld_idx][hyper_indexes[lpid][m] * size], &ONE)
+                    # our_saxpy(&size, &ONEF, &work[fld_idx*size], &ONE, &syn0_map[fld_idx][hyper_indexes[lpid][m] * size], &ONE)
+                    our_saxpy(&size, &ONEF, &work[fld_idx*size], &ONE, &syn0_map[fld_idx][pos_indexes[m] * size], &ONE)
     ######################################################################## E
-    
     return next_random
 
 def train_batch_fieldembed_negsamp(
@@ -529,75 +532,91 @@ def train_batch_fieldembed_negsamp(
     cdef int last_endidx
 
 
-    
-    # cdef int unk_idx = len(model.wv.DTU)
-    # cdef sent_log_num = 0
+    cdef int hyper_fields_num = len(chunk_hyper_idxs)
+    # now hyper_fields_num <= 1
+    assert hyper_fields_num <= 1
+
 
     init_w2v_config(&c, model, alpha, compute_loss, _work, _neu1, _work_m, _neu_m, _grad_mem) # this is the difference between sg and cbow
-    # print(c.window) # log 
-    # if subsampling:
+
     vlookup = model.wv.vocab
 
     # last_endidx = 0 # log 
     for sent_idx in range(len(sentence_idx)):
-        # print('For sentence:', sent_idx) # log 
-        # string = '' # log 
         # step1: get every sentence's idx_start and idx_end
         if sent_idx == 0:
             idx_start = 0
         else:
             idx_start = sentence_idx[sent_idx-1]
         idx_end = sentence_idx[sent_idx]
-        # print('orig-sent loc start and end idx') # log 
-        # print(idx_start, idx_end) # log 
+
+        # print('For sentence:', sent_idx)         ############ log 
+        # print(idx_start, idx_end,  'length', idx_end - idx_start,  'sent', sent_idx) ############ log 
+        # print(' '.join(chunk_token_str[idx_start: idx_end]))
+        # string = ''                              ############ log 
 
         # step2: loop every tokens in this sentence, drop special tokens and use downsampling
-
         # the following blocks only deal with one sentence
         for loc_idx in range(idx_start, idx_end):
-            # loc_idx = i + idx_start
-            token = chunk_token_str[loc_idx]
             
+            token = chunk_token_str[loc_idx]
+            # print('\nnew words in '+token + str(loc_idx))
             word = vlookup[token] if token in vlookup else None
             # filter high and low freq tokens, is these necessary?
             if word is None:
-                # string = string + ' ' + "<UKN" + token +'>' # log 
+                # string += ' ' + "<UKN" + token +'>' ############ log 
                 continue
-
+            
             word_vocidx = word.index 
+            
             if c.sample and word.sample_int < random_int32(&c.next_random):
-                # string = string + ' ' + "<DP" + token +'>' # log 
+                # string +=  ' ' + "<DP" + token +'>'  ############ log 
                 continue
-            
+           
+            # print('good in filter special tokens')
             c.indexes[effective_words] = word_vocidx
-            # string = string + ' ' + token + str(word_vocidx) # log 
-            
+
+            # print('good in adding word_vocidx:', c.indexes[effective_words], word_vocidx)
+            # print(len(string))
+            # string += ' ' + token + str(word_vocidx) ############ log: this problem
+            # print('before entering hyper')
             if c.use_hyper:
-                for i in range(len(chunk_hyper_idxs)):
+                for i in range(hyper_fields_num): 
                     # c.hyper_indexes is created in init_config
                     # np.uint32_t
+                    # print('for token ' + token) ############ log 
                     hyper_vocidx = chunk_hyper_idxs[i][loc_idx] 
-                    c.hyper_indexes[i][effective_words] = hyper_vocidx
-                    # print('current loc_idx is', loc_idx)
-                    # print('get hyper_vocidx is', hyper_vocidx
-            
-            effective_words +=1
+                    
+                    # c.hyper_indexes[i][effective_words] = hyper_vocidx # TO UPDATE
+                    # print('for c.hyper_indexes', c.pos_indexes[effective_words], hyper_vocidx) ############ log 
+                    c.pos_indexes[effective_words] = hyper_vocidx
+                    # print('for c.pos_indexes', c.pos_indexes[effective_words], hyper_vocidx) ############ log 
+                    # tag = model.weights['pos'].LGU[hyper_vocidx] ############ log 
+                    # print('good before tag ' + tag)              ############ log 
+                    # string += '/' + tag                          ############ log 
+
+            # print(string)
+            effective_words += 1
             if effective_words == MAX_SENTENCE_LEN:
                 # TODO: log warning, tally overflow?
                 break  
+            # print('end a token' + '\n')
 
         # LESSION: notice the indentation
         # step3: add the new idx_end for this sentence, that is, the value of effective_words
         c.sentence_idx[effective_sentences] = effective_words
-        effective_sentences += 1
+        
         if effective_words == MAX_SENTENCE_LEN:
             # TODO: log warning, tally overflow?
             break  
         
         # print out a sentence
-        # print(last_endidx, effective_words,  'last',  effective_words - last_endidx,  'sent', effective_sentences) # log 
-        # print(string +  '\n') # log 
-        # last_endidx = effective_words # log 
+        # print(last_endidx, effective_words,  'length', effective_words - last_endidx,  'sent', effective_sentences) ############ log 
+        # print(string +  '\n')         ############ log 
+        # last_endidx = effective_words ############ log 
+
+        effective_sentences += 1 
+        # end of current sentence
 
 
     # precompute "reduced window" offsets in a single randint() call
@@ -607,8 +626,9 @@ def train_batch_fieldembed_negsamp(
     # here, we produce c.index, c.hyper_indexes, c.sentence_idx, c.reduced_windows.
 
     # LESSION: you should notice this nogil, otherwise threads are rubbish
-    with nogil: 
     # if True: # log 
+    with nogil: 
+        
         for sent_idx in range(effective_sentences):
             # idx_start and idx_end
             idx_end = c.sentence_idx[sent_idx]
@@ -617,7 +637,7 @@ def train_batch_fieldembed_negsamp(
             else:
                 idx_start = c.sentence_idx[sent_idx-1]
 
-            # print('the idx start and idx end: ' + str(idx_start) + '  ' + str(idx_end)) # log 
+            # print('the idx start and idx end: ' + str(idx_start) + '  ' + str(idx_end)) ############ log 
             for i in range(idx_start, idx_end):
 
                 j = i - c.window + c.reduced_windows[i]
@@ -627,15 +647,17 @@ def train_batch_fieldembed_negsamp(
                 if k > idx_end:
                     k = idx_end
 
-                # print('random window:', c.reduced_windows[i]) # log 
-                # print(j, i, k) # log 
+                # print(j, i, k) ############ log 
                 if c.sg == 1:
                     # change the first j to another name: such as t.
                     for j in range(j, k): 
                         if j == i:
                             continue
                         c.next_random = fieldembed_negsamp(c.alpha, c.size, c.negative, c.cum_table, c.cum_table_len, 
-                            c.indexes, c.hyper_indexes, i, j, j + 1, 
+                            c.indexes, 
+                            # c.hyper_indexes, 
+                            c.pos_indexes, 
+                            i, j, j + 1, 
                             c.use_head, c.use_sub,  c.use_hyper, c.use_merger,
                             c.syn0_map, c.LookUp_map, c.EndIdx_map, c.LengInv_map, # c.leng_max_map,
                             c.syn1neg, c.word_locks, 
@@ -644,7 +666,10 @@ def train_batch_fieldembed_negsamp(
                 else:
                     # build the batch here
                     c.next_random = fieldembed_negsamp(c.alpha, c.size, c.negative, c.cum_table, c.cum_table_len, 
-                            c.indexes, c.hyper_indexes, i, j, k, 
+                            c.indexes, 
+                            # c.hyper_indexes, 
+                            c.pos_indexes, 
+                            i, j, k, 
                             c.use_head, c.use_sub,  c.use_hyper,  c.use_merger,
                             c.syn0_map, c.LookUp_map, c.EndIdx_map, c.LengInv_map, # c.leng_max_map,
                             c.syn1neg, c.word_locks, 
@@ -653,6 +678,7 @@ def train_batch_fieldembed_negsamp(
 
     model.running_training_loss = c.running_training_loss
     return effective_words, model.running_training_loss
+
 
 def init():
     """Precompute function `sigmoid(x) = 1 / (1 + exp(-x))`, for x values discretized into table EXP_TABLE.
