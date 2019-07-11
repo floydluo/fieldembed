@@ -212,20 +212,15 @@ ana_f     = 'fieldembed/sources/analogy.txt'
 
 class WordEmbeddingsKeyedVectors(BaseKeyedVectors):
     """Class containing common methods for operations over word vectors."""
-    def __init__(self, vector_size, LGU = [], DGU = {}):
+    def __init__(self, vector_size, GU = None):
         super(WordEmbeddingsKeyedVectors, self).__init__(vector_size=vector_size)
         self.vectors_norm = None
-        self.index2word = LGU
-        self.LGU = LGU 
-        self.DGU = DGU
-        self.GU     = self.LGU, self.DGU
+        self.GU  = GU
+        # will update index2word and vocab as soon as possible.
         self.vector = None
-
         ######## The following parts are only suitable for the sub field channels ##########
-        self.LTU      = None 
-        self.DTU      = None 
-        self.TU = self.LTU, self.DTU
-        
+
+        self.TU = None
         self.LKP     = None 
         self._derivative_wv = None
         ####################################################################################
@@ -233,12 +228,12 @@ class WordEmbeddingsKeyedVectors(BaseKeyedVectors):
     @property
     def derivative_wv(self):
         # if getattr(self, '_derivative_wv', None):
-        if getattr(self, '_derivative_wv', None) is None:
+        if getattr(self, '_derivative_wv', None) is not None:
             return self._derivative_wv
         elif getattr(self, 'LKP', None) is not None:
-            derivative_wv = WordEmbeddingsKeyedVectors(self.vector_size, LGU = self.LTU, LTU = self.DTU)
-            derivative_vectors = zeros((len(self.LTU), self.vector_size), dtype=REAL)
-            for word_vocidx in range(1, len(self.LTU)):
+            derivative_wv = WordEmbeddingsKeyedVectors(self.vector_size, GU = self.TU)
+            derivative_vectors = zeros((len(self.TU[0]), self.vector_size), dtype=REAL)
+            for word_vocidx in range(1, len(self.TU[0])):
                 grain_vocidx = self.LKP[word_vocidx]
                 field_word   = self.vectors[grain_vocidx].mean(axis=0)
                 derivative_vectors[word_vocidx] = field_word

@@ -141,8 +141,6 @@ class FieldEmbedding(utils.SaveLoad):
         print("model's window size is:", window)
         print('finish build vocab')
 
-
-
         if train:
             print('\n\n======== Training Start ....'); s = datetime.now()
             self.train(nlptext = nlptext, total_examples=self.corpus_count,
@@ -195,9 +193,7 @@ class FieldEmbedding(utils.SaveLoad):
                     # GU, LookUp, EndIdx, Leng_Inv, Leng_max, TU, LKP = data
                     LGU, DGU = GU
                     wv = self.create_field_embedding(self.vector_size, channel, LGU, DGU)
-                    LTU, DTU = TU
-                    wv.LTU = LTU
-                    wv.DTU = DTU
+                    wv.TU = TU
                     wv.LKP = LKP
                     self.field_sub.append([wv, LookUp, EndIdx, Leng_Inv])
                     self.weights[channel] = wv
@@ -240,12 +236,14 @@ class FieldEmbedding(utils.SaveLoad):
             return and set a wv for fieldembed: wv_channel
         '''
         if channel == 'token':
+            # will update token wv in other place
+            # self.wv.index2word = LGU 
+            # self.wv.GU = (LGU, DGU)
             return self.wv
         else:
             gw = Word2VecKeyedVectors(size)
             gw.index2word = LGU 
-            gw.LGU = gw.index2word
-            gw.DGU = DGU
+            gw.GU = (LGU, DGU)
             for gr in DGU:
                 gw.vocab[gr] = Vocab(index=DGU[gr])
             self.__setattr__('wv_' + channel, gw)
@@ -803,8 +801,7 @@ class FieldEmbedVocab(utils.SaveLoad):
             self.sample = sample
             model.wv.index2word = LTU # LTU
             model.wv.vocab = {}       # DTU
-            model.wv.LTU = LTU
-            model.wv.DTU = DTU
+            model.wv.GU = (LTU, DTU)
             for vocidx, freq in enumerate(idx2freq):
                 # actually, wv.vocab is a combination of token2freq and token2idx
                 model.wv.vocab[LTU[vocidx]] = Vocab(count=freq, index=vocidx)
@@ -863,8 +860,7 @@ class FieldEmbedVocab(utils.SaveLoad):
 
         model.wv_neg.index2word = model.wv.index2word
         model.wv_neg.vocab      = model.wv.vocab
-        model.wv_neg.LTU = LTU
-        model.wv_neg.DTU = DTU
+        model.wv_neg.GU = (LTU, DTU)
         
         e = datetime.now(); print('\tEnd  : ', e);print('\tTotal Time:', e - s )
 
