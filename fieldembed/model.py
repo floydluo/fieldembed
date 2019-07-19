@@ -564,7 +564,7 @@ class FieldEmbedding(utils.SaveLoad):
     def _log_epoch_progress(self, progress_queue=None, job_queue=None, cur_epoch=0, total_examples=None,total_words=None, report_delay=10.0, is_corpus_file_mode=None):
 
         example_count, trained_word_count, raw_word_count = 0, 0, 0
-        start, next_report = default_timer() - 0.00001, 1.0
+        start, next_report = default_timer() - 0.00001, 5.0
         job_tally = 0
         unfinished_worker_count = self.workers
         last_loss = 0
