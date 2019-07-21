@@ -12,6 +12,8 @@ corpus/LuohuNER/
 corpus/ccks/
 corpus/Wiki*/
 
+_etc/
+
 
 embeddings
 
