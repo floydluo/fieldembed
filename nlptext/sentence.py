@@ -1,11 +1,12 @@
 import os
+import logging
 from bisect import bisect
 import numpy as np
 
 from .base import BasicObject
 from .token import Token
 
-from .utils.channel import getChannelGrain4Sent, getChannelName
+from .utils.channel import getChannelGrain4Sent, getChannelGrain4Token, getChannelName
 from .utils.pyramid import segSent2Tokens, get_line_with_position
 from .utils.infrastructure import START, END, START_ID, END_ID, UNK_ID
 import re 
@@ -47,7 +48,10 @@ class Sentence(BasicObject):
         grain_idx = re.split(' |\n', self.get_stored_hyper(channel))
         bioes2tag = self.getTrans(channel, tagScheme)
         # shall we check its insanity?
-        return [bioes2tag[vocidx] for vocidx in grain_idx]
+        try:
+            return [bioes2tag[vocidx] for vocidx in grain_idx]
+        except:
+            print(grain_idx)
 
     def get_stored_hyperstring(self, channel, tagScheme):
         vocidx2grain = self.getGrainVocab(channel, tagScheme = tagScheme)[0]
@@ -66,6 +70,7 @@ class Sentence(BasicObject):
             channel_name = getChannelName(channel, Min_Ngram = Min_Ngram, Max_Ngram = Max_Ngram, end_grain = end_grain, 
                                           min_grain_freq = min_grain_freq, tagScheme = tagScheme)
         else:
+            # print(channel_name)
             channel, Min_Ngram, Max_Ngram, end_grain, min_grain_freq, tagScheme = getChannelName(channel = channel, channel_name = channel_name, style = 'extract')
 
 
@@ -77,21 +82,33 @@ class Sentence(BasicObject):
             # sent = self.sentence.split(' ')
             tokenLevel = self._tokenLevel if self._tokenLevel else self.TOKEN['TOKENLevel']
             # the sentence input is separated by spaces
+            # print(tagScheme)
             channelGrain =  getChannelGrain4Sent(self.sentence, channel, Min_Ngram = Min_Ngram, Max_Ngram = Max_Ngram, 
                                                  end_grain = end_grain, tagScheme  = tagScheme, tokenLevel = tokenLevel)
 
             return channelGrain
 
     def get_grain_idx(self, channel, Min_Ngram = 1, Max_Ngram = 1, end_grain = False, min_grain_freq = 1, tagScheme = 'BIO', channel_name = None, 
-                      TU = None, GU = None, LKP = None, Data_Dir = None):
+                      Data_Dir = None,
+                      GU = None, TU = None, LKP = None, TRANS = None):
+
+        '''
+            1. Once GU TU LKP and TRANS are settled, channel_name is settled before.
+            2. If give us channel_name and Data_Dir, we furtherly determine what GU TU LKP and TRANS are.
+        '''
 
         if channel == 'token':
             # find the TU at the first time
-            if not TU:
+            # assert GU == TU.
+            if TU:
+                GU = TU
+            elif GU:
+                TU = GU 
+            else:
                 if not Data_Dir:
-                    TU = self.TokenVocab
+                    TU = self.TokenVocab; GU = TU
                 else:
-                    TU = self.getGrainVocab('token', Data_Dir = Data_Dir)
+                    TU = self.getGrainVocab('token', Data_Dir = Data_Dir); GU = TU
 
             LTU, DTU = TU
             unk_id = len(DTU)
@@ -109,23 +126,28 @@ class Sentence(BasicObject):
 
         
         if channel in self.Channel_Hyper_Path:
+            # deal with hyper fields
             if not GU: GU = self.getGrainVocab(channel, channel_name = channel_name, Data_Dir =Data_Dir)
             LGU, DGU = GU
             unk_id = len(DGU)
 
-            if not self._sentence: 
-                info = [[tk] for tk in self.get_stored_hypertagscheme(channel, tagScheme)]
+            if not self._sentence:
+                # Generally, we will use this one.
+                grain_idx = re.split(' |\n', self.get_stored_hyper(channel))
+                TRANS = self.getTrans(channel, tagScheme) if not TRANS else TRANS
+                info = [[TRANS[vocidx]] for vocidx in grain_idx]
                 leng_st = len(info)
                 leng = [1] * leng_st
                 return info, leng_st, leng, 1
             else:
                 info = self.get_grain_str(channel, channel_name = channel_name)
+                # print(info)
                 info = [[DGU.get(gr, unk_id) for gr in tk] for tk in info]
-                info, leng_st, leng_tk, max_gr = self.padding_info(info, useStartEnd = useStartEnd)
+                info, leng_st, leng_tk, max_gr = self.padding_info(info)
                 return info, leng_st, leng_tk, max_gr
 
         else: 
-
+            # deal with sub fields
             if not GU: GU = self.getGrainVocab(channel, channel_name = channel_name, Data_Dir =Data_Dir)
             LGU, DGU = GU
             unk_id = len(LGU)
@@ -137,13 +159,17 @@ class Sentence(BasicObject):
                     pass
 
             if (LKP and TU):
+                # if we can get LKP and TU
                 sentence_tokens = self.sentence.split(' ')
                 LTU, DTU = TU
                 unk_id = len(DTU)
 
-                # print(len(LTU))
+                # print(LTU[:100])
                 # print(len(DTU))
+                # print([tk for tk in self.sentence.split(' ')])
                 tk_voc_info = [DTU.get(tk, unk_id) for tk in self.sentence.split(' ')]
+                # print(tk_voc_info)
+
                 info = []
                 for idx, tk_voc in enumerate(tk_voc_info):
                     if tk_voc != unk_id:
@@ -151,12 +177,14 @@ class Sentence(BasicObject):
                     else:
                         # deal with the low freq words
                         token_str = sentence_tokens[idx]
-                        grains = getChannelGrain4Token(token, channel, Min_Ngram = Min_Ngram, Max_Ngram = Max_Ngram, end_grain = end_grain)
+                        print(token_str) # TODO: remove this to log
+                        grains = getChannelGrain4Token(token_str, channel, Min_Ngram = Min_Ngram, Max_Ngram = Max_Ngram, end_grain = end_grain)
                         info.append([DGU.get(gr, unk_id) for gr in grains])
 
                 info, leng_st, leng_tk, max_gr = self.padding_info(info)
                 return info, leng_st, leng_tk, max_gr
             else:
+                # if we cannot get LKP and TU
                 info = self.get_grain_str(channel, channel_name = channel_name)
                 info = [[DGU.get(gr, unk_id) for gr in tk] for tk in info]
                 info, leng_st, leng_tk, max_gr = self.padding_info(info)
@@ -226,7 +254,7 @@ class Sentence(BasicObject):
     @property
     def length(self):
         if self._sentence:
-            length = len(self.Tokens)
+            length = len(self.sentence.split(' '))
         else:
             s, e = self.IdxTokenStartEnd 
             length = e-s
