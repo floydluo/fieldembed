@@ -11,9 +11,10 @@ corpus/LuohuCorpus*/
 corpus/LuohuNER/
 corpus/ccks/
 corpus/Wiki*/
-
+corpus/newsgroup/
 _etc/
 
+AAAI-MA/
 
 embeddings
 
@@ -21,11 +22,17 @@ corpus/fudan
 log.txt
 eval_medical.py
 
+Rebuttal.ipynb
+
+Doc2Vec.ipynb
+
+
+
 output/
 embed/
 channel/
 data/
-
+test_aaai.py
 *.pyc
 
 *.py[cod]
