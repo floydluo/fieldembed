@@ -17,7 +17,6 @@ import os
 def fudan_classification(feat, label, cv=10):
     """
     multi-class logistic classification
-
     """
     x_train, x_test, y_train, y_test = train_test_split(feat, label, test_size=0.3, random_state=0)
     lr = LogisticRegressionCV(cv=cv, multi_class = 'ovr', solver = 'liblinear')
@@ -25,8 +24,6 @@ def fudan_classification(feat, label, cv=10):
     y_pred = lr.predict(x_test)
     acc = np.mean(np.equal(y_pred, y_test))
     return acc
-
-
 
 
 available_fields = ['token', 'char', 'subcomp', 'stroke', 'pinyin']

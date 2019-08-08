@@ -11,7 +11,7 @@ logger.setLevel(logging.DEBUG)
 logging.debug('test')
 
 
-Data_Dir = 'data/fudan/word/'
+Data_Dir = 'data/newsgroup/word/'
 
 # this is not correct
 CHANNEL_SETTINGS_TEMPLATE = {
@@ -54,7 +54,7 @@ size = 50
 batch_words = 10000
 alpha = 0.025
 sg = 1
-iter = 10
+iter = 20
 train = True
 window = 5
 
@@ -81,5 +81,9 @@ print('+++++End++++++', e, 'Using:', time);
 # print(e - s)
 # print(d)
 
-model.save('embeddings/fieldembed/Eng_token_model_' + str(size))
-
+# model.save('embeddings/fieldembed/Eng_token_model_' + str(size))
+import os
+path = 'AAAI-MA/newsgroup/word2vec/' + str(size) 
+if not os.path.exists(path):
+	os.makedirs(path)
+model.wv.save(path + '/' + 'wv')
