@@ -549,6 +549,9 @@ def train_batch_fieldembed_negsamp(
         else:
             idx_start = sentence_idx[sent_idx-1]
         idx_end = sentence_idx[sent_idx]
+        
+        # if idx_end - idx_start > MAX_SENTENCE_LEN:
+        #     continue
 
         # print('For sentence:', sent_idx)         ############ log 
         # print(idx_start, idx_end,  'length', idx_end - idx_start,  'sent', sent_idx) ############ log 
@@ -617,6 +620,7 @@ def train_batch_fieldembed_negsamp(
 
         effective_sentences += 1 
         # end of current sentence
+            
 
 
     # precompute "reduced window" offsets in a single randint() call
