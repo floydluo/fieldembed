@@ -73,8 +73,8 @@ class custom_build_ext(build_ext):
         self.include_dirs.append(numpy.get_include())
 
 
-model_dir = os.path.join(os.path.dirname(__file__), 'fieldembed', 'models')
-fieldembed_dir = os.path.join(os.path.dirname(__file__), 'fieldembed')
+model_dir = os.path.join(os.path.dirname(__file__), 'fieldembed')
+# fieldembed_dir = os.path.join(os.path.dirname(__file__), 'fieldembed')
 
 cmdclass = {'build_ext': custom_build_ext}
 
@@ -111,7 +111,9 @@ ext_modules = [
     #     include_dirs=[model_dir]),
 
     Extension('fieldembed._matutils',
-        sources=['./fieldembed/_matutils.c']),
+        sources=['./fieldembed/_matutils.c'],
+        include_dirs=[model_dir],
+         ),
 ]
 
 
