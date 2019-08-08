@@ -243,6 +243,16 @@ class WordEmbeddingsKeyedVectors(BaseKeyedVectors):
         else:
             return self
 
+
+    def set_GU_and_TU(self):
+        if not self.TU and not self.GU:
+            # idx2token = 
+            token2idx = {tk: idx for idx, tk in enumerate(self.index2word)}
+            self.TU = self.index2word, token2idx
+            self.GU = self.TU
+        else:
+            pass
+
     def lexical_evals(self):
         if getattr(self, 'LKP', None) is not None:
             raise('This is for token level embeddings')
@@ -1241,9 +1251,9 @@ class Word2VecKeyedVectors(WordEmbeddingsKeyedVectors):
     @classmethod
     def load(cls, fname_or_handle, **kwargs):
         model = super(WordEmbeddingsKeyedVectors, cls).load(fname_or_handle, **kwargs)
-        if isinstance(model, FastTextKeyedVectors):
-            if not hasattr(model, 'compatible_hash'):
-                model.compatible_hash = False
+        # if isinstance(model, FastTextKeyedVectors):
+        #     if not hasattr(model, 'compatible_hash'):
+        #         model.compatible_hash = False
 
         return model
 
@@ -1504,3 +1514,31 @@ class WordEmbeddingSimilarityIndex(TermSimilarityIndex):
 
 
 
+
+from nlptext.sentence import Sentence
+
+def getsent2matrix(sent, wv, train = True):
+    features = {}
+    Channel_Settings = fieldembed.Field_Settings
+    token_strs = [i[0] for i in sent.get_grain_str('token')]
+    # print(token_strs)
+    features['origin'] = token_strs
+
+    wv = wv.derivative_wv
+    TU = derivative_wv.GU # LGU in derivative wv is LTU
+    # this code is verbose
+    # TODO: how to deal with unk tokens
+    token_idxes = [TU[1].get(token_str, 0) for token_str in token_strs] # 0 is not unk, to fix it in the future
+    # token_idxes = [i[0] for i in token_idxes]
+    # print(token_idxes)
+    matrix = derivative_wv.vectors[token_idxes]
+    return matrix
+
+def convert_document_to_X_and_Y(nlptext, wv):
+
+    for sentidx in range(nlptext.SENT['length']):
+        sent = Sentence(sentidx)
+        matrix = getsent2matrix(sent, wv)
+        # matrix.append(sent)
+        docvector = np.mean(matrix, axis = 1)
+    
