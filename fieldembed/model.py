@@ -37,7 +37,7 @@ from .fieldembed_core import train_batch_fieldembed_negsamp
 
 logger = logging.getLogger(__name__)
 
-MAX_WORDS_IN_BATCH = 10000
+MAX_WORDS_IN_BATCH = 20000
 
 FIELD_INFO = {
     'sub':  ['char', 'subcomp', 'stroke', 'pinyin'],
@@ -559,6 +559,38 @@ class FieldEmbedding(utils.SaveLoad):
                             alpha, work, neu1, work_m, neu_m, grad_mem, self.compute_loss)
         tally = tally_increase + tally
         return tally, sentence_idx[-1], loss
+
+        # chunk_token_str = indexes
+        # chunk_hyper_idxs = hyper_indexes
+
+        # vlookup = self.wv.vocab
+        # for sent_idx in range(len(sentence_idx)):
+        #     try:
+        #         if sent_idx == 0:
+        #             idx_start = 0
+        #         else:
+        #             idx_start = sentence_idx[sent_idx-1]
+        #         idx_end = sentence_idx[sent_idx]
+
+        #         for loc_idx in range(idx_start, idx_end):
+        #             token = chunk_token_str[loc_idx]
+        #             word = vlookup[token] if token in vlookup else None
+        #             if word is None:
+        #                 continue
+        #             word_vocidx = word.index 
+        #     except:
+        #         if sent_idx == 0:
+        #             idx_start = 0
+        #         else:
+        #             idx_start = sentence_idx[sent_idx-1]
+        #         idx_end = sentence_idx[sent_idx]
+        #         total_leng = len(chunk_token_str)
+        #         idx_end = total_leng if idx_end > total_leng else idx_end
+        #         print(idx_start, idx_end)
+        #         print(' '.join(chunk_token_str[idx_start: idx_end]))
+
+
+        # return 0, sentence_idx[-1],  0
 
     ################################################################################################################################################### log
     def _log_epoch_progress(self, progress_queue=None, job_queue=None, cur_epoch=0, total_examples=None,total_words=None, report_delay=10.0, is_corpus_file_mode=None):
