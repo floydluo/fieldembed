@@ -3,7 +3,7 @@ import collections
 from datetime import datetime
 from .channel import getChannelGrain4Token
 from .infrastructure import UNK, UNK_ID, specialTokens, specialTokensDict
-
+import pandas as pd
 
 ##################################################################################################TOKEN_LTU
 def buildTokens(tokenList):
@@ -87,10 +87,12 @@ def get_GU_or_LKP(TokenVocab, tkidx2freq,
         for gr in grain2number:
             if gr in oldDGU:
                 oldidx2freq[oldDGU[gr]] = oldidx2freq[oldDGU[gr]] + grain2number[gr] * token_freq
+                # oldidx2freq[oldDGU[gr]] = oldidx2freq[oldDGU[gr]] + grain2number[gr] 
             else:
                 oldDGU[gr] = len(oldDGU)
                 oldLGU.append(gr)
                 oldidx2freq.append(grain2number[gr] * token_freq)
+                # oldidx2freq.append(grain2number[gr])
 
         LKP.append([oldDGU[gr] for gr in ChN])
         if idx % 100000 == 0:
