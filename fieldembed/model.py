@@ -47,40 +47,26 @@ FIELD_INFO = {
 
 class FieldEmbedding(utils.SaveLoad):
 
-    def __init__(self, nlptext = None, Field_Settings = {},  train = True, mode = 'sg_nlptext', sg=0, use_merger = 0, 
-        neg_init = 0, standard_grad = 1, size=100, alpha=0.025, min_alpha=0.0001, window=5, sample=1e-3, seed=1, workers=3, 
-        negative=5, ns_exponent=0.75, cbow_mean=1, hashfxn=hash, iter=5,
-        batch_words=MAX_WORDS_IN_BATCH, compute_loss=False, callbacks=()):
-        '''
+    def __init__(self, 
+        nlptext = None, Field_Settings = {}, train = True,  
+        sg=0,  iter=5, window=5, negative=5, alpha=0.025, sample=1e-3, ns_exponent=0.75, workers=4,  
+        sample_grain = None, use_merger = 1, size=100, 
+        standard_grad = 1,cbow_mean=1,
+        seed=1, neg_init = 0, min_alpha = 0.0001,  
+        hashfxn=hash, batch_words=MAX_WORDS_IN_BATCH, compute_loss = False, callbacks=()):
+        #-------------------------------------------------------------------------------------#
+        self.neg_init = neg_init
+        self.random = random.RandomState(seed) # random = seed
 
-            nlptext: nlptext.base
-            Field_Settings: field configurations.
-            train: train embeddings or not.
-            mode: 'what mode to use', TODO: remove it.
-            sg: use skip-gram or cbow
-            use_merger: use the merger projection. # TODO: adding the three modes 
-            neg_init: method to initialize the syn1neg word embedding matrix.
-            standard_grad: deal with cbow, cbow seems need a larger learning rate.
+        self.sg = int(sg)
+        self.negative = int(negative)
 
-            ++Hyper Parameters++
-            size:
-            alpha:
-            min_alpha:
-            window:
-            sample:
-            seed:
-            workers:
-
-            compute_loss: we need to see the compute_loss
-
-        '''
         self.standard_grad = standard_grad
-        self.mode = mode
         self.callbacks = callbacks
         self.load = call_on_class_only
         self.Field_Settings = Field_Settings
         self.use_merger = use_merger
-        self.neg_init = neg_init
+        
 
         # here only do initializations for wv, vocabulary, and trainables
         # there is a self.wv, and its vectors may be empty.
@@ -109,10 +95,8 @@ class FieldEmbedding(utils.SaveLoad):
             logger.warning("consider setting layer size to a multiple of 4 for greater performance")
         
         self.window = int(window)
-        self.random = random.RandomState(seed) # random = seed
-        
-        self.sg = int(sg)
-        self.negative = int(negative)
+        self.sample = sample 
+        self.sample_grain = sample_grain
 
         self.ns_exponent = ns_exponent
         self.cbow_mean = int(cbow_mean)
@@ -129,13 +113,14 @@ class FieldEmbedding(utils.SaveLoad):
 
         self.vector_size = int(vector_size)
         self.workers = int(workers)
-        print(self.workers)
         self.epochs = iter
         self.train_count = 0
         self.total_train_time = 0
         self.batch_words = batch_words
         self.model_trimmed_post_training = False
         self.callbacks = callbacks
+
+        self.path = self.get_path()
 
         self.build_vocab(nlptext = nlptext)
         print("model's window size is:", window)
@@ -148,6 +133,24 @@ class FieldEmbedding(utils.SaveLoad):
                 start_alpha=self.alpha, end_alpha=self.min_alpha, compute_loss=compute_loss)
             print('======== Training End ......'); e = datetime.now()
             print('======== Total Time: ', e - s)
+
+    def get_path(self):
+        flds = '_'.join([fld for fld in self.Field_Settings])
+        sg_or_cb = 'sg' if self.sg else 'cb'
+        ep  = 'it' + str(self.epochs)
+        w   = 'w'  + str(self.window)
+        neg = 'ng' + str(self.negative)
+        thr = 'th' + str(self.workers)
+        smp = 'smp'+ str(self.sample)
+        alp = 'lr' + str(self.alpha)
+        nsexp = 'nsexp' + str(self.ns_exponent)
+        hppara = '-'.join([sg_or_cb, ep, w, neg, alp, smp, nsexp, thr,])
+        lf = 'LF3' if self.use_merger else 'LF2'
+        smpgr = 'SmpGrT' if self.sample_grain else 'SmpGrF'
+        subchoice = '-'.join([lf, smpgr])
+        return os.path.join(flds, hppara, subchoice)
+
+
 
     ################################################################################################################################################### build_vocab
     def build_vocab(self, nlptext = None, **kwargs):
@@ -189,13 +192,53 @@ class FieldEmbedding(utils.SaveLoad):
                 elif channel in FIELD_INFO['sub']:
                     # when the channel is a sub-field
                     data = self.get_subfield_info(nlptext, channel, **f_setting) 
-                    (GU, TU, LKP), (LookUp, EndIdx, Leng_Inv, Leng_max) = data
-                    # GU, LookUp, EndIdx, Leng_Inv, Leng_max, TU, LKP = data
+                    (GU, TU, LKP), (LookUp, EndIdx, Leng_Inv, Leng_max, Freq) = data
                     LGU, DGU = GU
-                    wv = self.create_field_embedding(self.vector_size, channel, LGU, DGU)
+                    wv = self.create_field_embedding(self.vector_size, channel, LGU, DGU, Freq)
                     wv.TU = TU
                     wv.LKP = LKP
-                    self.field_sub.append([wv, LookUp, EndIdx, Leng_Inv])
+
+                    # here deal with the Freq
+                    total_grain_num = len(LGU)
+                    # 
+                    
+                    if self.sample_grain is None:
+                        print('dont use grain subsampling')
+                        Sample_Int = np.zeros(len(Freq), dtype = np.uint32)
+                    else:
+                        assert self.sample_grain < 1
+                        # Sample_Int = np.zeros(len(Freq),  dtype = np.uint32)
+                        sample_grain = self.sample_grain
+                        retain_total = np.sum(Freq)
+                        ################################################## TODO
+                        threshold_count = retain_total * 1e-4 # around first 100 high grains
+                        Sample_Int = np.zeros(len(Freq), dtype = np.uint32)
+                        Grain_Prob = np.zeros(len(Freq))
+                        downsample_unique = 0
+                        downsample_total  = 0
+                        for idx, v in enumerate(Freq):
+                            word_probability = (sqrt(v / threshold_count) + 1) * (threshold_count / v)
+                            if word_probability < 1.0:
+                                downsample_unique += 1
+                                downsample_total += word_probability * v
+                            else:
+                                word_probability = 1.0
+                                downsample_total += v
+
+                            # this is the same as create token2sample_int
+                            # or we can get idx2sample_int.
+                            # model.wv.vocab[w].sample_int = int(round(word_probability * 2**32))
+                            Grain_Prob[idx] = word_probability
+                            Sample_Int[idx] = int(round(word_probability * 2**32)) 
+
+                        print('\n--- for field ', channel, '---')
+                        print(downsample_total)
+                        print(retain_total)
+                        print(downsample_total/retain_total)
+                        print(len(Grain_Prob[Grain_Prob < 1]) / len(Grain_Prob))
+
+                    self.field_sub.append([wv, LookUp, EndIdx, Leng_Inv, Sample_Int])
+                    # The Freq will be changed to 
                     self.weights[channel] = wv
 
                 elif channel in FIELD_INFO['hyper']:
@@ -212,21 +255,29 @@ class FieldEmbedding(utils.SaveLoad):
         self.use_sub  = len(self.field_sub)
         self.use_hyper= len(self.field_hyper)
         self.proj_num = len(self.weights)
+        self.sample_grain_indictors_leng = int(2 * self.window * self.proj_num * 500)
         print('use_head:', self.use_head, 'use_sub:', self.use_sub, 'use_hyper:', self.use_hyper)
 
-    def get_subfield_info(self, nlptext, field = 'char', Min_Ngram = 1,  Max_Ngram = 1, end_grain = False, min_grain_freq = 1):
+
+    def get_subfield_info(self, nlptext, field = 'char', Min_Ngram = 1,  Max_Ngram = 1, end_grain = False, min_grain_freq = 1, **kwargs):
         GU = nlptext.getGrainVocab(field, Min_Ngram = Min_Ngram, Max_Ngram = Max_Ngram, end_grain = end_grain, min_grain_freq = min_grain_freq)
         LKP,TU = nlptext.getLookUp(field, Min_Ngram = Min_Ngram, Max_Ngram = Max_Ngram, end_grain = end_grain, min_grain_freq = min_grain_freq)
+        Freq = nlptext.getFreq(field, Min_Ngram = Min_Ngram, Max_Ngram = Max_Ngram, end_grain = end_grain, min_grain_freq = min_grain_freq)
+        # if len == 0, will it influence the computation?
         Leng = np.array([len(i) for i in LKP], dtype = np.uint32)
+        # LESSION: you may have a lesson here
+        # Leng[Leng == 0] = 1 ############# Lesson
         Leng_max = np.max(Leng)
         # LESSION: ignoring the np.uint32 wastes me a lot of time
         EndIdx = np.cumsum(Leng, dtype = np.uint32) 
         LookUp = np.array(list(itertools.chain.from_iterable(LKP)), dtype = np.uint32)
+        Leng[Leng == 0] = 1 ############# Lesson
         Leng_Inv = 1 / Leng
         Leng_Inv = Leng_Inv.astype(REAL)
-        return (GU, TU, LKP), (LookUp, EndIdx, Leng_Inv, Leng_max)
+        return (GU, TU, LKP), (LookUp, EndIdx, Leng_Inv, Leng_max, Freq)
 
-    def create_field_embedding(self, size, channel, LGU, DGU):
+
+    def create_field_embedding(self, size, channel, LGU, DGU, Freq = None):
         '''
             size: embedding size
             channel: field name
@@ -244,8 +295,8 @@ class FieldEmbedding(utils.SaveLoad):
             gw = Word2VecKeyedVectors(size)
             gw.index2word = LGU 
             gw.GU = (LGU, DGU)
-            for gr in DGU:
-                gw.vocab[gr] = Vocab(index=DGU[gr])
+            for vocid, gr in enumerate(LGU):
+                gw.vocab[gr] = Vocab(index=vocid, count = Freq[vocid])
             self.__setattr__('wv_' + channel, gw)
             return self.__getattribute__('wv_' + channel)
 
@@ -392,7 +443,7 @@ class FieldEmbedding(utils.SaveLoad):
                 args=(job_queue, progress_queue, self.proj_num))
             for _ in range(self.workers)
         ]
-        logger.info('\n the total_examples is:' + str(total_examples) + '   , the total words is:' + str(total_words) + '\n')
+        logger.info('\n the total_examples is: ' + str(total_examples) + ', the total words is:' + str(total_words) + '\n')
         workers.append(threading.Thread(
             target=self._job_producer_nlptext,
             args=(nlptext, chunkidx_2_endbyteidxs, chunkidx_2_cumlengoftexts, job_no, job_queue, total_examples,  total_words,), # data_iterable is sentences
@@ -407,6 +458,7 @@ class FieldEmbedding(utils.SaveLoad):
             report_delay=report_delay, is_corpus_file_mode=False)
 
         return trained_word_count, raw_word_count, job_tally
+
 
     def _job_producer_nlptext(self, nlptext, chunkidx_2_endbyteidxs, chunkidx_2_cumlengoftexts, job_no, job_queue, 
         total_examples,  total_words, cur_epoch=0):
@@ -489,56 +541,6 @@ class FieldEmbedding(utils.SaveLoad):
         self.min_alpha_yet_reached = next_alpha
         return next_alpha
 
-    def _worker_loop_nlptext(self, job_queue, progress_queue, proj_num = 1):
-        # produce memory for projection vectors
-        inits = self._get_thread_working_mem(proj_num = proj_num) 
-        merger_mem = self._get_thread_working_mem_for_merger()
-        grad_mem = self._get_thread_grad_mem(proj_num = proj_num)
-
-        jobs_processed = 0
-
-        idx = 0 # log
-
-        while True:
-            job = job_queue.get()
-            if job is None:
-                progress_queue.put(None)
-                break  # no more jobs => quit this worker
-
-
-            chunk_token_str, chunk_hyper_idxs, sentence_idx, alpha = job 
-
-            # # log
-            # idx = idx + 1 
-            # if idx % 100 == 0:
-            #     print(idx)
-            #     # print(chunk_token_str)
-            #     # print(chunk_hyper_idxs)
-            #     print(alpha)
-
-            #     for sent_idx in range(len(sentence_idx)):
-            #         # step1: get every sentence's idx_start and idx_end
-            #         if sent_idx == 0:
-            #             idx_start = 0
-            #         else:
-            #             idx_start = sentence_idx[sent_idx-1]
-            #         idx_end = sentence_idx[sent_idx]
-            #         # print('orig-sent loc start and end idx')
-            #         # print(idx_start, idx_end)
-            #         print(' '.join(chunk_token_str[idx_start: idx_end]))
-            #         print('\n')
-            #     print('----')
-            for callback in self.callbacks:
-                callback.on_batch_begin(self)
-
-            tally, raw_tally, loss = self._do_train_job_nlptext(chunk_token_str, chunk_hyper_idxs, sentence_idx, alpha, inits, merger_mem, grad_mem)
-            for callback in self.callbacks:
-                callback.on_batch_end(self)
-
-            progress_queue.put((len(sentence_idx), tally, raw_tally, loss))  # report back progress
-            jobs_processed += 1
-        logger.debug("o----> Worker exiting, processed %i jobs", jobs_processed)
-
     def _get_thread_working_mem(self, proj_num = 1):
         return [matutils.zeros_aligned(self.vector_size * proj_num, dtype=REAL) for i in range(2)]
 
@@ -547,54 +549,80 @@ class FieldEmbedding(utils.SaveLoad):
         neu_m  = matutils.zeros_aligned(self.vector_size, dtype=REAL) 
         return work_m, neu_m
 
+    def _get_thread_fdot_men(self, proj_num = 1):
+        return matutils.zeros_aligned(self.proj_num, dtype=REAL) 
+
     def _get_thread_grad_mem(self, proj_num = 1):
         return matutils.zeros_aligned(self.proj_num, dtype=REAL) 
 
-    def _do_train_job_nlptext(self, indexes, hyper_indexes, sentence_idx, alpha, inits, merger_mem, grad_mem):
+    def _get_sample_grain_indictors_mem(self, leng):
+        return matutils.zeros_aligned(leng, dtype=uint32)
+
+    def _worker_loop_nlptext(self, job_queue, progress_queue, proj_num = 1):
+        # produce memory for projection vectors
+        inits = self._get_thread_working_mem(proj_num = proj_num) 
+        merger_mem = self._get_thread_working_mem_for_merger()
+        fdot_mem = self._get_thread_fdot_men(proj_num = proj_num)
+        grad_mem = self._get_thread_grad_mem(proj_num = proj_num)
+        sample_grain_indictors = self._get_sample_grain_indictors_mem(self.sample_grain_indictors_leng)
+
+        jobs_processed = 0
+
+        idx = 0 # log
+        while True:
+            job = job_queue.get()
+            if job is None:
+                progress_queue.put(None)
+                break  # no more jobs => quit this worker
+
+            chunk_token_str, chunk_hyper_idxs, sentence_idx, alpha = job 
+
+            for callback in self.callbacks:
+                callback.on_batch_begin(self)
+
+            tally, raw_tally, loss = self._do_train_job_nlptext(indexes = chunk_token_str, 
+                                                                hyper_indexes = chunk_hyper_idxs, 
+                                                                sentence_idx = sentence_idx, 
+                                                                alpha = alpha, 
+                                                                inits = inits, 
+                                                                merger_mem = merger_mem, 
+                                                                fdot_mem = fdot_mem,
+                                                                grad_mem = grad_mem,
+                                                                sample_grain_indictors = sample_grain_indictors)
+            for callback in self.callbacks:
+                callback.on_batch_end(self)
+
+            progress_queue.put((len(sentence_idx), tally, raw_tally, loss))  # report back progress
+            jobs_processed += 1
+        logger.debug("o----> Worker exiting, processed %i jobs", jobs_processed)
+
+
+    def _do_train_job_nlptext(self, indexes, hyper_indexes, sentence_idx, alpha, inits, merger_mem, fdot_mem, grad_mem, sample_grain_indictors):
         tally = 0
-        work, neu1 = inits
+        # for P1,...Ph
+        work, neu1 = inits     
+        # for P0     
         work_m, neu_m = merger_mem
-        grad_mem = grad_mem
-        tally_increase, loss = train_batch_fieldembed_negsamp(self, indexes, hyper_indexes, sentence_idx, 
-                            alpha, work, neu1, work_m, neu_m, grad_mem, self.compute_loss)
+        
+        tally_increase, loss = train_batch_fieldembed_negsamp(self, 
+                                                              indexes, 
+                                                              hyper_indexes, 
+                                                              sentence_idx, 
+                                                              alpha, 
+                                                              work, 
+                                                              neu1, 
+                                                              work_m, 
+                                                              neu_m, 
+                                                              fdot_mem, 
+                                                              grad_mem,
+                                                              sample_grain_indictors,
+                                                              self.compute_loss)
         tally = tally_increase + tally
         return tally, sentence_idx[-1], loss
 
-        # chunk_token_str = indexes
-        # chunk_hyper_idxs = hyper_indexes
-
-        # vlookup = self.wv.vocab
-        # for sent_idx in range(len(sentence_idx)):
-        #     try:
-        #         if sent_idx == 0:
-        #             idx_start = 0
-        #         else:
-        #             idx_start = sentence_idx[sent_idx-1]
-        #         idx_end = sentence_idx[sent_idx]
-
-        #         for loc_idx in range(idx_start, idx_end):
-        #             token = chunk_token_str[loc_idx]
-        #             word = vlookup[token] if token in vlookup else None
-        #             if word is None:
-        #                 continue
-        #             word_vocidx = word.index 
-        #     except:
-        #         if sent_idx == 0:
-        #             idx_start = 0
-        #         else:
-        #             idx_start = sentence_idx[sent_idx-1]
-        #         idx_end = sentence_idx[sent_idx]
-        #         total_leng = len(chunk_token_str)
-        #         idx_end = total_leng if idx_end > total_leng else idx_end
-        #         print(idx_start, idx_end)
-        #         print(' '.join(chunk_token_str[idx_start: idx_end]))
-
-
-        # return 0, sentence_idx[-1],  0
 
     ################################################################################################################################################### log
     def _log_epoch_progress(self, progress_queue=None, job_queue=None, cur_epoch=0, total_examples=None,total_words=None, report_delay=10.0, is_corpus_file_mode=None):
-
         example_count, trained_word_count, raw_word_count = 0, 0, 0
         start, next_report = default_timer() - 0.00001, 5.0
         job_tally = 0
