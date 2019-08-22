@@ -62,7 +62,7 @@ cdef unsigned long long random_int32(unsigned long long *next_random) nogil
 cdef struct Word2VecConfig:
     REAL_t running_training_loss, alpha
     int hs, negative, sample, compute_loss, size, window, cbow_mean, workers, sg
-    int use_sub, use_head, use_hyper, use_merger
+    int use_sub, use_head, use_hyper, use_merger, sample_grain_indictors_leng
     
     # to segment sentences 
     int sentence_idx[MAX_SENTENCE_LEN + 1]
@@ -79,19 +79,24 @@ cdef struct Word2VecConfig:
     # for sub fields only                  
     map[int, np.uint32_t *] LookUp_map
     map[int, np.uint32_t *] EndIdx_map
+    map[int, np.uint32_t *] SampleInt_map
     map[int, REAL_t *] LengInv_map
 
     # for hyper fields only
     # map[int, np.uint32_t *] hyper_indexes # to improve it in the future.
     np.uint32_t pos_indexes[MAX_SENTENCE_LEN]      
     
+    REAL_t *fdot_mem
     REAL_t *grad_mem
     REAL_t *work
     REAL_t *neu1
     REAL_t *work_m
     REAL_t *neu_m
+    np.uint32_t *sample_grain_indictors
+
     REAL_t *word_locks
     np.uint32_t *cum_table
+    
 
     unsigned long long cum_table_len
     unsigned long long next_random
@@ -107,7 +112,9 @@ cdef init_w2v_config(
     _neu1, 
     _work_m, 
     _neu_m, 
-    _grad_mem)
+    _fdot_mem,
+    _grad_mem,
+    _sample_grain_indictors)
 
 
 cdef unsigned long long fieldembed_negsamp( 
@@ -118,14 +125,15 @@ cdef unsigned long long fieldembed_negsamp(
     unsigned long long cum_table_len, 
 
     const np.uint32_t indexes[MAX_SENTENCE_LEN],
+    # will this work?
     # map[int, np.uint32_t *] hyper_indexes, 
     const np.uint32_t pos_indexes[MAX_SENTENCE_LEN],
     int i, # right word loc_idx
     int j, # left  word loc_idx start
     int k, # left  word loc_idx end
 
-    int use_head,               
-    int use_sub,               
+    int use_head,                # 
+    int use_sub,                 # 
     int use_hyper,
     int use_merger,
 
@@ -133,16 +141,20 @@ cdef unsigned long long fieldembed_negsamp(
     map[int, np.uint32_t *] LookUp_map,
     map[int, np.uint32_t *] EndIdx_map,
     map[int, REAL_t *] LengInv_map,
+    map[int, np.uint32_t *] SampleInt_map,
 
     REAL_t *syn1neg, 
     REAL_t *word_locks,
-    
+    REAL_t *fdot_mem,
     REAL_t *grad_mem,
     REAL_t *neu1,  
     REAL_t *work,
 
     REAL_t *neu_m,  
     REAL_t *work_m,
+    
+    np.uint32_t *sample_grain_indictors,
+    int sample_grain_indictors_leng,
 
     int cbow_mean, 
     unsigned long long next_random, 

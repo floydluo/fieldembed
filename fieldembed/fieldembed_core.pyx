@@ -99,7 +99,9 @@ cdef init_w2v_config(
     _neu1, 
     _work_m, 
     _neu_m,
-    _grad_mem):
+    _fdot_mem,
+    _grad_mem, 
+    _sample_grain_indictors):
     #===========================================================================================#
     
     ####################################################################### index and configuration
@@ -121,11 +123,15 @@ cdef init_w2v_config(
     if c[0].use_sub:
         for i in range(c[0].use_sub):
             fld_idx  = fld_idx + 1
+            # print(len(model.field_sub[i][1]))
+            # print(len(model.field_sub[i][2]))
+            # print(len(model.field_sub[i][3]))
+            # print(len(model.field_sub[i][4]))
             c[0].syn0_map[fld_idx]= <REAL_t *>(np.PyArray_DATA(model.field_sub[i][0].vectors))
-            
             c[0].LookUp_map[i]    = <np.uint32_t *>(np.PyArray_DATA(model.field_sub[i][1]))
             c[0].EndIdx_map[i]    = <np.uint32_t *>(np.PyArray_DATA(model.field_sub[i][2]))
             c[0].LengInv_map[i]   = <REAL_t *>(np.PyArray_DATA(model.field_sub[i][3])) 
+            c[0].SampleInt_map[i] = <np.uint32_t *>(np.PyArray_DATA(model.field_sub[i][4])) 
 
     c[0].use_head = model.use_head 
     if c[0].use_head:
@@ -141,16 +147,19 @@ cdef init_w2v_config(
 
             ## TODO multiple hyper-fields
             # c[0].hyper_indexes[i]  = <np.uint32_t *>(np.PyArray_DATA(np.zeros(MAX_SENTENCE_LEN, dtype = np.uint32)))  
-
-    c[0].grad_mem  = <REAL_t *>np.PyArray_DATA(_grad_mem)
+    c[0].use_merger = model.use_merger
 
     c[0].work   = <REAL_t *>np.PyArray_DATA(_work)
     c[0].neu1   = <REAL_t *>np.PyArray_DATA(_neu1)
-
-    c[0].use_merger = model.use_merger
+    
     c[0].work_m = <REAL_t *>np.PyArray_DATA(_work_m)
     c[0].neu_m  = <REAL_t *>np.PyArray_DATA(_neu_m)
 
+    c[0].fdot_mem  = <REAL_t *>np.PyArray_DATA(_fdot_mem) # NEW
+    c[0].grad_mem  = <REAL_t *>np.PyArray_DATA(_grad_mem)
+    # need to be long enough
+    c[0].sample_grain_indictors = <np.uint32_t *>(np.PyArray_DATA(_sample_grain_indictors)) # NEW
+    c[0].sample_grain_indictors_leng = model.sample_grain_indictors_leng
     ####################################################################### hyper_parameters
     # there may not be any model.wv, what if there is no model.wv? check it.
     c[0].size = model.wv.vector_size 
@@ -194,16 +203,21 @@ cdef unsigned long long fieldembed_negsamp(
     map[int, np.uint32_t *] EndIdx_map,
     map[int, REAL_t *] LengInv_map,
     # map[int, int] leng_max_map,
+    map[int, np.uint32_t *] SampleInt_map,
+
 
     REAL_t *syn1neg, 
     REAL_t *word_locks,
-
+    REAL_t *fdot_mem,
     REAL_t *grad_mem,
     REAL_t *neu1,  
     REAL_t *work,
 
     REAL_t *neu_m,  
     REAL_t *work_m,
+
+    np.uint32_t *sample_grain_indictors,
+    int sample_grain_indictors_leng,
 
     int cbow_mean, 
     unsigned long long next_random, 
@@ -216,7 +230,7 @@ cdef unsigned long long fieldembed_negsamp(
     cdef unsigned long long modulo = 281474976710655ULL
     
     cdef REAL_t label
-    cdef REAL_t f_dot, f, log_e_f_dot, g_m
+    cdef REAL_t f_dot, f, log_e_f_dot, f_dot_m, g_m, log_e_f_dot_m
     # d is for looping negative, m is for looping left words, 
     cdef int d, m  
     # n is for looping left word's grain, shoud n be an int?
@@ -224,9 +238,12 @@ cdef unsigned long long fieldembed_negsamp(
     cdef int lpid
     cdef int left_word
     cdef int gs, ge
+    cdef int indicator_idx
+    cdef np.uint32_t subsample_indictor
     # should left_word be an int?
-    cdef np.uint32_t target_index, word_index, grain_index, fld_idx 
+    cdef np.uint32_t target_index, word_index, grain_index, fld_idx
     cdef REAL_t count, inv_count = 1.0, word_lenginv = 1.0, channel_no_inv = ONEF / (proj_num)
+    cdef int flag = 0
 
     ######################################################################## S: Initialize count and inv_count
     count = <REAL_t>0.0
@@ -245,15 +262,23 @@ cdef unsigned long long fieldembed_negsamp(
     # here word_index is np.uint32_t, because indexes is np.int32_t (very interesting)
     # word_index is the target word in this whole function
     word_index = indexes[i] 
-
-    memset(neu1, 0, proj_num * size * cython.sizeof(REAL_t))
+    # print('-a')
     ######################################################################## S: calculate proj from syn0
+    # Stage1: Caculate P0, P1, ..., Ph, and P0
+    memset(neu1,   0, size * cython.sizeof(REAL_t) * proj_num)
+    memset(neu_m,  0, size * cython.sizeof(REAL_t))
+    memset(sample_grain_indictors, 0, sample_grain_indictors_leng * cython.sizeof(np.uint32_t))
     fld_idx = -1
     if use_sub: 
+        # only in this case, we will use sample_grain_indictors
+        ########################################## New Codes
+        indicator_idx = -1
+        ########################################## New Codes
         for lpid in range(use_sub):
             fld_idx = fld_idx + 1
             # sg case: range(j, k) is range(j, j + 1)
             # loop left tokens here
+            # grain_loc_idx = -1 ###########
             for m in range(j, k): 
                 if m == i:
                     continue
@@ -264,12 +289,33 @@ cdef unsigned long long fieldembed_negsamp(
                     word_lenginv = LengInv_map[lpid][left_word] 
                     gs = EndIdx_map[lpid][left_word-1]
                     ge = EndIdx_map[lpid][left_word]
+                    # print('-a1', gs, ge, 'leng of grain is:',ge - gs, 'left_word', left_word)
                     for n in range(gs, ge):
+                        # print('-a11', n)
                         # n is also np.uint_32
                         # should n be an int? just like m?
                         grain_index = LookUp_map[lpid][n] # syn0_1_LookUp is a np.uint_32
+                        # print('-a111', grain_index)
+                        ############################################# New Codes
                         # grain_index is also np.uint_32
-                        our_saxpy(&size, &word_lenginv, &syn0_map[fld_idx][grain_index * size],  &ONE, &neu1[fld_idx*size], &ONE)
+                        grain_randint = SampleInt_map[lpid][grain_index]
+                        # print('-a112', grain_randint)
+                        # subsample_indictor zero is to drop and one is to keep 
+                        # subsample_indictor = int(grain_randint > random_int32(&next_random) or grain_randint == 0) # grain_randint == 0 is the same as 2**32
+                        # grain_randint == 0 is the same as 2**32
+                        # print('-a12')
+                        if grain_randint > random_int32(&next_random) or grain_randint == 0: 
+                            subsample_indictor = 1
+                        else:
+                            subsample_indictor = 0
+                        # print('-a13')
+                        indicator_idx = indicator_idx + 1
+                        sample_grain_indictors[indicator_idx] = subsample_indictor
+                        if subsample_indictor == 1:
+                            # print('-a14', subsample_indictor)
+                            ############################################# New Codes
+                            our_saxpy(&size, &word_lenginv, &syn0_map[fld_idx][grain_index * size],  &ONE, &neu1[fld_idx*size], &ONE)
+            
             # (does this need BLAS-variants like saxpy? # no, you don't)
             sscal(&size, &inv_count, &neu1[fld_idx*size], &ONE)  
    
@@ -301,7 +347,6 @@ cdef unsigned long long fieldembed_negsamp(
             sscal(&size, &inv_count, &neu1[fld_idx*size], &ONE)
 
     if use_merger:
-        memset(neu_m,  0, size * cython.sizeof(REAL_t))
         fld_idx = -1
         for lpid in range(proj_num):
             fld_idx = fld_idx + 1
@@ -309,9 +354,11 @@ cdef unsigned long long fieldembed_negsamp(
             our_saxpy(&size, &channel_no_inv, &neu1[fld_idx*size],  &ONE, neu_m, &ONE)
     ######################################################################## E
 
-
+    # print('-b')
     ######################################################################## S: calculate grad and update syn1neg
-    memset(work,  0, proj_num * size * cython.sizeof(REAL_t))
+    # Stage 2: Preprae Grad for P1, P2, ..., Ph, and P0
+    memset(work,    0, size * cython.sizeof(REAL_t) * proj_num)
+    memset(work_m,  0, size * cython.sizeof(REAL_t))
 
     # d is int
     for d in range(negative+1):
@@ -332,80 +379,118 @@ cdef unsigned long long fieldembed_negsamp(
         row2 = target_index * size 
         
         ##################################################################################### use proj (neu1) to calculate grad (work) for each field
+        # STAGE 2.1: Cacluate fdot1, fdot2, ..., fdoth, and fdot0 (f_dot_m)
+        # print('-b1')
+        memset(fdot_mem,  0, proj_num * cython.sizeof(REAL_t)); f_dot_m = 0
+        flag = 0
         fld_idx = -1
         if use_sub:
             for lpid in range(use_sub):
                 fld_idx = fld_idx + 1
-
                 f_dot = our_dot(&size, &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)
                 if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:
-                    continue 
-
-                f = EXP_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
-                grad_mem[fld_idx] = (label - f) * alpha 
-    
-                if _compute_loss == 1: 
-                    # change f_dot according to the pair relationship: d
-                    f_dot = (f_dot if d == 0  else -f_dot)
-                    log_e_f_dot = LOG_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
-                    _running_training_loss_param[0] = _running_training_loss_param[0] - log_e_f_dot 
-                # accumulate grad (work) and do not update syn1neg now.
-                our_saxpy(&size, &grad_mem[fld_idx], &syn1neg[row2], &ONE, &work[fld_idx*size], &ONE) 
+                    flag = 1
+                    break 
+                fdot_mem[fld_idx] = f_dot
+            if flag == 1:
+                continue
 
         if use_head:
             fld_idx = fld_idx + 1
             f_dot = our_dot(&size, &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)
             if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:
                 continue 
+            fdot_mem[fld_idx] = f_dot
 
-            f = EXP_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
-            grad_mem[fld_idx] = (label - f) * alpha 
+        if use_hyper:
+            for lpid in range(use_hyper):
+                fld_idx = fld_idx + 1
+                f_dot = our_dot(&size, &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)
+                if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:
+                    flag = 1
+                    break 
+                fdot_mem[fld_idx] = f_dot
+            if flag == 1:
+                continue
+        
+        if use_merger:
+            f_dot_m = our_dot(&size, neu_m, &ONE, &syn1neg[row2], &ONE)
+            if f_dot_m <= -MAX_EXP or f_dot_m >= MAX_EXP:
+                continue 
 
-            if _compute_loss == 1: 
-                # change f_dot according to the pair relationship: d
+        ##################################################################################### calculate the grad for merger
+        # STAGE 2.2: Caculate loss for each pair of P and word
+        # print('-b2')
+        if _compute_loss == 1: 
+            fld_idx = -1
+            if use_sub:
+                for lpid in range(use_sub):
+                    fld_idx = fld_idx + 1
+                    f_dot = fdot_mem[fld_idx]
+                    # change f_dot according to the pair relationship: d
+                    f_dot = (f_dot if d == 0  else -f_dot)
+                    log_e_f_dot = LOG_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
+                    _running_training_loss_param[0] = _running_training_loss_param[0] - log_e_f_dot 
+                   
+            if use_head:
+                fld_idx = fld_idx + 1
+                f_dot = fdot_mem[fld_idx]
                 f_dot = (f_dot if d == 0  else -f_dot)
                 log_e_f_dot = LOG_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
                 _running_training_loss_param[0] = _running_training_loss_param[0] - log_e_f_dot 
 
+            if use_hyper:
+                for lpid in range(use_hyper):
+                    fld_idx = fld_idx + 1
+                    f_dot = fdot_mem[fld_idx]
+                    f_dot = (f_dot if d == 0  else -f_dot)
+                    log_e_f_dot = LOG_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
+                    _running_training_loss_param[0] = _running_training_loss_param[0] - log_e_f_dot 
+            
+            if use_merger:
+                f_dot = f_dot_m
+                f_dot = (f_dot if d == 0  else -f_dot)
+                log_e_f_dot = LOG_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
+                _running_training_loss_param[0] = _running_training_loss_param[0] - log_e_f_dot 
+
+        ##################################################################################### calculate the grad for merger
+        # STAGE 2.3: Caculate g1, g2, .., g0 and Accumulate work as grad1, grad2, ..., gradh, and grad0 (work_m)
+        # pay attention to grad_mem, word, and work_m
+        # print('-b3')
+        memset(grad_mem,  0, proj_num * cython.sizeof(REAL_t)); g_m = 0
+        fld_idx = -1
+        if use_sub:
+            for lpid in range(use_sub):
+                fld_idx = fld_idx + 1
+                f_dot = fdot_mem[fld_idx]
+                f = EXP_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
+                grad_mem[fld_idx] = (label - f) * alpha 
+                our_saxpy(&size, &grad_mem[fld_idx], &syn1neg[row2], &ONE, &work[fld_idx*size], &ONE) 
+
+        if use_head:
+            fld_idx = fld_idx + 1
+            f_dot = fdot_mem[fld_idx]
+            f = EXP_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
+            grad_mem[fld_idx] = (label - f) * alpha 
             our_saxpy(&size, &grad_mem[fld_idx], &syn1neg[row2], &ONE, &work[fld_idx*size], &ONE) 
 
         if use_hyper:
             for lpid in range(use_hyper):
                 fld_idx = fld_idx + 1
-
-                f_dot = our_dot(&size, &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)
-                if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:
-                    continue 
-
+                f_dot = fdot_mem[fld_idx]
                 f = EXP_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
                 grad_mem[fld_idx] = (label - f) * alpha 
-    
-                if _compute_loss == 1: 
-                    # change f_dot according to the pair relationship: d
-                    f_dot = (f_dot if d == 0  else -f_dot)
-                    log_e_f_dot = LOG_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
-                    _running_training_loss_param[0] = _running_training_loss_param[0] - log_e_f_dot 
-                # accumulate work
                 our_saxpy(&size, &grad_mem[fld_idx], &syn1neg[row2], &ONE, &work[fld_idx*size], &ONE) 
         
-        ##################################################################################### calculate the grad for merger
         if use_merger:
-            f_dot = our_dot(&size, neu_m, &ONE, &syn1neg[row2], &ONE)
-            if f_dot <= -MAX_EXP or f_dot >= MAX_EXP:
-                continue 
-
+            f_dot = f_dot_m
             f = EXP_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
             g_m = (label - f) * alpha 
-
-            if _compute_loss == 1: 
-                # change f_dot according to the pair relationship: d
-                f_dot = (f_dot if d == 0  else -f_dot)
-                log_e_f_dot = LOG_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
-                _running_training_loss_param[0] = _running_training_loss_param[0] - log_e_f_dot 
-
-            our_saxpy(&size, &g_m, &syn1neg[row2], &ONE, &work[fld_idx*size], &ONE) 
+            our_saxpy(&size, &g_m, &syn1neg[row2], &ONE, work_m, &ONE)  # LESSON
 
         ##################################################################################### update syn1neg based on all projs
+        # STAGE 2.4: Updating Word Embedding; use g1, g2, .., g0 and P1, P2, ..., P0 to update syn1ng 
+        # print('-b4')
         fld_idx = -1
         if use_sub:
             for lpid in range(use_sub):
@@ -422,12 +507,13 @@ cdef unsigned long long fieldembed_negsamp(
                 our_saxpy(&size, &grad_mem[fld_idx], &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)
 
         if use_merger:
-            # notice the difference between neu_m and neu1[fld_idx*size]
+            # notice the difference between neu_m and neu1[fld_idx*size] # MAKE SURE
             our_saxpy(&size, &g_m, neu_m, &ONE, &syn1neg[row2], &ONE)
     ######################################################################## E
 
 
     ######################################################################## S: assign the grad_m (work_m) to each grad (work)
+    # Stage 3: Out of the Loop and Caculate Correct grad for P1, P2, P3.. Ph, and abandon P0
     if use_merger:
         fld_idx = -1
         if use_sub:
@@ -447,6 +533,7 @@ cdef unsigned long long fieldembed_negsamp(
 
 
     ######################################################################## S: use standard grad
+    # Stage 4: Normalize grad? (Work)
     if cbow_mean and count > (<REAL_t>0.5):  
         fld_idx = -1
         if use_sub:
@@ -461,10 +548,17 @@ cdef unsigned long long fieldembed_negsamp(
                 fld_idx = fld_idx + 1
                 sscal(&size, &inv_count, &work[fld_idx*size], &ONE)  
 
-
     ######################################################################## S: update each syn0 by using the grad (work)
+    # print('-c')
+
     fld_idx = -1
     if use_sub:
+        # only in this case, we will use sample_grain_indictors
+        ########################################## New Codes
+        # memset(sample_grain_indictors, 0, indictor_size * cython.sizeof(np.uint32_t))
+        indicator_idx = -1
+        ########################################## New Codes
+
         for lpid in range(use_sub):
             fld_idx = fld_idx + 1
             # sg case: j + 1 = k; loop left tokens here
@@ -485,7 +579,13 @@ cdef unsigned long long fieldembed_negsamp(
                     for n in range(gs, ge):              
                         # grain_index is uint     
                         grain_index = LookUp_map[lpid][n] 
-                        our_saxpy(&size, &word_lenginv, &work[fld_idx*size], &ONE, &syn0_map[fld_idx][grain_index * size], &ONE) 
+                        ########################################## New Codes
+                        indicator_idx = indicator_idx + 1
+                        subsample_indictor = sample_grain_indictors[indicator_idx]
+                        if subsample_indictor == 1:
+                            ########################################## New Codes
+                            our_saxpy(&size, &word_lenginv, &work[fld_idx*size], &ONE, &syn0_map[fld_idx][grain_index * size], &ONE) 
+
     if use_head:
         fld_idx = fld_idx + 1
         for m in range(j,k): 
@@ -519,7 +619,9 @@ def train_batch_fieldembed_negsamp(
     _neu1, 
     _work_m, 
     _neu_m, 
+    _fdot_mem,
     _grad_mem,
+    _sample_grain_indictors,
     compute_loss):
 
     cdef Word2VecConfig c
@@ -536,8 +638,7 @@ def train_batch_fieldembed_negsamp(
     # now hyper_fields_num <= 1
     assert hyper_fields_num <= 1
 
-
-    init_w2v_config(&c, model, alpha, compute_loss, _work, _neu1, _work_m, _neu_m, _grad_mem) # this is the difference between sg and cbow
+    init_w2v_config(&c, model, alpha, compute_loss, _work, _neu1, _work_m, _neu_m, _fdot_mem, _grad_mem, _sample_grain_indictors) 
 
     vlookup = model.wv.vocab
 
@@ -663,9 +764,10 @@ def train_batch_fieldembed_negsamp(
                             c.pos_indexes, 
                             i, j, j + 1, 
                             c.use_head, c.use_sub,  c.use_hyper, c.use_merger,
-                            c.syn0_map, c.LookUp_map, c.EndIdx_map, c.LengInv_map, # c.leng_max_map,
+                            c.syn0_map, c.LookUp_map, c.EndIdx_map, c.LengInv_map, c.SampleInt_map,
                             c.syn1neg, c.word_locks, 
-                            c.grad_mem, c.neu1, c.work, c.neu_m, c.work_m, 
+                            c.fdot_mem, c.grad_mem, c.neu1, c.work, c.neu_m, c.work_m, 
+                            c.sample_grain_indictors, c.sample_grain_indictors_leng,
                             c.cbow_mean, c.next_random, c.compute_loss, &c.running_training_loss)
                 else:
                     # build the batch here
@@ -675,9 +777,10 @@ def train_batch_fieldembed_negsamp(
                             c.pos_indexes, 
                             i, j, k, 
                             c.use_head, c.use_sub,  c.use_hyper,  c.use_merger,
-                            c.syn0_map, c.LookUp_map, c.EndIdx_map, c.LengInv_map, # c.leng_max_map,
+                            c.syn0_map, c.LookUp_map, c.EndIdx_map, c.LengInv_map, c.SampleInt_map,
                             c.syn1neg, c.word_locks, 
-                            c.grad_mem, c.neu1, c.work, c.neu_m, c.work_m, 
+                            c.fdot_mem, c.grad_mem, c.neu1, c.work, c.neu_m, c.work_m, 
+                            c.sample_grain_indictors, c.sample_grain_indictors_leng,
                             c.cbow_mean, c.next_random, c.compute_loss, &c.running_training_loss)
 
     model.running_training_loss = c.running_training_loss

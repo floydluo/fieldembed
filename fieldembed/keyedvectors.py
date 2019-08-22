@@ -333,6 +333,10 @@ class WordEmbeddingsKeyedVectors(BaseKeyedVectors):
 
             result.setflags(write=False)
             return result
+        elif self.GU:
+            if word in self.GU[1]:
+                result = self.vectors[self.GU[1][word]]
+                return result
         else:
             raise KeyError("word '%s' not in vocabulary" % word)
 
