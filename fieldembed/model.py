@@ -50,7 +50,7 @@ class FieldEmbedding(utils.SaveLoad):
     def __init__(self, 
         nlptext = None, Field_Settings = {}, train = True,  
         sg=0,  iter=5, window=5, negative=5, alpha=0.025, sample=1e-3, ns_exponent=0.75, workers=4,  
-        sample_grain = None, use_merger = 1, size=100, 
+        sample_grain = None, LF = 1, size=100, 
         standard_grad = 1,cbow_mean=1,
         seed=1, neg_init = 0, min_alpha = 0.0001,  
         hashfxn=hash, batch_words=MAX_WORDS_IN_BATCH, compute_loss = False, callbacks=()):
@@ -65,7 +65,7 @@ class FieldEmbedding(utils.SaveLoad):
         self.callbacks = callbacks
         self.load = call_on_class_only
         self.Field_Settings = Field_Settings
-        self.use_merger = use_merger
+        self.LF = LF if len(Field_Settings) > 1 else 1
         
 
         # here only do initializations for wv, vocabulary, and trainables
@@ -130,7 +130,8 @@ class FieldEmbedding(utils.SaveLoad):
             print('\n\n======== Training Start ....'); s = datetime.now()
             self.train(nlptext = nlptext, total_examples=self.corpus_count,
                 total_words=self.corpus_total_words, epochs=self.epochs, 
-                start_alpha=self.alpha, end_alpha=self.min_alpha, compute_loss=compute_loss)
+                start_alpha=self.alpha, end_alpha=self.min_alpha, compute_loss=compute_loss,
+                report_delay = 60.)
             print('======== Training End ......'); e = datetime.now()
             print('======== Total Time: ', e - s)
 
@@ -145,11 +146,10 @@ class FieldEmbedding(utils.SaveLoad):
         alp = 'lr' + str(self.alpha)
         nsexp = 'nsexp' + str(self.ns_exponent)
         hppara = '-'.join([sg_or_cb, ep, w, neg, alp, smp, nsexp, thr,])
-        lf = 'LF3' if self.use_merger else 'LF2'
+        lf = 'LF' + str(self.LF)
         smpgr = 'SmpGrT' if self.sample_grain else 'SmpGrF'
         subchoice = '-'.join([lf, smpgr])
         return os.path.join(flds, hppara, subchoice)
-
 
 
     ################################################################################################################################################### build_vocab
@@ -211,7 +211,8 @@ class FieldEmbedding(utils.SaveLoad):
                         sample_grain = self.sample_grain
                         retain_total = np.sum(Freq)
                         ################################################## TODO
-                        threshold_count = retain_total * 1e-4 # around first 100 high grains
+                        # threshold_count = retain_total * 1e-4 # around first 100 high grains
+                        threshold_count = retain_total * 1e-3 # around first 100 high grains
                         Sample_Int = np.zeros(len(Freq), dtype = np.uint32)
                         Grain_Prob = np.zeros(len(Freq))
                         downsample_unique = 0
@@ -270,10 +271,31 @@ class FieldEmbedding(utils.SaveLoad):
         Leng_max = np.max(Leng)
         # LESSION: ignoring the np.uint32 wastes me a lot of time
         EndIdx = np.cumsum(Leng, dtype = np.uint32) 
+
         LookUp = np.array(list(itertools.chain.from_iterable(LKP)), dtype = np.uint32)
         Leng[Leng == 0] = 1 ############# Lesson
         Leng_Inv = 1 / Leng
         Leng_Inv = Leng_Inv.astype(REAL)
+
+        max_grvocidx = len(GU[0]) - 1
+        tk_num = len(LKP)
+
+        # print('***'*30)
+        # # print(field, EndIdx.min(), EndIdx.max())
+        # print(field)
+        # print(max_grvocidx, max(LookUp))
+        # print('tk_num', tk_num, len(TU[0]))
+        # print('len(Leng_Inv)', len(Leng_Inv))
+        # print('len(EndIdx)', len(EndIdx))
+
+        # print('***'*30)
+
+        assert tk_num == len(Leng_Inv)
+        assert tk_num == len(EndIdx)
+        assert len(LookUp) == max(EndIdx)
+        assert tk_num == len(TU[0])
+        assert max_grvocidx == max(LookUp)
+
         return (GU, TU, LKP), (LookUp, EndIdx, Leng_Inv, Leng_max, Freq)
 
 
@@ -318,7 +340,7 @@ class FieldEmbedding(utils.SaveLoad):
     def train(self, nlptext = None, total_examples=None, 
         total_words=None, epochs=None, start_alpha=None, 
         end_alpha=None, word_count=0,queue_factor=2, 
-        report_delay=1.0, compute_loss=False, callbacks=(), **kwargs):
+        report_delay=10.0, compute_loss=False, callbacks=(), **kwargs):
 
         #---------------------------------------------------------------
         
@@ -411,7 +433,7 @@ class FieldEmbedding(utils.SaveLoad):
         )
 
     ####################################################################################### 
-    def _train_epoch_nlptext(self, nlptext, cur_epoch = 0, total_examples=None, total_words=None,queue_factor=2, report_delay=1.0):
+    def _train_epoch_nlptext(self, nlptext, cur_epoch = 0, total_examples=None, total_words=None,queue_factor=2, report_delay=10.0):
         ########### preprocess
         # sentences_endidx = nlptext.SENT['EndIDXTokens']
         # tokens_vocidx    = nlptext.TOKEN['ORIGTokenIndex']
@@ -464,7 +486,6 @@ class FieldEmbedding(utils.SaveLoad):
         total_examples,  total_words, cur_epoch=0):
         #---------------------------------------------------# 
         
-
         job_batch, batch_size = [], 0
         pushed_words, pushed_examples = 0, 0 # examples refers to sentences
         next_job_params = self._get_job_params(cur_epoch) # current learning rate: cur_alpha
@@ -580,7 +601,7 @@ class FieldEmbedding(utils.SaveLoad):
             for callback in self.callbacks:
                 callback.on_batch_begin(self)
 
-            tally, raw_tally, loss = self._do_train_job_nlptext(indexes = chunk_token_str, 
+            tally, raw_tally, loss_total, data_point_num = self._do_train_job_nlptext(indexes = chunk_token_str, 
                                                                 hyper_indexes = chunk_hyper_idxs, 
                                                                 sentence_idx = sentence_idx, 
                                                                 alpha = alpha, 
@@ -592,7 +613,7 @@ class FieldEmbedding(utils.SaveLoad):
             for callback in self.callbacks:
                 callback.on_batch_end(self)
 
-            progress_queue.put((len(sentence_idx), tally, raw_tally, loss))  # report back progress
+            progress_queue.put((len(sentence_idx), tally, raw_tally, loss_total, data_point_num))  # report back progress
             jobs_processed += 1
         logger.debug("o----> Worker exiting, processed %i jobs", jobs_processed)
 
@@ -604,7 +625,7 @@ class FieldEmbedding(utils.SaveLoad):
         # for P0     
         work_m, neu_m = merger_mem
         
-        tally_increase, loss = train_batch_fieldembed_negsamp(self, 
+        tally_increase, loss_total, data_point_num = train_batch_fieldembed_negsamp(self, 
                                                               indexes, 
                                                               hyper_indexes, 
                                                               sentence_idx, 
@@ -618,38 +639,50 @@ class FieldEmbedding(utils.SaveLoad):
                                                               sample_grain_indictors,
                                                               self.compute_loss)
         tally = tally_increase + tally
-        return tally, sentence_idx[-1], loss
+        # print(loss_total, data_point_num)
+        # print('average loss for a batch:', round(loss_total/data_point_num, 5))
+        return tally, sentence_idx[-1], loss_total, data_point_num
 
 
     ################################################################################################################################################### log
-    def _log_epoch_progress(self, progress_queue=None, job_queue=None, cur_epoch=0, total_examples=None,total_words=None, report_delay=10.0, is_corpus_file_mode=None):
+    def _log_epoch_progress(self, progress_queue=None, job_queue=None, cur_epoch=0, total_examples=None,total_words=None, report_delay=20.0, is_corpus_file_mode=None):
         example_count, trained_word_count, raw_word_count = 0, 0, 0
+        ################################
+        all_loss_total = 0 
+        all_data_point_num = 0
+        old_all_loss_total = 0
+        old_all_data_point_num = 0
+        ################################
         start, next_report = default_timer() - 0.00001, 5.0
         job_tally = 0
         unfinished_worker_count = self.workers
-        last_loss = 0
         while unfinished_worker_count > 0:
             report = progress_queue.get()  # blocks if workers too slow
             if report is None:  # a thread reporting that it finished
                 unfinished_worker_count -= 1
                 logger.info("Worker thread finished; awaiting finish of %i more threads", unfinished_worker_count)
                 continue
-            examples, trained_words, raw_words, loss = report
+            examples, trained_words, raw_words, loss_total, data_point_num = report
             job_tally += 1
 
             # update progress stats
             example_count += examples
             trained_word_count += trained_words  # only words in vocab & sampled
             raw_word_count += raw_words
+            ################################
+            all_loss_total += loss_total
+            all_data_point_num += data_point_num 
+            ################################
 
             # log progress once every report_delay seconds
             elapsed = default_timer() - start
             if elapsed >= next_report:
                 self._log_progress(
                     job_queue, progress_queue, cur_epoch, example_count, total_examples,
-                    raw_word_count, total_words, trained_word_count, elapsed, loss - last_loss)
+                    raw_word_count, total_words, trained_word_count, elapsed, all_loss_total - old_all_loss_total , all_data_point_num - old_all_data_point_num)
+                old_all_loss_total = all_loss_total
+                old_all_data_point_num = all_data_point_num
                 next_report = elapsed + report_delay
-            last_loss = loss
         # all done; report the final stats
         elapsed = default_timer() - start
         self._log_epoch_end(
@@ -659,28 +692,30 @@ class FieldEmbedding(utils.SaveLoad):
         return trained_word_count, raw_word_count, job_tally
 
     def _log_progress(self, job_queue, progress_queue, cur_epoch, example_count, total_examples,
-        raw_word_count, total_words, trained_word_count, elapsed, loss):
+        raw_word_count, total_words, trained_word_count, elapsed,
+        all_loss_total, all_data_point_num):
         if total_examples:
             # examples-based progress %
             logger.info(
-                "EPOCH %i - PROGRESS: at %.2f%% examples, %.0f words/s, in_qsize %i, out_qsize %i, loss %.3f",
+                "EPOCH %i - PROGRESS: at %.2f%% examples, %.0f words/s, in_qsize %i, out_qsize %i, LOSS %.4f, DP %i, mean LOSS %.4f",
                 cur_epoch + 1, 
                 100.0 * example_count / total_examples, 
                 trained_word_count / elapsed,
                 -1 if job_queue is None else utils.qsize(job_queue), 
                 utils.qsize(progress_queue),
-                loss, 
+                all_loss_total,
+                all_data_point_num,
+                all_loss_total/all_data_point_num,
             )
         else:
             # words-based progress %
             logger.info(
-                "EPOCH %i - PROGRESS: at %.2f%% words, %.0f words/s, in_qsize %i, out_qsize %i, loss %.3f",
+                "EPOCH %i - PROGRESS: at %.2f%% words, %.0f words/s, in_qsize %i, out_qsize %i",
                 cur_epoch + 1, 
                 100.0 * raw_word_count / total_words, 
                 trained_word_count / elapsed,
                 -1 if job_queue is None else utils.qsize(job_queue), 
                 utils.qsize(progress_queue),
-                loss, 
             )
 
     def _log_epoch_end(self, cur_epoch, example_count, total_examples, raw_word_count, total_words,
@@ -725,14 +760,30 @@ class FieldEmbedding(utils.SaveLoad):
                 continue
             print(channel)
             print(wv.derivative_wv.lexical_evals())
-        wv = self.wv_neg
         print('syn1neg')
-        print(wv.lexical_evals())
+        print(self.wv_neg.lexical_evals())
         return
+
+    def save_keyedvectors(self, path):
+        for channel, wv in self.weights.items():
+            if channel in FIELD_INFO['hyper']:
+                continue
+            wv.save(path + '_grain_' + channel)
+            # print(channel)
+            # print(wv.derivative_wv.lexical_evals())
+        # print('syn1neg')
+        # print(self.wv_neg.lexical_evals())
+        self.wv_neg.save(path + '_word_' + channel)
 
     ################################################################################################################################################### load and save
     def save(self, *args, **kwargs):
-        kwargs['ignore'] = kwargs.get('ignore', ['vectors_norm', 'cum_table'])
+        del self.vocabulary
+        del self.trainables
+        del self.field_sub
+        del self.field_head
+        del self.field_hyper
+        # del self.cum_table
+        kwargs['ignore'] = kwargs.get('ignore', ['vectors_norm', 'vocabulary', 'field_sub', 'field_head', 'field_hyper',  'cum_table', 'trainables'])
         super(FieldEmbedding, self).save(*args, **kwargs)
 
     @classmethod
@@ -812,8 +863,15 @@ class FieldEmbedding(utils.SaveLoad):
             self.__class__.__name__, len(self.wv.index2word), self.wv.vector_size, self.alpha
         )
 
+    def __repr__(self):
+        return "%s(vocab=%s, size=%s, alpha=%s)" % (
+            self.__class__.__name__, len(self.wv.index2word), self.wv.vector_size, self.alpha
+        )
 
-class FieldEmbedVocab(utils.SaveLoad):
+    # def save
+
+
+class FieldEmbedVocab(object):
     """Vocabulary used by :class:`~gensim.models.word2vec.Word2Vec`."""
     def __init__(self, sample=1e-3, sorted_vocab=True, null_word=0, max_final_vocab=None, ns_exponent=0.75):
         self.sample = sample
@@ -839,7 +897,8 @@ class FieldEmbedVocab(utils.SaveLoad):
         # up to know, the min_token_freq is considered already.
         LTU, DTU = nlptext.TokenVocab
         
-        print('o-->', 'Get Token Vocab Frequency from NLPText')
+        # print()
+        logger.info('o--> Get Token Vocab Frequency from NLPText')
         # ISSUE: contains the lower freq tokens or not.
         idx2freq = nlptext.idx2freq
         
@@ -852,7 +911,7 @@ class FieldEmbedVocab(utils.SaveLoad):
         self.effective_min_count = min_count # TODO: make it neater
 
         if not update:
-            print('o-->', "Prepare WV's index2word, vocab...")
+            logger.info("o--> Prepare WV's index2word, vocab...")
             s = datetime.now(); print('\tStart: ', s)
             
             logger.info("Loading a fresh vocabulary")
@@ -889,7 +948,7 @@ class FieldEmbedVocab(utils.SaveLoad):
 
             e = datetime.now(); print('\tEnd  : ', e);print('\tTotal Time:', e - s )
 
-        print('o-->', "Compute Token's sampel_int...")
+        logger.info("o--> Compute Token's sampel_int...")
         s = datetime.now(); print('\tStart: ', s)
         if not sample:
             # no words downsampled
@@ -936,10 +995,11 @@ class FieldEmbedVocab(utils.SaveLoad):
             'downsample_total': int(downsample_total), 'num_retained_words': len(retain_words)
         }
 
-        print('o-->', 'Compute Cum Table')
-        s = datetime.now(); print('\tStart: ', s)
+        logger.info('o--> Compute Cum Table')
+        # s = datetime.now(); print('\tStart: ', s)
         self.make_cum_table(model.wv)
-        e = datetime.now(); print('\tEnd  : ', e);print('\tTotal Time:', e - s )
+        # e = datetime.now(); print('\tEnd  : ', e);print( )
+        logger.info('\tTotal Time:' + str(e - s))
 
         # update wv and wv_neg information.
         return corpus_total_words, corpus_count,  report_values
@@ -959,7 +1019,8 @@ class FieldEmbedVocab(utils.SaveLoad):
         if len(self.cum_table) > 0:
             assert self.cum_table[-1] == domain
 
-class FieldEmbedTrainables(utils.SaveLoad):
+
+class FieldEmbedTrainables(object):
     """Represents the inner shallow neural network used to train :class:`~gensim.models.word2vec.Word2Vec`."""
     def __init__(self, vector_size=100, seed=1, hashfxn=hash):
         self.hashfxn = hashfxn
@@ -986,13 +1047,15 @@ class FieldEmbedTrainables(utils.SaveLoad):
         # syn1neg      
         # if negative:
         if type(neg_init) == str:
-            print('Init syn1neg with random:', neg_init)
+            # print('Init syn1neg with random:', neg_init)
+            logger.info('Init syn1neg with random: ' + str(neg_init))
             model.wv_neg.vectors = empty((len(model.wv.vocab), self.layer1_size), dtype=REAL)
             for i in range(len(wv.vocab)): 
                 # construct deterministic seed from word AND seed argument
                 model.wv_neg.vectors[i] = self.seeded_vector(model.wv_neg.index2word[i] + neg_int + str(self.seed), self.layer1_size)
         else:    
-            print('Init syn1neg with zeros')
+            # print('Init syn1neg with zeros')
+            logger.info('Init syn1neg with zeros')
             model.wv_neg.vectors = zeros((len(model.wv.vocab), self.layer1_size), dtype=REAL)
         
         # this is only for the convenient. trainable.syn1neg and model.wv_neg.vectors are the same thing.
