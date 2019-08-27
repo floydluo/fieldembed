@@ -14,7 +14,8 @@ corpus/Wiki*/
 corpus/newsgroup/
 _etc/
 
-AAAI-MA/
+MA/
+MA.ipynb
 
 embeddings
 
