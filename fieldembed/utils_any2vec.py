@@ -71,7 +71,7 @@ def _save_word2vec_format(fname, vocab, vectors, fvocab=None, binary=False, tota
 
 
 def _load_word2vec_format(cls, fname, fvocab=None, binary=False, encoding='utf8', unicode_errors='strict',
-                          limit=None, datatype=REAL):
+                          limit=None, datatype=REAL, sep = ' '):
     """Load the input-hidden weight matrix from the original C word2vec-tool format.
 
     Note that the information stored in the file is incomplete (the binary tree is missing),
@@ -169,7 +169,7 @@ def _load_word2vec_format(cls, fname, fvocab=None, binary=False, encoding='utf8'
                 line = fin.readline()
                 if line == b'':
                     raise EOFError("unexpected end of input; is count incorrect or file otherwise damaged?")
-                parts = utils.to_unicode(line.rstrip(), encoding=encoding, errors=unicode_errors).split(" ")
+                parts = utils.to_unicode(line.rstrip(), encoding=encoding, errors=unicode_errors).split(sep)
                 if len(parts) != vector_size + 1:
                     raise ValueError("invalid vector on line %s (is this really the text format?)" % line_no)
                 word, weights = parts[0], [datatype(x) for x in parts[1:]]

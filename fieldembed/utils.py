@@ -44,7 +44,7 @@ import scipy.sparse
 from six import iterkeys, iteritems, itervalues, u, string_types, unichr
 from six.moves import range
 
-from smart_open import smart_open
+from smart_open import open as smart_open
 
 from multiprocessing import cpu_count
 
@@ -553,7 +553,9 @@ class SaveLoad(object):
         restores = self._save_specials(fname, separately, sep_limit, ignore, pickle_protocol,
                                        compress, subname)
         try:
+
             pickle(self, fname, protocol=pickle_protocol)
+            print(fname)
         finally:
             # restore attribs handled specially
             for obj, asides in restores:
@@ -620,6 +622,7 @@ class SaveLoad(object):
             for attrib, val in iteritems(asides):
                 if isinstance(val, np.ndarray) and attrib not in ignore:
                     numpys.append(attrib)
+                    # use this one
                     logger.info("storing np array '%s' to %s", attrib, subname(fname, attrib))
 
                     if compress:
@@ -923,147 +926,6 @@ def get_my_ip():
             # give up, leave the resolution to gethostbyname
             result = socket.gethostbyname(socket.gethostname())
     return result
-
-
-class RepeatCorpus(SaveLoad):
-    """Wrap a `corpus` as another corpus of length `reps`. This is achieved by repeating documents from `corpus`
-    over and over again, until the requested length `len(result) == reps` is reached.
-    Repetition is done on-the-fly=efficiently, via `itertools`.
-
-    Examples
-    --------
-    .. sourcecode:: pycon
-
-        >>> from gensim.utils import RepeatCorpus
-        >>>
-        >>> corpus = [[(1, 2)], []]  # 2 documents
-        >>> list(RepeatCorpus(corpus, 5))  # repeat 2.5 times to get 5 documents
-        [[(1, 2)], [], [(1, 2)], [], [(1, 2)]]
-
-    """
-    def __init__(self, corpus, reps):
-        """
-
-        Parameters
-        ----------
-        corpus : iterable of iterable of (int, numeric)
-            Input corpus.
-        reps : int
-            Number of repeats for documents from corpus.
-
-        """
-        self.corpus = corpus
-        self.reps = reps
-
-    def __iter__(self):
-        return itertools.islice(itertools.cycle(self.corpus), self.reps)
-
-
-class RepeatCorpusNTimes(SaveLoad):
-    """Wrap a `corpus` and repeat it `n` times.
-
-    Examples
-    --------
-    .. sourcecode:: pycon
-
-        >>> from gensim.utils import RepeatCorpusNTimes
-        >>>
-        >>> corpus = [[(1, 0.5)], []]
-        >>> list(RepeatCorpusNTimes(corpus, 3))  # repeat 3 times
-        [[(1, 0.5)], [], [(1, 0.5)], [], [(1, 0.5)], []]
-
-    """
-    def __init__(self, corpus, n):
-        """
-
-        Parameters
-        ----------
-        corpus : iterable of iterable of (int, numeric)
-            Input corpus.
-        n : int
-            Number of repeats for corpus.
-
-        """
-        self.corpus = corpus
-        self.n = n
-
-    def __iter__(self):
-        for _ in range(self.n):
-            for document in self.corpus:
-                yield document
-
-
-class ClippedCorpus(SaveLoad):
-    """Wrap a `corpus` and return `max_doc` element from it."""
-    def __init__(self, corpus, max_docs=None):
-        """
-
-        Parameters
-        ----------
-        corpus : iterable of iterable of (int, numeric)
-            Input corpus.
-        max_docs : int
-            Maximum number of documents in the wrapped corpus.
-
-        Warnings
-        --------
-        Any documents after `max_docs` are ignored. This effectively limits the length of the returned corpus
-        to <= `max_docs`. Set `max_docs=None` for "no limit", effectively wrapping the entire input corpus.
-
-        """
-        self.corpus = corpus
-        self.max_docs = max_docs
-
-    def __iter__(self):
-        return itertools.islice(self.corpus, self.max_docs)
-
-    def __len__(self):
-        return min(self.max_docs, len(self.corpus))
-
-
-class SlicedCorpus(SaveLoad):
-    """Wrap `corpus` and return a slice of it."""
-    def __init__(self, corpus, slice_):
-        """
-
-        Parameters
-        ----------
-        corpus : iterable of iterable of (int, numeric)
-            Input corpus.
-        slice_ : slice or iterable
-            Slice for `corpus`.
-
-        Notes
-        -----
-        Negative slicing can only be used if the corpus is indexable, otherwise, the corpus will be iterated over.
-        Slice can also be a np.ndarray to support fancy indexing.
-
-        Calculating the size of a SlicedCorpus is expensive when using a slice as the corpus has
-        to be iterated over once. Using a list or np.ndarray does not have this drawback, but consumes more memory.
-
-        """
-        self.corpus = corpus
-        self.slice_ = slice_
-        self.length = None
-
-    def __iter__(self):
-        if hasattr(self.corpus, 'index') and len(self.corpus.index) > 0:
-            return (self.corpus.docbyoffset(i) for i in self.corpus.index[self.slice_])
-        return itertools.islice(self.corpus, self.slice_.start, self.slice_.stop, self.slice_.step)
-
-    def __len__(self):
-        # check cached length, calculate if needed
-        if self.length is None:
-            if isinstance(self.slice_, (list, np.ndarray)):
-                self.length = len(self.slice_)
-            elif isinstance(self.slice_, slice):
-                (start, end, step) = self.slice_.indices(len(self.corpus.index))
-                diff = end - start
-                self.length = diff // step + (diff % step > 0)
-            else:
-                self.length = sum(1 for x in self)
-
-        return self.length
 
 
 def safe_unichr(intval):
@@ -2118,6 +1980,7 @@ def effective_n_jobs(n_jobs):
     return n_jobs
 
 
+###################################################################################
 def get_chunk_info(BasicObject, Object, BATCH_MAX_NUM = 10000):
     
     if 'sent' in Object.lower():
