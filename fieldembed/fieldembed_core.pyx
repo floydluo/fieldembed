@@ -116,6 +116,7 @@ cdef init_w2v_config(
     c[0].workers = model.workers
     c[0].compute_loss = (1 if compute_loss else 0)
     c[0].running_training_loss = model.running_training_loss
+    c[0].loss_total = 0
 
     ####################################################################### sub_fields and head_fields
     fld_idx = -1 
@@ -147,7 +148,8 @@ cdef init_w2v_config(
 
             ## TODO multiple hyper-fields
             # c[0].hyper_indexes[i]  = <np.uint32_t *>(np.PyArray_DATA(np.zeros(MAX_SENTENCE_LEN, dtype = np.uint32)))  
-    c[0].use_merger = model.use_merger
+    # c[0].LF = model.LF
+    c[0].LF = model.LF
 
     c[0].work   = <REAL_t *>np.PyArray_DATA(_work)
     c[0].neu1   = <REAL_t *>np.PyArray_DATA(_neu1)
@@ -196,7 +198,7 @@ cdef unsigned long long fieldembed_negsamp(
     int use_head,                # 
     int use_sub,                 # 
     int use_hyper,
-    int use_merger,
+    int LF,
 
     map[int, REAL_t * ] syn0_map,
     map[int, np.uint32_t *] LookUp_map,
@@ -222,7 +224,8 @@ cdef unsigned long long fieldembed_negsamp(
     int cbow_mean, 
     unsigned long long next_random, 
     const int _compute_loss, 
-    REAL_t *_running_training_loss_param) nogil:
+    REAL_t *_running_training_loss_param,
+    REAL_t *_loss_total) nogil:
     #===========================================================================================#
 
     cdef int proj_num = use_sub + use_head + use_hyper
@@ -243,6 +246,7 @@ cdef unsigned long long fieldembed_negsamp(
     # should left_word be an int?
     cdef np.uint32_t target_index, word_index, grain_index, fld_idx
     cdef REAL_t count, inv_count = 1.0, word_lenginv = 1.0, channel_no_inv = ONEF / (proj_num)
+    # cdef REAL_t loss_value = 0.
     cdef int flag = 0
 
     ######################################################################## S: Initialize count and inv_count
@@ -289,7 +293,7 @@ cdef unsigned long long fieldembed_negsamp(
                     word_lenginv = LengInv_map[lpid][left_word] 
                     gs = EndIdx_map[lpid][left_word-1]
                     ge = EndIdx_map[lpid][left_word]
-                    # print('-a1', gs, ge, 'leng of grain is:',ge - gs, 'left_word', left_word)
+                    # print('-a1', lpid, gs, ge, 'leng of grain is:', ge - gs, 'left_word', left_word -1 , left_word)
                     for n in range(gs, ge):
                         # print('-a11', n)
                         # n is also np.uint_32
@@ -346,7 +350,7 @@ cdef unsigned long long fieldembed_negsamp(
                     our_saxpy(&size, &ONEF, &syn0_map[fld_idx][pos_indexes[m] * size], &ONE, &neu1[fld_idx*size], &ONE)
             sscal(&size, &inv_count, &neu1[fld_idx*size], &ONE)
 
-    if use_merger:
+    if LF == 1 or LF == 3:
         fld_idx = -1
         for lpid in range(proj_num):
             fld_idx = fld_idx + 1
@@ -413,7 +417,7 @@ cdef unsigned long long fieldembed_negsamp(
             if flag == 1:
                 continue
         
-        if use_merger:
+        if LF == 1 or LF == 3:
             f_dot_m = our_dot(&size, neu_m, &ONE, &syn1neg[row2], &ONE)
             if f_dot_m <= -MAX_EXP or f_dot_m >= MAX_EXP:
                 continue 
@@ -422,35 +426,40 @@ cdef unsigned long long fieldembed_negsamp(
         # STAGE 2.2: Caculate loss for each pair of P and word
         # print('-b2')
         if _compute_loss == 1: 
-            fld_idx = -1
-            if use_sub:
-                for lpid in range(use_sub):
+            if LF == 2 or LF == 3:
+                fld_idx = -1
+                if use_sub:
+                    for lpid in range(use_sub):
+                        fld_idx = fld_idx + 1
+                        f_dot = fdot_mem[fld_idx]
+                        # change f_dot according to the pair relationship: d
+                        f_dot = (f_dot if d == 0  else -f_dot)
+                        log_e_f_dot = LOG_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
+                        _loss_total[0] = _loss_total[0] - log_e_f_dot 
+                        _running_training_loss_param[0] = _running_training_loss_param[0] - log_e_f_dot 
+                       
+                if use_head:
                     fld_idx = fld_idx + 1
                     f_dot = fdot_mem[fld_idx]
-                    # change f_dot according to the pair relationship: d
                     f_dot = (f_dot if d == 0  else -f_dot)
                     log_e_f_dot = LOG_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
+                    _loss_total[0] = _loss_total[0] - log_e_f_dot 
                     _running_training_loss_param[0] = _running_training_loss_param[0] - log_e_f_dot 
-                   
-            if use_head:
-                fld_idx = fld_idx + 1
-                f_dot = fdot_mem[fld_idx]
-                f_dot = (f_dot if d == 0  else -f_dot)
-                log_e_f_dot = LOG_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
-                _running_training_loss_param[0] = _running_training_loss_param[0] - log_e_f_dot 
 
-            if use_hyper:
-                for lpid in range(use_hyper):
-                    fld_idx = fld_idx + 1
-                    f_dot = fdot_mem[fld_idx]
-                    f_dot = (f_dot if d == 0  else -f_dot)
-                    log_e_f_dot = LOG_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
-                    _running_training_loss_param[0] = _running_training_loss_param[0] - log_e_f_dot 
+                if use_hyper:
+                    for lpid in range(use_hyper):
+                        fld_idx = fld_idx + 1
+                        f_dot = fdot_mem[fld_idx]
+                        f_dot = (f_dot if d == 0  else -f_dot)
+                        log_e_f_dot = LOG_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
+                        _loss_total[0] = _loss_total[0] - log_e_f_dot 
+                        _running_training_loss_param[0] = _running_training_loss_param[0] - log_e_f_dot 
             
-            if use_merger:
+            if LF ==1 or LF == 3:
                 f_dot = f_dot_m
                 f_dot = (f_dot if d == 0  else -f_dot)
                 log_e_f_dot = LOG_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
+                _loss_total[0] = _loss_total[0] - log_e_f_dot 
                 _running_training_loss_param[0] = _running_training_loss_param[0] - log_e_f_dot 
 
         ##################################################################################### calculate the grad for merger
@@ -458,31 +467,32 @@ cdef unsigned long long fieldembed_negsamp(
         # pay attention to grad_mem, word, and work_m
         # print('-b3')
         memset(grad_mem,  0, proj_num * cython.sizeof(REAL_t)); g_m = 0
-        fld_idx = -1
-        if use_sub:
-            for lpid in range(use_sub):
+        if LF == 2 or LF == 3:
+            fld_idx = -1
+            if use_sub:
+                for lpid in range(use_sub):
+                    fld_idx = fld_idx + 1
+                    f_dot = fdot_mem[fld_idx]
+                    f = EXP_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
+                    grad_mem[fld_idx] = (label - f) * alpha 
+                    our_saxpy(&size, &grad_mem[fld_idx], &syn1neg[row2], &ONE, &work[fld_idx*size], &ONE) 
+
+            if use_head:
                 fld_idx = fld_idx + 1
                 f_dot = fdot_mem[fld_idx]
                 f = EXP_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
                 grad_mem[fld_idx] = (label - f) * alpha 
                 our_saxpy(&size, &grad_mem[fld_idx], &syn1neg[row2], &ONE, &work[fld_idx*size], &ONE) 
 
-        if use_head:
-            fld_idx = fld_idx + 1
-            f_dot = fdot_mem[fld_idx]
-            f = EXP_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
-            grad_mem[fld_idx] = (label - f) * alpha 
-            our_saxpy(&size, &grad_mem[fld_idx], &syn1neg[row2], &ONE, &work[fld_idx*size], &ONE) 
-
-        if use_hyper:
-            for lpid in range(use_hyper):
-                fld_idx = fld_idx + 1
-                f_dot = fdot_mem[fld_idx]
-                f = EXP_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
-                grad_mem[fld_idx] = (label - f) * alpha 
-                our_saxpy(&size, &grad_mem[fld_idx], &syn1neg[row2], &ONE, &work[fld_idx*size], &ONE) 
+            if use_hyper:
+                for lpid in range(use_hyper):
+                    fld_idx = fld_idx + 1
+                    f_dot = fdot_mem[fld_idx]
+                    f = EXP_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
+                    grad_mem[fld_idx] = (label - f) * alpha 
+                    our_saxpy(&size, &grad_mem[fld_idx], &syn1neg[row2], &ONE, &work[fld_idx*size], &ONE) 
         
-        if use_merger:
+        if LF ==1 or LF == 3:
             f_dot = f_dot_m
             f = EXP_TABLE[<int>((f_dot + MAX_EXP) * (EXP_TABLE_SIZE / MAX_EXP / 2))]
             g_m = (label - f) * alpha 
@@ -491,22 +501,23 @@ cdef unsigned long long fieldembed_negsamp(
         ##################################################################################### update syn1neg based on all projs
         # STAGE 2.4: Updating Word Embedding; use g1, g2, .., g0 and P1, P2, ..., P0 to update syn1ng 
         # print('-b4')
-        fld_idx = -1
-        if use_sub:
-            for lpid in range(use_sub):
+        if LF == 2 or LF == 3:
+            fld_idx = -1
+            if use_sub:
+                for lpid in range(use_sub):
+                    fld_idx = fld_idx + 1
+                    our_saxpy(&size, &grad_mem[fld_idx], &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)
+
+            if use_head:
                 fld_idx = fld_idx + 1
                 our_saxpy(&size, &grad_mem[fld_idx], &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)
 
-        if use_head:
-            fld_idx = fld_idx + 1
-            our_saxpy(&size, &grad_mem[fld_idx], &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)
+            if use_hyper:
+                for lpid in range(use_hyper):
+                    fld_idx = fld_idx + 1
+                    our_saxpy(&size, &grad_mem[fld_idx], &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)
 
-        if use_hyper:
-            for lpid in range(use_hyper):
-                fld_idx = fld_idx + 1
-                our_saxpy(&size, &grad_mem[fld_idx], &neu1[fld_idx*size], &ONE, &syn1neg[row2], &ONE)
-
-        if use_merger:
+        if LF ==1 or LF == 3:
             # notice the difference between neu_m and neu1[fld_idx*size] # MAKE SURE
             our_saxpy(&size, &g_m, neu_m, &ONE, &syn1neg[row2], &ONE)
     ######################################################################## E
@@ -514,7 +525,7 @@ cdef unsigned long long fieldembed_negsamp(
 
     ######################################################################## S: assign the grad_m (work_m) to each grad (work)
     # Stage 3: Out of the Loop and Caculate Correct grad for P1, P2, P3.. Ph, and abandon P0
-    if use_merger:
+    if LF ==1 or LF == 3:
         fld_idx = -1
         if use_sub:
             for lpid in range(use_sub):
@@ -534,6 +545,7 @@ cdef unsigned long long fieldembed_negsamp(
 
     ######################################################################## S: use standard grad
     # Stage 4: Normalize grad? (Work)
+    # this can be alleviated by changing the learning rate
     if cbow_mean and count > (<REAL_t>0.5):  
         fld_idx = -1
         if use_sub:
@@ -635,6 +647,9 @@ def train_batch_fieldembed_negsamp(
 
 
     cdef int hyper_fields_num = len(chunk_hyper_idxs)
+    cdef int data_point_num = 0
+    cdef REAL_t loss_total = 0.
+    cdef REAL_t loss_value
     # now hyper_fields_num <= 1
     assert hyper_fields_num <= 1
 
@@ -654,7 +669,7 @@ def train_batch_fieldembed_negsamp(
         # if idx_end - idx_start > MAX_SENTENCE_LEN:
         #     continue
 
-        # print('For sentence:', sent_idx)         ############ log 
+        # print('-For sentence:', sent_idx)         ############ log 
         # print(idx_start, idx_end,  'length', idx_end - idx_start,  'sent', sent_idx) ############ log 
         # print(' '.join(chunk_token_str[idx_start: idx_end]))
         # string = ''                              ############ log 
@@ -729,7 +744,7 @@ def train_batch_fieldembed_negsamp(
         c.reduced_windows[i] = item
 
     # here, we produce c.index, c.hyper_indexes, c.sentence_idx, c.reduced_windows.
-
+    # print('-start training...')
     # LESSION: you should notice this nogil, otherwise threads are rubbish
     # if True: # log 
     with nogil: 
@@ -758,33 +773,38 @@ def train_batch_fieldembed_negsamp(
                     for j in range(j, k): 
                         if j == i:
                             continue
+                        data_point_num = data_point_num + 1
                         c.next_random = fieldembed_negsamp(c.alpha, c.size, c.negative, c.cum_table, c.cum_table_len, 
                             c.indexes, 
                             # c.hyper_indexes, 
                             c.pos_indexes, 
                             i, j, j + 1, 
-                            c.use_head, c.use_sub,  c.use_hyper, c.use_merger,
+                            c.use_head, c.use_sub,  c.use_hyper, c.LF,
                             c.syn0_map, c.LookUp_map, c.EndIdx_map, c.LengInv_map, c.SampleInt_map,
                             c.syn1neg, c.word_locks, 
                             c.fdot_mem, c.grad_mem, c.neu1, c.work, c.neu_m, c.work_m, 
                             c.sample_grain_indictors, c.sample_grain_indictors_leng,
-                            c.cbow_mean, c.next_random, c.compute_loss, &c.running_training_loss)
+                            c.cbow_mean, c.next_random, c.compute_loss, &c.running_training_loss, &c.loss_total)
+                        # loss_total = loss_total + loss_value
                 else:
                     # build the batch here
+                    data_point_num = data_point_num + 1
                     c.next_random = fieldembed_negsamp(c.alpha, c.size, c.negative, c.cum_table, c.cum_table_len, 
                             c.indexes, 
                             # c.hyper_indexes, 
                             c.pos_indexes, 
                             i, j, k, 
-                            c.use_head, c.use_sub,  c.use_hyper,  c.use_merger,
+                            c.use_head, c.use_sub,  c.use_hyper,  c.LF,
                             c.syn0_map, c.LookUp_map, c.EndIdx_map, c.LengInv_map, c.SampleInt_map,
                             c.syn1neg, c.word_locks, 
                             c.fdot_mem, c.grad_mem, c.neu1, c.work, c.neu_m, c.work_m, 
                             c.sample_grain_indictors, c.sample_grain_indictors_leng,
-                            c.cbow_mean, c.next_random, c.compute_loss, &c.running_training_loss)
+                            c.cbow_mean, c.next_random, c.compute_loss, &c.running_training_loss, &c.loss_total)
+                    # loss_total = loss_total + loss_value
 
-    model.running_training_loss = c.running_training_loss
-    return effective_words, model.running_training_loss
+    # model.running_training_loss = c.running_training_loss
+    loss_total = c.loss_total
+    return effective_words, loss_total, data_point_num
 
 
 def init():

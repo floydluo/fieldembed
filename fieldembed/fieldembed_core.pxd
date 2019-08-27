@@ -60,9 +60,11 @@ cdef unsigned long long random_int32(unsigned long long *next_random) nogil
 ###################################################################################################################################
 
 cdef struct Word2VecConfig:
-    REAL_t running_training_loss, alpha
+    
     int hs, negative, sample, compute_loss, size, window, cbow_mean, workers, sg
-    int use_sub, use_head, use_hyper, use_merger, sample_grain_indictors_leng
+    int use_sub, use_head, use_hyper, LF, sample_grain_indictors_leng
+    REAL_t running_training_loss, alpha
+    REAL_t loss_total
     
     # to segment sentences 
     int sentence_idx[MAX_SENTENCE_LEN + 1]
@@ -135,7 +137,7 @@ cdef unsigned long long fieldembed_negsamp(
     int use_head,                # 
     int use_sub,                 # 
     int use_hyper,
-    int use_merger,
+    int LF,
 
     map[int, REAL_t * ] syn0_map,
     map[int, np.uint32_t *] LookUp_map,
@@ -159,4 +161,5 @@ cdef unsigned long long fieldembed_negsamp(
     int cbow_mean, 
     unsigned long long next_random, 
     const int _compute_loss, 
-    REAL_t *_running_training_loss_param) nogil
+    REAL_t *_running_training_loss_param,
+    REAL_t *_loss_total) nogil
