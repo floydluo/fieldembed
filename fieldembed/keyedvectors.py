@@ -269,11 +269,6 @@ class WordEmbeddingsKeyedVectors(BaseKeyedVectors):
             d['ana_' + section['section'] ] = correct/total
         return d
 
-    @property
-    @deprecated("Attribute will be removed in 4.0.0, use self instead")
-    def wv(self):
-        return self
-
     ########################
     @property
     def index2entity(self):
@@ -1111,29 +1106,6 @@ class WordEmbeddingsKeyedVectors(BaseKeyedVectors):
 
         return rcs
 
-    ########################
-    @property
-    @deprecated("Attribute will be removed in 4.0.0, use self.vectors instead")
-    def syn0(self):
-        return self.vectors
-
-    @syn0.setter
-    @deprecated("Attribute will be removed in 4.0.0, use self.vectors instead")
-    def syn0(self, value):
-        self.vectors = value
-
-    ########################
-    @property
-    @deprecated("Attribute will be removed in 4.0.0, use self.vectors_norm instead")
-    def syn0norm(self):
-        return self.vectors_norm
-
-    @syn0norm.setter
-    @deprecated("Attribute will be removed in 4.0.0, use self.vectors_norm instead")
-    def syn0norm(self, value):
-        self.vectors_norm = value
-    ########################
-
 
 
 class Word2VecKeyedVectors(WordEmbeddingsKeyedVectors):
@@ -1163,7 +1135,7 @@ class Word2VecKeyedVectors(WordEmbeddingsKeyedVectors):
             fname, self.vocab, self.vectors, fvocab=fvocab, binary=binary, total_vec=total_vec)
 
     @classmethod
-    def load_word2vec_format(cls, fname, fvocab=None, binary=False, encoding='utf8', unicode_errors='strict',limit=None, datatype=REAL):
+    def load_word2vec_format(cls, fname, fvocab=None, binary=False, encoding='utf8', unicode_errors='strict',limit=None, datatype=REAL, sep = ' '):
         """Load the input-hidden weight matrix from the original C word2vec-tool format.
 
         Warnings
@@ -1204,7 +1176,7 @@ class Word2VecKeyedVectors(WordEmbeddingsKeyedVectors):
         # from gensim.models.word2vec import load_word2vec_format
         return _load_word2vec_format(
             cls, fname, fvocab=fvocab, binary=binary, encoding=encoding, unicode_errors=unicode_errors,
-            limit=limit, datatype=datatype)
+            limit=limit, datatype=datatype, sep = sep)
 
     @classmethod
     def load_old_wv_format(cls, old_wv):
