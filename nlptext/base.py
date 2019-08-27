@@ -485,7 +485,8 @@ class BasicObject(object):
         except:
             cls.min_token_freq = min_token_freq
 
-        if min_token_freq < cls.min_token_freq:
+        # if min_token_freq < cls.min_token_freq:
+        if True:
             # reset all token vocab from disk
             cls._load_tokenvocab_from_disk()
 
