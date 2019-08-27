@@ -126,6 +126,8 @@ class FieldEmbedding(utils.SaveLoad):
         print("model's window size is:", window)
         print('finish build vocab')
 
+        self._final_loss = 0
+
         if train:
             print('\n\n======== Training Start ....'); s = datetime.now()
             self.train(nlptext = nlptext, total_examples=self.corpus_count,
@@ -707,6 +709,7 @@ class FieldEmbedding(utils.SaveLoad):
                 all_data_point_num,
                 all_loss_total/all_data_point_num,
             )
+            self._final_loss = all_loss_total/all_data_point_num
         else:
             # words-based progress %
             logger.info(
@@ -768,12 +771,12 @@ class FieldEmbedding(utils.SaveLoad):
         for channel, wv in self.weights.items():
             if channel in FIELD_INFO['hyper']:
                 continue
-            wv.save(path + '_grain_' + channel)
+            wv.save(path + '_left_' + channel)
             # print(channel)
             # print(wv.derivative_wv.lexical_evals())
         # print('syn1neg')
         # print(self.wv_neg.lexical_evals())
-        self.wv_neg.save(path + '_word_' + channel)
+        self.wv_neg.save(path + '_right_word')
 
     ################################################################################################################################################### load and save
     def save(self, *args, **kwargs):
