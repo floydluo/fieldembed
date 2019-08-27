@@ -92,7 +92,7 @@ Data_Dir = 'data/WikiChinese/word/'; min_count = 10
 names = ['word2vec', 'cwe', 'jwe']
 
 sg = 0 # use cbow or use sg
-iter = 1 # epoch number
+iter = 5 # epoch number
 window = 5
 negative = 10
 alpha = 0.025

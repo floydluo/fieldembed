@@ -6,6 +6,15 @@ from fieldembed import FieldEmbedding
 
 import os
 import logging
+from datetime import datetime
+
+
+logging.basicConfig(filename = 'F3_three_fields_log.txt',
+                    filemode='w',
+                    format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
+                    datefmt='%H:%M:%S',
+                    level=logging.DEBUG)
+
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 logging.debug('test')
@@ -51,16 +60,16 @@ if __name__ == '__main__':
     #                     ['token', 'subcomp', 'pinyin']]
 
     new_field_selections = [
-                            ['token'], 
-                            ['stroke'], 
-                            ['token', 'char'],
-                            ['token', 'subcomp'],
-                            ['token', 'pinyin'],
-                            ['token', 'char', 'pinyin'],
-                            # ['token', 'stroke', 'pinyin'],
-                            # ['token', 'subcomp', 'pinyin'],
-                            # ['token', 'subcomp', 'stroke'],
-                            # ['token', 'char', 'subcomp'],
+                            # ['token'], 
+                            # ['stroke'], 
+                            # ['token', 'char'],
+                            # ['token', 'subcomp'],
+                            # ['token', 'pinyin'],
+                            ['token', 'char', 'subcomp'],
+                            ['token', 'char', 'stroke'],
+                            ['token', 'subcomp', 'pinyin'],
+                            ['char', 'subcomp', 'pinyin'],
+                            ['subcomp','stroke', 'pinyin'],
                             # ['subcomp', 'char', 'stroke','pinyin'],
                             # ['token', 'char', 'subcomp', 'stroke','pinyin'],
                             ]
@@ -102,7 +111,7 @@ if __name__ == '__main__':
         window = 5
         negative = 10
         alpha = 0.025
-        sample = 1e-3
+        sample = 1e-5
         workers = 4
 
         sample_grain = 1e-3
