@@ -86,11 +86,10 @@ def run_baseline_w2v(learn_path, paras):
     shell_invoke([learn_path] + part_args)
 
 
-Data_Dir = 'data/WikiChinese/word/'
+Data_Dir = 'data/WikiChinese/word/'; min_count = 10
 # Data_Dir = 'data/wiki_cn_sample/word/'
-min_count = 1
-names = ['word2vec', 'cwe', 'jwe']
 
+names = ['word2vec', 'cwe', 'jwe']
 
 sg = 0 # use cbow or use sg
 iter = 1 # epoch number
