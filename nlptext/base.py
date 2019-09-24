@@ -141,7 +141,7 @@ class BasicObject(object):
 
         ################################################################################################################
         CorpusGroups, GroupType = CorpusGroupsReader(CORPUSPath, iden = Corpus2GroupMethod)
-        # print()
+        # print(CorpusGroups, GroupType)
         assert GROUP['GroupType'] == GroupType
         pprint(GroupType)
 
@@ -485,8 +485,7 @@ class BasicObject(object):
         except:
             cls.min_token_freq = min_token_freq
 
-        # if min_token_freq < cls.min_token_freq:
-        if True:
+        if min_token_freq < cls.min_token_freq:
             # reset all token vocab from disk
             cls._load_tokenvocab_from_disk()
 
