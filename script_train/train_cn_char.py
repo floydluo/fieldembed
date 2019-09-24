@@ -9,69 +9,46 @@ import logging
 from datetime import datetime
 
 
-logging.basicConfig(filename = 'F3_three_fields_log.txt',
-                    filemode='w',
-                    format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
-                    datefmt='%H:%M:%S',
-                    level=logging.DEBUG)
-
-logger = logging.getLogger()
-logger.setLevel(logging.DEBUG)
-logging.debug('test')
-
-
 if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
     # parser.add_argument('-f', '--fields_type', type =int, default = 1,  help="the number of fields used in training")
     parser.add_argument('-s', '--size', default = 200,  type=int, help="the number of iteration")
+    parser.add_argument('-f', '--field_num', default = 1,  type=int, help="the number of iteration")
     args = parser.parse_args()
+    field_num = args.field_num
 
-    # Data_Dir = 'data/wiki_cn_sample/word/'; min_token_freq = 10
-    Data_Dir = 'data/WikiChinese/word/'; min_token_freq = 10
+    logging.basicConfig(filename = 'Chinese_Char_log_field_' + str(field_num) + '.txt',
+                    filemode='w',
+                    format='%(asctime)s,%(msecs)d %(name)s %(levelname)s %(message)s',
+                    datefmt='%H:%M:%S',
+                    level=logging.DEBUG)
+
+    logger = logging.getLogger()
+    logger.setLevel(logging.DEBUG)
+    logging.debug('test')
+
+
+    Data_Dir = 'data/WikiChinese/char/'; min_token_freq = 10
+    # Data_Dir = 'data/wiki_cn_sample/char/'; min_token_freq = 10
     BasicObject.INIT_FROM_PICKLE(Data_Dir, min_token_freq)
 
     # # this is not correct
     CHANNEL_SETTINGS_TEMPLATE_FOR_WIKICN = {
         # CTX_IND
-        'token':   {'use': True,},
-        'char':    {'use': True, 'Min_Ngram': 1, 'Max_Ngram': 1, 'end_grain': False,  'min_grain_freq' : 15},
-        'pinyin':  {'use': True, 'Min_Ngram': 1, 'Max_Ngram': 4, 'end_grain': False,  'min_grain_freq' : 15856},
-        'subcomp': {'use': True, 'Min_Ngram': 1, 'Max_Ngram': 4, 'end_grain': False,  'min_grain_freq' : 21759},
-        'stroke':  {'use': True, 'Min_Ngram': 3, 'Max_Ngram': 6, 'end_grain': False,  'min_grain_freq' : 19719},
-        'pos':     {'use': True,},
+        'token':   {'use': True, 'Max_Ngram': 1,},
+        'subcomp': {'use': True, 'Min_Ngram': 1, 'Max_Ngram': 4, 'end_grain': False,  'min_grain_freq' : 1152},
+        'pinyin':  {'use': True, 'Min_Ngram': 1, 'Max_Ngram': 4, 'end_grain': False,  'min_grain_freq' : 10},
+        'pos':     {'use': True, 'tagScheme': 'BIOES'}
     }
 
-    # CHANNEL_SETTINGS_TEMPLATE_FOR_WIKICN = {
-    #     # CTX_IND
-    #     'token':   {'use': True, 'Max_Ngram': 1, },
-    #     'char':    {'use': True, 'Max_Ngram': 1, 'end_grain': False},
-    #     'pinyin':  {'use': True, 'Max_Ngram': 3, 'end_grain': False},
-    #     'subcomp': {'use': True, 'Max_Ngram': 3, 'end_grain': False},
-    #     'stroke':  {'use': True, 'Max_Ngram': 3, 'end_grain': False},
-    #     'pos':     {'use': True, },
-    # }
-
     CS_TEM = CHANNEL_SETTINGS_TEMPLATE_FOR_WIKICN
-    # BasicObject.BUILD_GV_LKP(CHANNEL_SETTINGS_TEMPLATE_FOR_WIKICN)
-
-    # field_selections = [['token'], 
-    #                     ['token', 'pinyin'],
-    #                     ['token', 'subcomp', 'pinyin']]
 
     new_field_selections = [
-                            # ['token'], 
-                            # ['stroke'], 
-                            # ['token', 'char'],
-                            # ['token', 'subcomp'],
-                            # ['token', 'pinyin'],
-                            ['token', 'char', 'subcomp'],
-                            ['token', 'char', 'stroke'],
+                            ['token'], 
+                            ['token', 'subcomp'],
                             ['token', 'subcomp', 'pinyin'],
-                            ['char', 'subcomp', 'pinyin'],
-                            ['subcomp','stroke', 'pinyin'],
-                            # ['subcomp', 'char', 'stroke','pinyin'],
-                            # ['token', 'char', 'subcomp', 'stroke','pinyin'],
+                            ['token', 'subcomp', 'pinyin', 'pos'],
                             ]
 
     # fields_type = int(args.fields_type)
@@ -79,7 +56,9 @@ if __name__ == '__main__':
     # fields_type = fields_type -1
     # fields_selection = field_selections[fields_type]
 
-    for fields_selection in new_field_selections:
+    # for fields_selection in new_field_selections:
+    if field_num in [1,2,3,4]:
+        fields_selection = new_field_selections[field_num - 1]
         # print(fields_selection)
         # del BasicObject
         # from nlptext.base import BasicObject
@@ -111,7 +90,7 @@ if __name__ == '__main__':
         window = 5
         negative = 10
         alpha = 0.025
-        sample = 1e-5
+        sample = 1e-3
         workers = 4
 
         sample_grain = 1e-3
@@ -134,6 +113,7 @@ if __name__ == '__main__':
         field_names = '_'.join([fld for fld in fields_selection])
 
         EmbeddingPath = os.path.join(Data_Dir.replace('data', 'embeddings/fieldembed'), model.path)
+        print(EmbeddingPath)
         if not os.path.exists(EmbeddingPath): os.makedirs(EmbeddingPath)
         ModelPath =  os.path.join(EmbeddingPath, str(model.vector_size))
         print('\n')
@@ -142,5 +122,3 @@ if __name__ == '__main__':
         print('=='*40)
         print('Done!')
         print('=='*40)
-
-

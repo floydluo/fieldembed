@@ -86,8 +86,10 @@ def run_baseline_w2v(learn_path, paras):
     shell_invoke([learn_path] + part_args)
 
 
-Data_Dir = 'data/WikiChinese/word/'; min_count = 10
+# Data_Dir = 'data/WikiChinese/word/'; min_count = 10
 # Data_Dir = 'data/wiki_cn_sample/word/'
+Data_Dir = 'data/WikiEnglish/word/'; min_count = 30
+
 
 names = ['word2vec', 'cwe', 'jwe']
 
@@ -104,6 +106,7 @@ compute_loss = True
 
 for name in names:
     if sg == 1 and name != 'word2vec': continue
+    if 'English' in Data_Dir and name == 'jwe': continue
     learn_path, paras = generate_para(name, Data_Dir, sg, iter, window, negative, alpha, sample, workers,size,  min_count = min_count)
     print('\n', name,  '=='*30, '\n')
     print(learn_path)
