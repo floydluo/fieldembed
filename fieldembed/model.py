@@ -40,9 +40,9 @@ logger = logging.getLogger(__name__)
 MAX_WORDS_IN_BATCH = 20000
 
 FIELD_INFO = {
-    'sub':  ['char', 'subcomp', 'stroke', 'pinyin'],
+    'sub':  ['char', 'subcomp', 'stroke', 'pinyin', 'phoneme'],
     'head': ['token'],
-    'hyper':['pos', 'ner']
+    'hyper':['pos', 'ner', 'pos_en']
 }
 
 class FieldEmbedding(utils.SaveLoad):
@@ -121,6 +121,9 @@ class FieldEmbedding(utils.SaveLoad):
         self.callbacks = callbacks
 
         self.path = self.get_path()
+        print('----------------------------------')
+        print('\t', self.path)
+        print('----------------------------------')
 
         self.build_vocab(nlptext = nlptext)
         print("model's window size is:", window)
@@ -186,6 +189,10 @@ class FieldEmbedding(utils.SaveLoad):
             self.weights['token'] = self.wv 
 
         else:
+            print('++++++'*30)
+            print('Field_Settings')
+            pprint(self.Field_Settings)
+            print('++++++'*30)
             for channel, f_setting in self.Field_Settings.items():
                 if channel == 'token':
                     self.field_head.append([self.wv])
@@ -204,7 +211,7 @@ class FieldEmbedding(utils.SaveLoad):
                     total_grain_num = len(LGU)
                     # 
                     
-                    if self.sample_grain is None:
+                    if self.sample_grain is None or channel == 'pinyin':
                         print('dont use grain subsampling')
                         Sample_Int = np.zeros(len(Freq), dtype = np.uint32)
                     else:
@@ -251,8 +258,8 @@ class FieldEmbedding(utils.SaveLoad):
 
                     self.field_hyper.append([wv])
                     self.weights[channel] = wv
-                    print(self.weights[channel].LGU)
-                    print(len(self.weights[channel].LGU))
+                    print(self.weights[channel].GU[0])
+                    print(len(self.weights[channel].GU[0]))
             
         self.use_head = len(self.field_head)
         self.use_sub  = len(self.field_sub)
@@ -319,8 +326,12 @@ class FieldEmbedding(utils.SaveLoad):
             gw = Word2VecKeyedVectors(size)
             gw.index2word = LGU 
             gw.GU = (LGU, DGU)
-            for vocid, gr in enumerate(LGU):
-                gw.vocab[gr] = Vocab(index=vocid, count = Freq[vocid])
+            if Freq is not None:
+                for vocid, gr in enumerate(LGU):
+                    gw.vocab[gr] = Vocab(index=vocid, count = Freq[vocid])
+            else:
+                for vocid, gr in enumerate(LGU):
+                    gw.vocab[gr] = Vocab(index=vocid)
             self.__setattr__('wv_' + channel, gw)
             return self.__getattribute__('wv_' + channel)
 
@@ -499,6 +510,7 @@ class FieldEmbedding(utils.SaveLoad):
             start_position = 0 if chunk_idx == 0 else chunkidx_2_endbyteidxs[channel][chunk_idx - 1] 
             end_postion = chunkidx_2_endbyteidxs[channel][chunk_idx] 
             path = nlptext.Channel_Hyper_Path[channel]
+            # print(path)
             chunk_token_str = re.split(' |\n', read_file_chunk_string(path, start_position, end_postion))
             token_num = len(chunk_token_str)
 
@@ -768,9 +780,10 @@ class FieldEmbedding(utils.SaveLoad):
         return
 
     def save_keyedvectors(self, path):
+        print(self.weights)
         for channel, wv in self.weights.items():
-            if channel in FIELD_INFO['hyper']:
-                continue
+            # if channel in FIELD_INFO['hyper']:
+            #     continue
             wv.save(path + '_left_' + channel)
             # print(channel)
             # print(wv.derivative_wv.lexical_evals())

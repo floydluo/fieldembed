@@ -235,7 +235,10 @@ class WordEmbeddingsKeyedVectors(BaseKeyedVectors):
             derivative_vectors = zeros((len(self.TU[0]), self.vector_size), dtype=REAL)
             for word_vocidx in range(1, len(self.TU[0])):
                 grain_vocidx = self.LKP[word_vocidx]
-                field_word   = self.vectors[grain_vocidx].mean(axis=0)
+                if len(grain_vocidx) == 0:
+                    field_word = zeros(self.vector_size, dtype=REAL)
+                else:
+                    field_word = self.vectors[grain_vocidx].mean(axis=0)
                 derivative_vectors[word_vocidx] = field_word
             derivative_wv.vectors = derivative_vectors
             self._derivative_wv = derivative_wv
