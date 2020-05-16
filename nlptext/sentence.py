@@ -231,8 +231,8 @@ class Sentence(BasicObject):
 
     @property
     def Folder(self):
-        from .group import Group 
-        return Group(self.IdxGroup)
+        from .folder import Folder 
+        return Folder(self.IdxGroup)
 
     @property
     def Text(self):
@@ -266,3 +266,5 @@ class Sentence(BasicObject):
         ctx =  str(self.Idx)  if type(self.Idx) == int else 'New'
 
         return "<st " + ctx + " (tokenNum: " + str(self.length) + ") >"
+
+
